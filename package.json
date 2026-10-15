@@ -1,0 +1,15 @@
+{
+  "name": "pholoso-website",
+  "private": true,
+  "description": "Pholoso Afrika Foundation website: checks and browser tests (nothing here is deployed).",
+  "scripts": {
+    "check": "node tests/check-site.mjs",
+    "test:php": "php tests/php/contact-test.php",
+    "test:e2e": "playwright test",
+    "test": "npm run check && npm run test:php && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.64.1"
+  }
+}

@@ -7,6 +7,11 @@
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 header('Content-Type: application/json');
 
+if ($path === '/healthz') {
+    echo '{"ok":true}';
+    return;
+}
+
 if (preg_match('#^/([^/]+)/oauth2/v2\.0/token$#', $path, $m)) {
     if ($m[1] === 'bad-tenant') {
         http_response_code(401);

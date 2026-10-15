@@ -17,6 +17,12 @@ config.php
 # Runtime data written by the contact form (rate limiting)
 var/
 
+# Test tooling output
+node_modules/
+test-results/
+playwright-report/
+dist/
+
 # OS and editor junk
 Thumbs.db
 desktop.ini
