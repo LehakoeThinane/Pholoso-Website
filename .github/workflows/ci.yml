@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main, stabilise]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hygiene:
+    name: Repository hygiene
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: No tool attribution in files or history
+        run: |
+          # Built from parts so this file never contains the words it searches for.
+          a=cla; b=ude; c=anthr; d=opic
+          pattern="${a}${b}|${c}${d}"
+          if git grep -n -i -E "$pattern"; then
+            echo "::error::Forbidden word found in tracked files"; exit 1
+          fi
+          if git log --all --format="%H %an %ae%n%B" | grep -n -i -E "$pattern|co-authored-by"; then
+            echo "::error::Forbidden word or co-author trailer found in history"; exit 1
+          fi
+          echo "clean: files and history"
+
+  site:
+    name: Static checks and upload set
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tests/check-site.mjs
+      - run: node tools/build-dist.mjs
+
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.1', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl
+          coverage: none
+      - name: Syntax
+        run: for f in contact.php config.example.php lib/*.php tests/php/*.php tests/e2e/*.php; do php -l "$f"; done
+      - name: Contact form tests
+        run: php tests/php/contact-test.php
+      - name: .htaccess blocking rules
+        run: php tests/php/htaccess-test.php
+
+  browser:
+    name: Browser tests (accessibility, Comfort & access, forms)
+    runs-on: ubuntu-24.04
+    needs: [site]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl
+          coverage: none
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - name: Keep the report when tests fail
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
