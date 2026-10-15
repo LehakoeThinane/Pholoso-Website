@@ -15,6 +15,12 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 | A7 | Default wording: person-first ("child with autism", current default) or identity-first? (spec §14.1) | Comfort & access |
 | A8 | Newsletter: until a provider is chosen, sign-ups arrive at know@pholoso.africa as emails. Who adds them to the list? | Footer "Join" |
 | A9 | Is `milisa-braweni.png` (an email signature) needed for anything? It is no longer in the repository and must not be on the web server. | — |
+| A10 | **Was Microsoft 365 bought through GoDaddy or directly from Microsoft, and who is its admin?** If GoDaddy-managed, the Microsoft Graph approach may be blocked; the fallback is a transactional email service over HTTPS. Decide this before sending `docs/m365-setup.md` to anyone. | Contact form delivery |
+| A11 | Who owns the GoDaddy account, and can the developer get cPanel (SFTP/FTPS) and DNS access? | Deployment |
+| A12 | Which GoDaddy hosting plan is it, when does it renew, which PHP version runs, and are backups switched on? | Deployment, DEPLOY.md |
+| A13 | Is the domain registered at GoDaddy, and is it set to auto-renew? A lapsed domain takes down the website and email together. | Everything |
+| A14 | Where does the Microsoft 365 tenant store data? Needed for the privacy notice's cross-border wording (the web host is outside South Africa). | Privacy notice |
+| A15 | When should the site go live? Deployment is switched off until the Foundation says so. | Deploy workflow |
 
 ## Needed before or during Part B
 
@@ -32,3 +38,6 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 12. Retention period for form submissions.
 13. Who answers accessibility feedback, and how quickly?
 14. Can the Foundation help recruit neurodivergent participants and parents for usability testing?
+15. **Who will edit the website** after launch: a developer, a staff member, a volunteer?
+16. **How often:** weekly news and stories, or a few changes a year?
+17. **Should partners update their own directory listings** soon, or can the Foundation do it for them at first? (If "staff or volunteer, occasionally, Foundation-managed", a static site with a simple editor on the current hosting is likely the best fit; see the architecture decision when written.)

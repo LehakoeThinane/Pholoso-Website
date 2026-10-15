@@ -36,7 +36,20 @@ To get exactly this set in one folder, run `node tools/build-dist.mjs` and uploa
 
 `.htaccess` starts with a dot, so many FTP clients and file managers hide it. Make sure it is uploaded.
 
+## The host: GoDaddy shared hosting (cPanel)
+
+Public records show the site on a GoDaddy server (`…host.secureserver.net`) in the United States, with DNS also at GoDaddy. The plan itself (cPanel, PHP version, backups) still needs confirming by whoever holds the GoDaddy account. Once you have access:
+
+- **PHP version:** in cPanel, open **Select PHP Version** (or **MultiPHP Manager**) and choose **8.1 or newer**. The code works on 7.4 and later; CI tests 7.4, 8.1 and 8.3.
+- **SFTP for automatic deployment:** in cPanel, open **SSH Access** and enable it if it is off. Use the cPanel username and password, and port 22. If SSH can't be enabled on the plan, use FTPS instead (`DEPLOY_PROTOCOL=ftps`) with the server name from cPanel's **FTP Accounts** page.
+- **Folders:** the web root is `/home/<cpanel-user>/public_html/`. Create the private config folder beside it as `/home/<cpanel-user>/pholoso-private/` (see "Contact form configuration" below). cPanel's **File Manager** shows the home folder.
+- **Hidden files:** in File Manager, turn on **Settings → Show Hidden Files** to see and upload `.htaccess`.
+- **Backups:** check whether the plan includes backups, and take a cPanel backup (or download `public_html`) before the first upload.
+- **Certificate for `www`:** the `.htaccess` sends `www.pholoso.africa` to `pholoso.africa`. For `https://www.` to redirect cleanly, the certificate must cover `www` too. Check in cPanel under **SSL/TLS Status**.
+
 ## Automatic deployment (GitHub Actions)
+
+**Currently switched off** in GitHub (Actions → Deploy is disabled), so nothing deploys until the Foundation says so. Switch it on again with `gh workflow enable Deploy`, or from the Actions tab.
 
 `.github/workflows/deploy.yml` uploads `dist/` after CI passes on `main`, so **merging an approved pull request deploys it**. It can also be run by hand from the Actions tab ("Deploy" → "Run workflow").
 
@@ -89,7 +102,7 @@ Delete these from the web root if they were uploaded before. The deploy never de
 
 ## Check after every upload
 
-1. **HTTPS:** `http://pholoso.africa/` redirects to `https://pholoso.africa/` (301).
+1. **HTTPS and one address:** `http://pholoso.africa/`, `http://www.pholoso.africa/` and `https://www.pholoso.africa/` all redirect (301) to `https://pholoso.africa/`.
 2. **404 page:** `https://pholoso.africa/no-such-page` shows the green "Page not found" page, with status 404.
 3. **Headers:** `curl -I https://pholoso.africa/` shows `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` and `Content-Security-Policy`. Open the site with the browser console open and confirm there are no "Content Security Policy" errors.
 4. **Private paths:** `/.git/HEAD`, `/docs/`, `/brand/`, `/lib/form-handler.php`, `/README.md` and `/config.php` all return 404.
