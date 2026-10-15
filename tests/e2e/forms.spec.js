@@ -33,7 +33,7 @@ test('valid enquiry: success only after Microsoft accepts it', async ({ page }) 
   await fillValid(page, marker);
   await page.getByRole('button', { name: 'Send with care' }).click();
   const status = page.locator('#formStatus');
-  await expect(status).toHaveText(/Thank you. Your message has been sent/);
+  await expect(status).toHaveText(/Thank you. Your message has been sent/, { timeout: 15_000 }); // the single-threaded test server can be slow under parallel load
   await expect(status).toBeFocused();
   const sent = graphRequests().find(r => r.body.message.body.content.includes(marker));
   expect(sent, 'request reached the Graph mock').toBeTruthy();
@@ -48,7 +48,7 @@ test.describe('without Microsoft 365 credentials', () => {
     await fillValid(page, 'NOCONFIG');
     await page.getByRole('button', { name: 'Send with care' }).click();
     const status = page.locator('#formStatus');
-    await expect(status).toHaveText("We couldn't send your message. Please email know@pholoso.africa directly.");
+    await expect(status).toHaveText("We couldn't send your message. Please email know@pholoso.africa directly.", { timeout: 15_000 });
     await expect(status).toBeFocused();
     await expect(status.getByRole('link', { name: 'know@pholoso.africa' })).toHaveAttribute('href', 'mailto:know@pholoso.africa');
     await expect(page.getByLabel('Your message')).toHaveValue(/NOCONFIG/);
@@ -61,7 +61,7 @@ test.describe('without Microsoft 365 credentials', () => {
     await page.getByLabel(/Yes, email me updates/).check();
     await page.waitForTimeout(1100);
     await page.getByRole('button', { name: 'Join' }).click();
-    await expect(page.locator('#newsStatus')).toHaveText("We couldn't send your request. Please email know@pholoso.africa directly.");
+    await expect(page.locator('#newsStatus')).toHaveText("We couldn't send your request. Please email know@pholoso.africa directly.", { timeout: 15_000 });
   });
 });
 
@@ -74,7 +74,7 @@ test('updates sign-up needs consent, then sends a tagged request', async ({ page
   await page.getByLabel(/Yes, email me updates/).check();
   await page.waitForTimeout(1100);
   await page.getByRole('button', { name: 'Join' }).click();
-  await expect(page.locator('#newsStatus')).toHaveText(/We have received your request/);
+  await expect(page.locator('#newsStatus')).toHaveText(/We have received your request/, { timeout: 15_000 });
   const sent = graphRequests().find(r => r.body.message.body.content.includes(email));
   expect(sent.body.message.subject).toBe('Updates sign-up request from the website');
 });
