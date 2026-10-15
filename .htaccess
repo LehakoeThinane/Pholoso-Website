@@ -1,19 +1,52 @@
 # Pholoso Afrika Foundation
+# Only takes effect on the Apache server. See DEPLOY.md for the post-upload checks.
+
+# --- Never serve private or development files -------------------------------
+# Backstop in case they are ever uploaded by mistake: answer 404, not 403,
+# so nothing confirms the files exist.
+# Any dotfile or dot-folder (.git/, .env, .gitignore), except .well-known/
+RedirectMatch 404 (?i)/\.(?!well-known/)
+# Development folders
+RedirectMatch 404 (?i)^/(docs|brand|tools|lib|var)(/|$)
+# Config files and Markdown/text documentation
+RedirectMatch 404 (?i)(^|/)config(\.example)?\.php$
+RedirectMatch 404 (?i)\.(md|markdown|log|ini|bak|sql|py|sh)$
+
+# --- HTTPS ------------------------------------------------------------------
 RewriteEngine On
-# Force HTTPS (requires SSL active on the domain)
+# Force HTTPS (requires SSL active on the domain). The X-Forwarded-Proto check
+# avoids a redirect loop on hosts that terminate SSL in front of Apache.
 RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
 DirectoryIndex index.html
 ErrorDocument 404 /404.html
+Options -Indexes
+
+# --- Caching ----------------------------------------------------------------
 <IfModule mod_expires.c>
 ExpiresActive On
+ExpiresByType image/jpeg "access plus 1 month"
 ExpiresByType image/png "access plus 1 month"
+ExpiresByType image/svg+xml "access plus 1 month"
+ExpiresByType image/webp "access plus 1 month"
 ExpiresByType image/x-icon "access plus 1 month"
+ExpiresByType image/vnd.microsoft.icon "access plus 1 month"
 ExpiresByType text/css "access plus 1 week"
 ExpiresByType application/javascript "access plus 1 week"
+# Pages change with every update, so browsers must recheck them.
+ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
+
+# --- Security headers -------------------------------------------------------
 <IfModule mod_headers.c>
-Header set X-Content-Type-Options "nosniff"
-Header set X-Frame-Options "SAMEORIGIN"
-Header set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+# The page keeps its CSS and JS inline, so 'unsafe-inline' is needed until the rebuild.
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+# Turn on HSTS only after HTTPS is confirmed working on the live domain (DEPLOY.md).
+# Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
