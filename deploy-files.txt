@@ -1,0 +1,22 @@
+# Files uploaded to the web server: the only source of truth for deployment.
+# tools/build-dist.mjs copies exactly these into dist/ and refuses anything private.
+# One path per line, relative to the repository root. Lines starting with # are ignored.
+
+index.html
+404.html
+.htaccess
+contact.php
+lib/form-handler.php
+lib/graph-mailer.php
+lib/rate-limiter.php
+
+robots.txt
+sitemap.xml
+favicon.ico
+logo.png
+og-image.png
+
+img-hero.jpg
+img-classroom.jpg
+img-ecosystem.jpg
+img-family.jpg

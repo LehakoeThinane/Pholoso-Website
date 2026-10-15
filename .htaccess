@@ -6,11 +6,12 @@
 # so nothing confirms the files exist.
 # Any dotfile or dot-folder (.git/, .env, .gitignore), except .well-known/
 RedirectMatch 404 (?i)/\.(?!well-known/)
-# Development folders
-RedirectMatch 404 (?i)^/(docs|brand|tools|lib|var)(/|$)
-# Config files and Markdown/text documentation
+# Development folders (lib/ holds PHP that contact.php includes; it is never requested directly)
+RedirectMatch 404 (?i)^/(docs|brand|tools|tests|lib|var|node_modules|dist)(/|$)
+# Config files, tooling files and Markdown/text documentation
 RedirectMatch 404 (?i)(^|/)config(\.example)?\.php$
-RedirectMatch 404 (?i)\.(md|markdown|log|ini|bak|sql|py|sh)$
+RedirectMatch 404 (?i)(^|/)(package(-lock)?\.json|playwright\.config\.js|deploy-files\.txt)$
+RedirectMatch 404 (?i)\.(md|markdown|log|ini|bak|sql|py|sh|mjs)$
 
 # --- HTTPS ------------------------------------------------------------------
 RewriteEngine On
