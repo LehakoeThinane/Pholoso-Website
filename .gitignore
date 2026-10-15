@@ -1,0 +1,27 @@
+# AI coding-assistant tool files (never commit).
+# Spelled with character classes so the tool name itself never appears in the repo.
+*[Cc][Ll][Aa][Uu][Dd][Ee]*
+*[Aa][Nn][Tt][Hh][Rr][Oo][Pp][Ii][Cc]*
+
+# Private build brief (kept outside the repo; safety net if a copy lands here)
+pholoso-website-build-prompt*
+
+# Brand source files (kept locally and in the Foundation's own storage)
+brand/
+
+# Local config and secrets
+config.php
+.env*
+!.env.example
+
+# Runtime data written by the contact form (rate limiting)
+var/
+
+# OS and editor junk
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
