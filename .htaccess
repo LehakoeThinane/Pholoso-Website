@@ -13,8 +13,12 @@ RedirectMatch 404 (?i)(^|/)config(\.example)?\.php$
 RedirectMatch 404 (?i)(^|/)(package(-lock)?\.json|playwright\.config\.js|deploy-files\.txt)$
 RedirectMatch 404 (?i)\.(md|markdown|log|ini|bak|sql|py|sh|mjs)$
 
-# --- HTTPS ------------------------------------------------------------------
+# --- HTTPS and one canonical address ------------------------------------------
 RewriteEngine On
+# www.pholoso.africa -> https://pholoso.africa in a single redirect, so search
+# engines see one address for the site.
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # Force HTTPS (requires SSL active on the domain). The X-Forwarded-Proto check
 # avoids a redirect loop on hosts that terminate SSL in front of Apache.
 RewriteCond %{HTTPS} off

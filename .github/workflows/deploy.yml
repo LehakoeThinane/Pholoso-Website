@@ -101,6 +101,7 @@ jobs:
           expect 404 "$SITE_URL/lib/form-handler.php"
           expect 404 "$SITE_URL/README.md"
           expect 301 "http://${SITE_URL#https://}/"
+          expect 301 "https://www.${SITE_URL#https://}/"
           for old in "PAF%20Logo%20File.pdf" "PAF_Brand_and_Boilerplate.docx" "milisa-braweni.png" "ATT15207.htaccess"; do
             if [ "$(status "$SITE_URL/$old")" = "200" ]; then
               echo "::warning::$old is still on the server. Delete it by hand (DEPLOY.md)."
