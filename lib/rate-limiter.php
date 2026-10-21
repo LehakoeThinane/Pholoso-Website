@@ -9,6 +9,12 @@ final class RateLimiter
     private $salt;
     private $max;
     private $window;
+    private $storageAvailable = true;
+
+    public function storageAvailable(): bool
+    {
+        return $this->storageAvailable;
+    }
 
     public function __construct(string $dir, string $salt, int $max, int $windowSeconds)
     {
@@ -24,6 +30,7 @@ final class RateLimiter
         if (!is_dir($this->dir) && !@mkdir($this->dir, 0700, true)) {
             // Without working storage, do not send unmetered mail.
             error_log('pholoso contact: rate-limit storage unavailable');
+            $this->storageAvailable = false;
             return false;
         }
         $file = $this->dir . '/' . hash('sha256', $this->salt . '|' . $ip) . '.json';
@@ -31,10 +38,12 @@ final class RateLimiter
         $fh   = @fopen($file, 'c+');
         if ($fh === false) {
             error_log('pholoso contact: rate-limit file unavailable');
+            $this->storageAvailable = false;
             return false;
         }
         if (!flock($fh, LOCK_EX)) {
             error_log('pholoso contact: rate-limit lock unavailable');
+            $this->storageAvailable = false;
             fclose($fh);
             return false;
         }
@@ -51,6 +60,7 @@ final class RateLimiter
         $encoded = json_encode($hits);
         if (!ftruncate($fh, 0) || !rewind($fh) || fwrite($fh, $encoded) !== strlen($encoded) || !fflush($fh)) {
             error_log('pholoso contact: rate-limit write failed');
+            $this->storageAvailable = false;
             $ok = false;
         }
         if (!flock($fh, LOCK_UN)) {

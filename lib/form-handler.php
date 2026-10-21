@@ -157,6 +157,9 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
         (int) (isset($rl['window']) ? $rl['window'] : 3600)
     );
     if (!$limiter->allow($ip)) {
+        if (!$limiter->storageAvailable()) {
+            return [503, ['ok' => false, 'code' => 'storage_unavailable', 'message' => $fail, 'errors' => []]];
+        }
         return [429, ['ok' => false, 'code' => 'rate_limited', 'errors' => [],
             'message' => 'You have sent several messages in a short time. Please try again later, or email ' . PAF_FALLBACK_EMAIL . ' directly.']];
     }

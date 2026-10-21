@@ -6,7 +6,7 @@ Last observed production commit/date: unknown. Audit: 21 October 2026.
 ## PR validation
 
 - [ ] Static checks, upload packaging, PHP tests and browser suite pass.
-- [x] Test both cURL and streams mail transports (48 PHP checks per transport).
+- [x] Test both cURL and streams mail transports (49 PHP checks per transport).
 - [x] No-JavaScript forms succeed against mock mail; child consent remains enforced.
 - [x] Uncertain sends are not retried; throttling respects Retry-After.
 - [x] Keyboard focus stays in menu/dialogs; backgrounds become inert and restore.

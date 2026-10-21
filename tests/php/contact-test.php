@@ -197,6 +197,11 @@ try {
     file_put_contents($blockedStorage, 'not a directory');
     $limiter = new RateLimiter($blockedStorage . '/limits', 'salt', 5, 3600);
     check('unavailable storage refuses unmetered sending', !$limiter->allow('198.51.100.1'));
+    $brokenCfg = $base();
+    mkdir($brokenCfg['storage_dir'], 0700, true);
+    file_put_contents($brokenCfg['storage_dir'] . '/ratelimit', 'not a directory');
+    list($st, $p) = paf_handle($valid, '198.51.100.1', $brokenCfg);
+    check('storage failure is not misreported as visitor throttling', $st === 503 && $p['code'] === 'storage_unavailable');
 
     echo "Updates sign-up\n";
     list($st, $p) = paf_handle(['kind' => 'newsletter', 'email' => 'reader@example.com', 'consent_updates' => '1', 'elapsed' => '5'], '203.0.113.10', $base());
