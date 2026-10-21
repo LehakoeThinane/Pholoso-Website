@@ -24,12 +24,23 @@ if (preg_match('#^/([^/]+)/oauth2/v2\.0/token$#', $path, $m)) {
 
 if (preg_match('#^/v1\.0/users/([^/]+)/sendMail$#', $path, $m)) {
     $sender = rawurldecode($m[1]);
+    $previous = (string) @file_get_contents(getenv('MOCK_GRAPH_LOG'));
     file_put_contents(getenv('MOCK_GRAPH_LOG'), json_encode([
         'sender' => $sender,
         'auth'   => isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : '',
         'body'   => json_decode(file_get_contents('php://input'), true),
     ]) . "\n", FILE_APPEND);
-    http_response_code(strpos($sender, 'fail@') === 0 ? 500 : 202);
+    if (strpos($sender, 'timeout@') === 0) {
+        sleep(22); // Accepted request, response arrives after the client's timeout.
+        http_response_code(202);
+        return;
+    }
+    if (strpos($sender, 'long-throttle@') === 0 || (strpos($sender, 'throttle@') === 0 && strpos($previous, 'throttle@') === false)) {
+        header('Retry-After: ' . (strpos($sender, 'long-throttle@') === 0 ? '120' : '1'));
+        http_response_code(429);
+    } else {
+        http_response_code(strpos($sender, 'fail@') === 0 ? 500 : 202);
+    }
     return;
 }
 

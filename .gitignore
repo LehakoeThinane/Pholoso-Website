@@ -22,6 +22,7 @@ node_modules/
 test-results/
 playwright-report/
 dist/
+release-backup.tar.gz.enc
 
 # OS and editor junk
 Thumbs.db

@@ -133,7 +133,7 @@
       "name": "How do you protect children and their stories?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The platform meets strict POPIA and EU standards for children's privacy. No child is identifiable. Children create their own pseudonyms and choose avatars that represent them. Add a signed safeguarding policy, guardian consent, and full edit and withdrawal rights, and protection is built into the model, not bolted on."
+        "text": "Please do not send a child's full name or medical details through this website. If your enquiry concerns a child, we ask you to confirm that you are their parent or legal guardian. Contact know@pholoso.africa to ask about access, correction or deletion of information you have sent. Our website privacy notice is a draft under review."
       }
     }
   ]
@@ -200,6 +200,8 @@
 /* The hidden attribute always wins over component display rules. */
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
+html{scroll-padding-top:110px}
+.statband cite a{color:var(--on-band);text-decoration:underline}
 body{font-family:var(--font); background:var(--paper); color:var(--ink); line-height:1.65; font-size:1.0625rem; -webkit-font-smoothing:antialiased; overflow-x:hidden}
 h1,h2,h3,h4{line-height:1.16; font-weight:700; color:var(--green-deep); letter-spacing:-.01em}
 h1{font-size:clamp(2rem,5.4vw,3.625rem); letter-spacing:-.02em}
@@ -599,7 +601,7 @@ html:not(.js) .story-detail,html:not(.js) .passion-set,html:not(.js) .passion-st
 .passion-set h3{margin-bottom:4px}
 .passion-set[hidden]{display:none}
 
-/* Header: 2to.iQ dropdown and "Fund their tomorrow" */
+/* Header: 2to.iQ dropdown and donation discussion link */
 .nav-dd{position:relative}
 .dd-btn{font:inherit;font-weight:600;font-size:0.9062rem;color:var(--ink);background:none;border:none;padding:6px 0;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .dd-btn .chev{font-size:.75em;display:inline-block}
@@ -746,7 +748,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
       <a href="#comfort" class="nav-mobile-only" data-comfort-open>Comfort &amp; access</a>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-primary btn-fund" href="#involved" data-nav="involved"><svg class="peak-ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 15 14.5Q8 11.5 1 14.5Z"/></svg>Fund their tomorrow</a>
+      <a class="btn btn-primary btn-fund" href="#contact" data-nav="contact"><svg class="peak-ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 15 14.5Q8 11.5 1 14.5Z"/></svg>Discuss a donation</a>
       <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
     </div>
   </div>
@@ -798,7 +800,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
       <div class="big">70%</div>
       <div>
         <p>Up to seven in ten school-aged children with disabilities in South Africa are out of school. Neurodivergent learners sit within this underserved group, and many who do attend are placed in separate settings rather than supported within inclusive ones.</p>
-        <cite>South African inclusive-education research; African Journal of Disability, 2024; Statistics South Africa</cite>
+        <cite><a href="https://doi.org/10.4102/ajod.v13i0.1462">Chirowamhangu, African Journal of Disability, 2024</a> (reports estimates from earlier studies, not a current census)</cite>
       </div>
     </div>
     <div style="margin-top:30px" class="reveal"><a href="#about" class="btn btn-ghost" data-nav="about">Why this matters</a></div>
@@ -887,20 +889,20 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
       <div class="tl"><b>2015</b><span>SDG 4</span><p>Inclusive, equitable quality education for all.</p></div>
     </div>
     <div class="stat-grid">
-      <div class="stat reveal"><b>70%</b><p>Up to seven in ten school-aged children with disabilities in South Africa are out of school.</p><cite>African Journal of Disability, 2024; Statistics South Africa</cite></div>
-      <div class="stat reveal"><b>1 in 100</b><p>children are neurodivergent on the autism spectrum alone, the WHO's conservative global estimate.</p><cite>World Health Organization, 2023</cite></div>
-      <div class="stat reveal"><b>Since 2001</b><p>South Africa has held an inclusive-education policy. The promise still outpaces the delivery.</p><cite>Education White Paper 6</cite></div>
+      <div class="stat reveal"><b>70%</b><p>Up to seven in ten school-aged children with disabilities in South Africa are out of school.</p><cite><a href="https://doi.org/10.4102/ajod.v13i0.1462">Chirowamhangu, 2024</a>, citing earlier studies</cite></div>
+      <div class="stat reveal"><b>1 in 100</b><p>children are on the autism spectrum in the historical global estimate cited here. This is not a current South African prevalence figure.</p><cite><a href="https://doi.org/10.1002/aur.2696">Zeidan et al., 2022 systematic review</a> (historical estimate; studies published 2012–2021)</cite></div>
+      <div class="stat reveal"><b>Since 2001</b><p>South Africa has held an inclusive-education policy. The promise still outpaces the delivery.</p><cite><a href="https://www.gov.za/documents/white-papers/special-needs-education-education-white-paper-6-01-jul-2001">Education White Paper 6, 2001</a></cite></div>
     </div>
   </div></div>
   <div class="section"><div class="wrap">
     <div class="section-head reveal"><span class="eyebrow">Why you can trust this</span><h2>When the work carries this much responsibility, trust cannot be decorative. It is built into the model.</h2></div>
     <div class="trust-grid">
-      <div class="trust-card reveal"><h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#EEA838" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Child safeguarding</h3><p>A signed safeguarding policy and code of conduct govern every interaction with children. Guardian consent and dignity come first.</p></div>
-      <div class="trust-card reveal"><h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#EEA838" stroke-width="1.8" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Privacy, by design</h3><p>The platform is built to strict POPIA and EU standards for children's privacy. No child is identifiable. Children choose their own pseudonyms and avatars to represent them.</p></div>
+      <div class="trust-card reveal"><h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#EEA838" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Child safeguarding</h3><p>Please do not include a child's full name or medical details in your enquiry. Contact us to discuss safeguarding arrangements before sharing a child's story or taking part in an activity.</p></div>
+      <div class="trust-card reveal"><h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#EEA838" stroke-width="1.8" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Privacy, by design</h3><p>This website sends enquiries by email. Contact know@pholoso.africa to ask us to access, correct or delete information you have sent. Our draft privacy notice explains this website's handling of information; ask us separately about 2to.iQ.</p></div>
       <div class="trust-card reveal"><h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#EEA838" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Accessibility, built in</h3><p>This site targets WCAG 2.2 AA. The Comfort and Access controls let you shape it to your own needs.</p></div>
       <div class="trust-card reveal"><h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#EEA838" stroke-width="1.8" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z"/></svg>Respectful language</h3><p>We use person-first language, child with autism, as our default. We also respect each person's own preference, and you can switch to identity-first at any time.</p></div>
     </div>
-    <p style="margin-top:28px;font-size:0.9062rem;color:var(--ink-soft)">Our Safeguarding Policy, Data Protection and Privacy Policy, Code of Conduct and Governance framework guide this work and are available to partners and funders.</p>
+    <p style="margin-top:28px;font-size:0.9062rem;color:var(--ink-soft)">Partners and funders can contact us to discuss safeguarding, privacy and governance arrangements before participating.</p>
     <p class="reg-line">NPO 333-132-NPO . CIPC 2025/951168/08 . PBO 930090077 (Section 18A approved)</p>
   </div></div>
   <div class="section" style="background:var(--paper-2)"><div class="wrap" style="max-width:820px">
@@ -908,7 +910,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     <details class="faq reveal"><summary>What does the Foundation actually do?</summary><p>We advance inclusive, adaptive, learner-centred education for neurodivergent children, through advocacy, educational innovation with 2to.iQ, and by connecting the ecosystem of schools, families and specialists around each child.</p></details>
     <details class="faq reveal"><summary>Are donations tax-deductible?</summary><p>Yes. We are a registered Public Benefit Organisation with SARS Section 18A approval, PBO 930090077. Qualifying donations can receive a Section 18A tax-deductible receipt.</p></details>
     <details class="faq reveal"><summary>How do PAF and 2to.iQ relate?</summary><p>Two entities, one mission. Pholoso Afrika Foundation is the social-impact engine. 2to.iQ is its edtech strategic partner, building the adaptive learning systems.</p></details>
-    <details class="faq reveal"><summary>How do you protect children and their stories?</summary><p>The platform meets strict POPIA and EU standards for children's privacy. No child is identifiable. Children create their own pseudonyms and choose avatars that represent them. Add a signed safeguarding policy, guardian consent, and full edit and withdrawal rights, and protection is built into the model, not bolted on.</p></details>
+    <details class="faq reveal"><summary>How do you protect children and their stories?</summary><p>Please do not send a child's full name or medical details through this website. If your enquiry concerns a child, we ask you to confirm that you are their parent or legal guardian. Contact know@pholoso.africa to ask about access, correction or deletion of information you have sent. Our website privacy notice is a draft under review.</p></details>
   </div></div>
 </section>
 
@@ -1018,6 +1020,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
       <button class="filter" data-filter="young" aria-pressed="false">Young person</button>
       <button class="filter" data-filter="educator" aria-pressed="false">Educator</button>
     </div>
+    <p class="story-note">These accounts are under review with the Foundation to confirm their source, publication permission and whether names are pseudonyms or the accounts are composites. Please contact us with any concern or removal request.</p>
     <div class="story-grid" id="storyGrid">
       <article class="story" data-cat="professional" aria-labelledby="story-0-q">
         <span class="cat">Professional voice</span>
@@ -1093,7 +1096,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
   <div class="section"><div class="wrap">
     <div class="involved-grid" style="margin-top:0">
       <div class="inv reveal"><span class="tag">Corporates and partners</span><h3>Co-build inclusive education</h3><ul><li>B-BBEE Socio-Economic Development value, because our beneficiaries are predominantly Black children with disabilities</li><li>Skills Development value when you fund educator training</li><li>CSI and ESG aligned, credible and brand-safe</li></ul><a href="#contact" class="btn btn-ghost" data-nav="contact">Start a conversation</a></div>
-      <div class="inv reveal"><span class="tag">Donors and funders</span><h3>Fund infrastructure, not just a programme</h3><ul><li>Section 18A tax-deductible giving under PBO 930090077</li><li>Catalytic support for early, adaptive systems</li><li>A legacy in a national model of inclusion</li></ul><a href="#contact" class="btn btn-ghost" data-nav="contact">See the donor case</a></div>
+      <div class="inv reveal"><span class="tag">Donors and funders</span><h3>Fund infrastructure, not just a programme</h3><ul><li>Section 18A tax-deductible giving under PBO 930090077</li><li>Catalytic support for early, adaptive systems</li><li>A legacy in a national model of inclusion</li></ul><a href="#contact" class="btn btn-ghost" data-nav="contact">Discuss a donation</a></div>
       <div class="inv reveal"><span class="tag">Schools and educators</span><h3>Partner on inclusive practice</h3><ul><li>Pilot 2to.iQ in controlled, supported settings</li><li>Affirming, learner-centred teaching support</li><li>Join a connected ecosystem of specialists</li></ul><a href="#contact" class="btn btn-ghost" data-nav="contact">Partner on a pilot</a></div>
     </div>
     <p class="reg-line">A registered Public Benefit Organisation. NPO 333-132-NPO . CIPC 2025/951168/08 . PBO 930090077 (Section 18A approved)</p>
@@ -1147,7 +1150,8 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
       <div class="field"><label for="email">Email <span class="hint">(optional, so we can reply)</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="err-email" /><p class="field-error" id="err-email" hidden></p></div>
       <div class="field"><label for="message">Your message</label><textarea id="message" name="message" rows="6" maxlength="5000" aria-required="true" aria-describedby="err-message"></textarea><p class="field-error" id="err-message" hidden></p></div>
       <div class="consent"><input type="checkbox" id="consent_popia" name="consent_popia" value="1" aria-required="true" aria-describedby="err-consent_popia" /><label for="consent_popia">I understand my message is handled in line with POPIA, as set out in the <a href="#privacy" data-nav="privacy">privacy notice</a>, and I can ask to edit or withdraw it.</label><p class="field-error" id="err-consent_popia" hidden></p></div>
-      <div class="consent"><input type="checkbox" id="consent_guardian" name="consent_guardian" value="1" aria-required="true" aria-describedby="err-consent_guardian" /><label for="consent_guardian">If my message is about a child, I am their parent or legal guardian and I give consent.</label><p class="field-error" id="err-consent_guardian" hidden></p></div>
+      <div class="field"><label for="concerns_child">Does your enquiry concern a child?</label><select id="concerns_child" name="concerns_child" aria-required="true" aria-describedby="err-concerns_child"><option value="">Please choose</option><option value="no">No</option><option value="yes">Yes</option></select><p class="field-error" id="err-concerns_child" hidden></p></div>
+      <div class="consent" id="guardianField"><input type="checkbox" id="consent_guardian" name="consent_guardian" value="1" aria-describedby="guardianHelp err-consent_guardian" /><label for="consent_guardian">I am the child's parent or legal guardian and I give consent.</label><p id="guardianHelp">Required only if your enquiry concerns a child.</p><p class="field-error" id="err-consent_guardian" hidden></p></div>
       <input type="hidden" name="elapsed" value="" />
       <div aria-hidden="true" style="position:absolute;left:-9999px"><label for="website">Leave this empty</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off" /></div>
       <div class="form-actions"><button type="submit" class="btn btn-primary" id="formSubmit">Send with care</button><a href="mailto:know@pholoso.africa">Or email know@pholoso.africa</a></div>
@@ -1171,28 +1175,30 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     <p>Pholoso Afrika Foundation NPC (NPO 333-132-NPO, CIPC 2025/951168/08, PBO 930090077) is responsible for the personal information collected through this website. You can reach us at <a href="mailto:know@pholoso.africa">know@pholoso.africa</a>.</p>
     <h2>What we collect, and why</h2>
     <ul>
-      <li><strong>Contact form:</strong> your name and email address (both optional), the option you choose under "I am a…", your message and your two confirmations. We use them only to read and reply to your message.</li>
+      <li><strong>Contact form:</strong> your name and email address (both optional), the option you choose under "I am a…", your message, your privacy confirmation, whether the enquiry concerns a child and, if so, your guardian confirmation. We use them only to read and reply to your message.</li>
       <li><strong>Email updates:</strong> your email address and your consent, with the date. We use them only to send the updates you asked for.</li>
-      <li><strong>Spam protection:</strong> when you send a form, your internet (IP) address is turned into a scrambled one-way code to limit how many messages one visitor can send in an hour. The address itself is not stored, and the code is deleted after about an hour.</li>
+      <li><strong>Spam protection:</strong> when you send a form, your internet (IP) address is turned into a scrambled one-way code to limit how many messages one visitor can send in an hour. The address itself is not stored, and timestamps stop counting after an hour. Files are removed during occasional cleanup on later submissions, so they may remain longer when the site is quiet. The code is not an anonymous identifier.</li>
       <li><strong>Comfort &amp; access settings:</strong> saved only in your own browser, on your device. We never receive them.</li>
     </ul>
     <p>Please don't include your child's full name or medical details in a message. We don't need them to help you.</p>
     <h2>Cookies and tracking</h2>
-    <p>This website does not use cookies, advertising trackers or analytics.</p>
+    <p>The website code does not add cookies, advertising trackers or analytics. The current hosting service adds a third-party monitoring script. We are asking the host to disable it and confirm what it collects. Until that is confirmed, we cannot promise that the live website is free of tracking.</p>
     <h2>Who handles your information for us</h2>
     <ul>
       <li><strong>Microsoft 365</strong> delivers and stores the email your message becomes.</li>
-      <li><strong>Our web host</strong> runs this website and may keep standard server logs, such as IP address, date and page requested, for security.</li>
+      <li><strong>Our web host</strong> runs this website on servers outside South Africa and may keep standard server logs, such as IP address, date and page requested, for security.</li>
       <li><strong>Read aloud</strong> uses the voice built into your own browser or device. Some browsers send the text being read to their own online voice service. That text is our page content, not information about you.</li>
     </ul>
+    <!-- TODO: legal review. Confirm where the Microsoft 365 tenant stores data, and the wording needed for cross-border transfers under POPIA. -->
+    <p>This means information you send through the website may be processed outside South Africa.</p>
     <h2>How long we keep it</h2>
     <p>We are confirming our retention periods as part of the review of this notice. Until then, you can ask us at any time to delete your message or to remove you from updates.</p>
     <h2>Your rights</h2>
     <p>Under the Protection of Personal Information Act (POPIA) you can ask to see the information we hold about you, ask us to correct or delete it, and object to how we use it. You can withdraw your consent to updates at any time. Email <a href="mailto:know@pholoso.africa">know@pholoso.africa</a>.</p>
     <p>If you are not happy with how we handle your information, you can complain to the Information Regulator (South Africa) at <a href="https://inforegulator.org.za" target="_blank" rel="noopener">inforegulator.org.za<span class="sr-only"> (opens external site in a new tab)</span></a>.</p>
     <h2>Children</h2>
-    <p>You don't need to give us any information about a child to use this website. If a message is about a child, it must come from their parent or legal guardian.</p>
-    <p class="reg-line">Last updated: 15 October 2026</p>
+    <p>You don't need to give us any information about a child to use this website. When an enquiry concerns a child, we ask the sender to confirm they are the parent or legal guardian. For a general professional or partnership enquiry, choose "No" and leave out information about individual children.</p>
+    <p class="reg-line">Last updated: 21 October 2026</p>
   </div></div>
 </section>
 
@@ -1228,7 +1234,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
         <li><button class="foot-link-btn" type="button" data-comfort-open>Comfort &amp; access</button></li>
       </ul></div>
       <div><h4>Get involved</h4><ul>
-        <li><a href="#involved" data-nav="involved">Donate (Section 18A)</a></li>
+        <li><a href="#contact" data-nav="contact">Discuss a donation</a></li>
         <li><a href="#involved" data-nav="involved">Partner with us</a></li>
         <li><a href="#involved" data-nav="involved">For schools</a></li>
         <li><a href="#contact" data-nav="contact">Share your story</a></li>
@@ -1321,10 +1327,25 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
   /* ---------- Mobile nav ---------- */
   var menuBtn=$('menuBtn'),navlinks=$('navlinks'),menuClose=$('menuClose');
   function navOpen(){return navlinks.classList.contains('open');}
-  function openNav(){navlinks.classList.add('open');root.classList.add('nav-open');menuBtn.setAttribute('aria-expanded','true');menuClose.focus();}
-  function closeNav(){if(!navOpen())return;navlinks.classList.remove('open');root.classList.remove('nav-open');menuBtn.setAttribute('aria-expanded','false');}
+  // Preserve pre-existing inert state, including when one layer opens over another.
+  var isolated=[];
+  function isolate(box){
+    isolated.forEach(function(item){item.el.inert=item.was;});isolated=[];
+    if(!box)return;
+    var branch=box;
+    while(branch&&branch!==document.body){
+      Array.prototype.forEach.call(branch.parentElement.children,function(el){
+        if(el===branch||el.id==='live'||(el.id==='cpBack'&&box===panel)||el.tagName==='SCRIPT'||el.tagName==='STYLE')return;
+        isolated.push({el:el,was:el.inert});el.inert=true;
+      });branch=branch.parentElement;
+    }
+  }
+  function syncLayers(){isolate(panel&&!panel.hidden?panel:modalOpen()?$('modal'):navOpen()?navlinks:null);}
+  function openNav(){navlinks.classList.add('open');root.classList.add('nav-open');menuBtn.setAttribute('aria-expanded','true');syncLayers();menuClose.focus();}
+  function closeNav(){if(!navOpen())return;navlinks.classList.remove('open');root.classList.remove('nav-open');menuBtn.setAttribute('aria-expanded','false');syncLayers();}
   menuBtn.addEventListener('click',openNav);
   menuClose.addEventListener('click',function(){closeNav();menuBtn.focus();});
+  window.addEventListener('resize',function(){if(window.innerWidth>1100&&navOpen())closeNav();});
 
   /* ---------- 2to.iQ dropdown: click, tap, Enter or Space; Escape closes ---------- */
   var iqBtn=$('iqBtn'),iqMenu=$('iqMenu');
@@ -1482,11 +1503,12 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
 
   /* ---------- Comfort & access panel (modal dialog) ---------- */
   var fab=$('comfortFab'),panel=$('comfortPanel'),cpBack=$('cpBack'),panelOpener=null;
-  function openPanel(from){panelOpener=from||fab;closeNav();setIq(false);panel.hidden=false;cpBack.hidden=false;fab.setAttribute('aria-expanded','true');$('cpTitle').focus();}
+  function openPanel(from){panelOpener=from||fab;closeNav();setIq(false);panel.hidden=false;cpBack.hidden=false;fab.setAttribute('aria-expanded','true');syncLayers();$('cpTitle').focus();}
   function closePanel(){
     if(panel.hidden)return;
     panel.hidden=true;cpBack.hidden=true;fab.setAttribute('aria-expanded','false');
-    var back=(panelOpener&&!panelOpener.closest('.nav-links'))?panelOpener:fab;back.focus();
+    syncLayers();
+    var back=modalOpen()?$('modalClose'):(panelOpener&&!panelOpener.closest('.nav-links'))?panelOpener:fab;back.focus();
   }
   fab.addEventListener('click',function(){if(panel.hidden)openPanel(fab);else closePanel();});
   each('[data-comfort-open]',function(a){a.addEventListener('click',function(e){e.preventDefault();openPanel(a);});});
@@ -1531,10 +1553,10 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     $('modalH').textContent=story.querySelector('.q').textContent;
     $('modalWho').textContent=story.querySelector('.who').textContent;
     $('m1').textContent=dd[0].textContent;$('m2').textContent=dd[1].textContent;$('m3').textContent=dd[2].textContent;$('m4').textContent=dd[3].textContent;
-    mb.classList.add('open');$('modalClose').focus();
+    mb.classList.add('open');syncLayers();$('modalClose').focus();
   }
-  function modalOpen(){return mb.classList.contains('open');}
-  function closeModal(){mb.classList.remove('open');player.stopIf($('modal'));if(lastFocus)lastFocus.focus();}
+  function modalOpen(){return !!mb&&mb.classList.contains('open');}
+  function closeModal(){mb.classList.remove('open');player.stopIf($('modal'));syncLayers();if(lastFocus)lastFocus.focus();}
   each('.story .more',function(b){b.addEventListener('click',function(){openModal(b.closest('.story'));});});
   $('modalClose').addEventListener('click',closeModal);
   mb.addEventListener('click',function(e){if(e.target===mb)closeModal();});
@@ -1543,6 +1565,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
   document.addEventListener('keydown',function(e){
     if(!panel.hidden){trap(panel,e);if(e.key==='Escape'){e.preventDefault();closePanel();}return;}
     if(modalOpen()){trap($('modal'),e);if(e.key==='Escape')closeModal();return;}
+    if(navOpen())trap(navlinks,e);
     if(e.key!=='Escape')return;
     if(!iqMenu.hidden){setIq(false,true);return;}
     if(navOpen()){closeNav();menuBtn.focus();}
@@ -1570,7 +1593,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
   each('[data-nav]',function(a){a.addEventListener('click',function(e){e.preventDefault();if(modalOpen())closeModal();showPage(a.getAttribute('data-nav'));});});
   window.addEventListener('popstate',function(){showPage((location.hash||'#home').slice(1),false);});
 
-  /* ---------- Forms: success only when the server confirms delivery ---------- */
+  /* ---------- Forms: success only when the server confirms acceptance for delivery ---------- */
   var FALLBACK='know@pholoso.africa', NETFAIL="We couldn't send your message. Please email "+FALLBACK+" directly.";
   var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   function post(form){
@@ -1585,7 +1608,11 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     el.appendChild(document.createTextNode(msg.slice(0,i)));el.appendChild(a);el.appendChild(document.createTextNode(msg.slice(i+FALLBACK.length)));
   }
   var form=$('storyForm'),formStatus=$('formStatus'),summary=$('errSummary'),errList=$('errList'),submit=$('formSubmit');
-  var FIELDS=['name','role','email','message','consent_popia','consent_guardian'];
+  var FIELDS=['name','role','email','message','consent_popia','concerns_child','consent_guardian'];
+  function guardianState(){var needed=$('concerns_child').value==='yes';$('guardianField').hidden=!needed;$('consent_guardian').disabled=!needed;$('consent_guardian').setAttribute('aria-required',needed?'true':'false');if(!needed)$('consent_guardian').checked=false;}
+  $('concerns_child').addEventListener('change',guardianState);
+  form.addEventListener('reset',function(){setTimeout(guardianState,0);});
+  guardianState();
   function clearErrors(){
     FIELDS.forEach(function(k){var e=$('err-'+k),el=$(k);e.hidden=true;e.textContent='';el.removeAttribute('aria-invalid');el.closest('.field,.consent').classList.remove('has-error');});
     summary.hidden=true;errList.textContent='';
@@ -1605,7 +1632,8 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     if(!msg)e.message='Please write your message.';
     else if(msg.length>5000)e.message='Please keep your message under 5000 characters.';
     if(!$('consent_popia').checked)e.consent_popia='Please confirm you understand how we handle your message.';
-    if(!$('consent_guardian').checked)e.consent_guardian='Please confirm the statement about children.';
+    if(!$('concerns_child').value)e.concerns_child='Please say whether your enquiry concerns a child.';
+    if($('concerns_child').value==='yes'&&!$('consent_guardian').checked)e.consent_guardian='Please confirm the statement about children.';
     return e;
   }
   function showStatus(ok,msg){formStatus.className='form-status '+(ok?'ok':'fail');setMessage(formStatus,msg);formStatus.hidden=false;formStatus.focus();}

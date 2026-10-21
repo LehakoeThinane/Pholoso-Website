@@ -187,6 +187,7 @@ test.describe('read aloud', () => {
     expect(spoken[0].text).toBe(h1);
     expect(spoken[0].voice).toBe('South African English');
     await page.getByRole('button', { name: 'Pause' }).click();
+    await expect(page.getByRole('button', { name: 'Resume', exact: true })).toBeVisible();
     const n = await page.evaluate(() => window.__spoken.length);
     await page.waitForTimeout(150);
     expect(await page.evaluate(() => window.__spoken.length)).toBe(n);

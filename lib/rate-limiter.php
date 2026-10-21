@@ -9,6 +9,12 @@ final class RateLimiter
     private $salt;
     private $max;
     private $window;
+    private $storageAvailable = true;
+
+    public function storageAvailable(): bool
+    {
+        return $this->storageAvailable;
+    }
 
     public function __construct(string $dir, string $salt, int $max, int $windowSeconds)
     {
@@ -22,17 +28,25 @@ final class RateLimiter
     public function allow(string $ip): bool
     {
         if (!is_dir($this->dir) && !@mkdir($this->dir, 0700, true)) {
-            // Storage unavailable: fail open rather than block real visitors.
+            // Without working storage, do not send unmetered mail.
             error_log('pholoso contact: rate-limit storage unavailable');
-            return true;
+            $this->storageAvailable = false;
+            return false;
         }
         $file = $this->dir . '/' . hash('sha256', $this->salt . '|' . $ip) . '.json';
         $now  = time();
         $fh   = @fopen($file, 'c+');
         if ($fh === false) {
-            return true;
+            error_log('pholoso contact: rate-limit file unavailable');
+            $this->storageAvailable = false;
+            return false;
         }
-        flock($fh, LOCK_EX);
+        if (!flock($fh, LOCK_EX)) {
+            error_log('pholoso contact: rate-limit lock unavailable');
+            $this->storageAvailable = false;
+            fclose($fh);
+            return false;
+        }
         $hits = json_decode((string) stream_get_contents($fh), true);
         $hits = is_array($hits) ? $hits : [];
         $cut  = $now - $this->window;
@@ -43,10 +57,15 @@ final class RateLimiter
         if ($ok) {
             $hits[] = $now;
         }
-        ftruncate($fh, 0);
-        rewind($fh);
-        fwrite($fh, json_encode($hits));
-        flock($fh, LOCK_UN);
+        $encoded = json_encode($hits);
+        if (!ftruncate($fh, 0) || !rewind($fh) || fwrite($fh, $encoded) !== strlen($encoded) || !fflush($fh)) {
+            error_log('pholoso contact: rate-limit write failed');
+            $this->storageAvailable = false;
+            $ok = false;
+        }
+        if (!flock($fh, LOCK_UN)) {
+            error_log('pholoso contact: rate-limit unlock failed');
+        }
         fclose($fh);
 
         if (mt_rand(1, 50) === 1) {

@@ -96,7 +96,7 @@ $base = function (array $over = []) use ($tmp, $mockPort) {
 $valid = [
     'name' => 'Thandi Test', 'email' => 'thandi@example.com', 'role' => 'Parent or caregiver',
     'message' => "Hello,\nI would like to know more. SECRET-BODY-MARKER",
-    'consent_popia' => '1', 'consent_guardian' => '1', 'website' => '', 'elapsed' => '12.5',
+    'consent_popia' => '1', 'concerns_child' => 'yes', 'consent_guardian' => '1', 'website' => '', 'elapsed' => '12.5',
 ];
 
 try {
@@ -113,11 +113,15 @@ try {
     $noTime = $valid;
     unset($noTime['elapsed']);
     list($st, $p) = paf_handle($noTime, '203.0.113.5', $base());
-    check('missing time-to-submit: blocked', $st === 400 && $p['code'] === 'too_fast');
+    check('missing time-to-submit: accepted for delivery', $st === 200 && $p['ok']);
+    list($st, $p) = paf_handle(array_merge($valid, ['elapsed' => '']), '203.0.113.5', $base());
+    check('empty timing without JavaScript: accepted', $st === 200 && $p['ok']);
+    list($st, $p) = paf_handle(array_merge($valid, ['elapsed' => 'bad']), '203.0.113.5', $base());
+    check('malformed timing is rejected', $st === 400 && !$p['ok']);
 
     list($st, $p) = paf_handle(['elapsed' => '9'], '203.0.113.5', $base());
-    check('empty form: message and both consents required',
-        $p['code'] === 'invalid' && isset($p['errors']['message'], $p['errors']['consent_popia'], $p['errors']['consent_guardian']));
+    check('empty form: message, privacy and child enquiry choice required',
+        $p['code'] === 'invalid' && isset($p['errors']['message'], $p['errors']['consent_popia'], $p['errors']['concerns_child']) && !isset($p['errors']['consent_guardian']));
 
     list($st, $p) = paf_handle(array_merge($valid, ['consent_guardian' => '']), '203.0.113.5', $base());
     check('guardian consent enforced on the server', isset($p['errors']['consent_guardian']) && count($p['errors']) === 1);
@@ -137,6 +141,12 @@ try {
     list($st, $p) = paf_handle(array_merge($valid, ['message' => "bad \xC3\x28 utf8"]), '203.0.113.5', $base());
     check('invalid UTF-8 treated as empty', isset($p['errors']['message']));
 
+    list($st, $p) = paf_handle(array_merge($valid, ['concerns_child' => 'no', 'consent_guardian' => '']), '203.0.113.5', $base());
+    check('general enquiry does not need guardian consent', $st === 200 && $p['ok']);
+    check('guardian statement recorded as not applicable', strpos(last_mail($mailLog)['body']['message']['body']['content'], 'Guardian statement: not applicable') !== false);
+    list($st, $p) = paf_handle($valid, '203.0.113.5', $base(['salt' => '  ']));
+    check('empty salt fails configuration', $st === 503 && !$p['ok']);
+
     echo "Delivery through the Graph mock\n";
     $before = mail_count($mailLog);
     list($st, $p) = paf_handle(array_merge($valid, ['name' => "Bob\r\nBcc: victim@example.com"]), '203.0.113.6', $base());
@@ -144,7 +154,7 @@ try {
     check('valid enquiry: success only after Graph accepts it', $st === 200 && $p['ok'] && mail_count($mailLog) === $before + 1, json_encode($p));
     check('uses a bearer token, no password', $m && $m['auth'] === 'Bearer test-token');
     check('sent from the configured mailbox', $m && $m['sender'] === 'website@pholoso.africa');
-    check('delivered to the recipient', $m && $m['body']['message']['toRecipients'][0]['emailAddress']['address'] === 'know@pholoso.africa');
+    check('recipient passed to Microsoft for delivery', $m && $m['body']['message']['toRecipients'][0]['emailAddress']['address'] === 'know@pholoso.africa');
     check('visitor email in Reply-To, not From', $m && $m['body']['message']['replyTo'][0]['emailAddress']['address'] === 'thandi@example.com' && !isset($m['body']['message']['from']));
     $subject = $m ? $m['body']['message']['subject'] : '';
     check('subject has no CR/LF (header injection stripped)', $subject !== '' && strpbrk($subject, "\r\n") === false, $subject);
@@ -154,8 +164,17 @@ try {
     $m = last_mail($mailLog);
     check('no email given: sends without Reply-To', $st === 200 && !isset($m['body']['message']['replyTo']));
 
+    $before = mail_count($mailLog);
     list($st, $p) = paf_handle($valid, '203.0.113.8', $base(['sender' => 'fail@pholoso.africa']));
     check('Graph error: honest failure, 502', $st === 502 && !$p['ok'] && $p['code'] === 'send_failed');
+
+    check('uncertain server failure is never retried', mail_count($mailLog) === $before + 1);
+    $before = mail_count($mailLog);
+    list($st, $p) = paf_handle($valid, '203.0.113.8', $base(['sender' => 'throttle@pholoso.africa']));
+    check('throttling retries once after Retry-After', $st === 200 && mail_count($mailLog) === $before + 2);
+    $before = mail_count($mailLog);
+    list($st, $p) = paf_handle($valid, '203.0.113.8', $base(['sender' => 'long-throttle@pholoso.africa']));
+    check('long Retry-After is not shortened', $st === 502 && mail_count($mailLog) === $before + 1);
 
     list($st, $p) = paf_handle($valid, '203.0.113.9', $base(['tenant_id' => 'bad-tenant']));
     check('token refused: honest failure', $st === 502 && !$p['ok']);
@@ -174,6 +193,16 @@ try {
     $stored = implode('', array_map('file_get_contents', $files)) . implode('', $files);
     check('IP address is not stored in rate-limit files', strpos($stored, '198.51.100') === false && count($files) === 2);
 
+    $blockedStorage = $tmp . '/storage-file';
+    file_put_contents($blockedStorage, 'not a directory');
+    $limiter = new RateLimiter($blockedStorage . '/limits', 'salt', 5, 3600);
+    check('unavailable storage refuses unmetered sending', !$limiter->allow('198.51.100.1'));
+    $brokenCfg = $base();
+    mkdir($brokenCfg['storage_dir'], 0700, true);
+    file_put_contents($brokenCfg['storage_dir'] . '/ratelimit', 'not a directory');
+    list($st, $p) = paf_handle($valid, '198.51.100.1', $brokenCfg);
+    check('storage failure is not misreported as visitor throttling', $st === 503 && $p['code'] === 'storage_unavailable');
+
     echo "Updates sign-up\n";
     list($st, $p) = paf_handle(['kind' => 'newsletter', 'email' => 'reader@example.com', 'consent_updates' => '1', 'elapsed' => '5'], '203.0.113.10', $base());
     $m = last_mail($mailLog);
@@ -184,12 +213,23 @@ try {
     check('sign-up without email is refused', isset($p['errors']['email']));
 
     echo "Logging\n";
+    $before = mail_count($mailLog);
+    list($st, $p) = paf_handle($valid, '203.0.113.11', $base(['sender' => 'timeout@pholoso.africa']));
+    check('timeout after sending is uncertain and never retried', $st === 502 && mail_count($mailLog) === $before + 1);
+    sleep(3); // Let the single-threaded mock finish before the HTTP checks.
     $logged = (string) @file_get_contents($errorLog);
     check('errors were logged (status codes only)', strpos($logged, 'HTTP 500') !== false);
     check('no message body or email address in the logs', strpos($logged, 'SECRET-BODY-MARKER') === false && strpos($logged, 'thandi@example.com') === false);
 
+    check('uncertain outcomes and storage failures are logged', strpos($logged, 'outcome uncertain') !== false && strpos($logged, 'storage unavailable') !== false);
+
     echo "contact.php over HTTP\n";
     $cfgFile = $tmp . '/config.php';
+    $invalidCfg = $base(['salt' => ' ']);
+    file_put_contents($cfgFile, '<?php return ' . var_export($invalidCfg, true) . ';');
+    putenv('PHOLOSO_CONFIG=' . $cfgFile);
+    check('config loader rejects whitespace-only salt', paf_load_config() === null);
+    putenv('PHOLOSO_CONFIG');
     file_put_contents($cfgFile, '<?php return ' . var_export($base(), true) . ';');
     $sitePort = free_port();
     $site = start_server($php, $sitePort, $root, '', array_merge($env, ['PHOLOSO_CONFIG' => $cfgFile]));
@@ -206,6 +246,8 @@ try {
     list($st, $body) = $post($valid, 'application/json');
     $j = json_decode($body, true);
     check('JSON response for the page script', $st === 200 && $j && $j['ok'] === true, "$st $body");
+    list($st, $body) = $post(array_merge($valid, ['elapsed' => '', 'concerns_child' => 'no', 'consent_guardian' => '']), 'text/html');
+    check('submission without JavaScript succeeds over HTTP', $st === 200 && strpos($body, 'Thanks, your message has been sent.') !== false);
     list($st, $body) = $post(array_merge($valid, ['message' => '']), 'text/html');
     check('plain HTML page without JavaScript', $st === 400 && strpos($body, 'Your message was not sent') !== false && strpos($body, 'mailto:know@pholoso.africa') !== false);
     list($st, $body, $hdrs) = $post(array_merge($valid, ['name' => '<script>alert(1)</script>', 'role' => '<b>x</b>']), 'text/html');

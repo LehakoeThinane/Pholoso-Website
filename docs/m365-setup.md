@@ -4,6 +4,15 @@
 **Time needed:** about 30 minutes
 **You need:** Global Administrator (or Application Administrator plus Exchange Administrator) rights
 
+## Check this first: was Microsoft 365 bought through GoDaddy?
+
+The domain's DMARC reports go to a GoDaddy address, which suggests Microsoft 365 may have been bought through GoDaddy. Microsoft 365 from GoDaddy often limits what the customer's own admin can do. App registrations and Exchange Online PowerShell, both needed below, may be blocked.
+
+To check: sign in at <https://admin.microsoft.com> with an admin account. If you are sent to a GoDaddy page, or **Billing** shows GoDaddy as the provider, the account is GoDaddy-managed.
+
+- **Bought directly from Microsoft:** continue with this guide.
+- **GoDaddy-managed:** stop here and tell the developer. The options are to move the account out of GoDaddy's management (a larger change, best planned with an IT adviser), or to send the website's mail through a separate transactional email service instead. The website code supports swapping the sending method.
+
 ## What this is for
 
 The contact form on pholoso.africa currently cannot deliver messages. Email sent straight from the web server is rejected or quarantined by the domain's own SPF and DMARC protection. So the website will instead send each enquiry through Microsoft 365, using a dedicated app identity with **permission to send from one mailbox only**.

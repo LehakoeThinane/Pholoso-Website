@@ -36,8 +36,9 @@ function paf_load_config(): ?array
             if (!is_array($cfg)) {
                 return null;
             }
-            foreach (['tenant_id', 'client_id', 'client_secret', 'sender', 'recipient'] as $k) {
-                if (empty($cfg[$k])) {
+            foreach (['tenant_id', 'client_id', 'client_secret', 'sender', 'recipient', 'salt'] as $k) {
+                if (!isset($cfg[$k]) || !is_string($cfg[$k]) || trim($cfg[$k]) === '') {
+                    error_log('pholoso contact: configuration incomplete');
                     return null;
                 }
             }
@@ -86,10 +87,10 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
         return [400, ['ok' => false, 'code' => 'blocked', 'message' => $fail, 'errors' => []]];
     }
 
-    // Time-to-submit: the page's script records how long the form was open.
+    // No JavaScript means timing is unknown; honeypot and rate limiting still apply.
     $min     = isset($cfg['min_seconds']) ? (float) $cfg['min_seconds'] : 3.0;
     $elapsed = paf_field($post, 'elapsed');
-    if (!is_numeric($elapsed) || (float) $elapsed < $min) {
+    if ($elapsed !== '' && (!is_numeric($elapsed) || !is_finite((float) $elapsed) || (float) $elapsed < $min)) {
         return [400, ['ok' => false, 'code' => 'too_fast', 'message' => $fail, 'errors' => []]];
     }
 
@@ -124,7 +125,11 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
         if (paf_field($post, 'consent_popia') !== '1') {
             $errors['consent_popia'] = 'Please confirm you understand how we handle your message.';
         }
-        if (paf_field($post, 'consent_guardian') !== '1') {
+        $concernsChild = paf_field($post, 'concerns_child');
+        if (!in_array($concernsChild, ['yes', 'no'], true)) {
+            $errors['concerns_child'] = 'Please say whether your enquiry concerns a child.';
+        }
+        if ($concernsChild === 'yes' && paf_field($post, 'consent_guardian') !== '1') {
             $errors['consent_guardian'] = 'Please confirm the statement about children.';
         }
     }
@@ -134,14 +139,15 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
     }
 
     // Not set up yet (no Microsoft 365 credentials): fail honestly.
-    if ($cfg === null) {
+    if ($cfg === null || !isset($cfg['salt']) || !is_string($cfg['salt']) || trim($cfg['salt']) === '') {
         error_log('pholoso contact: not configured');
         return [503, ['ok' => false, 'code' => 'not_configured', 'message' => $fail, 'errors' => []]];
     }
 
     $storage = isset($cfg['storage_dir']) ? rtrim((string) $cfg['storage_dir'], '/\\') : sys_get_temp_dir() . '/pholoso-contact';
-    if (!is_dir($storage)) {
-        @mkdir($storage, 0700, true);
+    if (!is_dir($storage) && !@mkdir($storage, 0700, true) && !is_dir($storage)) {
+        error_log('pholoso contact: storage unavailable');
+        return [503, ['ok' => false, 'code' => 'storage_unavailable', 'message' => $fail, 'errors' => []]];
     }
     $rl = isset($cfg['rate_limit']) && is_array($cfg['rate_limit']) ? $cfg['rate_limit'] : [];
     $limiter = new RateLimiter(
@@ -151,6 +157,9 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
         (int) (isset($rl['window']) ? $rl['window'] : 3600)
     );
     if (!$limiter->allow($ip)) {
+        if (!$limiter->storageAvailable()) {
+            return [503, ['ok' => false, 'code' => 'storage_unavailable', 'message' => $fail, 'errors' => []]];
+        }
         return [429, ['ok' => false, 'code' => 'rate_limited', 'errors' => [],
             'message' => 'You have sent several messages in a short time. Please try again later, or email ' . PAF_FALLBACK_EMAIL . ' directly.']];
     }
@@ -169,7 +178,8 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
                  . 'Email: ' . ($email !== '' ? $email : '(not given, so we cannot reply)') . "\n"
                  . 'I am a: ' . ($role !== '' ? $role : '(not chosen)') . "\n"
                  . "POPIA notice accepted: yes ($when)\n"
-                 . "Guardian statement confirmed: yes\n\n"
+                 . 'Enquiry concerns a child: ' . $concernsChild . "\n"
+                 . 'Guardian statement: ' . ($concernsChild === 'yes' ? 'confirmed' : 'not applicable') . "\n\n"
                  . "Message:\n$message\n";
         $replyName = $name;
     }
@@ -184,7 +194,7 @@ function paf_handle(array $post, string $ip, ?array $cfg): array
     }
 
     $done = $kind === 'newsletter'
-        ? 'Thank you. We have received your request and will add you to our updates.'
-        : 'Thank you. Your message has been sent. We will reply within a few working days.';
+        ? 'Thanks. Your updates request has been sent for the team to process.'
+        : 'Thanks, your message has been sent.';
     return [200, ['ok' => true, 'code' => 'sent', 'message' => $done, 'errors' => []]];
 }

@@ -37,7 +37,8 @@ async function fakeSpeech(page) {
     const synth = {
       speaking: false,
       getVoices: () => [{ lang: 'en-US', name: 'Generic', default: true }, { lang: 'en-ZA', name: 'South African English', default: false }],
-      speak(u) { spoken.push({ text: u.text, rate: u.rate, voice: u.voice && u.voice.name }); pending = setTimeout(() => u.onend && u.onend(), 20); },
+      // Leave enough time to operate Pause before a whole page finishes under load.
+      speak(u) { spoken.push({ text: u.text, rate: u.rate, voice: u.voice && u.voice.name }); pending = setTimeout(() => u.onend && u.onend(), 500); },
       cancel() { clearTimeout(pending); },
       pause() {}, resume() {},
       addEventListener() {},
