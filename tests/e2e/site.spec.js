@@ -32,6 +32,31 @@ test('home keeps its search title; inner pages get their own', async ({ page }) 
   await expect(page).toHaveTitle(homeTitle);
 });
 
+test('story and comfort dialogs isolate and restore their backgrounds', async ({ page }) => {
+  await page.goto('/#stories');
+  await page.locator('.story .more').first().click();
+  await expect(page.locator('#main')).toHaveAttribute('inert', '');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#main')).not.toHaveAttribute('inert', '');
+  await page.locator('#comfortFab').click();
+  await expect(page.locator('#main')).toHaveAttribute('inert', '');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#main')).not.toHaveAttribute('inert', '');
+});
+
+test('mobile menu traps focus and restores the background on close', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 740 });
+  await page.goto('/');
+  await page.locator('#menuBtn').click();
+  for (let i = 0; i < 20; i++) {
+    await page.keyboard.press(i % 5 === 0 ? 'Shift+Tab' : 'Tab');
+    expect(await page.evaluate(() => document.getElementById('navlinks').contains(document.activeElement))).toBe(true);
+  }
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#menuBtn')).toBeFocused();
+  await expect(page.locator('#main')).not.toHaveAttribute('inert', '');
+});
+
 test('2to.iQ dropdown works by keyboard and marks the external link (NAV-01)', async ({ page }) => {
   await page.goto('/');
   const btn = page.locator('#iqBtn');

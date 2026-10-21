@@ -28,9 +28,9 @@ return [
     'storage_dir'   => __DIR__ . '/storage',
 
     // Long random string, used to hash visitor IP addresses for rate limiting.
-    'salt'          => '',
+    'salt'          => '',  // Required; whitespace-only values disable sending.
 
     // Spam protection
     'rate_limit'    => ['max' => 5, 'window' => 3600],  // per visitor, per hour
-    'min_seconds'   => 3,                               // minimum time to fill in the form
+    'min_seconds'   => 3,                               // checked only when timing is supplied
 ];

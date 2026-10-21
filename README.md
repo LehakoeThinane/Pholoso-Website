@@ -2,7 +2,7 @@
 
 Website of the Pholoso Afrika Foundation: inclusive, neurodiversity-first education in South Africa.
 
-This is the live static site, stabilised (Part A of the rebuild plan in [`docs/project-brief.md`](docs/project-brief.md)). It runs on Apache + PHP shared hosting, with no build step and no framework.
+This repository contains the Part A stabilisation release for the static site (see [`docs/project-brief.md`](docs/project-brief.md)). It runs on Apache + PHP shared hosting with no framework. The public website was still serving an older version at the 21 October 2026 audit; repository state must not be treated as proof of deployment.
 
 ## What is where
 
@@ -51,6 +51,6 @@ Set `PHP_BIN` if `php` is not on your PATH. Set `BROWSER_CHANNEL=msedge` or `chr
 ## CI/CD
 
 - **CI** (`.github/workflows/ci.yml`) runs on every push and pull request: repository hygiene, static checks, the upload-set build, PHP tests on 7.4, 8.1 and 8.3, and the browser tests.
-- **Deploy** (`.github/workflows/deploy.yml`) uploads to the host after CI passes on `main`, so merging an approved pull request deploys it. It skips the upload until the hosting secrets are set. See [`DEPLOY.md`](DEPLOY.md).
+- **Deploy** (`.github/workflows/deploy.yml`) is manual, requires current `main` with passing CI for the exact commit, and backs up live files before uploading. Merging a pull request does not deploy. See [`DEPLOY.md`](DEPLOY.md).
 
-Branches: `main` matches what is live. Changes go through a pull request.
+Changes go through a pull request. Last deployed commit: **unknown, not verified**. Last deployment date: **unknown**. The live server reported a 27 June 2026 HTML modification date during the 21 October audit; that is not a verified deployment date. After an approved release, record its commit, date and workflow run here and verify `/version.txt`.

@@ -8,6 +8,7 @@ async function fillValid(page, marker) {
   await page.getByLabel('I am a…').selectOption('Parent or caregiver');
   await page.getByLabel('Your message').fill(`Hello from the browser test ${marker}`);
   await page.locator('#consent_popia').check();
+  await page.locator('#concerns_child').selectOption('yes');
   await page.locator('#consent_guardian').check();
   await page.waitForTimeout(1100); // the server's minimum time-to-submit in tests is 1 second
 }
@@ -20,7 +21,7 @@ test('empty form: accessible error summary, inline errors, nothing sent', async 
   await expect(summary).toBeFocused();
   await expect(summary.locator('li')).toHaveCount(3);
   await expect(page.locator('#message')).toHaveAttribute('aria-invalid', 'true');
-  await expect(page.locator('#err-consent_guardian')).toBeVisible();
+  await expect(page.locator('#err-concerns_child')).toBeVisible();
   await expectNoAxeViolations(page, 'form errors');
   await summary.getByRole('link', { name: 'Please write your message.' }).click();
   await expect(page.locator('#message')).toBeFocused();
@@ -33,7 +34,7 @@ test('valid enquiry: success only after Microsoft accepts it', async ({ page }) 
   await fillValid(page, marker);
   await page.getByRole('button', { name: 'Send with care' }).click();
   const status = page.locator('#formStatus');
-  await expect(status).toHaveText(/Thank you. Your message has been sent/, { timeout: 15_000 }); // the single-threaded test server can be slow under parallel load
+  await expect(status).toHaveText('Thanks, your message has been sent.', { timeout: 15_000 }); // the single-threaded test server can be slow under parallel load
   await expect(status).toBeFocused();
   const sent = graphRequests().find(r => r.body.message.body.content.includes(marker));
   expect(sent, 'request reached the Graph mock').toBeTruthy();
@@ -52,7 +53,7 @@ test.describe('without Microsoft 365 credentials', () => {
     await expect(status).toBeFocused();
     await expect(status.getByRole('link', { name: 'know@pholoso.africa' })).toHaveAttribute('href', 'mailto:know@pholoso.africa');
     await expect(page.getByLabel('Your message')).toHaveValue(/NOCONFIG/);
-    await expect(page.locator('body')).not.toContainText('Thank you. Your message has been sent');
+    await expect(page.locator('body')).not.toContainText('Thanks, your message has been sent.');
   });
 
   test('updates sign-up also fails honestly', async ({ page }) => {
@@ -74,7 +75,7 @@ test('updates sign-up needs consent, then sends a tagged request', async ({ page
   await page.getByLabel(/Yes, email me updates/).check();
   await page.waitForTimeout(1100);
   await page.getByRole('button', { name: 'Join' }).click();
-  await expect(page.locator('#newsStatus')).toHaveText(/We have received your request/, { timeout: 15_000 });
+  await expect(page.locator('#newsStatus')).toHaveText(/Your updates request has been sent/, { timeout: 15_000 });
   const sent = graphRequests().find(r => r.body.message.body.content.includes(email));
   expect(sent.body.message.subject).toBe('Updates sign-up request from the website');
 });
@@ -87,4 +88,48 @@ test('the privacy notice is linked from every form and the footer', async ({ pag
   await page.locator('#storyForm a[href="#privacy"]').first().click();
   await expect(page.locator('html')).toHaveAttribute('data-page', 'privacy');
   await expect(page.locator('#privacy h1')).toHaveText('How we handle your information');
+});
+
+test('guardian confirmation is required only for an enquiry about a child', async ({ page }) => {
+  await page.goto('/#contact');
+  await expect(page.locator('#guardianField')).toBeHidden();
+  await page.locator('#concerns_child').selectOption('yes');
+  await expect(page.locator('#guardianField')).toBeVisible();
+  await page.locator('#consent_guardian').check();
+  await page.locator('#concerns_child').selectOption('no');
+  await expect(page.locator('#guardianField')).toBeHidden();
+  await expect(page.locator('#consent_guardian')).not.toBeChecked();
+  await page.getByLabel('Your message').fill('General partnership enquiry');
+  await page.locator('#consent_popia').check();
+  await page.waitForTimeout(1100);
+  await page.getByRole('button', { name: 'Send with care' }).click();
+  await expect(page.locator('#formStatus')).toHaveText('Thanks, your message has been sent.');
+});
+
+test.describe('forms without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+  test('a general enquiry succeeds without timing or guardian confirmation', async ({ page }) => {
+    await page.goto('/');
+    await page.getByLabel('Your message').fill('Partnership enquiry without JavaScript');
+    await page.locator('#concerns_child').selectOption('no');
+    await page.locator('#consent_popia').check();
+    await page.getByRole('button', { name: 'Send with care' }).click();
+    await expect(page.getByRole('heading', { name: 'Message sent' })).toBeVisible();
+    await expect(page.locator('main')).toContainText('Thanks, your message has been sent.');
+  });
+  test('an updates request succeeds without timing', async ({ page }) => {
+    await page.goto('/');
+    await page.getByLabel('Get email updates').fill('no-script@example.com');
+    await page.getByLabel(/Yes, email me updates/).check();
+    await page.getByRole('button', { name: 'Join' }).click();
+    await expect(page.locator('main')).toContainText('Your updates request has been sent');
+  });
+  test('a child enquiry still requires guardian confirmation', async ({ page }) => {
+    await page.goto('/');
+    await page.getByLabel('Your message').fill('Child enquiry without identifying details');
+    await page.locator('#concerns_child').selectOption('yes');
+    await page.locator('#consent_popia').check();
+    await page.getByRole('button', { name: 'Send with care' }).click();
+    await expect(page.locator('main')).toContainText('Please confirm the statement about children.');
+  });
 });

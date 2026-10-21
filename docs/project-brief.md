@@ -12,7 +12,7 @@ Keep the same files and hosting, and fix what is broken or misleading:
 
 - Version control, with private files (brand sources, credentials) kept out.
 - Remove file corruption; activate the misnamed `.htaccess`; stop private files being served.
-- Contact form: deliver through Microsoft 365; success only when delivery is confirmed; consent enforced; spam and rate limiting; honest failure with the email address.
+- Contact form: send through Microsoft 365; success only when accepted for delivery (not proof of inbox arrival); consent enforced; spam and rate limiting; honest failure with the email address.
 - No fake success messages anywhere (the newsletter box).
 - A POPIA privacy notice, marked for legal review.
 - Content visible without JavaScript.
@@ -39,4 +39,4 @@ Not started. Requires the Foundation's approval of the architecture and its runn
 - Nothing is invented: no made-up statistics, partners, practitioners, stories or prices. Medical, legal and policy guidance is left as clearly marked placeholders for qualified reviewers.
 - When something is ambiguous, choose the option that is more accessible, more private and less likely to overstate what the Foundation offers.
 - No tool or vendor attribution anywhere in the repository or its history; plain conventional commit messages.
-- `main` matches the live site. Part A goes through one pull request from `stabilise`. Part B lives on a long-lived `rebuild` branch until launch.
+- Changes go through a pull request; production is a separately approved release of tested `main`. Record its commit and date in README and verify `/version.txt`. Part B lives on a long-lived `rebuild` branch until launch.

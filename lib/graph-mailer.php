@@ -56,19 +56,19 @@ final class GraphMailer
             if ($res['status'] === 202) {
                 return true;
             }
-            if ($res['status'] === 401 && $attempt === 1) {
-                // Cached token rejected (revoked or rotated secret): fetch a new one once.
-                @unlink($this->tokenCacheFile);
-                $token = $this->token();
-                if ($token === '') {
-                    return false;
+            // A transport failure after sending may already have queued the message.
+            // Only retry a definite pre-send connection failure or explicit throttling.
+            if ($attempt === 1 && ($res['pre_send_failure'] || $res['status'] === 429)) {
+                $delay = $res['status'] === 429 ? self::retryDelay($res['headers']) : 0;
+                if ($delay !== null) {
+                    if ($delay > 0) sleep($delay);
+                    continue;
                 }
-                continue;
             }
-            if (($res['status'] === 429 || $res['status'] >= 500 || $res['status'] === 0) && $attempt === 1) {
-                sleep(1);
-                continue;
+            if ($res['status'] === 0 || $res['status'] >= 500) {
+                error_log('pholoso contact: send outcome uncertain; not retried');
             }
+            if ($res['status'] === 401) @unlink($this->tokenCacheFile);
             break;
         }
         // Status only: never log message content or personal data.
@@ -105,10 +105,28 @@ final class GraphMailer
         return (string) $data['access_token'];
     }
 
-    /** @return array{status:int, body:string} */
+    /** Retry only short waits here; leave long waits to a later visitor attempt. */
+    private static function retryDelay(array $headers): ?int
+    {
+        foreach ($headers as $line) {
+            if (stripos($line, 'Retry-After:') !== 0) continue;
+            $value = trim(substr($line, 12));
+            if (ctype_digit($value)) $seconds = (float) $value;
+            else {
+                $date = strtotime($value);
+                if ($date === false) return null;
+                $seconds = max(0, $date - time());
+            }
+            return $seconds <= 5 ? (int) $seconds : null;
+        }
+        return null; // No server-provided delay: do not guess.
+    }
+
+    /** @return array{status:int, body:string, headers:array, pre_send_failure:bool} */
     private static function http(string $method, string $url, string $body, array $headers): array
     {
         if (function_exists('curl_init')) {
+            $responseHeaders = [];
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_CUSTOMREQUEST  => $method,
@@ -117,11 +135,20 @@ final class GraphMailer
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 20,
+                CURLOPT_HEADERFUNCTION => function ($ch, $line) use (&$responseHeaders) {
+                    if (stripos($line, 'HTTP/') === 0) $responseHeaders = [];
+                    $responseHeaders[] = trim($line);
+                    return strlen($line);
+                },
             ]);
             $out    = curl_exec($ch);
             $status = $out === false ? 0 : (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+            // DNS and connect failures happen before a request can be sent.
+            // Timeouts and all other errors are deliberately treated as uncertain.
+            $preSend = $out === false && in_array(curl_errno($ch), [CURLE_COULDNT_RESOLVE_PROXY, CURLE_COULDNT_RESOLVE_HOST, CURLE_COULDNT_CONNECT], true);
             curl_close($ch);
-            return ['status' => $status, 'body' => $out === false ? '' : (string) $out];
+            return ['status' => $status, 'body' => $out === false ? '' : (string) $out,
+                'headers' => $responseHeaders, 'pre_send_failure' => $preSend];
         }
         $ctx = stream_context_create(['http' => [
             'method'        => $method,
@@ -129,12 +156,15 @@ final class GraphMailer
             'content'       => $body,
             'timeout'       => 20,
             'ignore_errors' => true,
+            'follow_location' => 0,
         ]]);
         $out    = @file_get_contents($url, false, $ctx);
         $status = 0;
         if (isset($http_response_header[0]) && preg_match('#\s(\d{3})\s#', $http_response_header[0] . ' ', $m)) {
             $status = (int) $m[1];
         }
-        return ['status' => $status, 'body' => $out === false ? '' : (string) $out];
+        // Streams cannot reliably distinguish pre-send failures from uncertain sends.
+        return ['status' => $status, 'body' => $out === false ? '' : (string) $out,
+            'headers' => isset($http_response_header) ? $http_response_header : [], 'pre_send_failure' => false];
     }
 }

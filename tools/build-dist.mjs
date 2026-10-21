@@ -3,6 +3,7 @@
 // Usage: node tools/build-dist.mjs
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const root = path.resolve(import.meta.dirname, '..');
 const out = path.join(root, 'dist');
@@ -21,6 +22,10 @@ const list = fs.readFileSync(path.join(root, 'deploy-files.txt'), 'utf8')
 
 const problems = [];
 for (const f of list) {
+  const source = path.join(root, f);
+  const invalidPath = !/^[a-zA-Z0-9_./-]+$/.test(f) || path.isAbsolute(f) || f.split('/').some(p => !p || p === '.' || p === '..');
+  const escaped = fs.existsSync(source) && (!fs.realpathSync(source).startsWith(fs.realpathSync(root) + path.sep) || !fs.lstatSync(source).isFile());
+  if (invalidPath || escaped) problems.push(`unsafe upload path: ${f}`);
   if (FORBIDDEN.some(re => re.test(f))) problems.push(`forbidden in the upload set: ${f}`);
   if (!fs.existsSync(path.join(root, f))) problems.push(`listed but missing: ${f}`);
 }
@@ -38,4 +43,6 @@ for (const f of list) {
   fs.copyFileSync(path.join(root, f), dest);
   bytes += fs.statSync(dest).size;
 }
-console.log(`dist/ ready: ${list.length} files, ${(bytes / 1024).toFixed(0)} KB`);
+const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+fs.writeFileSync(path.join(out, 'version.txt'), `${commit}\n`);
+console.log(`dist/ ready: ${list.length + 1} files, ${(bytes / 1024).toFixed(0)} KB`);

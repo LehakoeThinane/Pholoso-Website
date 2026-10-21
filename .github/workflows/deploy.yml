@@ -1,17 +1,12 @@
 name: Deploy
 
-# Uploads the site to the web host after CI passes on main (that is, once a pull
-# request is approved and merged). It can also be run by hand from the Actions tab.
-# It does nothing until the deployment secrets are set: see DEPLOY.md.
+# Manual release only, after explicit approval. Merging a PR never deploys.
 on:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: deploy-production
@@ -19,45 +14,47 @@ concurrency:
 
 jobs:
   deploy:
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     environment:
       name: production
-      url: ${{ vars.SITE_URL || 'https://pholoso.africa' }}
+      url: https://pholoso.africa
     env:
-      SITE_URL: ${{ vars.SITE_URL || 'https://pholoso.africa' }}
+      SITE_URL: https://pholoso.africa
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ github.sha }}
+
+      - name: Require current main and passing CI for this exact commit
+        run: |
+          set -eu
+          main=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
+          test "$main" = "$GITHUB_SHA"
+          passed=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$GITHUB_SHA&event=push&per_page=100" --jq '[.workflow_runs[] | select(.head_branch == "main")][0].conclusion')
+          test "$passed" = success
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Build the upload set from deploy-files.txt
+      - name: Build the upload set
         run: node tools/build-dist.mjs
 
-      - name: Check deployment is configured
-        id: cfg
+      - name: Require hosting and encrypted backup configuration
         env:
           HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+          BACKUP_PASSWORD: ${{ secrets.DEPLOY_BACKUP_PASSWORD }}
         run: |
-          if [ -z "$HOST" ]; then
-            echo "::warning::Deployment secrets are not set, so nothing was uploaded. See DEPLOY.md."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          fi
+          test -n "$HOST" && test -n "$USER" && test -n "$PASSWORD" && test -n "$BACKUP_PASSWORD"
 
-      - name: Install lftp
-        if: steps.cfg.outputs.ready == 'true'
+      - name: Install transfer tool
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: Upload (adds and updates files; never deletes anything on the server)
-        if: steps.cfg.outputs.ready == 'true'
+      - name: Back up all live files, then upload index.html last
         env:
           PROTO: ${{ vars.DEPLOY_PROTOCOL || 'sftp' }}
           HOST: ${{ secrets.DEPLOY_HOST }}
@@ -66,45 +63,17 @@ jobs:
           LFTP_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
           REMOTE_DIR: ${{ vars.DEPLOY_PATH || 'public_html' }}
           KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-        run: |
-          case "$PROTO" in
-            sftp)
-              if [ -z "$KNOWN_HOSTS" ]; then
-                echo "::error::Set the DEPLOY_KNOWN_HOSTS secret so the server's identity can be checked (DEPLOY.md)."; exit 1
-              fi
-              mkdir -p ~/.ssh && printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
-              port="${PORT:-22}"; settings="set sftp:auto-confirm no;" ;;
-            ftps)
-              port="${PORT:-21}"; settings="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate true;" ;;
-            *)
-              echo "::error::DEPLOY_PROTOCOL must be sftp or ftps. Plain FTP would send the password unencrypted."; exit 1 ;;
-          esac
-          lftp -c "set net:max-retries 2; set net:timeout 30; $settings
-            open --env-password -u \"$USER\" -p $port $PROTO://$HOST;
-            mirror --reverse --verbose --no-perms --parallel=2 dist/ \"$REMOTE_DIR\""
+          BACKUP_PASSWORD: ${{ secrets.DEPLOY_BACKUP_PASSWORD }}
+        run: bash tools/deploy.sh
 
-      - name: Smoke-test the live site
-        if: steps.cfg.outputs.ready == 'true'
-        run: |
-          status() { curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$1"; }
-          fail=0
-          expect() {
-            got=$(status "$2")
-            if [ "$got" = "$1" ]; then echo "ok   $1  $2"; else echo "::error::Expected $1 but got $got for $2"; fail=1; fi
-          }
-          expect 200 "$SITE_URL/"
-          expect 200 "$SITE_URL/logo.png"
-          expect 405 "$SITE_URL/contact.php"
-          expect 404 "$SITE_URL/no-such-page"
-          expect 404 "$SITE_URL/.git/HEAD"
-          expect 404 "$SITE_URL/docs/"
-          expect 404 "$SITE_URL/lib/form-handler.php"
-          expect 404 "$SITE_URL/README.md"
-          expect 301 "http://${SITE_URL#https://}/"
-          expect 301 "https://www.${SITE_URL#https://}/"
-          for old in "PAF%20Logo%20File.pdf" "PAF_Brand_and_Boilerplate.docx" "milisa-braweni.png" "ATT15207.htaccess"; do
-            if [ "$(status "$SITE_URL/$old")" = "200" ]; then
-              echo "::warning::$old is still on the server. Delete it by hand (DEPLOY.md)."
-            fi
-          done
-          exit $fail
+      - name: Retain encrypted pre-release backup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-backup-${{ github.run_id }}
+          path: release-backup.tar.gz.enc
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Verify public release
+        run: bash tools/check-live.sh

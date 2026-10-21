@@ -7,7 +7,7 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 | # | Question | Where it shows |
 |---|---|---|
 | A1 | Who manages Microsoft 365, and which mailbox should the website send **from** (suggested: a shared mailbox `website@pholoso.africa`)? | Contact form stays in "please email us" mode until `docs/m365-setup.md` is done |
-| A2 | Who holds the hosting account, and does the host offer SFTP or FTPS? | Automatic deployment (DEPLOY.md) |
+| A2 | Who holds the hosting account, and does the host offer SFTP or FTPS? | Approved manual deployment (DEPLOY.md) |
 | A3 | Legal review of the draft privacy notice, including retention periods and the host's server-log retention | `index.html`, privacy section (`TODO: legal review`) |
 | A4 | URLs of the official Instagram, LinkedIn and WhatsApp Channel profiles | `sameAs` in the structured data (`TODO` in `index.html`) |
 | A5 | Google Search Console and Bing Webmaster Tools verification codes | Two commented-out tags in `index.html` |
@@ -21,6 +21,10 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 | A13 | Is the domain registered at GoDaddy, and is it set to auto-renew? A lapsed domain takes down the website and email together. | Everything |
 | A14 | Where does the Microsoft 365 tenant store data? Needed for the privacy notice's cross-border wording (the web host is outside South Africa). | Privacy notice |
 | A15 | When should the site go live? Deployment is switched off until the Foundation says so. | Deploy workflow |
+| A16 | Are the existing stories real accounts with publication permission, pseudonymised accounts, or composites? Review the account involving a minor first. | Interim provenance note on Stories |
+| A17 | Who monitors privacy requests and what retention periods actually apply to enquiries, updates and hosting logs? | Draft privacy notice |
+| A18 | Can the host disable its injected monitoring script, and what does it collect until disabled? | Interim tracking disclosure and CSP verification |
+| A19 | Who owns the encrypted backup password, restore test and production release approval? | DEPLOY.md and release checklist |
 
 ## Needed before or during Part B
 

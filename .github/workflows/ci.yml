@@ -44,6 +44,10 @@ jobs:
           node-version: 22
       - run: node tests/check-site.mjs
       - run: node tools/build-dist.mjs
+      - name: Release script syntax and backup safety
+        run: |
+          bash -n tools/deploy.sh tools/check-live.sh tests/deploy-test.sh
+          bash tests/deploy-test.sh
 
   php:
     name: PHP ${{ matrix.php }}
