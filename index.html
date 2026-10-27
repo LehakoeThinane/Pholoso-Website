@@ -163,6 +163,7 @@
   var reduced=s.motion?s.motion==='reduced':mq('(prefers-reduced-motion: reduce)');
   if(theme==='calm')d.classList.add('calm-mode');
   if(theme==='contrast')d.classList.add('contrast-high');
+  if(theme==='dim')d.classList.add('dim-mode');
   if(s.text===125)d.classList.add('text-large');
   if(s.spacing)d.classList.add('spacing-wide');
   if(s.simple)d.classList.add('simple-page');
@@ -182,17 +183,17 @@
   --gold-text:#8A5E0F;
   /* Dark content bands (hero, page heroes, stat panels) */
   --band:var(--green-deep); --band-2:var(--green);
-  --band-grad:linear-gradient(160deg,var(--green-deep),var(--green) 62%,#15534a);
+  --band-grad:var(--green-deep);
   --on-band:#FFFFFF; --on-band-soft:rgba(255,255,255,.9); --on-band-faint:rgba(255,255,255,.7);
   --on-band-accent:var(--gold-soft); --on-band-line:rgba(255,255,255,.5);
   /* Primary buttons and the closing call-to-action band */
   --btn-bg:var(--gold); --btn-text:#3a2a06; --btn-hover:var(--gold-soft);
   --cta-bg:var(--gold); --on-cta:#3a2a06; --on-cta-soft:#5a4413;
   --header-bg:rgba(251,249,244,.97);
-  --maxw:1140px; --radius:18px; --radius-sm:12px;
-  --space:clamp(56px,8vw,108px);
+  --maxw:1200px; --radius:16px; --radius-sm:10px;
+  --space:clamp(64px,9vw,120px);
   --font:Arial, "Helvetica Neue", Helvetica, system-ui, sans-serif;
-  --shadow:0 1px 2px rgba(16,40,34,.04), 0 14px 34px rgba(16,40,34,.07);
+  --shadow:0 1px 2px rgba(16,40,34,.04), 0 8px 24px rgba(16,40,34,.06);
   --ease:cubic-bezier(.22,.61,.36,1);
 }
 /* Comfort & access themes and settings: see the end of this stylesheet. */
@@ -210,7 +211,7 @@ h3{font-size:clamp(1.25rem,2.3vw,1.5625rem)}
 p{max-width:66ch}
 /* Long words and addresses wrap instead of pushing the page sideways at large text sizes. */
 h1,h2,h3,h4,p,li,dt,dd,summary,blockquote,label,small{overflow-wrap:anywhere}
-a{color:var(--green-700); text-underline-offset:3px}
+a{color:var(--green-700); text-decoration:underline; text-underline-offset:3px}
 img{max-width:100%;display:block}
 .wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(20px,5vw,40px)}
 .section{padding-block:var(--space)}
@@ -695,6 +696,31 @@ html.contrast-high .comfort-fab{box-shadow:none;border-color:#FFF;outline:2px so
   a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid Highlight}
 }
 
+/* Dim: a complete dark palette for light sensitivity. */
+html.dim-mode{
+  --green:#A9D3C4; --green-deep:#E6E9E4; --green-700:#A9D3C4;
+  --gold:#E8C27A; --gold-soft:#E8C27A; --gold-text:#E8C27A;
+  --paper:#1C2321; --paper-2:#252D2A; --card:#252D2A;
+  --ink:#E6E9E4; --ink-soft:#C1CAC5; --line:#6F7C76; --focus:#E8C27A;
+  --shadow:none; --header-bg:#1C2321;
+  --band:#151B19; --band-2:#151B19; --band-grad:#151B19;
+  --on-band:#E6E9E4; --on-band-soft:#D2D9D5; --on-band-faint:#C1CAC5; --on-band-accent:#E8C27A; --on-band-line:#6F7C76;
+  --btn-bg:#E8C27A; --btn-text:#1C2321; --btn-hover:#F0D49E;
+  --cta-bg:#252D2A; --on-cta:#E6E9E4; --on-cta-soft:#C1CAC5;
+}
+html.dim-mode a{text-decoration:underline}
+html.dim-mode .hero-aura{display:none}
+html.dim-mode main img{filter:brightness(.82)}
+html.dim-mode .hero-photo img,html.dim-mode .comfort-fab{box-shadow:none}
+html.dim-mode header.site{--header-bg:#F6F3EE;--ink:#16241F;--green-deep:#0E3A33;--green-700:#1C5C52;--line:#E4E0D4}
+html.dim-mode .menu-btn{background:var(--btn-bg);color:var(--btn-text)}
+html.dim-mode .comfort-fab{background:var(--btn-bg);color:var(--btn-text);border-color:var(--btn-bg)}
+html.dim-mode :is(.pchip,.filter,.listen-btn).on,
+html.dim-mode .pchip[aria-pressed="true"],
+html.dim-mode .filter[aria-pressed="true"],
+html.dim-mode .listen-btn.on{background:var(--btn-bg);color:var(--btn-text);border-color:var(--btn-bg)}
+@media(max-width:1100px){html.dim-mode .nav-links{background:var(--band)}}
+
 /* Larger text: everything is sized in rem, so the whole layout scales. */
 html.text-large{font-size:125%}
 
@@ -719,6 +745,34 @@ html.motion-reduced :is(.btn,.pchip):hover{transform:none}
 html.simple-page :is(.hero-aura,.hero-photo,.photo-band,.cta-band,.iq-mark,.pchip .pic){display:none!important}
 html.simple-page .hero .hero-grid{grid-template-columns:1fr}
 html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
+
+/* A clearer, editorial layout keeps the Foundation's brand while reducing visual noise. */
+.hero-aura{display:none}
+.hero .wrap{padding-block:clamp(60px,8vw,104px)}
+.hero h1{max-width:15ch;font-size:clamp(2.5rem,6.1vw,4.5rem);line-height:1.04;letter-spacing:-.035em}
+.hero p.lead{max-width:52ch}
+.hero-photo img{border-radius:8px 48px 8px 8px;box-shadow:none;border:1px solid var(--on-band-line)}
+.photo-band img{border-radius:8px;box-shadow:none}
+.btn{border-radius:10px}
+.btn:hover{transform:translateY(-1px)}
+.btn-ghost{border-radius:10px}
+.section-head h2{max-width:24ch}
+.center .section-head h2,.section-head.center h2{margin-inline:auto}
+.card,.story,.trust-card,.front,.inv,.res-card,.entity .ent,.value,.stat{
+  border-radius:12px;
+  box-shadow:none;
+}
+.card,.story,.trust-card,.front,.inv,.entity .ent{border-color:var(--line)}
+.entity .ent{border-top:4px solid var(--green)}
+.entity .ent.iq{border-top-color:var(--gold)}
+.cta-band{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.comfort-fab{box-shadow:0 6px 20px rgba(14,58,51,.2)}
+@media(max-width:680px){
+  .hero .wrap{padding-block:48px}
+  .hero .hero-grid{gap:26px}
+  .hero h1{max-width:13ch;font-size:clamp(2.35rem,11vw,3.2rem)}
+  .hero-photo img{border-top-right-radius:34px}
+}
 </style>
 </head>
 <body>
@@ -776,6 +830,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
       <h1>Every mind learns differently. Education should be built that way.</h1>
       <p class="lead">Pholoso Afrika Foundation advances inclusive, adaptive, learner-centred education for neurodivergent children across South Africa and the African continent. Learners should not have to bend to fit rigid systems. The systems should learn to fit the learner.</p>
       <div class="hero-cta">
+        <a class="btn btn-ghost-dark" href="#about" data-nav="about">Who we are</a>
         <a class="btn btn-on-dark" href="#involved" data-nav="involved">Get involved</a>
       </div>
       </div>
@@ -1275,6 +1330,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     <label class="cp-theme"><input type="radio" name="cp-theme" value="standard" /><span><b>Standard</b><small>The Foundation's colours</small></span></label>
     <label class="cp-theme"><input type="radio" name="cp-theme" value="calm" /><span><b>Calm</b><small>Softer, muted colours with less to look at</small></span></label>
     <label class="cp-theme"><input type="radio" name="cp-theme" value="contrast" /><span><b>High contrast</b><small>Black and white, strong edges, underlined links</small></span></label>
+    <label class="cp-theme"><input type="radio" name="cp-theme" value="dim" /><span><b>Dim</b><small>A darker palette for light sensitivity</small></span></label>
   </fieldset>
 
   <h3 class="cp-group">Text and reading</h3>
@@ -1471,6 +1527,7 @@ html.simple-page .section{padding-block:clamp(36px,5vw,64px)}
     var c=current();
     root.classList.toggle('calm-mode',c.theme==='calm');
     root.classList.toggle('contrast-high',c.theme==='contrast');
+    root.classList.toggle('dim-mode',c.theme==='dim');
     root.classList.toggle('text-large',c.text);
     root.classList.toggle('spacing-wide',c.spacing);
     root.classList.toggle('motion-reduced',c.motion);

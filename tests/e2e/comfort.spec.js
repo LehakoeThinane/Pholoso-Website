@@ -27,7 +27,7 @@ test.describe('panel', () => {
   test('passes axe with the panel open, in every theme (CA-03)', async ({ page }) => {
     test.setTimeout(150_000);
     await page.goto('/');
-    for (const theme of ['Standard', 'Calm', 'High contrast']) {
+    for (const theme of ['Standard', 'Calm', 'High contrast', 'Dim']) {
       await page.locator('#comfortFab').click();
       await page.getByRole('radio', { name: new RegExp('^' + theme) }).check();
       await expectNoAxeViolations(page, `panel open, ${theme}`);
@@ -69,6 +69,17 @@ test.describe('every setting visibly changes the page (CA-01)', () => {
     expect(await style(page, 'body', 'color')).toBe('rgb(0, 0, 0)');
     expect(await style(page, 'footer a', 'textDecorationLine')).toContain('underline');
     expect(await style(page, '.card', 'borderTopWidth')).toBe('2px');
+  });
+
+  test('Dim uses a dark palette with readable links and softened images', async ({ page }) => {
+    await page.getByRole('radio', { name: /^Dim/ }).check();
+    expect(await style(page, 'body', 'backgroundColor')).toBe('rgb(28, 35, 33)');
+    expect(await style(page, 'body', 'color')).toBe('rgb(230, 233, 228)');
+    expect(await style(page, 'header.site', 'backgroundColor')).toBe('rgb(246, 243, 238)');
+    expect(await style(page, 'header.site .nav-links a', 'color')).toBe('rgb(22, 36, 31)');
+    expect(await style(page, '.prose a', 'color')).toBe('rgb(169, 211, 196)');
+    expect(await style(page, 'main img', 'filter')).toBe('brightness(0.82)');
+    expect(await style(page, '.prose a', 'textDecorationLine')).toContain('underline');
   });
 
   test('Larger text scales the root size by 25%', async ({ page }) => {
@@ -220,7 +231,7 @@ test.describe('read aloud', () => {
 
 // Every theme x text size x spacing x motion x simplified combination stays readable (CA-04).
 const combos = [];
-for (const theme of ['standard', 'calm', 'contrast'])
+for (const theme of ['standard', 'calm', 'contrast', 'dim'])
   for (const text of [100, 125])
     for (const spacing of [false, true])
       for (const simple of [false, true])
