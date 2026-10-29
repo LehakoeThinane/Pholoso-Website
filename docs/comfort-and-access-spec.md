@@ -476,7 +476,7 @@ Run a short usability session before the Part B launch, and ideally a light one 
 | Panel as an accessible dialog with a clear label | ✔ | ✔ |
 | Calm theme (full pastel palette) | ✔ | ✔ |
 | High contrast theme (+ forced colours) | ✔ | ✔ |
-| Dim theme | Optional | ✔ |
+| Dim theme | ✔ | ✔ |
 | Text size | 100% / 125% | 100 / 115 / 130 / 150% |
 | Reading spacing (WCAG 1.4.12) | ✔ | ✔ |
 | Easy-to-read font | Optional | ✔ |

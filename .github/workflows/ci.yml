@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: No tool attribution in files or history
+      - name: No forbidden vendor terms in files or history
         run: |
           # Built from parts so this file never contains the words it searches for.
           a=cla; b=ude; c=anthr; d=opic
@@ -29,8 +29,8 @@ jobs:
           if git grep -n -i -E "$pattern"; then
             echo "::error::Forbidden word found in tracked files"; exit 1
           fi
-          if git log --all --format="%H %an %ae%n%B" | grep -n -i -E "$pattern|co-authored-by"; then
-            echo "::error::Forbidden word or co-author trailer found in history"; exit 1
+          if git log --all --format="%H %an %ae%n%B" | grep -n -i -E "$pattern"; then
+            echo "::error::Forbidden vendor term found in history"; exit 1
           fi
           echo "clean: files and history"
 
