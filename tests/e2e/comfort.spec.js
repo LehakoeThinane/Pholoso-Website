@@ -54,11 +54,11 @@ test.describe('every setting visibly changes the page (CA-01)', () => {
 
   test('Calm swaps the whole palette, not a filter', async ({ page }) => {
     const before = await style(page, 'body', 'backgroundColor');
-    const heroBefore = await style(page, '.hero', 'backgroundImage');
+    const heroBefore = await style(page, '.hero', 'backgroundColor');
     await page.getByRole('radio', { name: /^Calm/ }).check();
     expect(await style(page, 'body', 'backgroundColor')).toBe('rgb(246, 243, 238)');
     expect(await style(page, 'body', 'backgroundColor')).not.toBe(before);
-    expect(await style(page, '.hero', 'backgroundImage')).not.toBe(heroBefore);
+    expect(await style(page, '.hero', 'backgroundColor')).not.toBe(heroBefore);
     expect(await style(page, 'html', 'filter')).toBe('none');
     expect(await style(page, 'body', 'filter')).toBe('none');
   });

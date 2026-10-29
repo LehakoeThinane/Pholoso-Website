@@ -77,10 +77,9 @@ test('2to.iQ dropdown works by keyboard and marks the external link (NAV-01)', a
   await expect(page.locator('#iqMenu')).toBeHidden();
 });
 
-test('the hero no longer duplicates "Who we are"', async ({ page }) => {
+test('the hero has distinct identity and action links', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.hero .btn')).toHaveCount(1);
-  await expect(page.locator('.hero .btn')).toHaveText('Get involved');
+  await expect(page.locator('.hero .btn')).toHaveText(['Who we are', 'Get involved']);
 });
 
 test.describe('mobile', () => {
