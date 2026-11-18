@@ -23,7 +23,8 @@
     "check:links": "node scripts/check-links.mjs",
     "test:e2e": "playwright test",
     "test:lighthouse": "lhci autorun",
-    "make:printables": "node scripts/make-printables.mjs"
+    "make:printables": "node scripts/make-printables.mjs",
+    "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.5",

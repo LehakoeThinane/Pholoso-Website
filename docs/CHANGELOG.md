@@ -8,6 +8,42 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-18 · `dev` · Milestone 9: handover docs, smoke test, optional deploy
+
+**Why:** brief §15 and §18.9: a stranger should be able to maintain and deploy the site from
+the docs alone.
+
+**What changed**
+
+- **README.md** rewritten for developers: requirements, every command, how the code fits
+  together, conventions, how to add a page / story / statistic / Kids' World page, branches,
+  troubleshooting, and the accessibility standards the site follows (COGA, UK Home Office,
+  WCAG 2.2, AASPIRE).
+- **docs/DEPLOY.md:** step-by-step for a non-technical person: first-time form setup
+  (`config.php` outside the web folder), making the release zip, uploading in cPanel with a
+  backup first, checking the live site, and what to do if something goes wrong (including
+  the 500 error and `.htaccess`).
+- **docs/CONTENT-GUIDE.md:** plain-language and terminology rules, `<Term>`, how to cite a
+  statistic, where each kind of content lives, writing for Kids' World.
+- **docs/DECISIONS.md:** 12 short decision records (Astro; static + PHP; forms; no analytics;
+  no sticky header; strict CSP; comfort settings; visibility before first paint; Kids' World
+  in the same site; illustrations and sounds; CSS budget; testing).
+- **docs/HANDOVER.md:** final report: milestone status, definition of done, the 9 facts still
+  to fill in, and every action for the Foundation in order.
+- **scripts/smoke-test.mjs** (`pnpm smoke`): post-deploy check of the live site: every sitemap
+  page, 404, redirects, security headers, private files blocked, and a test form submission
+  that sends nothing (the handler's `test=TEST` flag). The handler comment now points to it.
+- **.github/workflows/deploy.yml:** optional SFTP deployment, **off** until set up
+  (`DEPLOY_ENABLED` variable, secrets, and a required reviewer on the `production` environment).
+  Production build only, uploads without deleting, then runs the smoke test.
+
+**Not done**
+
+- The smoke test was checked against a local preview only, not the live site (it would send a
+  test request to production, and the live site may still be the old version).
+
+---
+
 ## 2026-11-18 · `dev` · CI fix and CSS budget raised to 14 KB
 
 **What changed**
