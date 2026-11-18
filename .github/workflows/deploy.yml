@@ -1,0 +1,75 @@
+# Optional automated deployment to the GoDaddy hosting over SFTP (brief §15).
+#
+# OFF until set up. It runs only when ALL of these are true:
+#   1. Repository variable DEPLOY_ENABLED is "true"
+#      (Settings → Secrets and variables → Actions → Variables).
+#   2. It is started by hand (Actions → Deploy → Run workflow) or by pushing a tag like v1.0.0.
+#   3. A person approves it: the "production" environment should require a reviewer
+#      (Settings → Environments → production → Required reviewers).
+#
+# Secrets (Settings → Secrets and variables → Actions → Secrets). Never put them in the repo.
+#   DEPLOY_HOST         the SFTP host name from cPanel
+#   DEPLOY_USER         the cPanel / SFTP user name
+#   DEPLOY_PASSWORD     its password (or leave empty and use DEPLOY_SSH_KEY)
+#   DEPLOY_SSH_KEY      optional private key, if the hosting allows key login
+#   DEPLOY_KNOWN_HOSTS  the server's host key line (run: ssh-keyscan -p 22 <host>)
+#   DEPLOY_PATH         the web folder, usually public_html
+#
+# It uploads (never deletes) the production build, then runs the smoke test.
+# See docs/DEPLOY.md, "Automated deployment".
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Production build (stops if any TODO placeholder remains)
+        run: pnpm build
+      - name: Built-output checks
+        run: pnpm check:dist && pnpm check:html && pnpm check:links
+
+      - name: Upload over SFTP (adds and replaces files; deletes nothing)
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          TARGET: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          connect="set sftp:connect-program 'ssh -a -x -o StrictHostKeyChecking=yes'"
+          if [ -n "$SSH_KEY" ]; then
+            printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+            connect="set sftp:connect-program 'ssh -a -x -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=yes'"
+          fi
+          lftp -e "$connect; set net:max-retries 2; mirror --reverse --verbose --parallel=4 dist/ ${TARGET:-public_html}/; bye" \
+            -u "$USER","$PASSWORD" "sftp://$HOST"
+
+      - name: Smoke test the live site
+        run: node scripts/smoke-test.mjs

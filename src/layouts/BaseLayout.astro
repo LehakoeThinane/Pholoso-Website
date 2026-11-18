@@ -23,6 +23,7 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/print.css';
 import font400 from '@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2?url';
+import font700 from '@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2?url';
 import ComfortPanel from '../components/ComfortPanel.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
@@ -52,11 +53,14 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {/* noindex pages (404, thank-you) are not canonical anywhere: the 404 page is served at any wrong address */}
+    {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#134B42" />
     <script is:inline src="/prefs.js"></script>
+    {/* Both weights: headings are bold, and a late bold swap can rewrap them (layout shift) */}
     <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={font700} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.ico" sizes="any" />
 
     <meta property="og:type" content="website" />

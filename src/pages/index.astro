@@ -60,28 +60,11 @@ const ngo = {
 ---
 
 <BaseLayout
-  fullTitle={`${site.name}: inclusive education for neurodivergent children in South Africa`}
+  fullTitle={`${site.name}: education for neurodivergent children`}
   description="The Pholoso Afrika Foundation works for inclusive, adaptive education for neurodivergent children in South Africa and Africa. Donate, partner or get involved."
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(ngo)} />
-  <nav class="doors" aria-label="Choose your way in">
-    <ul class="container doors__list">
-      <li>
-        <DoorCard href="/kids/" who="I’m a kid" action="Come and play!" variant="kid" />
-      </li>
-      <li>
-        <DoorCard
-          href="#grown-ups"
-          who="I’m a grown-up"
-          action="Find out about our work"
-          variant="grown-up"
-        />
-      </li>
-    </ul>
-  </nav>
-
   <Hero
-    id="grown-ups"
     eyebrow={site.name}
     title={site.tagline}
     image={hero}
@@ -101,7 +84,23 @@ const ngo = {
     </Fragment>
   </Hero>
 
-  <Section labelledby="problem-title">
+  <nav class="doors" aria-label="Choose your way in">
+    <ul class="container doors__list">
+      <li>
+        <DoorCard href="/kids/" who="I’m a kid" action="Come and play!" variant="kid" />
+      </li>
+      <li>
+        <DoorCard
+          href="#our-work"
+          who="I’m a grown-up"
+          action="Find out about our work"
+          variant="grown-up"
+        />
+      </li>
+    </ul>
+  </nav>
+
+  <Section id="our-work" labelledby="problem-title">
     <SectionHeading
       id="problem-title"
       eyebrow="The problem"
@@ -250,7 +249,7 @@ const ngo = {
 <style>
   .doors {
     padding-block: var(--space-l);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
   }
   .doors__list {
     list-style: none;
@@ -274,6 +273,8 @@ const ngo = {
   .after-cards,
   .after-quote {
     margin-top: var(--space-l);
+    margin-inline: auto;
+    text-align: center;
     font-weight: 700;
   }
   .split {

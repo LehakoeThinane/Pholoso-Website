@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, rebuild]
+    branches: [main, dev, rebuild]
   pull_request:
   workflow_dispatch:
 
@@ -58,13 +58,53 @@ jobs:
       - name: Preview build
         run: pnpm build:preview
       - run: pnpm check:dist
+      - name: HTML validation
+        run: pnpm check:html
+      - name: Internal links and anchors
+        run: pnpm check:links
+      - name: External links (report only, does not fail the build)
+        continue-on-error: true
+        run: >
+          pnpm exec linkinator dist --recurse --skip "^https://pholoso\.africa"
+          --skip "^mailto:" --timeout 15000 --retry
       - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
           include-hidden-files: true
           retention-days: 7
-      # Later milestones add: html-validate, link check, Playwright + axe, Lighthouse CI.
+
+  browser:
+    name: Browser tests (Playwright + axe) and Lighthouse
+    needs: site
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Playwright + axe (phone 390×844 and desktop 1280×900)
+        run: pnpm test:e2e
+      - name: Lighthouse budgets (brief §12)
+        run: pnpm test:lighthouse
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            playwright-report/
+            .lighthouseci/
+          include-hidden-files: true
+          retention-days: 14
 
   php:
     name: PHP ${{ matrix.php }}

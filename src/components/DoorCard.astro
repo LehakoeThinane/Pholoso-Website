@@ -1,6 +1,6 @@
 ---
 /**
- * DoorCard: one of the two big "doors" at the top of the home page:
+ * DoorCard: one of the two big "doors" on the home page, just under the hero:
  * "I'm a kid → Come and play!" and "I'm a grown-up → Find out about our work".
  * The whole card is one link; its words are the accessible name.
  *
@@ -74,10 +74,10 @@ const { href, who, action, variant } = Astro.props;
     padding: var(--space-m) var(--space-m) 0;
   }
   .door--kid .door__art {
-    background: var(--kids-sky);
+    background-color: var(--kids-sky);
   }
   .door--grown-up .door__art {
-    background: var(--kids-leaf);
+    background-color: var(--kids-leaf);
     align-items: center;
     padding-bottom: var(--space-m);
   }
@@ -96,14 +96,16 @@ const { href, who, action, variant } = Astro.props;
   .door__text {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: var(--space-3xs);
     flex: 1;
     padding: var(--space-m);
     border-top: 3px solid var(--color-text);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
   }
   .door--kid .door__text {
-    background: var(--kids-sunshine);
+    background-color: var(--kids-sunshine);
   }
   .door__who {
     font-size: var(--step-3);

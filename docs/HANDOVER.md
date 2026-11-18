@@ -1,0 +1,114 @@
+# Handover report
+
+**For:** the Pholoso Afrika Foundation, and the next developer.
+**As of:** 18 November 2026, branch `dev`.
+
+The new website is built and tested, but **not yet live**. Going live needs the Foundation's
+facts filled in (section 3) and the actions in section 4. Nothing here has been guessed: every
+unknown is a visible placeholder.
+
+## 1. Where things stand
+
+| Milestone (brief §18)                            | Status                                                                                            |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| 1. Plan                                          | Done                                                                                              |
+| 2. Scaffold (Astro, TypeScript, tooling, tokens) | Done                                                                                              |
+| 3. Design system and styleguide                  | Done (`/styleguide/`)                                                                             |
+| 4. Pages and content                             | Done: all grown-ups' pages                                                                        |
+| 4b. Kids' World                                  | Done: 7 pages, mascot, illustrations, printables, games. **Owner feedback on the look is still wanted.** |
+| 5. Enhancements (comfort panel, menu, filters …) | Done                                                                                              |
+| 6. Forms and PHP handler                         | Done. **Needs Microsoft 365 setup to deliver email** (section 4).                                 |
+| 7. Images and SEO                                | Done: optimised images, share image, structured data, sitemap, robots, `.htaccess`                |
+| 8. Quality gate                                  | Done, except the **manual screen-reader test** (section 4)                                        |
+| 9. Docs and handover                             | Done (this report)                                                                                |
+
+**Test results (local, 18 November 2026):** 150 browser tests passed, 0 failed (axe: no
+accessibility violations on any page, at phone and desktop size). HTML, links, contrast,
+type checks and lint all clean. Lighthouse (mobile): 100 for Performance, Accessibility, Best
+Practices and SEO on every sampled page. CI on GitHub runs the same checks; confirm the latest
+run is green in the repository's **Actions** tab.
+
+## 2. Definition of done (brief §20)
+
+| Item                                                                         | Status                                                                                |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| A child can use Kids' World without help; Calm mode in one tap               | Built and tested. Not yet tried by children; worth a short session with a few families. |
+| All pages exist, read well at 390 px and 1280 px, accurate and sourced       | Yes                                                                                   |
+| Everything works without JavaScript                                          | Yes (tested)                                                                          |
+| axe: 0 violations on every page and comfort state; Lighthouse budgets met    | Yes (CSS budget raised to 14 KB by owner decision)                                    |
+| No inline scripts or styles; CSP blocks nothing needed                       | Yes in the build. **Confirm on the live server** with the smoke test.                 |
+| No third-party requests                                                      | Yes (tested)                                                                          |
+| Forms deliver correctly formatted email; no-JS and JS paths tested; anti-spam | Tested with mock mail. **Real delivery needs Microsoft 365 setup**, then a live test. |
+| Production build passes only when all `TODO:` are filled                     | Yes. It is currently blocked by the 9 placeholders below, as intended.                |
+| README, DEPLOY, CONTENT-GUIDE, DECISIONS written                             | Yes                                                                                   |
+
+## 3. Facts still to fill in (`src/config/site.ts`)
+
+The production build will not run until these are replaced with confirmed values.
+
+| Setting                      | Needed                                                                  |
+| ---------------------------- | ----------------------------------------------------------------------- |
+| `bank.bank`                  | Bank name                                                               |
+| `bank.accountNumber`         | Account number                                                          |
+| `bank.branchCode`            | Branch code                                                             |
+| `bank.accountType`           | Account type                                                            |
+| `bank.swift`                 | SWIFT code (for international donors)                                   |
+| `address`                    | Physical or postal address (required in the privacy notice)             |
+| `informationOfficer.name`    | Name of the POPIA Information Officer                                   |
+| `stories.notice`             | Confirm whether the stories are composites, pseudonymised or real, and approve the notice wording |
+| `accessibility.responseTime` | How quickly accessibility problems will be answered (e.g. "within 5 working days") |
+
+## 4. Actions for the Foundation
+
+Before going live:
+
+1. **Fill in the facts** in section 3 (send them to the developer).
+2. **Microsoft 365:** have the administrator follow [m365-setup.md](m365-setup.md), then create
+   `config.php` on the hosting ([DEPLOY.md](DEPLOY.md), Step 0). Check first whether Microsoft
+   365 was bought through GoDaddy, which can block this.
+3. **POPIA review:** have someone qualified in POPIA review the privacy notice
+   (`/privacy/`), including retention periods, cross-border processing (the hosting and
+   Microsoft 365 may store data outside South Africa) and the gallery drawings process.
+4. **Register the Information Officer** with the Information Regulator
+   (<https://inforegulator.org.za/>).
+5. **Stories:** confirm where the four grown-ups' stories come from and that publication is
+   allowed, starting with any that involve a child.
+6. **Approve Kids' World:** the mascot's name ("Pholo" is a placeholder; a children's naming
+   competition is an option), the "Did you know?" facts, the five picture stories, and the
+   gallery process. Decide on a professional illustrator. These are K1 to K9 in
+   [open-questions.md](open-questions.md).
+7. **Manual screen-reader test:** follow the script in [a11y-testing.md](a11y-testing.md) with
+   NVDA and VoiceOver, and record the results.
+8. **2to.iQ:** confirm the address parents should be sent to (currently https://2toiq.africa).
+9. **Merge `dev` into `main`** by pull request once the above is agreed.
+
+Going live and after:
+
+10. **Deploy** following [DEPLOY.md](DEPLOY.md): back up the current site first.
+11. **Run the smoke test** against the live site, and send a real test message through each
+    form (contact, updates, Section 18A receipt) to check delivery and formatting.
+12. **Google Search Console:** verify the domain and submit
+    `https://pholoso.africa/sitemap-index.xml`.
+13. Record the release in [CHANGELOG.md](CHANGELOG.md).
+
+Optional:
+
+- **Automated deployment** from GitHub (DEPLOY.md, last section): only if SFTP is available.
+- **Photos:** confirm permission for the four photos in use, and supply originals if better
+  quality is wanted. An **SVG logo** would replace the PNGs.
+- **Analytics:** none by design. If wanted later, choose a cookieless self-hosted tool and
+  update the privacy notice first.
+- Other languages (isiZulu, Sesotho, Afrikaans …): the interface words are in one file
+  (`src/config/strings.ts`), ready for translation.
+
+## 5. Other open questions
+
+[open-questions.md](open-questions.md) lists everything the build is waiting on. Its Part A
+section (A1 to A19) came from stabilising the old site; several still apply (Microsoft 365,
+hosting access, domain renewal, backups, privacy review).
+
+## 6. For the next developer
+
+Read the [README](../README.md) first, then [DECISIONS.md](DECISIONS.md). Open `/styleguide/`
+to see every component. Run the full check list in the README before every push, add an entry
+to [CHANGELOG.md](CHANGELOG.md), and work on `dev`.

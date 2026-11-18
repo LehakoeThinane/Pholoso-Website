@@ -31,9 +31,11 @@ const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
 </div>
 
 <style>
+  /* Centred (owner decision, 18 Nov 2026): headings and short text. Long text stays left. */
   .section-heading {
-    margin-bottom: var(--space-l);
+    margin: 0 auto var(--space-l);
     max-width: var(--measure);
+    text-align: center;
   }
   .section-heading__eyebrow {
     margin: 0 0 var(--space-2xs);

@@ -10,12 +10,7 @@ const root = document.documentElement;
  * Simplified page are all off.
  */
 export function motionAllowed(): boolean {
-  return (
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-    root.dataset.motion !== 'reduced' &&
-    root.dataset.theme !== 'calm' &&
-    root.dataset.simple !== 'on'
-  );
+  return root.dataset.anim === 'on'; // set by public/prefs.js, the same flag the CSS uses
 }
 
 /** Sounds are on only when a child turned them on, and never with Calm colours. */

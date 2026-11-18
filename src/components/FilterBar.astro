@@ -26,7 +26,7 @@ const labelId = `${target}-filter-label`;
   data-filter-target={target}
   data-noun-one={noun[0]}
   data-noun-many={noun[1]}
-  hidden
+  data-js-only
 >
   <p class="filter-bar__label" id={labelId}>
     {label}
@@ -65,12 +65,12 @@ const labelId = `${target}-filter-label`;
     padding-inline: var(--space-s);
     border: 2px solid var(--color-text);
     border-radius: 999px;
-    background: transparent;
+    background-color: transparent;
     font-weight: 700;
     cursor: pointer;
   }
   .filter-bar__button[aria-pressed='true'] {
-    background: var(--color-text);
+    background-color: var(--color-text);
     color: var(--color-bg);
   }
 </style>

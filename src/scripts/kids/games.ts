@@ -38,9 +38,12 @@ export function initPickers(): void {
       .filter((p): p is HTMLElement => !!p);
     const prompt = document.getElementById(picker.dataset.picker ?? '');
 
-    picker.hidden = false;
-    panels.forEach((p) => (p.hidden = true));
-    if (prompt) prompt.hidden = false;
+    // The picker and prompt are shown, and the panels hidden, by CSS before the first paint
+    // (data-js-only / data-js-hide). The hidden attribute takes over from here.
+    panels.forEach((p) => {
+      p.hidden = true;
+      p.removeAttribute('data-js-hide');
+    });
 
     buttons.forEach((button) => {
       button.addEventListener('click', () => {
@@ -64,7 +67,10 @@ export function initFlipGroups(): void {
   document.querySelectorAll<HTMLElement>('[data-flip-group]').forEach((group) => {
     const cards = [...group.querySelectorAll<HTMLDetailsElement>('[data-flip]')];
     const done = group.querySelector<HTMLElement>('[data-flip-done]');
-    if (done) done.hidden = true;
+    if (done) {
+      done.hidden = true;
+      done.removeAttribute('data-js-hide');
+    }
     let finished = false;
     cards.forEach((card) =>
       card.addEventListener('toggle', () => {

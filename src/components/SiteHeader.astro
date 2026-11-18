@@ -3,9 +3,10 @@
  * SiteHeader: logo, primary navigation and the Donate button. Not sticky, so it can never
  * cover focused content (WCAG 2.4.11).
  *
- * Below 62rem the navigation becomes a disclosure menu, but only once
- * src/scripts/menu.ts has run (it sets data-menu on the header and reveals the button).
- * Without JavaScript the full navigation is simply shown.
+ * Below 62rem the navigation becomes a disclosure menu when JavaScript runs: the button
+ * and the collapsed state are set by CSS before the first paint (html.js), so nothing
+ * jumps; src/scripts/menu.ts opens and closes it. Without JavaScript the full navigation
+ * is simply shown.
  *
  * Props:
  * - currentPath: the page's path (for example "/about/"), used to mark the current link.
@@ -49,7 +50,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
       type="button"
       aria-expanded="false"
       aria-controls="site-nav"
-      hidden
+      data-js-only
     >
       {strings.menuButton}
     </button>
@@ -75,7 +76,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
 
 <style>
   .site-header {
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     border-bottom: var(--border-width) solid var(--color-line);
   }
   .site-header__inner {
@@ -106,7 +107,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     min-height: var(--button-min);
     padding-inline: var(--space-m);
     border-radius: var(--radius-s);
-    background: var(--color-cta-bg);
+    background-color: var(--color-cta-bg);
     background-image: var(--gloss);
     box-shadow: var(--gloss-shadow);
     color: var(--color-cta-text);
@@ -128,12 +129,9 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     padding-inline: var(--space-s);
     border: var(--border-width) solid var(--color-text);
     border-radius: var(--radius-s);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     font-weight: 700;
     cursor: pointer;
-  }
-  .site-header__menu-button[hidden] {
-    display: none;
   }
 
   .site-nav {
@@ -168,7 +166,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     align-self: flex-start;
     padding-inline: var(--space-2xs) var(--space-s);
     border-radius: 999px;
-    background: var(--kids-sunshine);
+    background-color: var(--kids-sunshine);
     color: var(--color-text);
   }
   :global(.site-nav__icon) {
@@ -179,7 +177,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
 
   /* Small screens with JavaScript: collapsed until the menu button opens it */
   @media (max-width: 61.99rem) {
-    .site-header[data-menu='closed'] .site-nav {
+    :global(.js) .site-header:not([data-menu='open']) .site-nav {
       display: none;
     }
   }

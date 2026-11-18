@@ -34,7 +34,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
   />
 
   <div class="container kids-section">
-    <ul class="kids-grid kids-grid--small picker" data-picker="love-prompt" hidden>
+    <ul class="kids-grid kids-grid--small picker" data-picker="love-prompt" data-js-only>
       {interests.map((i) => (
         <li>
           <button
@@ -50,7 +50,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
         </li>
       ))}
     </ul>
-    <p class="kids-note picker__prompt" id="love-prompt" hidden>
+    <p class="kids-note picker__prompt" id="love-prompt" data-js-only>
       <Art name="icons/star" />
       Choose one to start!
     </p>
@@ -61,6 +61,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
         id={`love-${i.id}`}
         aria-labelledby={`love-${i.id}-title`}
         data-flip-group
+        data-js-hide
       >
         <h2 id={`love-${i.id}-title`} class="love-panel__title">
           <Art name={`icons/${i.data.icon}`} class="love-panel__art" />
@@ -76,7 +77,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
             </li>
           ))}
         </ul>
-        <p class="love-panel__done" data-flip-done>
+        <p class="love-panel__done" data-flip-done data-js-hide>
           <Art name="mascot/celebrating" class="love-panel__mascot" />
           <span>You’re a great learner!</span>
         </p>
@@ -107,14 +108,14 @@ const areas = Object.entries(kidsIdeaAreas) as [
     padding: var(--space-s);
     border: 3px solid var(--color-text);
     border-radius: var(--radius-l);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     font-size: var(--step-1);
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 0 var(--color-text);
   }
   .picker__button[aria-pressed='true'] {
-    background: var(--kids-sunshine);
+    background-color: var(--kids-sunshine);
     outline: 4px solid var(--color-text);
     outline-offset: 3px;
   }
@@ -146,7 +147,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
     padding: var(--space-s) var(--space-m);
     border: 3px solid var(--color-text);
     border-radius: var(--radius-l);
-    background: var(--kids-sunshine);
+    background-color: var(--kids-sunshine);
     font-size: var(--step-3) !important;
     font-weight: 700;
     max-width: none;

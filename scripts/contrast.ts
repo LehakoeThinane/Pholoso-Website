@@ -121,6 +121,7 @@ let failures = 0;
   const t = themes.standard!;
   const highlight = Number(root['--gloss-highlight']);
   const band = Number(root['--gloss-band-highlight']);
+  const surface = Number(root['--gloss-surface-highlight']);
   if (!(highlight >= 0) || !(band >= 0)) throw new Error('Gloss strengths not found in tokens.css');
   const c = (n: string) => resolve(t, n);
   const glossPairs: [string, string, number, string][] = [
@@ -157,6 +158,30 @@ let failures = 0;
       'dark band focus ring, highlight',
     ],
     [c('--color-cta-text'), blend(c('--color-cta-bg'), 0.18), TEXT, 'gold band, highlight'],
+    // Surface sheen on dark cards (global.css .on-dark uses the band strength)
+    [c('--color-dark-text'), blend(c('--color-dark-surface'), band), TEXT, 'dark card text, sheen'],
+    [
+      c('--color-dark-link'),
+      blend(c('--color-dark-surface'), band),
+      TEXT,
+      'dark card links, sheen',
+    ],
+    // Surface sheen on light surfaces only lightens: dark text and links gain contrast.
+    // Checked at the lightest point anyway, in case a token changes.
+    ...(
+      [
+        '--kids-sky',
+        '--kids-coral',
+        '--kids-leaf',
+        '--kids-lilac',
+        '--kids-sunshine',
+        '--kids-gold',
+        '--color-surface',
+      ] as const
+    ).flatMap((bg): [string, string, number, string][] => [
+      [c('--color-text'), blend(c(bg), surface), TEXT, `text on ${bg}, sheen`],
+      [c('--color-link'), blend(c(bg), surface), TEXT, `links on ${bg}, sheen`],
+    ]),
   ];
   const lines = glossPairs.map(([fg, bg, min, what]) => {
     const r = ratio(fg, bg);

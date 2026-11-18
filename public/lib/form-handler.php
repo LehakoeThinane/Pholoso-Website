@@ -339,7 +339,7 @@ function paf_handle(array $post, string $ip, ?array $cfg, ?callable $mailerFacto
             'message' => 'You have sent several forms in a short time. Please wait 10 minutes and try again, or email ' . PAF_FALLBACK_EMAIL . '.']];
     }
 
-    // Deployment smoke test (tools/smoke-test.sh): everything above ran, nothing is sent.
+    // Deployment smoke test (scripts/smoke-test.mjs): everything above ran, nothing is sent.
     if (paf_field($post, 'test') === 'TEST') {
         return [200, ['ok' => true, 'code' => 'test', 'message' => 'Test received. Nothing was sent.', 'errors' => []]];
     }

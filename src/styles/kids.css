@@ -48,6 +48,12 @@
 .kids-section {
   padding-block: var(--space-xl) 0;
 }
+/* Centred: section headings and the short sentence under them (owner decision, 18 Nov 2026) */
+.kids-section > h2,
+.kids-section > h2 + p {
+  text-align: center;
+  margin-inline: auto;
+}
 .kids-grid {
   list-style: none;
   margin: 0;
@@ -71,7 +77,7 @@
   padding: var(--space-s) var(--space-m);
   border: 3px solid var(--color-text);
   border-radius: var(--radius-l);
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   color: var(--color-text);
   font-size: var(--step-2);
   font-weight: 700;
@@ -83,10 +89,10 @@
   position: absolute;
   width: 1.2rem;
   height: 1.2rem;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   border: 3px solid var(--color-text);
   border-width: 3px 0 0 3px;
-  left: 2rem;
+  left: calc(50% - 0.6rem); /* the bubble is centred under the mascot on phones */
   top: -0.7rem;
   rotate: 45deg;
 }
@@ -106,7 +112,7 @@
   padding: var(--space-s) var(--space-m);
   border: 3px dashed var(--color-text);
   border-radius: var(--radius-l);
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   font-weight: 700;
 }
 .kids-note .art {
@@ -124,36 +130,30 @@
 }
 
 /* ---------- Motion (all child-triggered, all under 1 second) ---------- */
-/* "Motion allowed" = the device does not ask for less motion, and Reduce motion,
-   Calm colours and Simplified page are all off. */
+/* [data-anim] (set by public/prefs.js) = motion allowed: the device does not ask for less
+   motion, and Reduce motion, Calm colours and Simplified page are all off. */
 @media (prefers-reduced-motion: no-preference) {
   /* Mascot waves when tapped */
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
-    .is-waving
-    .mascot__wave {
+  [data-anim] .is-waving .mascot__wave {
     transform-box: fill-box;
     transform-origin: 0% 100%;
     animation: kids-wave 0.8s ease-in-out 1;
   }
   /* Flip cards turn to show their idea */
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
-    .flip[open]
-    .flip__back {
+  [data-anim] .flip[open] .flip__back {
     animation: kids-flip 0.35s ease-out 1;
   }
   /* Gentle press feedback */
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on']) .pic-btn,
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on']) .door,
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on']) .read-to-me,
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
-    .breathe__button {
+  [data-anim] .pic-btn,
+  [data-anim] .door,
+  [data-anim] .read-to-me,
+  [data-anim] .breathe__button {
     transition:
       translate 0.1s ease-out,
       box-shadow 0.1s ease-out;
   }
   /* The breathing shape: 4 s in, 4 s out. Runs only after Start; Stop removes the class. */
-  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
-    .breathe__shape.is-breathing {
+  [data-anim] .breathe__shape.is-breathing {
     animation: kids-breathe 8s ease-in-out infinite;
   }
 }

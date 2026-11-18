@@ -31,7 +31,13 @@ const isHome = currentPath === kids.home.href;
     </a>
 
     <div class="kids-header__tools">
-      <button type="button" class="kids-toggle" data-kids-toggle="calm" aria-pressed="false" hidden>
+      <button
+        type="button"
+        class="kids-toggle"
+        data-kids-toggle="calm"
+        aria-pressed="false"
+        data-js-only
+      >
         <Art name="icons/leaf" class="kids-toggle__icon" />
         {kids.calmToggle}
       </button>
@@ -40,7 +46,7 @@ const isHome = currentPath === kids.home.href;
         class="kids-toggle"
         data-kids-toggle="sound"
         aria-pressed="false"
-        hidden
+        data-js-only
       >
         <Art name="icons/speaker" class="kids-toggle__icon" />
         {kids.soundToggle}
@@ -73,7 +79,7 @@ const isHome = currentPath === kids.home.href;
 
 <style>
   .kids-header {
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     padding-block: var(--space-s) var(--space-m);
   }
   .kids-header__top {
@@ -90,7 +96,7 @@ const isHome = currentPath === kids.home.href;
     min-height: var(--kids-target);
     padding: var(--space-3xs) var(--space-m) var(--space-3xs) var(--space-2xs);
     border-radius: 999px;
-    background: var(--kids-sunshine);
+    background-color: var(--kids-sunshine);
     border: 3px solid var(--color-text);
     color: var(--color-text);
     font-size: var(--step-2);
@@ -118,7 +124,7 @@ const isHome = currentPath === kids.home.href;
     padding: var(--space-2xs) var(--space-s);
     border: 3px solid var(--color-text);
     border-radius: 999px;
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     font-weight: 700;
     cursor: pointer;
   }
@@ -126,7 +132,7 @@ const isHome = currentPath === kids.home.href;
     display: none;
   }
   .kids-toggle[aria-pressed='true'] {
-    background: var(--color-text);
+    background-color: var(--color-text);
     color: var(--color-bg);
   }
   :global(.kids-toggle__icon) {
