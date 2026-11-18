@@ -8,6 +8,22 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-18 · `dev` · CI fix and CSS budget raised to 14 KB
+
+**What changed**
+
+- **CI install fixed.** The previous push pinned the new test tools to exact versions in
+  `package.json` without regenerating `pnpm-lock.yaml`, so `pnpm install --frozen-lockfile`
+  failed in CI. The lockfile is regenerated; the frozen install passes locally.
+- **CSS budget raised from 12 KB to 14 KB** (Lighthouse, as transferred), and back to failing
+  the build when exceeded. Decided by the owner on 2026-11-18: the whole site now uses one
+  cached stylesheet (about 13.3 KB as Lighthouse counts it), and Kids' World roughly doubled
+  the number of components the original budget was written for.
+
+**Lesson:** after changing `package.json`, always run `pnpm install` so the lockfile matches.
+
+---
+
 ## 2026-11-18 · `dev` · Milestone 8: quality gate (tests, budgets, fixes)
 
 **Why:** brief §17–§18: every page tested automatically in CI before anything ships.

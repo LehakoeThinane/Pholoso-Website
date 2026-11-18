@@ -15,7 +15,12 @@
         "preset": "perf",
         "formFactor": "mobile",
         "throttlingMethod": "simulate",
-        "onlyCategories": ["performance", "accessibility", "best-practices", "seo"]
+        "onlyCategories": [
+          "performance",
+          "accessibility",
+          "best-practices",
+          "seo"
+        ]
       }
     },
     "assert": {
@@ -63,9 +68,9 @@
           }
         ],
         "resource-summary:stylesheet:size": [
-          "warn",
+          "error",
           {
-            "maxNumericValue": 12288
+            "maxNumericValue": 14336
           }
         ]
       }
