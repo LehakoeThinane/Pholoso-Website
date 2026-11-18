@@ -1,0 +1,110 @@
+---
+/**
+ * Our gallery: children's drawings, sent in by a parent or guardian with consent, and checked
+ * before they go up. Only a first name or nickname and an age are ever shown: never a
+ * surname, a school, or a photo of a child.
+ *
+ * Until real drawings arrive, the wall shows pictures of the mascot, labelled as such.
+ * Never make up or fake children's artwork.
+ *
+ * To add a drawing: put the image in src/assets/gallery/ and add an entry to `drawings`
+ * below, with the name and age exactly as the parent or guardian agreed.
+ */
+import Art from '../../components/kids/Art.astro';
+import KidsHero from '../../components/kids/KidsHero.astro';
+import { kids } from '../../config/strings';
+import KidsLayout from '../../layouts/KidsLayout.astro';
+
+const mascotPictures = [
+  { pose: 'hello', caption: `${kids.mascotName} says hello`, colour: 'sky' },
+  { pose: 'celebrating', caption: `${kids.mascotName} is very happy`, colour: 'sunshine' },
+  { pose: 'thinking', caption: `${kids.mascotName} is thinking`, colour: 'lilac' },
+  { pose: 'calm', caption: `${kids.mascotName} feels calm`, colour: 'leaf' },
+] as const;
+---
+
+<KidsLayout
+  title="Our gallery"
+  description="A gallery of children's drawings, shared by their grown-ups. Find out how a parent or guardian can send one in."
+>
+  <KidsHero
+    title="Our gallery"
+    says="This is our picture wall. Soon it will have drawings by children like you!"
+    pose="celebrating"
+    colour="lilac"
+  />
+
+  <section class="container kids-section" aria-labelledby="wall-title">
+    <h2 id="wall-title">Pictures of {kids.mascotName}</h2>
+    <p>These pictures of {kids.mascotName} were made for this website.</p>
+    <ul class="kids-grid kids-grid--small">
+      {mascotPictures.map((p) => (
+        <li>
+          <figure class:list={['frame', `kids-bg--${p.colour}`]}>
+            <Art name={`mascot/${p.pose}`} class="frame__art" />
+            <figcaption>{p.caption}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container kids-section" aria-labelledby="send-title">
+    <div class="send kids-bg--sunshine">
+      <Art name="icons/pencil" class="send__art" />
+      <div>
+        <h2 id="send-title">Would you like your drawing here?</h2>
+        <p>Ask a grown-up who looks after you to send it to us.</p>
+        <p class="send__grown-ups">
+          <a href="/share-a-drawing/">For grown-ups: how to share a drawing</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</KidsLayout>
+
+<style>
+  .frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+    height: 100%;
+    margin: 0;
+    padding: var(--space-m);
+    border: 8px solid var(--color-text);
+    border-radius: var(--radius-m);
+    color: var(--color-text);
+    font-weight: 700;
+    text-align: center;
+  }
+  .frame :global(.frame__art) {
+    width: 9rem;
+    height: 9rem;
+  }
+  .send {
+    display: grid;
+    gap: var(--space-m);
+    align-items: center;
+    padding: var(--space-l);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-xl);
+    color: var(--color-text);
+  }
+  @media (min-width: 40rem) {
+    .send {
+      grid-template-columns: 6rem 1fr;
+    }
+  }
+  .send :global(.send__art) {
+    width: 6rem;
+    height: 6rem;
+  }
+  .send__grown-ups {
+    margin: 0;
+    font-weight: 700;
+  }
+  .send__grown-ups a {
+    color: var(--color-text);
+  }
+</style>

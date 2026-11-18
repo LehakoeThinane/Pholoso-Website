@@ -5,7 +5,7 @@
  * See docs/CONTENT-GUIDE.md.
  */
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 /** Story categories, in the order the filter buttons appear. */
@@ -80,4 +80,80 @@ const faqs = defineCollection({
   }),
 });
 
-export const collections = { stories, interests, resources, faqs };
+/* ---------- Kids' World (src/content/kids/*.yaml: one file per collection) ---------- */
+
+/** The four "you could…" ideas every Kids' World interest has, in display order. */
+export const kidsIdeaAreas = {
+  numbers: { label: 'Numbers', icon: 'numbers' },
+  words: { label: 'Words', icon: 'words' },
+  science: { label: 'Find out', icon: 'science' },
+  friends: { label: 'Friends', icon: 'friends' },
+} as const;
+
+/** A short, read-aloud-friendly sentence for children. */
+const kidsLine = z.string().min(3).max(110);
+
+const kidsInterests = defineCollection({
+  loader: file('src/content/kids/interests.yaml'),
+  schema: z.object({
+    order: z.number().int(),
+    name: z.string().max(20),
+    icon: z.string(),
+    ideas: z.object({
+      numbers: kidsLine,
+      words: kidsLine,
+      science: kidsLine,
+      friends: kidsLine,
+    }),
+  }),
+});
+
+const kidsStories = defineCollection({
+  loader: file('src/content/kids/stories.yaml'),
+  schema: z.object({
+    order: z.number().int(),
+    title: z.string().max(40),
+    child: z.string(),
+    panels: z
+      .array(z.object({ text: kidsLine, icon: z.string().optional() }))
+      .min(4)
+      .max(6),
+  }),
+});
+
+const kidsFacts = defineCollection({
+  loader: file('src/content/kids/facts.yaml'),
+  schema: z.object({
+    text: kidsLine,
+    /** Where an editor can check the fact. Required; not shown on the page. */
+    source: z.string().min(5),
+  }),
+});
+
+const kidsFeelings = defineCollection({
+  loader: file('src/content/kids/feelings.yaml'),
+  schema: z.object({
+    order: z.number().int(),
+    name: z.string().max(12),
+    face: z.string(),
+    message: kidsLine,
+    idea: kidsLine,
+    link: z
+      .object({
+        href: z.string().startsWith('/', 'Feelings links must stay on this website'),
+        label: z.string(),
+      })
+      .optional(),
+  }),
+});
+
+export const collections = {
+  stories,
+  interests,
+  resources,
+  faqs,
+  kidsInterests,
+  kidsStories,
+  kidsFacts,
+  kidsFeelings,
+};

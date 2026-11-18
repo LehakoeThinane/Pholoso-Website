@@ -1,0 +1,44 @@
+---
+/**
+ * Wave: a soft wavy edge between two coloured bands. Decorative and hidden from screen
+ * readers. It is filled with `currentColor`, so set `color` on it (or a parent) to the
+ * colour of the band it belongs to.
+ *
+ * Props:
+ * - edge: 'top' (the wave sits on top of its band, default) or 'bottom' (hangs below it).
+ */
+interface Props {
+  edge?: 'top' | 'bottom';
+}
+
+const { edge = 'top' } = Astro.props;
+---
+
+<svg
+  class:list={['wave', `wave--${edge}`]}
+  viewBox="0 0 1440 48"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  {edge === 'top' ? (
+    <path d="M0 30 C 180 6 360 6 540 24 S 900 46 1080 26 S 1350 6 1440 18 V48 H0 Z" />
+  ) : (
+    <path d="M0 0 H1440 V18 C 1260 42 1080 42 900 24 S 540 2 360 22 S 90 42 0 30 Z" />
+  )}
+</svg>
+
+<style>
+  .wave {
+    display: block;
+    width: 100%;
+    height: clamp(1rem, 3vw, 2.25rem);
+    fill: currentColor;
+  }
+  .wave--top {
+    margin-bottom: -1px;
+  }
+  .wave--bottom {
+    margin-top: -1px;
+  }
+</style>

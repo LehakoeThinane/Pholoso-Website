@@ -30,6 +30,27 @@
   --error: #a3261b;
   --success: #1f6b3a;
 
+  /* Playful supporting palette (brief §10): backgrounds and illustration fills only.
+     Soft enough that ink text stays readable; checked by scripts/contrast.ts. */
+  --sky: #bfe3f2;
+  --coral: #f7b3a1;
+  --leaf: #cde8b5;
+  --lilac: #d9ccf0;
+  --sunshine: #fce7b8;
+
+  /* Kids' World backgrounds. Themes below soften or replace them. */
+  --kids-sky: var(--sky);
+  --kids-coral: var(--coral);
+  --kids-leaf: var(--leaf);
+  --kids-lilac: var(--lilac);
+  --kids-sunshine: var(--sunshine);
+  --kids-gold: var(--gold);
+  --kids-target: 4rem; /* kids' buttons: at least 64px tall (brief §7) */
+  --radius-l: 1.25rem;
+  --radius-xl: 1.75rem;
+  /* How bright illustrations are. Calm and Dim turn it down. */
+  --illustration-filter: none;
+
   /* Semantic colours: Standard theme */
   --color-bg: var(--paper);
   --color-surface: var(--paper-alt);
@@ -173,6 +194,13 @@
   --color-dark-focus: #7a6a9a;
   --color-dark-accent: #5e7f74;
   --color-on-cta-focus: #3f6358;
+  --kids-sky: #dfe9ec;
+  --kids-coral: #efdcd5;
+  --kids-leaf: #e0e9d9;
+  --kids-lilac: #e4dfeb;
+  --kids-sunshine: #f1ead9;
+  --kids-gold: #e9dfc8;
+  --illustration-filter: saturate(0.55);
 }
 
 /* High contrast: white, black, darker greens, strong borders (spec §7.2) */
@@ -198,6 +226,12 @@
   --color-dark-focus: #ffb27a;
   --color-dark-accent: #ffe08a;
   --color-on-cta-focus: #c2410c;
+  --kids-sky: #ffffff;
+  --kids-coral: #ffffff;
+  --kids-leaf: #ffffff;
+  --kids-lilac: #ffffff;
+  --kids-sunshine: #ffffff;
+  --kids-gold: #ffffff;
   --border-width: 2px;
   --focus-width: 4px;
 }
@@ -227,6 +261,13 @@
   --color-on-cta-focus: #e8c27a;
   --color-error: #ff9c8f;
   --color-success: #8fd6a6;
+  --kids-sky: #1f3540;
+  --kids-coral: #3d2a26;
+  --kids-leaf: #26331f;
+  --kids-lilac: #2e2a3b;
+  --kids-sunshine: #3a331f;
+  --kids-gold: #3a331f;
+  --illustration-filter: brightness(0.85) saturate(0.8);
   color-scheme: dark;
 }
 

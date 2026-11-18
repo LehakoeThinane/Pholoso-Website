@@ -268,6 +268,16 @@ main:focus {
   display: block;
 }
 
+/* Illustrations (src/components/kids/Art.astro): Calm and Dim tone them down */
+.art {
+  filter: var(--illustration-filter);
+}
+/* Decorative doodles and stickers: hidden in Calm colours and Simplified page */
+:root[data-theme='calm'] .doodle,
+:root[data-simple='on'] .doodle {
+  display: none !important;
+}
+
 /* Switchable wording waits for its swap, so person-first never flashes (max 2s) */
 :root.terms-pending .term {
   visibility: hidden;

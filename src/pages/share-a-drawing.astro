@@ -1,0 +1,69 @@
+---
+/**
+ * Share a drawing: how a parent or guardian sends a child's drawing for the Kids' World
+ * gallery. Children never submit anything themselves (brief §7, child safety).
+ * Drawings arrive by email, so there is no upload on the web server and nothing is stored
+ * there. Covered in the privacy notice ("You send a child's drawing").
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Notice from '../components/Notice.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import Steps from '../components/Steps.astro';
+import TickList from '../components/TickList.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  title="Share a child's drawing"
+  description="How a parent or guardian can send a child's drawing for the Kids' World gallery, and how we protect the child's privacy."
+>
+  <PageHero
+    eyebrow="Kids’ World gallery"
+    title="Share a child’s drawing"
+    lead="Children love seeing their work on the wall. If you are a child's parent or guardian, you can send us a drawing for the Kids’ World gallery."
+  />
+
+  <Section labelledby="how-title" narrow>
+    <h2 id="how-title">How to send a drawing</h2>
+    <Steps
+      steps={[
+        {
+          title: 'Take a clear photo or scan of the drawing.',
+          text: 'Make sure no faces, full names, school badges or addresses are in the picture.',
+        },
+        { title: `Email it to ${site.email}.`, text: 'Use the subject "Gallery drawing".' },
+        {
+          title: 'Tell us the name and age to show.',
+          text: 'A first name or nickname only, and the child’s age.',
+        },
+        {
+          title: 'Confirm that you agree.',
+          text: 'Say that you are the child’s parent or legal guardian, and that you agree to us showing the drawing with that name and age.',
+        },
+      ]}
+    />
+    <p>
+      <a href={`mailto:${site.email}?subject=Gallery%20drawing`}>Email a drawing to {site.email}</a>
+    </p>
+  </Section>
+
+  <Section variant="alt" labelledby="protect-title" narrow>
+    <h2 id="protect-title">How we protect your child</h2>
+    <TickList
+      items={[
+        'We show only a first name or nickname and an age. Never a surname, a school, or a photo of a child.',
+        'A person checks every drawing before it goes on the website.',
+        'We may choose not to publish a drawing, for example if it could identify a child.',
+        'You can ask us to take a drawing down at any time, and we will.',
+        'Children cannot send anything to us through Kids’ World. There are no forms, chat or accounts there.',
+      ]}
+    />
+    <Notice>
+      <p>
+        Read our <a href="/privacy/">privacy notice</a> to see how we handle the details in your
+        email.
+      </p>
+    </Notice>
+  </Section>
+</BaseLayout>

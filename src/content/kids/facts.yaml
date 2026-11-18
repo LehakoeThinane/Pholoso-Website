@@ -1,0 +1,52 @@
+# Kids' World: "Did you know?" facts. One shows each day, chosen by the date (never animated).
+# Rules: true, checkable, positive, and short enough to read aloud in one breath.
+# `source` is for editors: where to check the fact. It is not shown on the page.
+# Never add a statistic about children, disability or diagnosis here.
+
+- id: octopus
+  text: An octopus has three hearts.
+  source: Encyclopaedia Britannica, "octopus"
+
+- id: bees
+  text: Honeybees do a dance to show other bees where to find flowers.
+  source: Encyclopaedia Britannica, "waggle dance"
+
+- id: cheetah
+  text: The cheetah is the fastest animal on land. Cheetahs live in South Africa too.
+  source: Encyclopaedia Britannica, "cheetah"; South African National Parks (SANParks)
+
+- id: penguins
+  text: Penguins live in South Africa! African penguins live on our coast.
+  source: South African National Parks (SANParks), Boulders penguin colony, Table Mountain National Park
+
+- id: elephants
+  text: Elephants can talk to each other with rumbles too low for people to hear.
+  source: Encyclopaedia Britannica, "elephant" (infrasound communication)
+
+- id: languages
+  text: South Africa has 12 official languages. One of them is South African Sign Language.
+  source: Constitution Eighteenth Amendment Act, 2023 (South African Sign Language as an official language)
+
+- id: brain
+  text: When you practise something, your brain makes new connections. Every brain can learn.
+  source: Encyclopaedia Britannica, "neuroplasticity"
+
+- id: flamingos
+  text: A group of flamingos is called a flamboyance.
+  source: Collins / Merriam-Webster dictionaries, "flamboyance"
+
+- id: moon
+  text: There is no wind on the Moon, so astronauts' footprints can stay there for a very long time.
+  source: NASA, Moon facts
+
+- id: baobab
+  text: Baobab trees can live for more than a thousand years. Some grow in Limpopo.
+  source: Encyclopaedia Britannica, "baobab"; SANParks, Kruger National Park
+
+- id: heart
+  text: Your heart beats about one hundred thousand times every day.
+  source: Encyclopaedia Britannica, "heart" (resting heart rate of about 70 beats per minute)
+
+- id: different
+  text: No two people have the same fingerprints. Everyone is one of a kind!
+  source: Encyclopaedia Britannica, "fingerprint"

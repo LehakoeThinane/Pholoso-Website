@@ -1,0 +1,282 @@
+/*
+ * Kids' World styles (loaded by KidsLayout only).
+ *
+ * Happy by default, calm on request (brief §8):
+ *  - colour comes in big flat blocks; text always sits on a plain, high-contrast background
+ *  - nothing moves on its own. Every animation here starts from a child's tap, lasts under
+ *    one second, never flashes, and is switched off by Reduce motion, the device's reduced
+ *    motion setting, Calm colours or Simplified page. The one exception is the breathing
+ *    shape in the Calm corner, which runs only after Start and has a Stop button.
+ */
+
+/* ---------- Colour blocks: text, links and focus all pass on every one (contrast.ts) ---------- */
+.kids-bg--sky {
+  background-color: var(--kids-sky);
+}
+.kids-bg--coral {
+  background-color: var(--kids-coral);
+}
+.kids-bg--leaf {
+  background-color: var(--kids-leaf);
+}
+.kids-bg--lilac {
+  background-color: var(--kids-lilac);
+}
+.kids-bg--sunshine {
+  background-color: var(--kids-sunshine);
+}
+.kids-bg--gold {
+  background-color: var(--kids-gold);
+}
+[data-theme='contrast'] [class*='kids-bg--'] {
+  border-color: var(--color-border);
+}
+
+/* ---------- Type: big, bold, friendly ---------- */
+.kids-world h2 {
+  font-size: clamp(1.6rem, 1.3rem + 1.5vw, 2.3rem);
+}
+.kids-world h3 {
+  font-size: var(--step-2);
+}
+.kids-world main p,
+.kids-world main li {
+  font-size: var(--step-1);
+}
+
+/* ---------- Layout helpers ---------- */
+.kids-section {
+  padding-block: var(--space-xl) 0;
+}
+.kids-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-m);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}
+.kids-grid > li {
+  margin: 0;
+  max-width: none;
+}
+.kids-grid--small {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+}
+
+/* ---------- Speech bubble ---------- */
+.bubble {
+  position: relative;
+  max-width: 34rem;
+  padding: var(--space-s) var(--space-m);
+  border: 3px solid var(--color-text);
+  border-radius: var(--radius-l);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--step-2);
+  font-weight: 700;
+  line-height: 1.35;
+}
+/* The bubble's tail points at the mascot (left on wide screens, up on phones) */
+.bubble::before {
+  content: '';
+  position: absolute;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: var(--color-bg);
+  border: 3px solid var(--color-text);
+  border-width: 3px 0 0 3px;
+  left: 2rem;
+  top: -0.7rem;
+  rotate: 45deg;
+}
+@media (min-width: 40rem) {
+  .bubble::before {
+    left: -0.7rem;
+    top: 1.4rem;
+    rotate: -45deg;
+  }
+}
+
+/* ---------- Kids' notice: a plain, friendly box ---------- */
+.kids-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  border: 3px dashed var(--color-text);
+  border-radius: var(--radius-l);
+  background: var(--color-bg);
+  font-weight: 700;
+}
+.kids-note .art {
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+}
+
+/* ---------- Doodles: small decorative stars and triangles ---------- */
+.doodle-star {
+  position: absolute;
+  width: 1.75rem;
+  height: 1.75rem;
+  pointer-events: none;
+}
+
+/* ---------- Motion (all child-triggered, all under 1 second) ---------- */
+/* "Motion allowed" = the device does not ask for less motion, and Reduce motion,
+   Calm colours and Simplified page are all off. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Mascot waves when tapped */
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
+    .is-waving
+    .mascot__wave {
+    transform-box: fill-box;
+    transform-origin: 0% 100%;
+    animation: kids-wave 0.8s ease-in-out 1;
+  }
+  /* Flip cards turn to show their idea */
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
+    .flip[open]
+    .flip__back {
+    animation: kids-flip 0.35s ease-out 1;
+  }
+  /* Gentle press feedback */
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on']) .pic-btn,
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on']) .door,
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on']) .read-to-me,
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
+    .breathe__button {
+    transition:
+      translate 0.1s ease-out,
+      box-shadow 0.1s ease-out;
+  }
+  /* The breathing shape: 4 s in, 4 s out. Runs only after Start; Stop removes the class. */
+  :root:not([data-motion='reduced']):not([data-theme='calm']):not([data-simple='on'])
+    .breathe__shape.is-breathing {
+    animation: kids-breathe 8s ease-in-out infinite;
+  }
+}
+
+@keyframes kids-wave {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: -18deg;
+  }
+  60% {
+    rotate: 14deg;
+  }
+}
+@keyframes kids-flip {
+  from {
+    transform: perspective(40rem) rotateX(-70deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes kids-breathe {
+  0%,
+  100% {
+    transform: scale(0.6);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+/* ---------- Celebration: a single burst of stars from where the child tapped ---------- */
+.celebrate {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  overflow: hidden;
+}
+.celebrate__burst {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.celebrate__star {
+  position: absolute;
+  left: -0.9rem;
+  top: -0.9rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  opacity: 0;
+  animation: kids-star 0.75s ease-out 1 forwards;
+}
+/* Eight directions; each star fades once (one fade is not a flash: WCAG 2.3.1) */
+.celebrate__star:nth-child(1) {
+  --dx: 0rem;
+  --dy: -5rem;
+}
+.celebrate__star:nth-child(2) {
+  --dx: 3.5rem;
+  --dy: -3.5rem;
+}
+.celebrate__star:nth-child(3) {
+  --dx: 5rem;
+  --dy: 0rem;
+}
+.celebrate__star:nth-child(4) {
+  --dx: 3.5rem;
+  --dy: 3.5rem;
+}
+.celebrate__star:nth-child(5) {
+  --dx: 0rem;
+  --dy: 5rem;
+}
+.celebrate__star:nth-child(6) {
+  --dx: -3.5rem;
+  --dy: 3.5rem;
+}
+.celebrate__star:nth-child(7) {
+  --dx: -5rem;
+  --dy: 0rem;
+}
+.celebrate__star:nth-child(8) {
+  --dx: -3.5rem;
+  --dy: -3.5rem;
+}
+@keyframes kids-star {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.4);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(1);
+  }
+}
+/* Belt and braces: the script never starts a burst in these states either */
+:root[data-motion='reduced'] .celebrate,
+:root[data-theme='calm'] .celebrate,
+:root[data-simple='on'] .celebrate {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .celebrate {
+    display: none;
+  }
+}
+
+/* ---------- Calm corner: softer colours on this page only (Standard theme; the other
+   themes already set their own backgrounds) ---------- */
+:root:not([data-theme]) .kids-calm {
+  --kids-sky: #dcebf1;
+  --kids-coral: #f1e1dc;
+  --kids-leaf: #e2ecd9;
+  --kids-lilac: #e6e0ef;
+  --kids-sunshine: #f3ecdc;
+  --kids-gold: #efe2c6;
+}

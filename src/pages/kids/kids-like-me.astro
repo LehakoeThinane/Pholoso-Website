@@ -1,0 +1,157 @@
+---
+/**
+ * Kids like me: very short picture stories about children's strengths. The children are
+ * made up, and the page says so. Content: src/content/kids/stories.yaml.
+ */
+import Art from '../../components/kids/Art.astro';
+import KidsHero from '../../components/kids/KidsHero.astro';
+import ReadToMe from '../../components/kids/ReadToMe.astro';
+import KidsLayout from '../../layouts/KidsLayout.astro';
+import { ordered } from '../../lib/content';
+
+const stories = await ordered('kidsStories');
+const colours = ['sunshine', 'sky', 'leaf', 'lilac', 'coral'] as const;
+---
+
+<KidsLayout
+  title="Kids like me"
+  description="Short picture stories about children who are great at noticing, remembering, building, drawing and being kind."
+>
+  <KidsHero
+    title="Kids like me"
+    says="Every kid is good at something. Meet some new friends!"
+    pose="hello"
+    colour="leaf"
+  >
+    <p class="kids-note">
+      <Art name="icons/book" />
+      These are made-up stories. The children are not real, but lots of real children are like them.
+    </p>
+  </KidsHero>
+
+  <nav class="container kids-section" aria-labelledby="story-list-title">
+    <h2 id="story-list-title" class="visually-hidden">
+      The stories
+    </h2>
+    <ul class="kids-grid kids-grid--small">
+      {stories.map((s, i) => (
+        <li>
+          <a
+            class:list={['story-link', `kids-bg--${colours[i % colours.length]}`]}
+            href={`#${s.id}`}
+          >
+            <Art name={`children/${s.data.child}`} class="story-link__art" />
+            <span>{s.data.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  {stories.map((s, i) => (
+    <article class="container kids-section story" id={s.id} aria-labelledby={`${s.id}-title`}>
+      <div class="story__head">
+        <h2 id={`${s.id}-title`}>{s.data.title}</h2>
+        <ReadToMe target={`${s.id}-panels`} label={`the story ${s.data.title}`} size="small" />
+      </div>
+      <ol class="story__panels" id={`${s.id}-panels`}>
+        {s.data.panels.map((p, n) => (
+          <li class:list={['panel', `kids-bg--${colours[(i + n) % colours.length]}`]}>
+            <Art
+              name={n === 0 || !p.icon ? `children/${s.data.child}` : `icons/${p.icon}`}
+              class:list={['panel__art', { 'panel__art--child': n === 0 || !p.icon }]}
+            />
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </article>
+  ))}
+</KidsLayout>
+
+<style>
+  .story-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    height: 100%;
+    min-height: var(--kids-target);
+    padding: var(--space-s);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-l);
+    color: var(--color-text);
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 4px 0 var(--color-text);
+  }
+  .story-link :global(.story-link__art) {
+    width: 4rem;
+    height: 5.75rem;
+  }
+  .story {
+    scroll-margin-top: var(--space-m);
+  }
+  .story__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s) var(--space-m);
+    margin-bottom: var(--space-m);
+  }
+  .story__head h2 {
+    margin: 0;
+  }
+  .story__panels {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-s);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr));
+    counter-reset: panel;
+  }
+  .panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+    margin: 0;
+    max-width: none;
+    padding: var(--space-m) var(--space-s);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-l);
+    color: var(--color-text);
+    text-align: center;
+    counter-increment: panel;
+  }
+  /* Panel number, like a comic: helps children keep their place */
+  .panel::before {
+    content: counter(panel);
+    position: absolute;
+    top: var(--space-2xs);
+    left: var(--space-2xs);
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--color-text);
+    border-radius: 50%;
+    background: var(--color-bg);
+    font-weight: 700;
+    font-size: var(--step--1);
+  }
+  .panel p {
+    margin: 0;
+    font-weight: 700;
+  }
+  .panel :global(.panel__art) {
+    width: 5rem;
+    height: 5rem;
+  }
+  .panel :global(.panel__art--child) {
+    width: 4.5rem;
+    height: 6.5rem;
+  }
+</style>

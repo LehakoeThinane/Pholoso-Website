@@ -8,6 +8,7 @@
  * - image: imported hero photo (loaded with high priority)
  * - imageAlt: description of the photo, or "" if decorative
  * - level: 1 (default). Only the styleguide uses 2, to keep one <h1> per page.
+ * - id: optional anchor id (the home page's "I'm a grown-up" door links to it).
  *
  * Slots: default (one-sentence explanation), "actions" (buttons).
  */
@@ -20,13 +21,14 @@ interface Props {
   image: ImageMetadata;
   imageAlt: string;
   level?: 1 | 2;
+  id?: string;
 }
 
-const { eyebrow, title, image, imageAlt, level = 1 } = Astro.props;
+const { eyebrow, title, image, imageAlt, level = 1, id } = Astro.props;
 const Heading = `h${level}` as 'h1' | 'h2';
 ---
 
-<section class="hero on-dark" aria-labelledby="hero-title">
+<section class="hero on-dark" aria-labelledby="hero-title" id={id} tabindex={id ? -1 : undefined}>
   <div class="container hero__grid">
     <div class="hero__text">
       {eyebrow && <p class="hero__eyebrow triangle-marker">{eyebrow}</p>}
@@ -55,6 +57,9 @@ const Heading = `h${level}` as 'h1' | 'h2';
 <style>
   .hero {
     padding-block: var(--space-xl) var(--space-2xl);
+  }
+  .hero:focus {
+    outline: none;
   }
   .hero__grid {
     display: grid;

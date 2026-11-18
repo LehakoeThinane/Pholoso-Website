@@ -1,0 +1,104 @@
+---
+/**
+ * FlipCard: a card a child taps to reveal an idea. A native <details>, so it works with a
+ * keyboard, a screen reader and without JavaScript. With motion allowed, the idea flips in
+ * (under half a second); with reduced motion or Calm colours it simply appears.
+ *
+ * Props:
+ * - icon: illustration on the front, e.g. "icons/numbers"
+ * - front: one or two words on the front ("Numbers")
+ * - colour: card colour
+ * Slot: the idea (one short sentence).
+ *
+ * Group cards inside an element with [data-flip-group]: when every card in the group is
+ * open, src/scripts/kids/games.ts celebrates and reveals the group's [data-flip-done].
+ */
+import type { KidsColour } from '../../config/strings';
+import Art from './Art.astro';
+
+interface Props {
+  icon: string;
+  front: string;
+  colour: KidsColour;
+}
+
+const { icon, front, colour } = Astro.props;
+---
+
+<details class:list={['flip', `kids-bg--${colour}`]} data-flip>
+  <summary class="flip__front">
+    <Art name={icon} class="flip__art" />
+    <span class="flip__label">
+      {front}
+      <span class="visually-hidden"> idea</span>
+    </span>
+    <span class="flip__hint" aria-hidden="true">
+      Tap me!
+    </span>
+  </summary>
+  <p class="flip__back">
+    <slot />
+  </p>
+</details>
+
+<style>
+  .flip {
+    height: 100%;
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-l);
+    box-shadow: 0 5px 0 var(--color-text);
+    color: var(--color-text);
+  }
+  .flip__front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: 8rem;
+    padding: var(--space-s);
+    list-style: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: calc(var(--radius-l) - 3px);
+  }
+  .flip__front::-webkit-details-marker {
+    display: none;
+  }
+  :global(.flip__art) {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .flip__label {
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+  .flip__hint {
+    font-size: var(--step--1);
+    font-weight: 700;
+    padding: 0.1em 0.75em;
+    border: 2px solid var(--color-text);
+    border-radius: 999px;
+    background: var(--color-bg);
+  }
+  .flip[open] .flip__hint {
+    display: none;
+  }
+  .flip[open] .flip__front {
+    min-height: 0;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 0;
+  }
+  .flip[open] :global(.flip__art) {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .flip__back {
+    margin: 0;
+    padding: var(--space-xs) var(--space-s) var(--space-m);
+    font-size: var(--step-1);
+    font-weight: 700;
+    text-align: center;
+    max-width: none;
+  }
+</style>

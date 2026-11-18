@@ -4,7 +4,7 @@
  * (the Content-Security-Policy forbids inline scripts). Keep it tiny and dependency-free.
  *
  * Storage: localStorage "pholoso-comfort" = {"v":1, theme, text, spacing, guide, motion,
- * simple, images, focus, identityFirst, rate}. Settings never leave the device.
+ * simple, images, focus, identityFirst, rate, sound}. Settings never leave the device.
  * The same key and format were used by the previous site, so saved choices carry over.
  *
  * This file owns the mapping from settings to <html> attributes. The panel
@@ -66,6 +66,8 @@
       focus: s.focus === 'strong' ? 'strong' : 'normal',
       identityFirst: !!s.identityFirst,
       rate: [0.75, 1, 1.25, 1.5].indexOf(s.rate) > -1 ? s.rate : 1,
+      // Kids' World tap sounds: off unless chosen, and always off in the Calm theme.
+      sound: !!s.sound,
     };
   }
 
@@ -85,6 +87,11 @@
     set('data-images', e.images ? '' : 'off');
     set('data-focus', e.focus === 'strong' ? 'strong' : '');
     set('data-identity', e.identityFirst ? 'first' : '');
+    set('data-sound', e.sound && e.theme !== 'calm' ? 'on' : '');
+    // Lets Kids' World toggles and the panel stay in step when either changes a setting.
+    if (typeof CustomEvent === 'function') {
+      document.dispatchEvent(new CustomEvent('pholoso:prefs', { detail: e }));
+    }
     return e;
   }
 

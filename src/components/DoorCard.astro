@@ -1,0 +1,124 @@
+---
+/**
+ * DoorCard: one of the two big "doors" at the top of the home page:
+ * "I'm a kid → Come and play!" and "I'm a grown-up → Find out about our work".
+ * The whole card is one link; its words are the accessible name.
+ *
+ * Props:
+ * - href: where the door goes
+ * - who: "I'm a kid" / "I'm a grown-up"
+ * - action: "Come and play!" / "Find out about our work"
+ * - variant: 'kid' (bright sky, mascot and children) or 'grown-up' (calm paper and green)
+ */
+import Art from './kids/Art.astro';
+
+interface Props {
+  href: string;
+  who: string;
+  action: string;
+  variant: 'kid' | 'grown-up';
+}
+
+const { href, who, action, variant } = Astro.props;
+---
+
+<a href={href} class:list={['door', `door--${variant}`]}>
+  <span class="door__art">
+    {variant === 'kid' ? (
+      <>
+        <Art name="children/lerato" class="door__child" />
+        <Art name="mascot/hello" class="door__mascot" />
+        <Art name="children/sipho" class="door__child" />
+      </>
+    ) : (
+      <>
+        <Art name="icons/friends" class="door__icon" />
+        <Art name="icons/book" class="door__icon" />
+      </>
+    )}
+  </span>
+  <span class="door__text">
+    <span class="door__who">{who}</span>
+    <span class="door__action">
+      {action} <span aria-hidden="true">→</span>
+    </span>
+  </span>
+</a>
+
+<style>
+  .door {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    color: var(--color-text);
+    text-decoration: none;
+    box-shadow: 0 6px 0 var(--color-text);
+  }
+  .door:hover .door__action {
+    text-decoration: underline;
+    text-decoration-thickness: 0.1em;
+  }
+  .door:active {
+    box-shadow: 0 2px 0 var(--color-text);
+    translate: 0 4px;
+  }
+  .door__art {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: var(--space-s);
+    min-height: 9rem;
+    padding: var(--space-m) var(--space-m) 0;
+  }
+  .door--kid .door__art {
+    background: var(--kids-sky);
+  }
+  .door--grown-up .door__art {
+    background: var(--kids-leaf);
+    align-items: center;
+    padding-bottom: var(--space-m);
+  }
+  :global(.door__mascot) {
+    width: 7rem;
+    height: 7rem;
+  }
+  :global(.door__child) {
+    width: 3.75rem;
+    height: auto;
+  }
+  :global(.door__icon) {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  .door__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    flex: 1;
+    padding: var(--space-m);
+    border-top: 3px solid var(--color-text);
+    background: var(--color-bg);
+  }
+  .door--kid .door__text {
+    background: var(--kids-sunshine);
+  }
+  .door__who {
+    font-size: var(--step-3);
+    font-weight: 700;
+    line-height: var(--line-height-tight);
+  }
+  .door__action {
+    font-size: var(--step-1);
+    font-weight: 700;
+    color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 0.18em;
+  }
+  .door--kid .door__action {
+    color: var(--color-text);
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+/**
+ * KidsHero: the top of every Kids' World page. The mascot, the page's only <h1>, what the
+ * mascot says (a speech bubble), and the "Read it to me" button.
+ *
+ * Props:
+ * - title: the <h1>
+ * - says: what the mascot says, one or two short sentences
+ * - pose: 'hello' | 'thinking' | 'celebrating' | 'calm'
+ * - colour: background band colour (default 'sunshine')
+ * - wave: true lets children tap the mascot to make it wave (home page). The button is
+ *   disabled until JavaScript is ready, so it never looks broken.
+ * Slot: optional extra content under the button (e.g. a notice).
+ */
+import { kids, type KidsColour } from '../../config/strings';
+import Art from './Art.astro';
+import ReadToMe from './ReadToMe.astro';
+import Wave from './Wave.astro';
+
+interface Props {
+  title: string;
+  says: string;
+  pose?: 'hello' | 'thinking' | 'celebrating' | 'calm';
+  colour?: KidsColour;
+  wave?: boolean;
+}
+
+const { title, says, pose = 'hello', colour = 'sunshine', wave = false } = Astro.props;
+---
+
+<div class:list={['kids-hero', `kids-bg--${colour}`]}>
+  <div class="container kids-hero__inner">
+    <div class="kids-hero__mascot">
+      {wave ? (
+        <button
+          type="button"
+          class="mascot-button"
+          data-mascot={kids.mascotName}
+          disabled
+          aria-label={`Wave to ${kids.mascotName}`}
+        >
+          <Art name={`mascot/${pose}`} class="mascot" />
+        </button>
+      ) : (
+        <Art name={`mascot/${pose}`} class="mascot" />
+      )}
+    </div>
+    <div class="kids-hero__text">
+      <h1 class="kids-hero__title">{title}</h1>
+      <p class="bubble">
+        <span class="visually-hidden">{kids.mascotName} says: </span>
+        {says}
+      </p>
+      <ReadToMe />
+      <slot />
+    </div>
+  </div>
+  <Wave edge="top" />
+</div>
+
+<style>
+  .kids-hero {
+    padding-top: var(--space-l);
+  }
+  .kids-hero :global(.wave) {
+    color: var(--color-bg);
+    margin-top: var(--space-l);
+  }
+  .kids-hero__inner {
+    display: grid;
+    gap: var(--space-m);
+    align-items: center;
+  }
+  @media (min-width: 40rem) {
+    .kids-hero__inner {
+      grid-template-columns: minmax(9rem, 14rem) 1fr;
+      gap: var(--space-l);
+    }
+  }
+  .kids-hero__mascot {
+    justify-self: center;
+    width: min(12rem, 60vw);
+  }
+  .kids-hero__mascot :global(.mascot) {
+    width: 100%;
+    height: auto;
+  }
+  .kids-hero__title {
+    font-size: clamp(2.1rem, 1.5rem + 3vw, 3.4rem);
+    margin-bottom: var(--space-s);
+  }
+  .kids-hero__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-m);
+  }
+  .kids-hero__text > * {
+    margin: 0;
+  }
+  .mascot-button {
+    display: block;
+    width: 100%;
+    padding: var(--space-2xs);
+    border: 0;
+    border-radius: var(--radius-xl);
+    background: transparent;
+    cursor: pointer;
+  }
+  .mascot-button:disabled {
+    cursor: default;
+  }
+</style>

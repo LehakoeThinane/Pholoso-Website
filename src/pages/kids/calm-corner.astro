@@ -1,0 +1,73 @@
+---
+/**
+ * Calm corner: a slow breathing exercise and calming ideas, in softer colours on this page
+ * only (body class "kids-calm", see kids.css). The breathing shape is the only continuous
+ * animation on the site: it starts only on Start, has a Stop button, ends by itself, and is
+ * replaced by a number countdown under reduced motion or Calm colours.
+ */
+import Art from '../../components/kids/Art.astro';
+import BreathingGuide from '../../components/kids/BreathingGuide.astro';
+import KidsHero from '../../components/kids/KidsHero.astro';
+import KidsLayout from '../../layouts/KidsLayout.astro';
+
+const ideas = [
+  { icon: 'icons/pillow', text: 'Squeeze a pillow or a soft toy.' },
+  { icon: 'icons/eye', text: 'Count five things you can see.' },
+  { icon: 'icons/water', text: 'Have a drink of water.' },
+  { icon: 'icons/hug', text: 'Ask a grown-up for a hug.' },
+];
+---
+
+<KidsLayout
+  title="Calm corner"
+  description="A quiet place for children: a slow breathing exercise and simple calming ideas."
+  bodyClass="kids-calm"
+>
+  <KidsHero
+    title="Calm corner"
+    says="Let’s take some slow breaths together."
+    pose="calm"
+    colour="sky"
+  />
+
+  <section class="container kids-section" aria-labelledby="breathe-title">
+    <h2 id="breathe-title">Slow breathing</h2>
+    <BreathingGuide />
+  </section>
+
+  <section class="container kids-section" aria-labelledby="ideas-title">
+    <h2 id="ideas-title">More calm ideas</h2>
+    <ul class="kids-grid">
+      {ideas.map((idea, i) => (
+        <li
+          class:list={['calm-idea', `kids-bg--${(['leaf', 'lilac', 'sky', 'coral'] as const)[i]}`]}
+        >
+          <Art name={idea.icon} class="calm-idea__art" />
+          <p>{idea.text}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+</KidsLayout>
+
+<style>
+  .calm-idea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-l);
+    text-align: center;
+    color: var(--color-text);
+  }
+  .calm-idea p {
+    margin: 0;
+    font-weight: 700;
+  }
+  .calm-idea :global(.calm-idea__art) {
+    width: 5rem;
+    height: 5rem;
+  }
+</style>

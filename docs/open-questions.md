@@ -45,3 +45,19 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 15. **Who will edit the website** after launch: a developer, a staff member, a volunteer?
 16. **How often:** weekly news and stories, or a few changes a year?
 17. **Should partners update their own directory listings** soon, or can the Foundation do it for them at first? (If "staff or volunteer, occasionally, Foundation-managed", a static site with a simple editor on the current hosting is likely the best fit; see the architecture decision when written.)
+
+## Kids' World (v2 brief)
+
+Built with the brief's defaults. Each answer below changes one setting or file.
+
+| # | Question | Default used | Where to change it |
+|---|---|---|---|
+| K1 | What is the mascot's name? Could children choose it in a naming competition? | "Pholo" (placeholder) | `kids.mascotName` in `src/config/strings.ts`; re-run `node scripts/make-printables.mjs` |
+| K2 | Is there budget for a professional illustrator? | Original starter set of simple SVGs | `src/assets/illustrations/` (see its README) |
+| K3 | Age range to design for? | 5 to 12 | Wording and sizes in Kids' World |
+| K4 | Record audio later, in the owner's voice or other South African languages? | Browser speech in English | `src/scripts/listen.ts` |
+| K5 | Approve the "Did you know?" facts. Each lists where to check it. | 12 facts | `src/content/kids/facts.yaml` |
+| K6 | Approve the five "Kids like me" picture stories (made-up children, labelled as such). | As written | `src/content/kids/stories.yaml` |
+| K7 | Who checks gallery drawings before publishing, and how long are those emails kept? | Process on `/share-a-drawing/`; retention not stated | `src/pages/share-a-drawing.astro`, privacy notice |
+| K8 | Supply a verified, current children's helpline number, if you want one shown. | None: "Tell a grown-up you trust" only | `src/components/kids/KidsFooter.astro` |
+| K9 | Any child-safe external websites Kids' World should link to (through the "Ask a grown-up" page)? | None | `src/config/kids-links.ts` |

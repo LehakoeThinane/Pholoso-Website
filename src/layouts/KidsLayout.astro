@@ -1,0 +1,43 @@
+---
+/**
+ * KidsLayout: the shell for every Kids' World page (/kids/…).
+ *
+ * Same HTML shell, skip link and Comfort & access panel as the rest of the site
+ * (BaseLayout), with the kids' header and footer. Kids' World never shows Donate buttons,
+ * fundraising, sign-up forms, share buttons or links that leave the site without the
+ * "Ask a grown-up" page first. scripts/check-dist.mjs fails the build output if it does.
+ *
+ * Props:
+ * - title, description: as BaseLayout.
+ * - bodyClass: optional, e.g. "kids-calm" for the Calm corner's softer colours.
+ * - noindex: keep the page out of search results (the "Ask a grown-up" pages).
+ *
+ * Behaviour (mascot wave, celebrations, sounds, games): src/scripts/kids/main.ts.
+ */
+import '../styles/kids.css';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  bodyClass?: string | undefined;
+  noindex?: boolean;
+}
+
+const { title, description, bodyClass, noindex = false } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  world="kids"
+  bodyClass={bodyClass}
+  noindex={noindex}
+>
+  <slot />
+  <div class="celebrate" data-celebrate aria-hidden="true"></div>
+</BaseLayout>
+
+<script>
+  import '../scripts/kids/main';
+</script>

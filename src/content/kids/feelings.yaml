@@ -1,0 +1,57 @@
+# Kids' World: "How do I feel today?" (/kids/feelings/). Nothing a child taps is saved or sent.
+# Every message says the feeling is OK, and gives one small idea.
+# Do not add helpline numbers here unless the Foundation supplies verified, current ones.
+#   face: a file in src/assets/illustrations/feelings/
+#   link: optional, and only to another page on this website.
+
+- id: happy
+  order: 1
+  name: Happy
+  face: happy
+  message: Happy? Hooray! What made you smile?
+  idea: Tell someone about your happy thing, or draw a picture of it.
+  link: { href: /kids/make-and-do/, label: Find something to make }
+
+- id: calm
+  order: 2
+  name: Calm
+  face: calm
+  message: Calm? That's lovely.
+  idea: Calm is a good time to read, build or draw.
+
+- id: excited
+  order: 3
+  name: Excited
+  face: excited
+  message: Excited? That's a big feeling!
+  idea: Try jumping five times. Then take one slow breath.
+
+- id: worried
+  order: 4
+  name: Worried
+  face: worried
+  message: Worried? That's OK.
+  idea: Try the Calm corner, or tell a grown-up you trust.
+  link: { href: /kids/calm-corner/, label: Go to the Calm corner }
+
+- id: sad
+  order: 5
+  name: Sad
+  face: sad
+  message: Sad? That's OK. Everyone feels sad sometimes.
+  idea: A hug or a cuddly toy can help. You can tell a grown-up you trust.
+
+- id: angry
+  order: 6
+  name: Angry
+  face: angry
+  message: Angry? That's OK. All feelings are allowed.
+  idea: Squeeze a pillow hard, then let go. The Calm corner can help too.
+  link: { href: /kids/calm-corner/, label: Go to the Calm corner }
+
+- id: tired
+  order: 7
+  name: Tired
+  face: tired
+  message: Tired? Your body may need a rest.
+  idea: Have a drink of water, or lie down for a little while.

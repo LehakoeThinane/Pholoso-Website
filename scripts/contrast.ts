@@ -87,6 +87,12 @@ const pairs: Pair[] = [
   ['--color-dark-bg', '--color-dark-text', TEXT, 'pressed toggles in dark sections'],
   // Gold band
   ['--color-on-cta-focus', '--color-cta-bg', UI, 'focus ring on the gold band'],
+  // Kids' World: text, links and focus rings sit directly on the playful backgrounds
+  ...(['sky', 'coral', 'leaf', 'lilac', 'sunshine', 'gold'] as const).flatMap((c): Pair[] => [
+    ['--color-text', `--kids-${c}`, TEXT, `kids' text on ${c}`],
+    ['--color-link', `--kids-${c}`, TEXT, `kids' links on ${c}`],
+    ['--color-focus', `--kids-${c}`, UI, `focus ring on ${c}`],
+  ]),
 ];
 
 const aaaPairs: Pair[] = [

@@ -7,6 +7,9 @@
  * - fullTitle: optional complete title, used as-is (the home page uses this).
  * - description: unique meta description (about 150 characters).
  * - noindex: true for pages that must stay out of search results (thank-you, 404, styleguide).
+ * - world: 'main' (default) or 'kids'. Kids' World pages use KidsLayout, which sets this:
+ *   they get the kids' header and footer, with no Donate button, fundraising or sign-up form.
+ * - bodyClass: optional class on <body> (e.g. the Calm corner's softer colours).
  *
  * Slots: default (page content, inside <main>) and "head" (extra head tags, e.g. JSON-LD).
  *
@@ -24,15 +27,20 @@ import ComfortPanel from '../components/ComfortPanel.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SkipLink from '../components/SkipLink.astro';
+import KidsFooter from '../components/kids/KidsFooter.astro';
+import KidsHeader from '../components/kids/KidsHeader.astro';
 import { site } from '../config/site';
 import { lang } from '../config/strings';
 
 type Props = ({ title: string; fullTitle?: string } | { title?: undefined; fullTitle: string }) & {
   description: string;
   noindex?: boolean;
+  world?: 'main' | 'kids';
+  bodyClass?: string | undefined;
 };
 
-const { title, fullTitle, description, noindex = false } = Astro.props;
+const { title, fullTitle, description, noindex = false, world = 'main', bodyClass } = Astro.props;
+const isKids = world === 'kids';
 const pageTitle = fullTitle ?? `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 ---
@@ -68,13 +76,17 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta name="twitter:image:alt" content={`${site.name}: ${site.tagline}`} />
     <slot name="head" />
   </head>
-  <body>
+  <body class:list={[{ 'kids-world': isKids }, bodyClass]}>
     <SkipLink />
-    <SiteHeader currentPath={Astro.url.pathname} />
+    {isKids ? (
+      <KidsHeader currentPath={Astro.url.pathname} />
+    ) : (
+      <SiteHeader currentPath={Astro.url.pathname} />
+    )}
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <SiteFooter />
+    {isKids ? <KidsFooter /> : <SiteFooter />}
     <ComfortPanel />
     <div id="announcer" class="visually-hidden" aria-live="polite"></div>
     <script>
