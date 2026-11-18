@@ -1,5 +1,9 @@
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import todoGuard from './src/integrations/todo-guard';
+
+/** Pages marked noindex: kept out of the sitemap too. */
+const notInSitemap = ['/thank-you/', '/styleguide/', '/404'];
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
@@ -20,5 +24,10 @@ export default defineConfig({
     },
   },
   devToolbar: { enabled: false },
-  integrations: [todoGuard()],
+  integrations: [
+    todoGuard(),
+    sitemap({
+      filter: (page) => !notInSitemap.some((path) => new URL(page).pathname.startsWith(path)),
+    }),
+  ],
 });

@@ -64,10 +64,31 @@ for (const file of files.filter((f) => f.endsWith('.css'))) {
   if (/@import\s+url\(\s*["']?(https?:)?\/\//i.test(css)) report(file, 'remote @import in CSS');
 }
 
+// Photo budget (brief §12): every AVIF/WebP photo at most 150 KB at its largest size.
+const PHOTO_MAX = 150 * 1024;
+let largestPhoto = 0;
+for (const file of files.filter((f) => /\.(avif|webp)$/.test(f))) {
+  const size = statSync(file).size;
+  largestPhoto = Math.max(largestPhoto, size);
+  if (size > PHOTO_MAX) report(file, `photo is ${Math.round(size / 1024)} KB (limit 150 KB)`);
+}
+
+// Every built HTML page must have exactly one <h1>, a title, a description and a canonical URL.
+for (const file of files.filter((f) => f.endsWith('.html'))) {
+  const html = readFileSync(file, 'utf8');
+  if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) report(file, 'must have exactly one <h1>');
+  if (!/<title>[^<]+<\/title>/.test(html)) report(file, 'missing <title>');
+  if (!/<meta name="description" content="[^"]+"/.test(html))
+    report(file, 'missing meta description');
+  if (!/<link rel="canonical" href="https:\/\/pholoso\.africa\//.test(html))
+    report(file, 'missing canonical URL');
+}
+
 if (problems.length) {
   console.error(`check-dist: ${problems.length} problem(s)\n  ${problems.join('\n  ')}`);
   process.exit(1);
 }
 console.log(
-  `check-dist: ${files.length} files checked, no inline scripts/styles, no third-party resources.`,
+  `check-dist: ${files.length} files checked, no inline scripts/styles, no third-party resources, ` +
+    `largest photo ${Math.round(largestPhoto / 1024)} KB.`,
 );

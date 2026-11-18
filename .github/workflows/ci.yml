@@ -87,3 +87,5 @@ jobs:
         run: node scripts/php-lint.mjs
       - name: Form handler tests (Microsoft 365 mock, mail() capture)
         run: php tests/php/contact-test.php
+      - name: .htaccess rules (private paths, IfModule wrapping, CSP)
+        run: php tests/php/htaccess-test.php

@@ -23,12 +23,46 @@ const [featured] = await ordered('stories', (s) => s.data.featured);
 const storyNote = isTodo(site.stories.notice)
   ? 'The source of this story is being confirmed.'
   : site.stories.notice;
+
+// Structured data for search engines (schema.org NGO). A data block, not a script, so the
+// Content-Security-Policy allows it.
+const ngo = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: site.name,
+  alternateName: site.shortName,
+  url: `${site.url}/`,
+  logo: `${site.url}/logo.png`,
+  image: `${site.url}/og-image.png`,
+  email: site.email,
+  description: site.mission,
+  slogan: site.tagline,
+  foundingDate: String(site.founded),
+  areaServed: [
+    { '@type': 'Country', name: 'South Africa' },
+    { '@type': 'Continent', name: 'Africa' },
+  ],
+  identifier: [
+    { '@type': 'PropertyValue', propertyID: 'NPO number', value: site.registration.npo },
+    {
+      '@type': 'PropertyValue',
+      propertyID: 'PBO number (Section 18A)',
+      value: site.registration.pbo,
+    },
+    {
+      '@type': 'PropertyValue',
+      propertyID: 'CIPC registration number',
+      value: site.registration.cipc,
+    },
+  ],
+};
 ---
 
 <BaseLayout
   fullTitle={`${site.name}: inclusive education for neurodivergent children in South Africa`}
   description="The Pholoso Afrika Foundation works for inclusive, adaptive education for neurodivergent children in South Africa and Africa. Donate, partner or get involved."
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ngo)} />
   <Hero
     eyebrow={site.name}
     title={site.tagline}
