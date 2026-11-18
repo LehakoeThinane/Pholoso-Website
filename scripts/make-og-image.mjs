@@ -12,7 +12,7 @@ const read64 = (rel) => readFileSync(fileURLToPath(new URL(rel, root))).toString
 const font = read64(
   'node_modules/@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2',
 );
-const logo = read64('src/assets/brand/logo.png');
+const logo = read64('src/assets/logo/logo.png');
 const tagline = 'Every mind learns differently. Education should be built that way.';
 
 // This HTML exists only inside the headless browser, never on the website.
