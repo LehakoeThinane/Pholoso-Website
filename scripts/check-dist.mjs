@@ -84,6 +84,60 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
     report(file, 'missing canonical URL');
 }
 
+// Kids' World child-safety rules (brief §7). Checked on every page under /kids/.
+const sep = /[\\/]/;
+for (const file of files.filter((f) => f.endsWith('.html'))) {
+  const parts = relative(dist, file).split(sep);
+  if (parts[0] !== 'kids') continue;
+  const isGate = parts[1] === 'ask-a-grown-up';
+  const html = readFileSync(file, 'utf8');
+  const body = (html.split('<body')[1] ?? '').replace(/<dialog[\s\S]*?<\/dialog>/gi, '');
+  const text = body.replace(/<[^>]+>/g, ' ');
+
+  if (/\bdonat/i.test(body)) report(file, "Kids' World page mentions donating");
+  if (/<form\b/i.test(body))
+    report(file, "Kids' World page has a form (no data collection from children)");
+  if (/\b(subscribe|sign up for updates|newsletter)\b/i.test(text))
+    report(file, "Kids' World page has a sign-up or newsletter");
+  if (/\bshare (this|on)\b/i.test(text)) report(file, "Kids' World page has share buttons");
+  if (!/data-listen="main"/.test(body)) report(file, 'missing the "Read it to me" button');
+  if (!/Tell a grown-up you trust/.test(text)) report(file, 'missing the "Need help now?" note');
+
+  for (const m of body.matchAll(/<a\b[^>]*\shref\s*=\s*["']([^"']+)["']/gi)) {
+    const href = m[1];
+    const leaves = /^(https?:)?\/\//i.test(href) && !href.startsWith(SITE_ORIGIN);
+    if ((leaves || /^(mailto|tel):/i.test(href)) && !isGate)
+      report(file, `links straight out of Kids' World (use GrownUpLink): ${href}`);
+  }
+  // Picture buttons and toggles must have words, not only a picture.
+  for (const m of body.matchAll(
+    /<(a|button)\b[^>]*class="[^"]*(pic-btn|kids-toggle|picker__button|face-button)[^"]*"[^>]*>([\s\S]*?)<\/\1>/gi,
+  )) {
+    const words = m[3]
+      .replace(/<svg[\s\S]*?<\/svg>/gi, '')
+      .replace(/<[^>]+>/g, '')
+      .trim();
+    if (!words) report(file, `picture button without words (${m[2]})`);
+  }
+}
+
+// Printables: each PDF at most 300 KB (brief §7).
+for (const file of files.filter((f) => f.endsWith('.pdf'))) {
+  const size = statSync(file).size;
+  if (size > 300 * 1024) report(file, `printable is ${Math.round(size / 1024)} KB (limit 300 KB)`);
+}
+
+// Flashing (WCAG 2.3.1): no CSS animation may repeat faster than three times a second.
+for (const file of files.filter((f) => f.endsWith('.css'))) {
+  const css = readFileSync(file, 'utf8');
+  for (const m of css.matchAll(/animation(?:-duration)?\s*:[^;}]*?(\d*\.?\d+)(m?s)\b[^;}]*/gi)) {
+    const seconds = m[2] === 'ms' ? Number(m[1]) / 1000 : Number(m[1]);
+    const repeats = /infinite|\b[2-9]\d*\b(?![.\d]*m?s)/.test(m[0]);
+    if (repeats && seconds > 0.01 && seconds < 0.34)
+      report(file, `animation repeats faster than 3 times a second: ${m[0].trim()}`);
+  }
+}
+
 if (problems.length) {
   console.error(`check-dist: ${problems.length} problem(s)\n  ${problems.join('\n  ')}`);
   process.exit(1);

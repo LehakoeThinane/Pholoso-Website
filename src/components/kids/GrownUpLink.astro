@@ -1,0 +1,22 @@
+---
+/**
+ * GrownUpLink: the only way Kids' World links to another website. It goes to the
+ * "Ask a grown-up" page for that website (GrownUpGate), never straight out.
+ *
+ * Props:
+ * - slug: an entry in src/config/kids-links.ts (the build stops on an unknown slug)
+ * Slot: optional link text (defaults to the website's name).
+ */
+import { kidsExternalLink } from '../../config/kids-links';
+
+interface Props {
+  slug: string;
+}
+
+const link = kidsExternalLink(Astro.props.slug);
+---
+
+<a href={`/kids/ask-a-grown-up/${link.slug}/`} class="grown-up-link">
+  <slot>{link.name}</slot>
+  <span class="visually-hidden"> (ask a grown-up first)</span>
+</a>

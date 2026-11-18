@@ -13,6 +13,7 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/logo/logo.png';
 import { primaryNav, strings } from '../config/strings';
+import Art from './kids/Art.astro';
 
 interface Props {
   currentPath: string;
@@ -57,7 +58,12 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
       <ul class="site-nav__list">
         {primaryNav.map((item) => (
           <li>
-            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            <a
+              href={item.href}
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
+              class:list={{ 'site-nav__kids': item.icon }}
+            >
+              {item.icon && <Art name={item.icon} class="site-nav__icon" />}
               {item.label}
             </a>
           </li>
@@ -155,6 +161,20 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
   }
   .site-nav__list a[aria-current='page'] {
     text-decoration-thickness: 0.2em;
+  }
+  /* Kids' World: always first, with the mascot, on a sunshine pill so children spot it */
+  .site-nav__list .site-nav__kids {
+    gap: var(--space-2xs);
+    align-self: flex-start;
+    padding-inline: var(--space-2xs) var(--space-s);
+    border-radius: 999px;
+    background: var(--kids-sunshine);
+    color: var(--color-text);
+  }
+  :global(.site-nav__icon) {
+    width: 2rem;
+    height: 2rem;
+    flex: none;
   }
 
   /* Small screens with JavaScript: collapsed until the menu button opens it */

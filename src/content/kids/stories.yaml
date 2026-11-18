@@ -1,0 +1,90 @@
+# Kids' World: "Kids like me" (/kids/kids-like-me/).
+# Short picture stories about a child's strength. The children are made up, and the page
+# says so. Never name a diagnosis here, and never base a story on a real, identifiable child.
+#   child: a file name in src/assets/illustrations/children/ (shown in the first panel)
+#   panels: 4 to 6, one short sentence each. `icon` is a file in illustrations/icons/.
+
+- id: lerato
+  order: 1
+  title: Lerato notices things
+  child: lerato
+  panels:
+    - text: This is Lerato.
+    - text: Lerato sees tiny things that other people miss.
+      icon: science
+    - text: One day, she spots a ladybird on a leaf.
+      icon: ladybird
+    - text: 'She counts its spots. One, two, three, four!'
+      icon: numbers
+    - text: Her friends come to look. “Wow, Lerato!”
+      icon: friends
+    - text: Noticing things is one of Lerato’s strengths.
+      icon: star
+
+- id: sipho
+  order: 2
+  title: Sipho knows about trains
+  child: sipho
+  panels:
+    - text: This is Sipho. He loves trains.
+    - text: His headphones help when places are noisy.
+      icon: speaker
+    - text: Sipho knows lots and lots of train facts.
+      icon: book
+    - text: On a school trip, his teacher asks which train they need.
+      icon: train
+    - text: Sipho knows the answer straight away!
+      icon: star
+    - text: Remembering facts is one of Sipho’s strengths.
+      icon: heart
+
+- id: kayla
+  order: 3
+  title: Kayla builds a tower
+  child: kayla
+  panels:
+    - text: This is Kayla. She loves to build.
+    - text: She likes to work quietly, on her own.
+      icon: leaf
+    - text: Kayla builds a tall, tall tower.
+      icon: blocks
+    - text: It wobbles! So she makes the bottom wider.
+      icon: science
+    - text: Now her tower stands up strong.
+      icon: star
+    - text: Building and fixing things is one of Kayla’s strengths.
+      icon: heart
+
+- id: thabo
+  order: 4
+  title: Thabo draws his family
+  child: thabo
+  panels:
+    - text: This is Thabo. He talks with his tablet.
+    - text: He taps the pictures, and the tablet says the words.
+      icon: words
+    - text: Thabo loves to draw.
+      icon: art
+    - text: He draws his whole family. He remembers every detail.
+      icon: frame
+    - text: His family puts the picture up at home.
+      icon: home
+    - text: Drawing is one of Thabo’s strengths.
+      icon: star
+
+- id: zanele
+  order: 5
+  title: Zanele is a good friend
+  child: zanele
+  panels:
+    - text: This is Zanele. She gets around in her wheelchair.
+    - text: Zanele can tell when someone feels sad.
+      icon: hug
+    - text: A new girl at school is sitting on her own.
+      icon: friends
+    - text: Zanele says, “Do you want to play with us?”
+      icon: words
+    - text: Now they are friends.
+      icon: heart
+    - text: Being kind is one of Zanele’s strengths.
+      icon: star

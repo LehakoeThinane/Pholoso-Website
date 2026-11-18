@@ -1,0 +1,90 @@
+---
+/**
+ * GrownUpGate: the "Ask a grown-up" page body shown before Kids' World sends a child to
+ * another website. Tells the child to fetch a grown-up, tells the grown-up exactly where the
+ * link goes, and offers a big way back. The onward link opens in the same tab.
+ *
+ * Props:
+ * - link: an entry from src/config/kids-links.ts
+ * - level: heading level for the title (1 on the real page; 2 in the styleguide)
+ */
+import type { KidsExternalLink } from '../../config/kids-links';
+import ExternalLink from '../ExternalLink.astro';
+import Art from './Art.astro';
+
+interface Props {
+  link: KidsExternalLink;
+  level?: 1 | 2;
+}
+
+const { link, level = 1 } = Astro.props;
+const Heading = `h${level}` as 'h1' | 'h2';
+const host = new URL(link.url).hostname.replace(/^www\./, '');
+---
+
+<div class="gate kids-bg--lilac">
+  <Art name="mascot/thinking" class="gate__mascot" />
+  <Heading class="gate__title">Ask a grown-up first</Heading>
+  <p class="gate__lead">
+    This link goes to another website: <strong>{link.name}</strong>.
+  </p>
+  <p>{link.forKids}</p>
+  <p class="gate__lead">Please ask a grown-up to look with you.</p>
+
+  <div class="gate__grown-up">
+    <h2 class="gate__subtitle">For the grown-up</h2>
+    <p>{link.forGrownUps}</p>
+    <p>
+      It leaves the Pholoso Afrika Foundation website and goes to <strong>{host}</strong>. We do not
+      control that website.
+    </p>
+    <p>
+      <ExternalLink href={link.url}>Go to {link.name}</ExternalLink>
+    </p>
+  </div>
+
+  <p>
+    <a class="gate__back" href="/kids/">
+      Go back to Kids’ World
+    </a>
+  </p>
+</div>
+
+<style>
+  .gate {
+    padding: var(--space-l);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-xl);
+    color: var(--color-text);
+  }
+  :global(.gate__mascot) {
+    width: 8rem;
+    height: 8rem;
+  }
+  .gate__lead {
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+  .gate__grown-up {
+    margin-block: var(--space-m);
+    padding: var(--space-m);
+    border: 2px solid var(--color-text);
+    border-radius: var(--radius-m);
+    background: var(--color-bg);
+  }
+  .gate__subtitle {
+    font-size: var(--step-1);
+  }
+  .gate__back {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--kids-target);
+    padding: var(--space-2xs) var(--space-l);
+    border: 3px solid var(--color-text);
+    border-radius: 999px;
+    background: var(--kids-sunshine);
+    color: var(--color-text);
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+</style>

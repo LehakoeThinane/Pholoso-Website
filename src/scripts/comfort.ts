@@ -6,7 +6,8 @@
 import { announce } from './announce';
 import { applyTerms } from './terms';
 
-type Setting = 'spacing' | 'guide' | 'focus' | 'motion' | 'simple' | 'images' | 'identityFirst';
+type Setting =
+  'spacing' | 'guide' | 'focus' | 'motion' | 'simple' | 'images' | 'identityFirst' | 'sound';
 
 const LABELS: Record<Setting, string> = {
   spacing: 'Reading spacing',
@@ -16,6 +17,7 @@ const LABELS: Record<Setting, string> = {
   simple: 'Simplified page',
   images: 'Hide images',
   identityFirst: 'Identity-first wording',
+  sound: "Sounds in Kids' World",
 };
 const THEMES = { standard: 'Standard', calm: 'Calm', contrast: 'High contrast', dim: 'Dim' };
 
@@ -147,6 +149,7 @@ export function initComfort(): void {
     opener.addEventListener('click', (event) => {
       event.preventDefault();
       lastOpener = opener;
+      prefs = api.read(); // Kids' World toggles may have changed settings since load
       update(false);
       dialog.showModal();
       dialog.querySelector<HTMLElement>('#cp-title')?.focus();

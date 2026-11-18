@@ -1,0 +1,103 @@
+---
+/**
+ * Make and do: printable colouring pages and activity sheets. Small PDFs (each under
+ * 300 KB) in public/printables/, made by scripts/make-printables.mjs. Once saved or
+ * printed they work offline, which matters where mobile data is expensive.
+ */
+import Art from '../../components/kids/Art.astro';
+import KidsHero from '../../components/kids/KidsHero.astro';
+import PrintableCard from '../../components/kids/PrintableCard.astro';
+import { kids, type KidsColour } from '../../config/strings';
+import KidsLayout from '../../layouts/KidsLayout.astro';
+
+const printables: {
+  title: string;
+  about: string;
+  file: string;
+  icon: string;
+  colour: KidsColour;
+}[] = [
+  {
+    title: `Colour in ${kids.mascotName}`,
+    about: `A big picture of ${kids.mascotName} and some stars to colour.`,
+    file: '/printables/colour-in-pholo.pdf',
+    icon: 'mascot/hello',
+    colour: 'sunshine',
+  },
+  {
+    title: 'My favourite things',
+    about: 'Draw the things you love most, and write your name.',
+    file: '/printables/my-favourite-things.pdf',
+    icon: 'icons/heart',
+    colour: 'coral',
+  },
+  {
+    title: 'Feelings faces',
+    about: 'Seven feelings faces. Colour the one that is most like you today.',
+    file: '/printables/feelings-faces.pdf',
+    icon: 'feelings/happy',
+    colour: 'lilac',
+  },
+  {
+    title: 'My calm-down card',
+    about: 'Cut it out and keep it in your pocket or school bag.',
+    file: '/printables/calm-down-card.pdf',
+    icon: 'icons/card',
+    colour: 'leaf',
+  },
+];
+---
+
+<KidsLayout
+  title="Make and do"
+  description="Free printable colouring pages and activity sheets for children. Small files that work offline once printed."
+>
+  <KidsHero
+    title="Make and do"
+    says="Print a page, grab your crayons, and let’s make something!"
+    pose="celebrating"
+    colour="sunshine"
+  />
+
+  <section class="container kids-section" aria-labelledby="print-title">
+    <h2 id="print-title">Pages to print</h2>
+    <ul class="kids-grid">
+      {printables.map((p) => (
+        <li>
+          <PrintableCard {...p} />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container kids-section" aria-labelledby="grown-up-print-title">
+    <div class="kids-note">
+      <Art name="icons/friends" />
+      <div>
+        <h2 id="grown-up-print-title" class="print-help__title">
+          For grown-ups
+        </h2>
+        <p class="print-help__text">
+          Each page is a small PDF file for A4 paper. It prints well in black and white. Save it
+          once and you can print it again without using data.
+        </p>
+        <p class="print-help__text">
+          Looking for more learning activities?{' '}
+          <a href="/approach/#2toiq">See what our partner 2to.iQ offers families</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</KidsLayout>
+
+<style>
+  .print-help__title {
+    font-size: var(--step-1) !important;
+    margin-bottom: var(--space-3xs);
+  }
+  .print-help__text {
+    margin: 0;
+    font-weight: 400;
+    font-size: var(--step-0) !important;
+  }
+</style>

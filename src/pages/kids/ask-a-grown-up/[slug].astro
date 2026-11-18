@@ -1,0 +1,30 @@
+---
+/**
+ * "Ask a grown-up" pages: one for each website listed in src/config/kids-links.ts.
+ * Every Kids' World link to another website comes here first (GrownUpLink). noindex: these
+ * pages only make sense on the way somewhere.
+ */
+import GrownUpGate from '../../../components/kids/GrownUpGate.astro';
+import { kidsExternalLinks, type KidsExternalLink } from '../../../config/kids-links';
+import KidsLayout from '../../../layouts/KidsLayout.astro';
+
+export function getStaticPaths() {
+  return kidsExternalLinks.map((link) => ({ params: { slug: link.slug }, props: { link } }));
+}
+
+interface Props {
+  link: KidsExternalLink;
+}
+
+const { link } = Astro.props;
+---
+
+<KidsLayout
+  title={`Ask a grown-up: ${link.name}`}
+  description={`Ask a grown-up before you visit ${link.name}.`}
+  noindex
+>
+  <div class="container kids-section">
+    <GrownUpGate link={link} />
+  </div>
+</KidsLayout>

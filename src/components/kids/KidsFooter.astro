@@ -1,0 +1,109 @@
+---
+/**
+ * KidsFooter: the Kids' World footer. The "Need help now?" note appears on every Kids' World
+ * page (brief §7). It never lists helpline numbers: add one only when the Foundation supplies
+ * a verified, current number. Then links for grown-ups. No sign-up form, no Donate.
+ * Leaves room for the floating Comfort & access button. No props.
+ */
+import { site } from '../../config/site';
+import { kids, strings } from '../../config/strings';
+import Art from './Art.astro';
+import Wave from './Wave.astro';
+---
+
+<footer class="kids-footer">
+  <Wave edge="top" />
+  <div class="kids-footer__band">
+    <div class="container">
+      <p class="kids-footer__help">
+        <Art name="icons/hug" class="kids-footer__help-art" />
+        <span>{kids.helpNote}</span>
+      </p>
+      <p class="kids-footer__safe">
+        Kids’ World has no ads, no chat and no sign-ups. What you tap here stays on your device.
+      </p>
+
+      <nav aria-labelledby="kids-footer-title" class="kids-footer__grown-ups">
+        <h2 id="kids-footer-title" class="kids-footer__title">
+          For grown-ups
+        </h2>
+        <ul>
+          <li>
+            <a href="/">The {site.name} website</a>
+          </li>
+          <li>
+            <a href="/approach/#2toiq">Learning activities from our partner 2to.iQ</a>
+          </li>
+          <li>
+            <a href="/privacy/">{strings.footer.privacy}</a>
+          </li>
+          <li>
+            <a href="/accessibility/">{strings.footer.accessibility}</a>
+          </li>
+          <li>
+            <a href="/accessibility/#comfort" data-open-comfort>
+              Comfort &amp; access settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .kids-footer {
+    margin-top: var(--space-2xl);
+    color: var(--color-text);
+  }
+  .kids-footer :global(.wave) {
+    color: var(--kids-leaf);
+  }
+  .kids-footer__band {
+    background: var(--kids-leaf);
+    padding-block: var(--space-m) calc(var(--space-2xl) + var(--button-min));
+  }
+  .kids-footer__help {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    font-size: var(--step-2);
+    font-weight: 700;
+    max-width: none;
+  }
+  :global(.kids-footer__help-art) {
+    width: 3.5rem;
+    height: 3.5rem;
+    flex: none;
+  }
+  .kids-footer__safe {
+    font-size: var(--step-0);
+  }
+  .kids-footer__grown-ups {
+    margin-top: var(--space-l);
+    padding-top: var(--space-s);
+    border-top: 2px solid var(--color-text);
+    font-size: var(--step--1);
+  }
+  .kids-footer__title {
+    font-size: var(--step-0);
+    margin-bottom: var(--space-2xs);
+  }
+  .kids-footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-m);
+  }
+  .kids-footer li {
+    margin: 0;
+  }
+  .kids-footer li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    color: var(--color-text);
+  }
+</style>

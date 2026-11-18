@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import Art from '../../components/kids/Art.astro';
+import KidsHero from '../../components/kids/KidsHero.astro';
+import PictureButton from '../../components/kids/PictureButton.astro';
+import { kids, kidsNav } from '../../config/strings';
+import KidsLayout from '../../layouts/KidsLayout.astro';
+import { dayNumber } from '../../lib/day-number';
+
+const facts = await getCollection('kidsFacts');
+// Without JavaScript the fact for the build date shows; with it, today's (same formula).
+const buildFact = dayNumber(new Date()) % facts.length;
+
+const hints: Record<string, string> = {
+  '/kids/what-do-you-love/': 'Find fun ideas',
+  '/kids/calm-corner/': 'Breathe slowly',
+  '/kids/make-and-do/': 'Print and colour',
+  '/kids/kids-like-me/': 'Picture stories',
+  '/kids/gallery/': 'Look at pictures',
+  '/kids/feelings/': 'How do you feel?',
+};
+const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
+---
+
+<KidsLayout
+  title="Kids’ World"
+  description="A happy, calm place for children to play, read along, colour and learn. Made by the Pholoso Afrika Foundation."
+>
+  <KidsHero
+    title="Welcome to Kids’ World!"
+    says={`Hello! I’m ${kids.mascotName}. I’m so glad you’re here.`}
+    pose="hello"
+    wave
+  />
+
+  <section class="container kids-section" aria-labelledby="choose-title">
+    <h2 id="choose-title">What would you like to do?</h2>
+    <ul class="kids-grid">
+      {kidsNav.map((item) => (
+        <li>
+          <PictureButton
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            colour={item.colour}
+            size="door"
+            hint={hints[item.href]}
+          />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container kids-section" aria-labelledby="fact-title">
+    <div class="fact kids-bg--lilac">
+      <Art name="mascot/thinking" class="fact__mascot" />
+      <div>
+        <h2 id="fact-title" class="fact__title">
+          Did you know?
+        </h2>
+        <ul class="fact__list">
+          {facts.map((f, i) => (
+            <li data-fact hidden={i !== buildFact}>
+              {f.data.text}
+            </li>
+          ))}
+        </ul>
+        <p class="fact__more">Come back tomorrow for a new one!</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container kids-section" aria-labelledby="welcome-title">
+    <h2 id="welcome-title">Everyone is welcome here</h2>
+    <p>Every child learns in their own way. Your way is a good way.</p>
+    <div class="cast" aria-hidden="true">
+      {cast.map((c) => (
+        <Art name={`children/${c}`} class="cast__child" />
+      ))}
+    </div>
+  </section>
+</KidsLayout>
+
+<style>
+  .fact {
+    display: grid;
+    gap: var(--space-m);
+    align-items: center;
+    padding: var(--space-l);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-xl);
+    color: var(--color-text);
+  }
+  @media (min-width: 40rem) {
+    .fact {
+      grid-template-columns: 8rem 1fr;
+    }
+  }
+  .fact :global(.fact__mascot) {
+    width: 8rem;
+    height: 8rem;
+  }
+  .fact__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-s);
+  }
+  .fact__list li {
+    font-size: var(--step-2);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .fact__more {
+    margin: 0;
+  }
+  .cast {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: var(--space-m);
+    margin-top: var(--space-l);
+  }
+  .cast :global(.cast__child) {
+    width: clamp(4.5rem, 14vw, 8rem);
+    height: auto;
+  }
+</style>

@@ -1,0 +1,168 @@
+---
+/**
+ * KidsHeader: the Kids' World header. Not sticky (WCAG 2.4.11).
+ *
+ * - Home button with the mascot ("Kids' World").
+ * - Two big toggles, shown only with JavaScript because they are saved on the device:
+ *   "Calm colours" (one tap to the Calm theme: softer colours, no celebrations or sounds)
+ *   and "Sounds" (off until a child turns them on).
+ * - A small "For grown-ups" link back to the main site.
+ * - KidsNav: the row of picture buttons.
+ *
+ * No Donate button, ever. Props: currentPath.
+ */
+import { kids, kidsNav } from '../../config/strings';
+import Art from './Art.astro';
+import PictureButton from './PictureButton.astro';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const isHome = currentPath === kids.home.href;
+---
+
+<header class="kids-header">
+  <div class="container kids-header__top">
+    <a class="kids-header__home" href={kids.home.href} aria-current={isHome ? 'page' : undefined}>
+      <Art name="mascot/hello" class="kids-header__mascot" />
+      <span>{kids.home.label}</span>
+    </a>
+
+    <div class="kids-header__tools">
+      <button type="button" class="kids-toggle" data-kids-toggle="calm" aria-pressed="false" hidden>
+        <Art name="icons/leaf" class="kids-toggle__icon" />
+        {kids.calmToggle}
+      </button>
+      <button
+        type="button"
+        class="kids-toggle"
+        data-kids-toggle="sound"
+        aria-pressed="false"
+        hidden
+      >
+        <Art name="icons/speaker" class="kids-toggle__icon" />
+        {kids.soundToggle}
+        <span class="kids-toggle__state" aria-hidden="true" data-kids-toggle-state>
+          off
+        </span>
+      </button>
+      <a class="kids-header__grown-ups" href={kids.grownUps.href}>
+        {kids.grownUps.label}
+      </a>
+    </div>
+  </div>
+
+  <nav class="container kids-nav" aria-label={kids.navLabel}>
+    <ul class="kids-nav__list">
+      {kidsNav.map((item) => (
+        <li>
+          <PictureButton
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            colour={item.colour}
+            current={currentPath.startsWith(item.href)}
+          />
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .kids-header {
+    background: var(--color-bg);
+    padding-block: var(--space-s) var(--space-m);
+  }
+  .kids-header__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  .kids-header__home {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    min-height: var(--kids-target);
+    padding: var(--space-3xs) var(--space-m) var(--space-3xs) var(--space-2xs);
+    border-radius: 999px;
+    background: var(--kids-sunshine);
+    border: 3px solid var(--color-text);
+    color: var(--color-text);
+    font-size: var(--step-2);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .kids-header__home:hover {
+    text-decoration: underline;
+  }
+  :global(.kids-header__mascot) {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+  .kids-header__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .kids-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: 3.25rem;
+    padding: var(--space-2xs) var(--space-s);
+    border: 3px solid var(--color-text);
+    border-radius: 999px;
+    background: var(--color-bg);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .kids-toggle[hidden] {
+    display: none;
+  }
+  .kids-toggle[aria-pressed='true'] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  :global(.kids-toggle__icon) {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .kids-toggle__state {
+    font-weight: 400;
+  }
+  .kids-header__grown-ups {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    padding-inline: var(--space-2xs);
+    font-size: var(--step--1);
+    font-weight: 700;
+  }
+  .kids-nav {
+    margin-top: var(--space-m);
+  }
+  .kids-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-xs);
+  }
+  .kids-nav__list li {
+    margin: 0;
+    max-width: none;
+  }
+  @media (min-width: 48rem) {
+    .kids-nav__list {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: var(--space-s);
+    }
+  }
+</style>

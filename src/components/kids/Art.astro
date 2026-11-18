@@ -1,0 +1,30 @@
+---
+/**
+ * Art: one illustration from src/assets/illustrations/, inlined as SVG.
+ *
+ * Props:
+ * - name: path without ".svg", e.g. "icons/train", "mascot/hello", "children/sipho"
+ * - label: a text alternative. Leave it out when the picture is decorative or the words
+ *   next to it already say the same thing (the usual case): it is then hidden from
+ *   screen readers.
+ * - class: extra class for sizing.
+ *
+ * Calm and Dim colours tone illustrations down (--illustration-filter in tokens.css).
+ */
+import { illustration } from '../../lib/illustrations';
+
+interface Props {
+  name: string;
+  label?: string;
+  class?: string;
+}
+
+const { name, label, class: className } = Astro.props;
+const Svg = illustration(name);
+---
+
+{label ? (
+  <Svg class:list={['art', className]} role="img" aria-label={label} />
+) : (
+  <Svg class:list={['art', className]} aria-hidden="true" focusable="false" />
+)}

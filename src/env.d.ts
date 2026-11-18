@@ -13,6 +13,7 @@ interface ComfortPrefs {
   focus?: 'strong' | 'normal';
   identityFirst?: boolean;
   rate?: 0.75 | 1 | 1.25 | 1.5;
+  sound?: boolean;
 }
 
 /** Settings after device preferences are applied. */
@@ -27,6 +28,7 @@ interface ComfortEffective {
   focus: 'strong' | 'normal';
   identityFirst: boolean;
   rate: 0.75 | 1 | 1.25 | 1.5;
+  sound: boolean;
 }
 
 interface Window {

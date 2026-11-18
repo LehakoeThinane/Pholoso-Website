@@ -1,0 +1,95 @@
+# Kids' World: "What do you love?" game (/kids/what-do-you-love/).
+# Each interest has four "you could…" ideas, always in this order:
+#   numbers, words, science, friends.
+# Keep each idea to one short sentence a 5-year-old can follow when it is read aloud.
+# `icon` is a file name in src/assets/illustrations/icons/ (without .svg).
+
+- id: trains
+  order: 1
+  name: Trains
+  icon: train
+  ideas:
+    numbers: Count the carriages!
+    words: Make up a train song!
+    science: Find out what makes a train go.
+    friends: Play trains with a friend. Who will be the driver?
+
+- id: dinosaurs
+  order: 2
+  name: Dinosaurs
+  icon: dinosaur
+  ideas:
+    numbers: Line up your dinosaurs from smallest to biggest.
+    words: Say a long dinosaur name slowly. Tri-cer-a-tops!
+    science: Find out what your favourite dinosaur ate.
+    friends: Be dinosaurs with a friend. How do dinosaurs say hello?
+
+- id: music
+  order: 3
+  name: Music
+  icon: music
+  ideas:
+    numbers: Clap along to a song and count the beats.
+    words: Make up new words for a song you know.
+    science: Tap a pot and a box with a spoon. Which sound is higher?
+    friends: Make a band with your family!
+
+- id: numbers
+  order: 4
+  name: Numbers
+  icon: numbers
+  ideas:
+    numbers: Find numbers on your street or in your home.
+    words: Count to ten in another language.
+    science: How many steps is it from your bed to the door?
+    friends: Play a game with a friend. Who can find the most number 3s?
+
+- id: art
+  order: 5
+  name: Art
+  icon: art
+  ideas:
+    numbers: Count the colours in your picture.
+    words: Tell someone the story of your picture.
+    science: Mix two colours. What new colour do you get?
+    friends: Make one big picture together with a friend.
+
+- id: football
+  order: 6
+  name: Football
+  icon: football
+  ideas:
+    numbers: Count your kicks. Can you beat your score?
+    words: Be the commentator. Say what happens in the game!
+    science: Roll a ball on grass, then on a floor. Where does it go further?
+    friends: Pass the ball to a friend and say their name.
+
+- id: animals
+  order: 7
+  name: Animals
+  icon: animals
+  ideas:
+    numbers: Count the legs on different animals.
+    words: Make the sound of your favourite animal, then say its name.
+    science: Find out where your favourite animal lives.
+    friends: Pretend to be an animal. Can your friend guess which one?
+
+- id: space
+  order: 8
+  name: Space
+  icon: space
+  ideas:
+    numbers: 'Count down for take-off: 10, 9, 8, 7…'
+    words: Make up a name for a new planet.
+    science: Look at the Moon each night. Does its shape change?
+    friends: Build a rocket out of a box with a friend.
+
+- id: building
+  order: 9
+  name: Building
+  icon: blocks
+  ideas:
+    numbers: Count the blocks in your tower.
+    words: Tell someone how you built it, step by step.
+    science: Which tower stands up better, a thin one or a wide one? Try it!
+    friends: Build something together. Take turns to add a piece.

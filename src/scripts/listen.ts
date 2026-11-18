@@ -32,6 +32,8 @@ function textOf(el: HTMLElement): string {
   clone
     .querySelectorAll('button, [hidden], .visually-hidden, [aria-hidden="true"], form, dialog')
     .forEach((n) => n.remove());
+  // Unopened cards (<details>) keep their surprise: read the front, not the hidden idea.
+  clone.querySelectorAll('details:not([open]) > :not(summary)').forEach((n) => n.remove());
   return (clone.textContent ?? '').replace(/\s+/g, ' ').trim();
 }
 

@@ -1,7 +1,8 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { storyCategories } from '../content.config';
 
-type Ordered = 'stories' | 'interests' | 'resources' | 'faqs';
+type Ordered =
+  'stories' | 'interests' | 'resources' | 'faqs' | 'kidsInterests' | 'kidsStories' | 'kidsFeelings';
 
 /** All entries of a collection, sorted by their `order` field. */
 export async function ordered<C extends Ordered>(

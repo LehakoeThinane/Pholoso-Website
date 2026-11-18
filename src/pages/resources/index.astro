@@ -4,6 +4,7 @@ import Card from '../../components/Card.astro';
 import CardGrid from '../../components/CardGrid.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
 import PageHero from '../../components/PageHero.astro';
+import PartnerForParents from '../../components/PartnerForParents.astro';
 import Section from '../../components/Section.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import SignupForm from '../../components/SignupForm.astro';
@@ -30,6 +31,10 @@ const sourceList = [sources.ajod, sources.hrw, sources.who, sources.whitePaper6]
       </p>
     )}
   </PageHero>
+
+  <Section>
+    <PartnerForParents />
+  </Section>
 
   <Section labelledby="guides-title">
     <h2 id="guides-title">Guides</h2>

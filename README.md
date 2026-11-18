@@ -35,6 +35,11 @@ pnpm lint:php           # php -l on every PHP file
 | `src/layouts/`, `src/components/` | Page shell and components.                                                                             |
 | `public/prefs.js`                 | Applies saved Comfort & access settings before the page draws.                                         |
 | `scripts/`                        | Build-output checks.                                                                                   |
-| `docs/`                           | Comfort & access spec, Microsoft 365 setup, open questions.                                            |
+| `docs/`                           | Changelog, Comfort & access spec, Microsoft 365 setup, open questions.                                 |
 
 Full developer, deployment and content documentation is written at the end of the rebuild.
+
+## Changelog
+
+Every update is recorded in [docs/CHANGELOG.md](docs/CHANGELOG.md), newest first. Add an entry
+with each change before pushing. New work goes to the `dev` branch first.

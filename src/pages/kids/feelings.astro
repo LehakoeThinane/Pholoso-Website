@@ -1,0 +1,154 @@
+---
+/**
+ * "How do I feel today?": a feelings check-in (brief §7).
+ * Nothing a child taps is stored or sent: there is no form, and the script only shows and
+ * hides content already on the page. Never add helpline numbers unless the Foundation
+ * supplies verified, current ones. Content: src/content/kids/feelings.yaml.
+ */
+import Art from '../../components/kids/Art.astro';
+import KidsHero from '../../components/kids/KidsHero.astro';
+import KidsLayout from '../../layouts/KidsLayout.astro';
+import { ordered } from '../../lib/content';
+
+const feelings = await ordered('kidsFeelings');
+---
+
+<KidsLayout
+  title="How do I feel today?"
+  description="A feelings check-in for children. Tap a face to find a kind message and one idea. Nothing is saved or sent."
+>
+  <KidsHero
+    title="How do I feel today?"
+    says="Tap a face. There are no wrong answers."
+    pose="calm"
+    colour="lilac"
+  >
+    <p class="kids-note">
+      <Art name="icons/leaf" />
+      What you tap here is not saved or sent to anyone.
+    </p>
+  </KidsHero>
+
+  <div class="container kids-section">
+    <ul class="faces" data-picker="feel-prompt" hidden>
+      {feelings.map((f) => (
+        <li>
+          <button
+            type="button"
+            class="face-button"
+            data-pick
+            aria-pressed="false"
+            aria-controls={`feel-${f.id}`}
+          >
+            <Art name={`feelings/${f.data.face}`} class="face-button__art" />
+            <span>{f.data.name}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+    <p class="kids-note" id="feel-prompt" hidden>
+      <Art name="icons/smile" />
+      Choose the face that is most like you today.
+    </p>
+
+    {feelings.map((f) => (
+      <section class="feeling" id={`feel-${f.id}`} aria-labelledby={`feel-${f.id}-title`}>
+        <Art name={`feelings/${f.data.face}`} class="feeling__face" />
+        <div>
+          <h2 id={`feel-${f.id}-title`}>{f.data.name}</h2>
+          <p class="feeling__message">{f.data.message}</p>
+          <p>{f.data.idea}</p>
+          {f.data.link && (
+            <p>
+              <a class="feeling__link" href={f.data.link.href}>
+                {f.data.link.label}
+              </a>
+            </p>
+          )}
+        </div>
+      </section>
+    ))}
+  </div>
+</KidsLayout>
+
+<style>
+  .faces {
+    list-style: none;
+    margin: 0 0 var(--space-l);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+    gap: var(--space-s);
+  }
+  .faces li {
+    margin: 0;
+    max-width: none;
+  }
+  .faces[hidden],
+  .feeling[hidden],
+  #feel-prompt[hidden] {
+    display: none;
+  }
+  .face-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    width: 100%;
+    min-height: 8rem;
+    padding: var(--space-s);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-l);
+    background: var(--color-bg);
+    font-size: var(--step-1);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--color-text);
+  }
+  .face-button[aria-pressed='true'] {
+    background: var(--kids-sunshine);
+    outline: 4px solid var(--color-text);
+    outline-offset: 3px;
+  }
+  .face-button :global(.face-button__art) {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  .feeling {
+    display: grid;
+    gap: var(--space-m);
+    align-items: start;
+    margin-bottom: var(--space-l);
+    padding: var(--space-l);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+  }
+  @media (min-width: 40rem) {
+    .feeling {
+      grid-template-columns: 7rem 1fr;
+    }
+  }
+  .feeling h2:focus {
+    outline: none;
+  }
+  .feeling :global(.feeling__face) {
+    width: 7rem;
+    height: 7rem;
+  }
+  .feeling__message {
+    font-size: var(--step-2) !important;
+    font-weight: 700;
+  }
+  .feeling__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--kids-target);
+    padding: var(--space-2xs) var(--space-m);
+    border: 3px solid var(--color-text);
+    border-radius: 999px;
+    background: var(--kids-sky);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+</style>

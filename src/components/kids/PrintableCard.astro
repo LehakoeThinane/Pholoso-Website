@@ -1,0 +1,95 @@
+---
+/**
+ * PrintableCard: one printable activity sheet (a small PDF in public/printables/).
+ * Shows a picture, the title, one line about it, and a download link with the file size,
+ * so grown-ups on mobile data know what they are getting. PDFs work offline once saved.
+ *
+ * Props:
+ * - title, about: what it is
+ * - file: path under public/, e.g. "/printables/pholo-colouring.pdf"
+ * - icon: illustration for the card
+ * - colour: card colour
+ *
+ * The build stops if the PDF is missing or larger than 300 KB (brief §7).
+ * PDFs are made by scripts/make-printables.mjs.
+ */
+import { statSync } from 'node:fs';
+import { join } from 'node:path';
+import type { KidsColour } from '../../config/strings';
+import Art from './Art.astro';
+
+interface Props {
+  title: string;
+  about: string;
+  file: string;
+  icon: string;
+  colour: KidsColour;
+}
+
+const { title, about, file, icon, colour } = Astro.props;
+const MAX_KB = 300;
+let bytes: number;
+try {
+  bytes = statSync(join(process.cwd(), 'public', file)).size;
+} catch {
+  throw new Error(`Printable not found: public${file}. Run: node scripts/make-printables.mjs`);
+}
+const kb = Math.max(1, Math.round(bytes / 1024));
+if (kb > MAX_KB) throw new Error(`Printable ${file} is ${kb} KB (limit ${MAX_KB} KB).`);
+---
+
+<article class:list={['printable', `kids-bg--${colour}`]}>
+  <Art name={icon} class="printable__art" />
+  <h3 class="printable__title">{title}</h3>
+  <p class="printable__about">{about}</p>
+  <a class="printable__link" href={file} download>
+    Print it<span class="visually-hidden">: {title}</span>
+    <span class="printable__size">(PDF, {kb} KB)</span>
+  </a>
+</article>
+
+<style>
+  .printable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: var(--space-m);
+    border: 3px solid var(--color-text);
+    border-radius: var(--radius-l);
+    box-shadow: 0 5px 0 var(--color-text);
+    text-align: center;
+    color: var(--color-text);
+  }
+  :global(.printable__art) {
+    width: 6rem;
+    height: 6rem;
+    margin-bottom: var(--space-s);
+  }
+  .printable__title {
+    font-size: var(--step-2);
+    margin-bottom: var(--space-2xs);
+  }
+  .printable__about {
+    flex: 1;
+  }
+  .printable__link {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0 var(--space-2xs);
+    min-height: var(--kids-target);
+    padding: var(--space-2xs) var(--space-m);
+    border: 3px solid var(--color-text);
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+  .printable__size {
+    font-size: var(--step--1);
+    font-weight: 400;
+  }
+</style>
