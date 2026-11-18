@@ -94,7 +94,71 @@ const aaaPairs: Pair[] = [
   ['--color-link', '--color-bg', 7, 'links (AAA)'],
 ];
 
+/** Blends a colour towards white (amount > 0) or black (amount < 0), like a gloss layer. */
+function blend(hex: string, amount: number): string {
+  const target = amount >= 0 ? 255 : 0;
+  const a = Math.abs(amount);
+  return (
+    '#' +
+    [1, 3, 5]
+      .map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * (1 - a) + target * a))
+      .map((v) => v.toString(16).padStart(2, '0'))
+      .join('')
+  );
+}
+
 let failures = 0;
+
+// Gloss (Standard theme only): text must keep its contrast at the lightest and darkest
+// points of each sheen. The strengths are read from tokens.css.
+{
+  const t = themes.standard!;
+  const highlight = Number(root['--gloss-highlight']);
+  const band = Number(root['--gloss-band-highlight']);
+  if (!(highlight >= 0) || !(band >= 0)) throw new Error('Gloss strengths not found in tokens.css');
+  const c = (n: string) => resolve(t, n);
+  const glossPairs: [string, string, number, string][] = [
+    [
+      c('--color-btn-text'),
+      blend(c('--color-btn-bg'), highlight),
+      TEXT,
+      'green button, top of sheen',
+    ],
+    [
+      c('--color-cta-text'),
+      blend(c('--color-cta-bg'), highlight),
+      TEXT,
+      'gold button, top of sheen',
+    ],
+    [
+      c('--color-cta-text'),
+      blend(c('--color-cta-bg'), -0.06),
+      TEXT,
+      'gold button, bottom of sheen',
+    ],
+    [c('--color-dark-text'), blend(c('--color-dark-bg'), band), TEXT, 'dark band text, highlight'],
+    [
+      c('--color-dark-text-muted'),
+      blend(c('--color-dark-bg'), band),
+      TEXT,
+      'dark band muted text, highlight',
+    ],
+    [c('--color-dark-link'), blend(c('--color-dark-bg'), band), TEXT, 'dark band links, highlight'],
+    [
+      c('--color-dark-focus'),
+      blend(c('--color-dark-bg'), band),
+      UI,
+      'dark band focus ring, highlight',
+    ],
+    [c('--color-cta-text'), blend(c('--color-cta-bg'), 0.18), TEXT, 'gold band, highlight'],
+  ];
+  const lines = glossPairs.map(([fg, bg, min, what]) => {
+    const r = ratio(fg, bg);
+    if (r < min) failures++;
+    return `  ${r >= min ? 'ok  ' : 'FAIL'} ${r.toFixed(2).padStart(5)} ≥ ${min}  ${what} (${fg} on ${bg})`;
+  });
+  console.log(`standard gloss\n${lines.join('\n')}`);
+}
 for (const [theme, tokens] of Object.entries(themes)) {
   const list = theme === 'contrast' ? [...pairs, ...aaaPairs] : pairs;
   const lines: string[] = [];

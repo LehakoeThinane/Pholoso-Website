@@ -10,7 +10,8 @@
  *
  * Slots: default (page content, inside <main>) and "head" (extra head tags, e.g. JSON-LD).
  *
- * The CSP forbids inline scripts and styles: never add <script> or <style is:inline> here.
+ * The CSP forbids inline scripts and styles: never add <script is:inline> or <style is:inline>.
+ * Plain <script> blocks are fine: Astro bundles them into external files.
  * /prefs.js is render-blocking on purpose, so saved Comfort & access settings apply before
  * the first paint.
  */
@@ -19,6 +20,7 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/print.css';
 import font400 from '@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2?url';
+import ComfortPanel from '../components/ComfortPanel.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SkipLink from '../components/SkipLink.astro';
@@ -65,5 +67,10 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
       <slot />
     </main>
     <SiteFooter />
+    <ComfortPanel />
+    <div id="announcer" class="visually-hidden" aria-live="polite"></div>
+    <script>
+      import '../scripts/main';
+    </script>
   </body>
 </html>

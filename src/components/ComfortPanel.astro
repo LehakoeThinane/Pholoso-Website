@@ -1,0 +1,407 @@
+---
+/**
+ * ComfortPanel: the floating "Comfort & access" button and its settings panel
+ * (docs/comfort-and-access-spec.md). A native modal <dialog>: focus moves to its heading,
+ * stays inside while open, and returns to the button when closed (Esc, Done, ×, or a
+ * click outside on wide screens). Settings apply instantly and are saved on this device.
+ *
+ * Hidden without JavaScript, because without it nothing can be applied or saved.
+ * Behaviour: src/scripts/comfort.ts. Attribute mapping: public/prefs.js.
+ * No props.
+ */
+const themes = [
+  { value: 'standard', label: 'Standard', hint: 'The Foundation’s usual colours.' },
+  { value: 'calm', label: 'Calm', hint: 'Softer, muted colours with less to look at.' },
+  { value: 'contrast', label: 'High contrast', hint: 'Black on white, strong borders.' },
+  { value: 'dim', label: 'Dim', hint: 'Darker colours for light sensitivity.' },
+];
+const sizes = ['100', '115', '130', '150'];
+const switches = {
+  reading: [
+    {
+      key: 'spacing',
+      label: 'Reading spacing',
+      hint: 'More space between lines, letters and words.',
+    },
+    { key: 'guide', label: 'Reading guide', hint: 'A band that helps you keep your place.' },
+    {
+      key: 'focus',
+      label: 'Stronger focus outline',
+      hint: 'A thicker outline around what you have selected.',
+    },
+  ],
+  calm: [
+    { key: 'motion', label: 'Reduce motion', hint: 'Stops animations and moving parts.' },
+    {
+      key: 'simple',
+      label: 'Simplified page',
+      hint: 'Hides decorative pictures and extra sections.',
+    },
+    { key: 'images', label: 'Hide images', hint: 'Hides photos. Saves mobile data too.' },
+  ],
+};
+const sw = (key: string) => `cp-${key}`;
+---
+
+<button type="button" class="comfort-toggle" aria-haspopup="dialog" hidden data-comfort-open>
+  <svg class="comfort-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
+    <circle cx="16" cy="7" r="2" />
+    <circle cx="10" cy="17" r="2" />
+  </svg>
+  Comfort &amp; access
+</button>
+
+<dialog class="comfort" aria-labelledby="cp-title" data-comfort>
+  <div class="comfort__header">
+    <h2 id="cp-title" class="comfort__title" tabindex="-1">
+      Comfort &amp; access
+    </h2>
+    <button type="button" class="comfort__close" data-comfort-close>
+      <span aria-hidden="true">×</span>
+      <span class="visually-hidden">Close</span>
+    </button>
+  </div>
+  <p class="comfort__intro">Changes apply straight away. Choose what feels right for you.</p>
+
+  <section class="comfort__group" aria-labelledby="cp-quick">
+    <h3 id="cp-quick">Quick start</h3>
+    <div class="comfort__presets">
+      <button type="button" class="comfort__preset" data-preset="overwhelmed">
+        I feel overwhelmed
+      </button>
+      <button type="button" class="comfort__preset" data-preset="reading">
+        Reading is hard
+      </button>
+      <button type="button" class="comfort__preset" data-preset="seeing">
+        I can't see clearly
+      </button>
+    </div>
+  </section>
+
+  <fieldset class="comfort__group">
+    <legend>
+      <h3>Colours</h3>
+    </legend>
+    {themes.map((t) => (
+      <div class="comfort__option">
+        <input
+          type="radio"
+          name="cp-theme"
+          id={`cp-theme-${t.value}`}
+          value={t.value}
+          aria-describedby={`cp-theme-${t.value}-hint`}
+        />
+        <label for={`cp-theme-${t.value}`}>{t.label}</label>
+        <p class="comfort__hint" id={`cp-theme-${t.value}-hint`}>
+          {t.hint}
+        </p>
+      </div>
+    ))}
+  </fieldset>
+
+  <fieldset class="comfort__group">
+    <legend>
+      <h3>Text size</h3>
+    </legend>
+    <div class="comfort__sizes">
+      {sizes.map((s) => (
+        <div class="comfort__size">
+          <input type="radio" name="cp-text" id={`cp-text-${s}`} value={s} />
+          <label for={`cp-text-${s}`}>{s}%</label>
+        </div>
+      ))}
+    </div>
+  </fieldset>
+
+  <section class="comfort__group" aria-labelledby="cp-reading">
+    <h3 id="cp-reading">Reading</h3>
+    {switches.reading.map((s) => (
+      <div class="comfort__switch">
+        <input
+          type="checkbox"
+          role="switch"
+          id={sw(s.key)}
+          data-setting={s.key}
+          aria-describedby={`${sw(s.key)}-hint`}
+        />
+        <label for={sw(s.key)}>{s.label}</label>
+        <p class="comfort__hint" id={`${sw(s.key)}-hint`}>
+          {s.hint}
+        </p>
+      </div>
+    ))}
+  </section>
+
+  <section class="comfort__group" aria-labelledby="cp-calm">
+    <h3 id="cp-calm">Movement and distractions</h3>
+    {switches.calm.map((s) => (
+      <div class="comfort__switch">
+        <input
+          type="checkbox"
+          role="switch"
+          id={sw(s.key)}
+          data-setting={s.key}
+          aria-describedby={`${sw(s.key)}-hint`}
+        />
+        <label for={sw(s.key)}>{s.label}</label>
+        <p class="comfort__hint" id={`${sw(s.key)}-hint`}>
+          {s.hint}
+        </p>
+      </div>
+    ))}
+  </section>
+
+  <section class="comfort__group" aria-labelledby="cp-listen" data-comfort-listen hidden>
+    <h3 id="cp-listen">Listen</h3>
+    <div class="comfort__row">
+      <button type="button" class="comfort__action" aria-pressed="false" data-listen="main">
+        Read this page aloud
+      </button>
+      <label class="comfort__rate">
+        Voice speed
+        <select id="cp-rate" data-setting="rate">
+          <option value="0.75">Slower</option>
+          <option value="1">Normal</option>
+          <option value="1.25">Faster</option>
+          <option value="1.5">Fastest</option>
+        </select>
+      </label>
+    </div>
+    <p class="comfort__hint">Uses your browser's own voice. Nothing plays until you choose it.</p>
+  </section>
+
+  <section class="comfort__group" aria-labelledby="cp-wording">
+    <h3 id="cp-wording">Wording</h3>
+    <div class="comfort__switch">
+      <input
+        type="checkbox"
+        role="switch"
+        id="cp-identityFirst"
+        data-setting="identityFirst"
+        aria-describedby="cp-identityFirst-hint"
+      />
+      <label for="cp-identityFirst">Identity-first wording</label>
+      <p class="comfort__hint" id="cp-identityFirst-hint">
+        Uses “autistic child” instead of “child with autism”.{' '}
+        <a href="/accessibility/#wording">Why?</a>
+      </p>
+    </div>
+  </section>
+
+  <div class="comfort__footer">
+    <button type="button" class="comfort__action" data-comfort-reset>
+      Reset all settings
+    </button>
+    <button type="button" class="comfort__done" data-comfort-close>
+      Done
+    </button>
+  </div>
+  <p class="comfort__hint">
+    Settings are saved on this device only.{' '}
+    <a href="/accessibility/#comfort">About these settings</a>
+  </p>
+  <p class="visually-hidden" aria-live="polite" data-comfort-status></p>
+</dialog>
+
+<style>
+  .comfort-toggle {
+    position: fixed;
+    right: var(--space-s);
+    bottom: var(--space-s);
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: var(--button-min);
+    padding: var(--space-2xs) var(--space-m);
+    border: 2px solid var(--color-btn-text);
+    border-radius: 999px;
+    background: var(--color-btn-bg);
+    background-image: var(--gloss);
+    color: var(--color-btn-text);
+    font-weight: 700;
+    font-size: var(--step--1);
+    cursor: pointer;
+    box-shadow: var(--gloss-shadow);
+  }
+  .comfort-toggle[hidden] {
+    display: none;
+  }
+  .comfort-toggle__icon {
+    width: 1.25em;
+    height: 1.25em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .comfort {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: var(--space-m);
+    border: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    overflow-y: auto;
+  }
+  .comfort::backdrop {
+    background: rgb(0 0 0 / 0.45);
+  }
+  @media (min-width: 40rem) {
+    .comfort {
+      inset: 0 0 0 auto;
+      width: 24rem;
+      border-left: 2px solid var(--color-border);
+    }
+  }
+  .comfort__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  .comfort__title {
+    font-size: var(--step-2);
+    margin: 0;
+  }
+  .comfort__close {
+    min-width: var(--button-min);
+    min-height: var(--button-min);
+    border: 2px solid var(--color-text);
+    border-radius: 50%;
+    background: transparent;
+    font-size: var(--step-2);
+    line-height: 1;
+    cursor: pointer;
+  }
+  .comfort__intro {
+    margin: var(--space-2xs) 0 var(--space-m);
+  }
+  .comfort__group {
+    border: 0;
+    border-top: var(--border-width) solid var(--color-line);
+    margin: 0;
+    padding: var(--space-s) 0;
+    min-width: 0;
+  }
+  .comfort__group[hidden] {
+    display: none;
+  }
+  .comfort__group h3 {
+    font-size: var(--step-1);
+    margin: 0 0 var(--space-2xs);
+  }
+  .comfort__group legend {
+    padding: 0;
+    float: left;
+    width: 100%;
+  }
+  .comfort__group legend + * {
+    clear: both;
+  }
+  .comfort__presets {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+  .comfort__preset,
+  .comfort__action,
+  .comfort__done {
+    min-height: var(--button-min);
+    padding: var(--space-2xs) var(--space-s);
+    border: 2px solid var(--color-text);
+    border-radius: var(--radius-s);
+    background: transparent;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+  .comfort__preset[aria-pressed='true'],
+  .comfort__action[aria-pressed='true'] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  .comfort__done {
+    background: var(--color-btn-bg);
+    background-image: var(--gloss);
+    box-shadow: var(--gloss-shadow);
+    border-color: var(--color-btn-bg);
+    color: var(--color-btn-text);
+  }
+  .comfort__option,
+  .comfort__switch {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: var(--space-xs);
+    margin-bottom: var(--space-2xs);
+  }
+  .comfort__option input,
+  .comfort__size input,
+  .comfort__switch input {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    accent-color: var(--color-btn-bg);
+  }
+  .comfort__option label,
+  .comfort__switch label {
+    display: flex;
+    align-items: center;
+    min-height: var(--target-min);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .comfort__hint {
+    grid-column: 2;
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+  .comfort__sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-m);
+  }
+  .comfort__size {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+  .comfort__size label {
+    display: flex;
+    align-items: center;
+    min-height: var(--target-min);
+    cursor: pointer;
+  }
+  .comfort__row,
+  .comfort__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+    margin-bottom: var(--space-2xs);
+  }
+  .comfort__footer {
+    border-top: var(--border-width) solid var(--color-line);
+    padding-top: var(--space-s);
+    justify-content: space-between;
+  }
+  .comfort__rate {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-weight: 700;
+  }
+  .comfort__rate select {
+    min-height: var(--target-min);
+    padding-inline: var(--space-2xs);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+  }
+</style>

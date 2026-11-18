@@ -189,6 +189,7 @@ main:focus {
   --color-line: var(--color-dark-text-muted);
   --color-border: var(--color-dark-text-muted);
   background: var(--color-bg);
+  background-image: var(--gloss-band);
   color: var(--color-text);
 }
 .on-cta {
@@ -201,6 +202,7 @@ main:focus {
   --color-btn-bg: var(--color-cta-text);
   --color-btn-text: var(--color-cta-bg);
   background: var(--color-bg);
+  background-image: var(--gloss-cta);
   color: var(--color-text);
 }
 
@@ -222,4 +224,51 @@ main:focus {
 .prose h2,
 .prose h3 {
   margin-top: var(--space-l);
+}
+
+/* ---------- Comfort & access settings (spec §7) ---------- */
+
+/* Simplified page: hide decorative pictures and sections, keep content and navigation */
+:root[data-simple='on'] [data-decorative],
+:root[data-simple='on'] .photo:not([data-essential]),
+:root[data-simple='on'] .triangle-marker::before {
+  display: none !important;
+}
+
+/* Hide images: photos disappear; essential ones are replaced by their description */
+:root[data-images='off'] .photo:not([data-essential]) {
+  display: none !important;
+}
+:root[data-images='off'] .photo[data-essential] picture {
+  display: none;
+}
+:root[data-images='off'] .photo[data-essential]::before {
+  content: 'Image: ' attr(data-alt);
+  display: block;
+  padding: var(--space-s);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-s);
+}
+
+/* Reading guide: a soft band that follows the pointer or keyboard focus */
+.reading-guide {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2.6em;
+  z-index: 40;
+  pointer-events: none;
+  background: var(--color-accent);
+  opacity: 0.18;
+  border-block: 2px solid var(--color-text);
+  display: none;
+}
+:root[data-guide='on'] .reading-guide {
+  display: block;
+}
+
+/* Switchable wording waits for its swap, so person-first never flashes (max 2s) */
+:root.terms-pending .term {
+  visibility: hidden;
 }
