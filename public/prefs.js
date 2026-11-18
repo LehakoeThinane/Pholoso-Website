@@ -14,6 +14,11 @@
   var KEY = 'pholoso-comfort';
   var d = document.documentElement;
   d.classList.add('js');
+  // Capabilities, so CSS can show the right controls before the first paint (no layout shift)
+  if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
+    d.classList.add('can-speak');
+  }
+  if (navigator.clipboard && window.isSecureContext) d.classList.add('can-copy');
 
   function mq(q) {
     return !!(window.matchMedia && window.matchMedia(q).matches);

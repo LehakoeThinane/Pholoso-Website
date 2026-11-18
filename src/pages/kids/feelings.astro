@@ -30,7 +30,7 @@ const feelings = await ordered('kidsFeelings');
   </KidsHero>
 
   <div class="container kids-section">
-    <ul class="faces" data-picker="feel-prompt" hidden>
+    <ul class="faces" data-picker="feel-prompt" data-js-only>
       {feelings.map((f) => (
         <li>
           <button
@@ -46,13 +46,18 @@ const feelings = await ordered('kidsFeelings');
         </li>
       ))}
     </ul>
-    <p class="kids-note" id="feel-prompt" hidden>
+    <p class="kids-note" id="feel-prompt" data-js-only>
       <Art name="icons/smile" />
       Choose the face that is most like you today.
     </p>
 
     {feelings.map((f) => (
-      <section class="feeling" id={`feel-${f.id}`} aria-labelledby={`feel-${f.id}-title`}>
+      <section
+        class="feeling"
+        id={`feel-${f.id}`}
+        aria-labelledby={`feel-${f.id}-title`}
+        data-js-hide
+      >
         <Art name={`feelings/${f.data.face}`} class="feeling__face" />
         <div>
           <h2 id={`feel-${f.id}-title`}>{f.data.name}</h2>

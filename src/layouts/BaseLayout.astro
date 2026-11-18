@@ -52,7 +52,8 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {/* noindex pages (404, thank-you) are not canonical anywhere: the 404 page is served at any wrong address */}
+    {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#134B42" />
     <script is:inline src="/prefs.js"></script>

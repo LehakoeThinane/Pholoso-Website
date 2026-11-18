@@ -22,5 +22,7 @@ export function initInterests(): void {
     picker.hidden = false;
     buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.interest ?? '', true)));
     show(buttons[0]?.dataset.interest ?? '', false);
+    // CSS hid the other panels before the first paint (data-js-hide); hidden takes over.
+    panels.forEach((p) => p.removeAttribute('data-js-hide'));
   });
 }

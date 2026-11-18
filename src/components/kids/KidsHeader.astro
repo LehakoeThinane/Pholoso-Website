@@ -31,7 +31,13 @@ const isHome = currentPath === kids.home.href;
     </a>
 
     <div class="kids-header__tools">
-      <button type="button" class="kids-toggle" data-kids-toggle="calm" aria-pressed="false" hidden>
+      <button
+        type="button"
+        class="kids-toggle"
+        data-kids-toggle="calm"
+        aria-pressed="false"
+        data-js-only
+      >
         <Art name="icons/leaf" class="kids-toggle__icon" />
         {kids.calmToggle}
       </button>
@@ -40,7 +46,7 @@ const isHome = currentPath === kids.home.href;
         class="kids-toggle"
         data-kids-toggle="sound"
         aria-pressed="false"
-        hidden
+        data-js-only
       >
         <Art name="icons/speaker" class="kids-toggle__icon" />
         {kids.soundToggle}

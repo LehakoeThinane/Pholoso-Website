@@ -3,9 +3,10 @@
  * SiteHeader: logo, primary navigation and the Donate button. Not sticky, so it can never
  * cover focused content (WCAG 2.4.11).
  *
- * Below 62rem the navigation becomes a disclosure menu, but only once
- * src/scripts/menu.ts has run (it sets data-menu on the header and reveals the button).
- * Without JavaScript the full navigation is simply shown.
+ * Below 62rem the navigation becomes a disclosure menu when JavaScript runs: the button
+ * and the collapsed state are set by CSS before the first paint (html.js), so nothing
+ * jumps; src/scripts/menu.ts opens and closes it. Without JavaScript the full navigation
+ * is simply shown.
  *
  * Props:
  * - currentPath: the page's path (for example "/about/"), used to mark the current link.
@@ -49,7 +50,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
       type="button"
       aria-expanded="false"
       aria-controls="site-nav"
-      hidden
+      data-js-only
     >
       {strings.menuButton}
     </button>
@@ -132,9 +133,6 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     font-weight: 700;
     cursor: pointer;
   }
-  .site-header__menu-button[hidden] {
-    display: none;
-  }
 
   .site-nav {
     order: 4;
@@ -179,7 +177,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
 
   /* Small screens with JavaScript: collapsed until the menu button opens it */
   @media (max-width: 61.99rem) {
-    .site-header[data-menu='closed'] .site-nav {
+    :global(.js) .site-header:not([data-menu='open']) .site-nav {
       display: none;
     }
   }

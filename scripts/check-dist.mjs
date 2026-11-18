@@ -73,15 +73,18 @@ for (const file of files.filter((f) => /\.(avif|webp)$/.test(f))) {
   if (size > PHOTO_MAX) report(file, `photo is ${Math.round(size / 1024)} KB (limit 150 KB)`);
 }
 
-// Every built HTML page must have exactly one <h1>, a title, a description and a canonical URL.
+// Every built HTML page must have exactly one <h1>, a title and a description; every indexable
+// page also a canonical URL (noindex pages, like the 404 page, must not have one).
 for (const file of files.filter((f) => f.endsWith('.html'))) {
   const html = readFileSync(file, 'utf8');
   if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) report(file, 'must have exactly one <h1>');
   if (!/<title>[^<]+<\/title>/.test(html)) report(file, 'missing <title>');
   if (!/<meta name="description" content="[^"]+"/.test(html))
     report(file, 'missing meta description');
-  if (!/<link rel="canonical" href="https:\/\/pholoso\.africa\//.test(html))
-    report(file, 'missing canonical URL');
+  const noindex = /<meta name="robots" content="noindex"/.test(html);
+  const canonical = /<link rel="canonical" href="https:\/\/pholoso\.africa\//.test(html);
+  if (!noindex && !canonical) report(file, 'missing canonical URL');
+  if (noindex && canonical) report(file, 'noindex page must not declare a canonical URL');
 }
 
 // Kids' World child-safety rules (brief §7). Checked on every page under /kids/.

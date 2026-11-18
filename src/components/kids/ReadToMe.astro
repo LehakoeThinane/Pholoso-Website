@@ -27,7 +27,7 @@ const { target = 'main', label = 'this page', size = 'large' } = Astro.props;
   class:list={['read-to-me', `read-to-me--${size}`]}
   data-listen={target}
   aria-pressed="false"
-  hidden
+  data-speech-only
 >
   <Art name="icons/speaker" class="read-to-me__art" />
   <span>

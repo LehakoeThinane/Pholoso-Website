@@ -27,7 +27,7 @@ const CardHeading = `h${level + 1}` as 'h4' | 'h5';
 ---
 
 <div class="explorer" id={id} data-explorer>
-  <div class="explorer__picker" hidden data-explorer-picker>
+  <div class="explorer__picker" data-js-only data-explorer-picker>
     <p class="explorer__picker-label" id={`${id}-label`}>
       Choose an interest
     </p>
@@ -46,12 +46,13 @@ const CardHeading = `h${level + 1}` as 'h4' | 'h5';
     </div>
   </div>
 
-  {interests.map((interest) => (
+  {interests.map((interest, i) => (
     <section
       class="explorer__panel"
       id={`${id}-${interest.slug}`}
       aria-labelledby={`${id}-${interest.slug}-title`}
       data-interest-panel={interest.slug}
+      data-js-hide={i === 0 ? undefined : true}
     >
       <Heading class="explorer__title" id={`${id}-${interest.slug}-title`}>
         If a child loves {interest.name.toLowerCase()}

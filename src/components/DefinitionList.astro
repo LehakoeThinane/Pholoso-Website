@@ -6,7 +6,6 @@
  * - items: [{ term, value, copy? }]. Values may be config placeholders (rendered by Value).
  *   copy: true adds a "Copy" button, which appears only when the browser supports the
  *   Clipboard API (src/scripts/copy.ts). Placeholder values never get a copy button.
- * - label: optional accessible name for the list (e.g. "Bank details")
  */
 import { isTodo } from '../lib/todo';
 import Value from './Value.astro';
@@ -18,13 +17,12 @@ interface Item {
 }
 interface Props {
   items: Item[];
-  label?: string;
 }
 
-const { items, label } = Astro.props;
+const { items } = Astro.props;
 ---
 
-<dl class="definition-list" aria-label={label}>
+<dl class="definition-list">
   {items.map((item) => (
     <div class="definition-list__row">
       <dt>{item.term}</dt>
@@ -38,7 +36,7 @@ const { items, label } = Astro.props;
             class="definition-list__copy"
             data-copy={item.value}
             data-copy-label={item.term}
-            hidden
+            data-copy-only
           >
             Copy<span class="visually-hidden"> {item.term}</span>
           </button>
