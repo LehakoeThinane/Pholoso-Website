@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DefinitionList from '../components/DefinitionList.astro';
+import Disclosure from '../components/Disclosure.astro';
+import Notice from '../components/Notice.astro';
+import PageHero from '../components/PageHero.astro';
+import ReceiptForm from '../components/ReceiptForm.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Steps from '../components/Steps.astro';
+import { site } from '../config/site';
+import { ordered } from '../lib/content';
+import { render } from 'astro:content';
+
+const faqs = await Promise.all(
+  (await ordered('faqs', (f) => f.data.page === 'donate')).map(async (f) => ({
+    question: f.data.question,
+    id: f.id,
+    Content: (await render(f)).Content,
+  })),
+);
+const ref = site.bank.referencePrefix;
+---
+
+<BaseLayout
+  title="Donate"
+  description="Donate to the Pholoso Afrika Foundation by bank transfer (EFT), and request a Section 18A tax receipt."
+>
+  <PageHero
+    eyebrow="Donate"
+    title="Donate by bank transfer"
+    lead="Your gift supports inclusive education for neurodivergent children. Giving takes three steps."
+  />
+
+  <Section labelledby="steps-title" narrow>
+    <h2 id="steps-title">How to give</h2>
+    <Steps
+      steps={[
+        {
+          title: 'Pay by EFT',
+          text: 'Use the bank details below in your banking app or at your bank.',
+        },
+        {
+          title: `Use the reference ${ref} and your surname`,
+          text: `For example "${ref} MOKOENA". Companies use their company name instead.`,
+        },
+        {
+          title: 'Request a Section 18A receipt',
+          text: 'If you want to claim the donation for tax, fill in the receipt form on this page.',
+        },
+      ]}
+    />
+  </Section>
+
+  <Section variant="alt" labelledby="bank-title" narrow>
+    <h2 id="bank-title">Our bank details</h2>
+    <DefinitionList
+      label="Bank details"
+      items={[
+        { term: 'Account name', value: site.bank.accountName, copy: true },
+        { term: 'Bank', value: site.bank.bank },
+        { term: 'Account number', value: site.bank.accountNumber, copy: true },
+        { term: 'Branch code', value: site.bank.branchCode, copy: true },
+        { term: 'Account type', value: site.bank.accountType },
+        { term: 'SWIFT code (for international payments)', value: site.bank.swift, copy: true },
+        { term: 'Reference', value: `${ref} and your surname or company name` },
+      ]}
+    />
+    <Notice variant="warning" title="Protect yourself from fraud">
+      <p>
+        Our bank details will never change by email. If you receive a message saying our bank
+        details have changed, do not pay. Check with us first by emailing{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </Notice>
+  </Section>
+
+  <Section id="receipt" labelledby="receipt-title" narrow>
+    <SectionHeading
+      id="receipt-title"
+      title="Request a Section 18A tax receipt"
+      lead="Fill in this form after you have paid. We will email your receipt."
+    />
+    <h3>Why we ask for these details</h3>
+    <p>
+      Since 1 March 2023, SARS requires more details on Section 18A receipts, including the donor's
+      identity or registration number and address. We must also report every receipt to SARS as
+      third-party data (IT3(d)). We use your details only for your receipt and that report.
+    </p>
+    <ReceiptForm />
+  </Section>
+
+  <Section variant="alt" labelledby="giving-faq-title" narrow>
+    <h2 id="giving-faq-title">Questions about giving</h2>
+    {faqs.map(({ question, id, Content }) => (
+      <Disclosure summary={question} level={3} id={`faq-${id}`}>
+        <Content />
+      </Disclosure>
+    ))}
+  </Section>
+</BaseLayout>

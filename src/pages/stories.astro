@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import DataTable from '../components/DataTable.astro';
+import FilterBar from '../components/FilterBar.astro';
+import Notice from '../components/Notice.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import StoryCard from '../components/StoryCard.astro';
+import { site } from '../config/site';
+import { ordered, storyCategoryLabel, storyFilters } from '../lib/content';
+import { isTodo } from '../lib/todo';
+
+const stories = await ordered('stories');
+---
+
+<BaseLayout
+  title="Stories"
+  description="Stories of lived experience from parents, young people, educators and professionals, and the changes they ask schools and systems to make."
+>
+  <PageHero
+    eyebrow="Stories"
+    title="Stories show us what needs to change"
+    lead="Each story points to something a school, a workplace or a system can do differently. Read a story, then open what it asks us to change."
+  >
+    <Notice title="About these stories">
+      <p>{isTodo(site.stories.notice) ? site.stories.interimNotice : site.stories.notice}</p>
+    </Notice>
+  </PageHero>
+
+  <Section labelledby="stories-title">
+    <h2 id="stories-title" class="visually-hidden">
+      The stories
+    </h2>
+    <FilterBar
+      target="story-list"
+      label="Show stories from"
+      filters={storyFilters}
+      noun={['story', 'stories']}
+    />
+    <div id="story-list" class="story-list">
+      {stories.map((s) => (
+        <StoryCard
+          id={s.id}
+          category={s.data.category}
+          categoryLabel={storyCategoryLabel(s.data.category)}
+          quote={s.data.quote}
+          who={s.data.who}
+          misunderstand={s.data.misunderstand}
+          friction={s.data.friction}
+          helps={s.data.helps}
+          change={s.data.change}
+        />
+      ))}
+    </div>
+  </Section>
+
+  <Section variant="alt" labelledby="change-title">
+    <SectionHeading
+      id="change-title"
+      eyebrow="Systems change"
+      title="What the stories ask us to change"
+      lead="The problem is rarely the person. It is how things around them are designed."
+    />
+    <DataTable
+      caption="Where the system creates friction, and the change people ask for"
+      columns={['Story', 'Where the system creates friction', 'The change people ask for']}
+      rows={stories.map((s) => [
+        s.data.who.split(',')[0] ?? s.data.who,
+        s.data.friction,
+        s.data.change,
+      ])}
+    />
+  </Section>
+
+  <Section labelledby="share-title" narrow>
+    <SectionHeading
+      id="share-title"
+      title="Share your story"
+      lead="Your experience can help schools and systems change."
+    />
+    <p>
+      If you share a story with us, we use a pseudonym, and you can ask us to change or withdraw it
+      at any time. Please do not include a child's full name or medical details.
+    </p>
+    <Button variant="green" href="/contact/?topic=story">
+      Share your story
+    </Button>
+  </Section>
+</BaseLayout>
+
+<style>
+  .story-list {
+    display: grid;
+    gap: var(--space-m);
+  }
+  @media (min-width: 62rem) {
+    .story-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+</style>

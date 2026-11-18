@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/Card.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/Section.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import SignupForm from '../../components/SignupForm.astro';
+import { sources } from '../../config/sources';
+import { ordered } from '../../lib/content';
+
+const resources = await ordered('resources');
+const anyPlanned = resources.some((r) => r.data.status === 'planned');
+const sourceList = [sources.ajod, sources.hrw, sources.who, sources.whitePaper6];
+---
+
+<BaseLayout
+  title="Resources"
+  description="Plain-language guides for families, educators and anyone building inclusion, and the sources behind our work."
+>
+  <PageHero
+    eyebrow="Resources"
+    title="Guides for families, educators and everyone building inclusion"
+    lead="Practical, plain-language and respectful. We are writing these guides now."
+  >
+    {anyPlanned && (
+      <p class="now">
+        If you need help now, please <a href="/contact/?topic=support">contact us</a>.
+      </p>
+    )}
+  </PageHero>
+
+  <Section labelledby="guides-title">
+    <h2 id="guides-title">Guides</h2>
+    <CardGrid as="ul">
+      {resources.map((r) => (
+        <li>
+          {r.data.status === 'published' ? (
+            <Card
+              title={r.data.title}
+              tag={r.data.audience}
+              href={`/resources/${r.id}/`}
+              linkText={`Read: ${r.data.title}`}
+            >
+              <p>{r.data.summary}</p>
+            </Card>
+          ) : (
+            <Card title={r.data.title} tag={r.data.audience}>
+              <p>{r.data.summary}</p>
+              <p class="soon">Coming soon</p>
+            </Card>
+          )}
+        </li>
+      ))}
+    </CardGrid>
+  </Section>
+
+  <Section variant="alt" labelledby="sources-title" narrow>
+    <SectionHeading
+      id="sources-title"
+      title="Sources we rely on"
+      lead="Every statistic on this website links to its source, so you can check it."
+    />
+    <ul class="sources">
+      {sourceList.map((s) => (
+        <li>
+          <ExternalLink href={s.href}>{s.label}</ExternalLink>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section labelledby="notify-title" narrow>
+    <h2 id="notify-title">Hear when guides are ready</h2>
+    <SignupForm
+      id="resources-signup"
+      intro="We will email you when new guides are published. We will not use your address for anything else."
+      submit="Tell me when guides are ready"
+    />
+  </Section>
+</BaseLayout>
+
+<style>
+  .now {
+    margin-top: var(--space-s);
+    font-weight: 700;
+  }
+  .soon {
+    display: inline-block;
+    margin-top: var(--space-s);
+    padding: 0 var(--space-2xs);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-s);
+    font-size: var(--step--1);
+    font-weight: 700;
+  }
+  .sources li + li {
+    margin-top: var(--space-xs);
+  }
+</style>

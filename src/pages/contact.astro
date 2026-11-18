@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import PageHero from '../components/PageHero.astro';
+import Panel from '../components/Panel.astro';
+import Section from '../components/Section.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact the Pholoso Afrika Foundation: ask a question, share your story, ask for support, or start a partnership."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Contact us"
+    lead="Ask a question, share your story, ask for support or start a partnership. We read every message with care."
+  />
+
+  <Section>
+    <div class="contact">
+      <div class="contact__form">
+        <h2>Send us a message</h2>
+        <ContactForm />
+      </div>
+      <div class="contact__aside">
+        <Panel as="aside" title="Other ways to reach us" level={2}>
+          <p>
+            Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+          <h3 class="contact__subheading">Sharing your story</h3>
+          <p>
+            We use a pseudonym, and you can ask us to change or withdraw your story at any time.
+          </p>
+          <h3 class="contact__subheading">Want to give?</h3>
+          <p>
+            <a href="/donate/">See how to donate</a>
+          </p>
+        </Panel>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  @media (min-width: 62rem) {
+    .contact {
+      grid-template-columns: 2fr 1fr;
+      align-items: start;
+    }
+  }
+  .contact__subheading {
+    font-size: var(--step-0);
+    margin-top: var(--space-m);
+    margin-bottom: var(--space-3xs);
+  }
+</style>

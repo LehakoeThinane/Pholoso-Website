@@ -8,8 +8,7 @@
  * - description: unique meta description (about 150 characters).
  * - noindex: true for pages that must stay out of search results (thank-you, 404, styleguide).
  *
- * Slots: default (page content, inside <main>), "head" (extra head tags, e.g. JSON-LD),
- * "footer-signup" (the update sign-up form in the footer).
+ * Slots: default (page content, inside <main>) and "head" (extra head tags, e.g. JSON-LD).
  *
  * The CSP forbids inline scripts and styles: never add <script> or <style is:inline> here.
  * /prefs.js is render-blocking on purpose, so saved Comfort & access settings apply before
@@ -65,8 +64,6 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <SiteFooter>
-      <slot name="footer-signup" slot="signup" />
-    </SiteFooter>
+    <SiteFooter />
   </body>
 </html>

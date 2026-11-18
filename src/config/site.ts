@@ -48,6 +48,20 @@ const siteSchema = z.object({
     shortName: text,
     url,
   }),
+  hostingProvider: text,
+  stories: z.object({
+    /** The confirmed provenance notice shown above the stories (owner to confirm). */
+    notice: text,
+    /** Shown while `notice` is still a placeholder. */
+    interimNotice: text,
+  }),
+  accessibility: z.object({
+    responseTime: text,
+    lastReviewed: text,
+  }),
+  privacy: z.object({
+    lastUpdated: text,
+  }),
 });
 
 export type SiteConfig = z.infer<typeof siteSchema>;
@@ -88,6 +102,24 @@ export const site: SiteConfig = siteSchema.parse({
     name: '2to.iQ (Pty) Ltd',
     shortName: '2to.iQ',
     url: 'https://2toiq.africa',
+  },
+  hostingProvider: 'GoDaddy',
+  stories: {
+    // Suggested wording, if the Foundation confirms the stories are composites:
+    // "These are composite stories based on common experiences. Names are pseudonyms, and no
+    // real child or family can be identified."
+    notice:
+      'TODO: confirm whether the stories are composites, pseudonymised accounts or real accounts shared with permission, and approve the notice wording',
+    interimNotice:
+      'We are confirming the source of these stories, their publication permission, and whether the names are pseudonyms. Please contact us with any concern or request to remove a story.',
+  },
+  accessibility: {
+    responseTime:
+      'TODO: how quickly accessibility problems will be answered (e.g. "within 5 working days")',
+    lastReviewed: '18 November 2026',
+  },
+  privacy: {
+    lastUpdated: '18 November 2026',
   },
 });
 

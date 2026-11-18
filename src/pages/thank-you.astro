@@ -1,0 +1,32 @@
+---
+// Where forms land after a successful submit without JavaScript. Not indexed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  title="Thank you"
+  description="Your form was sent to the Pholoso Afrika Foundation."
+  noindex
+>
+  <PageHero title="Thank you" lead="Your form was sent. We read every message with care." />
+  <Section narrow>
+    <p>
+      If you asked us a question or requested a receipt, we will reply by email. If you do not hear
+      from us, please email <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+    <ul>
+      <li>
+        <a href="/">Go to the home page</a>
+      </li>
+      <li>
+        <a href="/stories/">Read the stories</a>
+      </li>
+      <li>
+        <a href="/approach/">See how we work</a>
+      </li>
+    </ul>
+  </Section>
+</BaseLayout>

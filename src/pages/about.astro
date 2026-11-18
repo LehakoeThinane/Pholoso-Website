@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
+import DataTable from '../components/DataTable.astro';
+import Disclosure from '../components/Disclosure.astro';
+import ListenButton from '../components/ListenButton.astro';
+import PageHero from '../components/PageHero.astro';
+import Panel from '../components/Panel.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Stat from '../components/Stat.astro';
+import TrustBlock from '../components/TrustBlock.astro';
+import { site } from '../config/site';
+import { sources, stats } from '../config/sources';
+import ExternalLink from '../components/ExternalLink.astro';
+import { ordered } from '../lib/content';
+import { render } from 'astro:content';
+
+const faqs = await Promise.all(
+  (await ordered('faqs', (f) => f.data.page === 'about')).map(async (f) => ({
+    question: f.data.question,
+    id: f.id,
+    Content: (await render(f)).Content,
+  })),
+);
+
+const values = [
+  {
+    title: 'Dignity first',
+    text: 'Every learner is treated as capable. Being different is not a deficit.',
+  },
+  {
+    title: 'Inclusion by design',
+    text: 'We plan for diversity from the start, never as an afterthought.',
+  },
+  {
+    title: 'Adaptive, not standardised',
+    text: 'Systems should change to fit the learner, not the other way round.',
+  },
+  {
+    title: 'Guided by evidence',
+    text: 'We learn from research and from the experience of families and educators.',
+  },
+  {
+    title: 'Working together',
+    text: 'Lasting change needs schools, families, therapists and communities working together.',
+  },
+  {
+    title: 'African-led',
+    text: 'We build solutions rooted in African realities, held to high standards.',
+  },
+];
+---
+
+<BaseLayout
+  title="About us"
+  description="Who the Pholoso Afrika Foundation is: our belief, mission, vision and values, the gap in inclusive education, and how we are governed."
+>
+  <PageHero
+    eyebrow="About us"
+    title="Every child should learn in a way that fits how their mind works"
+    lead={`${site.name} is a South African registered non-profit company. We work for inclusive, adaptive education for neurodivergent children, in schools, communities and families.`}
+  />
+
+  <Section labelledby="belief-title" narrow>
+    <div id="belief-text">
+      <SectionHeading
+        id="belief-title"
+        eyebrow="What we believe"
+        title="Difference is not a deficit"
+      />
+      <p>
+        Neurodivergent learners are not defined by limits. They think, communicate, process
+        information and take part in the world in different ways.
+      </p>
+      <p>
+        Education should respond to that. Learners should not have to bend to fit rigid systems. The
+        systems should change to fit the learner.
+      </p>
+    </div>
+    <ListenButton target="belief-text" label="what we believe" />
+  </Section>
+
+  <Section variant="alt" labelledby="entities-title">
+    <SectionHeading
+      id="entities-title"
+      eyebrow="Two organisations, one mission"
+      title="The Foundation and 2to.iQ"
+    />
+    <CardGrid columns={2}>
+      <Panel title={site.name}>
+        <p>A registered non-profit company and Public Benefit Organisation.</p>
+        <p>It leads advocacy and awareness, and connects the support around each child.</p>
+      </Panel>
+      <Panel title={site.partner.name}>
+        <p>A separate company and our edtech partner.</p>
+        <p>
+          It builds an adaptive learning platform designed first for neurodivergent learners.{' '}
+          <ExternalLink href={site.partner.url}>Visit the 2to.iQ website</ExternalLink>
+        </p>
+      </Panel>
+    </CardGrid>
+  </Section>
+
+  <Section labelledby="mission-title">
+    <CardGrid columns={2}>
+      <div>
+        <h2 id="mission-title">Our mission</h2>
+        <p>
+          To advance inclusive, adaptive, learner-centred education for neurodivergent children,
+          through advocacy, innovation and working together with communities.
+        </p>
+      </div>
+      <div>
+        <h2>Our vision</h2>
+        <p>
+          A future where neurodivergent children across South Africa and Africa are understood,
+          supported and able to thrive, because education is designed for different minds.
+        </p>
+      </div>
+    </CardGrid>
+  </Section>
+
+  <Section variant="alt" labelledby="values-title">
+    <SectionHeading id="values-title" eyebrow="What we stand for" title="Our six values" />
+    <CardGrid as="ul">
+      {values.map((v) => (
+        <li>
+          <Card title={v.title}>
+            <p>{v.text}</p>
+          </Card>
+        </li>
+      ))}
+    </CardGrid>
+  </Section>
+
+  <Section id="the-gap" labelledby="gap-title">
+    <SectionHeading
+      id="gap-title"
+      eyebrow="The gap"
+      title="The commitments exist. Delivery has not caught up."
+      lead="South Africa has had an inclusive education policy since 2001, and it has signed the main international commitments. For many children, daily reality still falls short."
+    />
+    <DataTable
+      caption="Commitments to inclusive education"
+      columns={['Year', 'Commitment', 'What it says']}
+      rows={[
+        ['1994', 'UNESCO Salamanca Statement', 'Set the global benchmark for inclusive education.'],
+        [
+          '2001',
+          'Education White Paper 6',
+          "South Africa's policy for building an inclusive education and training system.",
+        ],
+        [
+          '2006',
+          'UN Convention on the Rights of Persons with Disabilities (CRPD)',
+          'Affirms the right to inclusive education. South Africa ratified it in 2007.',
+        ],
+        [
+          '2015',
+          'Sustainable Development Goal 4',
+          'Inclusive, fair, good-quality education and lifelong learning for everyone.',
+        ],
+      ]}
+    />
+    <p>
+      Read the policy:{' '}
+      <ExternalLink href={sources.whitePaper6.href}>Education White Paper 6 on gov.za</ExternalLink>
+    </p>
+    <CardGrid columns={2}>
+      <Stat {...stats.outOfSchool} />
+      <Stat {...stats.shutOut} />
+    </CardGrid>
+  </Section>
+
+  <Section variant="alt" labelledby="trust-title">
+    <SectionHeading id="trust-title" eyebrow="Trust" title="How we work responsibly" />
+    <TrustBlock />
+    <Panel title="About the words we use" level={3}>
+      <p>
+        By default we use person-first language, such as "child with autism". Some people prefer
+        identity-first language, such as "autistic child". We respect each person's choice. You can
+        switch the wording on this website in the Comfort & access settings.{' '}
+        <a href="/accessibility/#wording">Read more about wording</a>.
+      </p>
+    </Panel>
+  </Section>
+
+  <Section labelledby="faq-title" narrow>
+    <SectionHeading id="faq-title" title="Questions people ask" />
+    {faqs.map(({ question, id, Content }) => (
+      <Disclosure summary={question} level={3} id={`faq-${id}`}>
+        <Content />
+      </Disclosure>
+    ))}
+  </Section>
+</BaseLayout>
+
+<style>
+  :global(.trust) + :global(.panel) {
+    margin-top: var(--space-l);
+  }
+</style>

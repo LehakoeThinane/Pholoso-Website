@@ -8,6 +8,7 @@
  * - hint: extra explanation under the label
  * - value: submitted value (default "yes")
  * - error: error message to show now (styleguide); the form script fills it at runtime
+ * - id: defaults to "f-<name>"; set it when two forms on one page use the same name
  *
  * Slot: optional rich label content (e.g. with a link to the privacy notice). If given, it
  * replaces `label`, which is then only used for the error summary.
@@ -19,10 +20,10 @@ interface Props {
   hint?: string;
   value?: string;
   error?: string;
+  id?: string;
 }
 
-const { name, label, required = false, hint, value = 'yes', error } = Astro.props;
-const id = `f-${name}`;
+const { name, label, required = false, hint, value = 'yes', error, id = `f-${name}` } = Astro.props;
 const hintId = hint ? `${id}-hint` : undefined;
 const errorId = `${id}-error`;
 const describedBy = [hintId, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;

@@ -1,0 +1,84 @@
+---
+/**
+ * Form: the shell shared by every form. Posts to /contact.php, which handles all three
+ * form types (contact, newsletter, receipt).
+ *
+ * - Without JavaScript: a normal POST. The server redirects to /thank-you/ on success, or
+ *   back to this page with "?error=1#<id>-failed", which reveals the failure notice below.
+ * - With JavaScript (src/scripts/forms.ts): validates, sends with fetch, and shows the
+ *   result in the status region without leaving the page.
+ *
+ * Props:
+ * - id: unique per page (e.g. "contact-form")
+ * - type: 'contact' | 'newsletter' | 'receipt'
+ * - label: accessible name of the form
+ * - submit: submit button text
+ * - requiredNote: show "All questions are required unless marked optional" (default true)
+ * - compact: smaller spacing, for the footer sign-up
+ */
+import { site } from '../config/site';
+import Button from './Button.astro';
+import ErrorSummary from './ErrorSummary.astro';
+import FormStatus from './FormStatus.astro';
+import Notice from './Notice.astro';
+
+interface Props {
+  id: string;
+  type: 'contact' | 'newsletter' | 'receipt';
+  label: string;
+  submit: string;
+  requiredNote?: boolean;
+  compact?: boolean;
+}
+
+const { id, type, label, submit, requiredNote = true, compact = false } = Astro.props;
+---
+
+<form
+  id={id}
+  class:list={['form', { 'form--compact': compact }]}
+  action="/contact.php"
+  method="post"
+  aria-label={label}
+  data-form={type}
+>
+  <Notice variant="error" id={`${id}-failed`} targetOnly title="Your form was not sent">
+    <p>
+      Something went wrong, or a required answer was missing. Please check your answers and try
+      again, or email us at <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+  </Notice>
+  <ErrorSummary id={`${id}-errors`} />
+  {requiredNote && <p class="form__note">All questions are required unless marked optional.</p>}
+  <input type="hidden" name="type" value={type} />
+  <input type="hidden" name="form" value={id} />
+  <div class="form__trap" aria-hidden="true">
+    <label for={`${id}-website`}>Leave this empty</label>
+    <input type="text" id={`${id}-website`} name="website" tabindex="-1" autocomplete="off" />
+  </div>
+  <slot />
+  <Button variant="green" type="submit">
+    {submit}
+  </Button>
+  <FormStatus id={`${id}-status`} />
+</form>
+
+<style>
+  .form {
+    max-width: 40rem;
+  }
+  .form__note {
+    color: var(--color-text-muted);
+  }
+  .form--compact :global(.field) {
+    margin-bottom: var(--space-s);
+  }
+  /* Spam trap: off-screen for people, still present for bots */
+  .form__trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>

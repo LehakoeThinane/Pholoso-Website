@@ -1,0 +1,111 @@
+---
+/**
+ * ReceiptForm: request a Section 18A tax receipt after donating (on /donate/).
+ * Field list and limits follow brief §7 and are enforced again by public/contact.php.
+ */
+import Checkbox from './Checkbox.astro';
+import ChoiceGroup from './ChoiceGroup.astro';
+import Field from './Field.astro';
+import Form from './Form.astro';
+---
+
+<Form
+  id="receipt-form"
+  type="receipt"
+  label="Section 18A receipt request"
+  submit="Request my receipt"
+>
+  <ChoiceGroup
+    name="donorType"
+    legend="Who made the donation?"
+    required
+    inline
+    options={[
+      { value: 'individual', label: 'An individual' },
+      { value: 'company', label: 'A company' },
+      { value: 'trust', label: 'A trust' },
+      { value: 'other', label: 'Other' },
+    ]}
+  />
+  <Field
+    name="donorName"
+    label="Full name, or registered name of the organisation"
+    required
+    autocomplete="name"
+    maxlength={150}
+  />
+  <Field
+    name="tradingName"
+    label="Trading name"
+    hint="Only if it is different from the registered name."
+    autocomplete="organization"
+    maxlength={150}
+  />
+  <Field
+    name="idNumber"
+    label="ID, passport or registration number"
+    required
+    maxlength={40}
+    hint="If you give a passport number, write the country that issued it in the notes."
+  />
+  <Field
+    name="taxNumber"
+    label="Income tax number"
+    hint="Only if you have one."
+    inputmode="numeric"
+    maxlength={20}
+  />
+  <Field
+    name="address"
+    label="Address"
+    type="textarea"
+    rows={3}
+    required
+    autocomplete="street-address"
+    maxlength={300}
+  />
+  <Field
+    name="email"
+    label="Email address"
+    type="email"
+    required
+    autocomplete="email"
+    inputmode="email"
+    maxlength={254}
+    hint="We will send your receipt to this address."
+  />
+  <Field
+    name="phone"
+    label="Phone number"
+    type="tel"
+    required
+    autocomplete="tel"
+    inputmode="tel"
+    maxlength={30}
+  />
+  <Field
+    name="amount"
+    label="Amount donated, in rand"
+    required
+    inputmode="decimal"
+    maxlength={12}
+    hint="For example 500 or 1250.50"
+  />
+  <Field name="datePaid" label="Date you paid" type="date" required />
+  <Field
+    name="reference"
+    label="Payment reference you used"
+    required
+    maxlength={60}
+    hint="For example DONATE MOKOENA"
+  />
+  <Field name="notes" label="Notes" type="textarea" rows={3} maxlength={1000} />
+  <Checkbox
+    name="consent"
+    label="I agree that the Foundation may use these details to issue my receipt and report it to SARS."
+    required
+  >
+    I agree that the Foundation may use these details to issue my receipt and report it to SARS, as
+    explained in the <a href="/privacy/">privacy notice</a>.
+  </Checkbox>
+</Form>

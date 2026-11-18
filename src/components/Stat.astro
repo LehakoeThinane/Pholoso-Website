@@ -24,7 +24,7 @@ const { figure, text, source } = Astro.props;
   <p class="stat__figure">{figure}</p>
   <p class="stat__text">{text}</p>
   <figcaption class="stat__source">
-    {source.prefix ?? 'Source:'}
+    {`${source.prefix ?? 'Source:'} `}
     <ExternalLink href={source.href}>{source.label}</ExternalLink>
   </figcaption>
 </figure>

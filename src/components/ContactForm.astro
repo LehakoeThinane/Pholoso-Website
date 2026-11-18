@@ -1,0 +1,62 @@
+---
+/**
+ * ContactForm: the general contact form on /contact/.
+ * The topic can be preselected with ?topic=<value> (src/scripts/forms.ts; without
+ * JavaScript the first option is selected).
+ */
+import Checkbox from './Checkbox.astro';
+import Field from './Field.astro';
+import Form from './Form.astro';
+
+const contactTopics = [
+  { value: 'general', label: 'A general question' },
+  { value: 'story', label: 'Sharing my story' },
+  { value: 'support', label: 'Support for my child or family' },
+  { value: 'partner', label: 'Partnering as a company or funder' },
+  { value: 'school', label: 'A school or educator enquiry' },
+  { value: 'donation', label: 'A donation' },
+  { value: 'media', label: 'Media' },
+];
+---
+
+<Form id="contact-form" type="contact" label="Contact form" submit="Send message">
+  <Field
+    name="topic"
+    label="What is your message about?"
+    type="select"
+    required
+    options={contactTopics}
+  />
+  <Field name="name" label="Your name" autocomplete="name" maxlength={100} />
+  <Field
+    name="email"
+    label="Your email address"
+    type="email"
+    required
+    autocomplete="email"
+    inputmode="email"
+    maxlength={254}
+    hint="We use this only to reply to you."
+  />
+  <Field
+    name="message"
+    label="Your message"
+    type="textarea"
+    required
+    maxlength={5000}
+    hint="Please do not include a child's full name or medical details."
+  />
+  <Checkbox
+    name="consent"
+    label="I agree that the Foundation may use my details to reply to this message."
+    required
+  >
+    I agree that the Foundation may use my details to reply to this message, as explained in the{' '}
+    <a href="/privacy/">privacy notice</a>.
+  </Checkbox>
+  <Checkbox
+    name="guardian"
+    label="I am the child's parent or legal guardian and I agree to share this information."
+    hint="Only tick this if your message is about a child."
+  />
+</Form>

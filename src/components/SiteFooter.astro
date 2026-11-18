@@ -1,6 +1,6 @@
 ---
 /**
- * SiteFooter: logo and tagline, the update sign-up (slot "signup", added with the forms),
+ * SiteFooter: logo and tagline, the update sign-up form,
  * Explore and Get involved links, contact details, the registration line, copyright,
  * Privacy and Accessibility links. Leaves room at the bottom for the floating
  * Comfort & access button. No props.
@@ -9,6 +9,7 @@ import { Image } from 'astro:assets';
 import logo from '../assets/brand/logo.png';
 import { registrationLine, site } from '../config/site';
 import { footerExplore, footerGetInvolved, strings } from '../config/strings';
+import SignupForm from './SignupForm.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -18,7 +19,11 @@ const year = new Date().getFullYear();
     <div class="site-footer__brand">
       <Image src={logo} alt={site.name} width={220} densities={[1, 2]} class="site-footer__logo" />
       <p class="site-footer__tagline">{site.tagline}</p>
-      <slot name="signup" />
+      <SignupForm
+        id="footer-signup"
+        heading="Get occasional updates"
+        intro="News about our work, a few times a year."
+      />
     </div>
 
     <nav aria-label={strings.footerNavLabel} class="site-footer__nav">

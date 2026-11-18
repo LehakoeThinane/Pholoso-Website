@@ -1,0 +1,40 @@
+---
+// Built as dist/404.html and served by .htaccess (ErrorDocument 404). Not indexed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title="Page not found" description="This page could not be found." noindex>
+  <PageHero
+    title="We could not find that page"
+    lead="The page may have moved, or the address may have a typing mistake."
+  />
+  <Section narrow>
+    <h2>Try one of these pages</h2>
+    <ul>
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li>
+        <a href="/about/">About us</a>
+      </li>
+      <li>
+        <a href="/approach/">Our approach</a>
+      </li>
+      <li>
+        <a href="/get-involved/">Get involved</a>
+      </li>
+      <li>
+        <a href="/donate/">Donate</a>
+      </li>
+      <li>
+        <a href="/contact/">Contact</a>
+      </li>
+    </ul>
+    <p>
+      Or email us at <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+  </Section>
+</BaseLayout>
