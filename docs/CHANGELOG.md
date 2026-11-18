@@ -8,6 +8,39 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-18 · `dev` · Header menu, alignment pass, handover update
+
+**What changed**
+
+- **Header menu (wide screens):** the menu now has its own centred row under the logo and
+  Donate button. Side by side it needed about 1,255 px but the page allows 1,224 px, so links
+  were breaking onto two lines ("About us", "Our approach", "Get involved"). Links no longer
+  break at any width.
+- **Header (phones):** logo centred on top, Donate and Menu centred below it (they were hanging
+  to the left), and the opened menu is centred too.
+- **Alignment pass** (every page checked at 1280 px and 390 px):
+  - Page-hero labels ("About us", "Donate" …) now sit centred over their headings.
+  - Section headings written straight into a page (e.g. "How to give", "Our bank details") are
+    centred like the others; About's "Our mission" / "Our vision" too.
+  - Lists, tables and forms inside centred cards stay left-aligned (Get involved's tick lists
+    were centred, with the ticks stranded on the left).
+  - Numbered steps (Our approach, Donate) are centred as a block under their heading; their
+    text stays left-aligned.
+  - The stories filter row and table captions are centred.
+  - Kids' World grids fill the whole row (Kids like me left an empty sixth column); each
+    picture story's heading and Read it to me button are centred.
+  - Make and do: every Print it button has the same two-line shape.
+- **Browser tests:** the comfort-setting accessibility checks run one page per test (45 short
+  tests instead of 9 long ones that were close to timing out, because axe works harder with
+  the gloss gradients). 186 passed, 0 failed.
+- **HANDOVER.md** updated for today's design changes and the 16 KB budget.
+
+**The 9 missing facts:** checked https://pholoso.africa/ on 18 November 2026. It is still the
+old single-page site and contains none of them (no bank details, address, Information Officer,
+accessibility response time or story provenance), so they remain placeholders.
+
+---
+
 ## 2026-11-18 · `dev` · New hero design, gloss everywhere, centred text
 
 **Why:** owner design direction, modelled on a reference layout (a photo bleeding to the edge

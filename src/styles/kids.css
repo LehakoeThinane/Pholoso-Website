@@ -60,14 +60,17 @@
   padding: 0;
   display: grid;
   gap: var(--space-m);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 15rem), 1fr)
+  ); /* fill the row: no gaps */
 }
 .kids-grid > li {
   margin: 0;
   max-width: none;
 }
 .kids-grid--small {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
 }
 
 /* ---------- Speech bubble ---------- */

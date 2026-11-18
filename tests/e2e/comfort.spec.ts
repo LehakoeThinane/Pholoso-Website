@@ -22,14 +22,15 @@ const SETTINGS: [string, Partial<ComfortPrefsForTests>][] = [
 test.describe('axe with each comfort setting', () => {
   // The settings change colours and spacing, not layout logic: desktop size is enough here.
   test.skip(({ viewport }) => (viewport?.width ?? 0) < 1000, 'desktop only');
+  // One test per setting and page: short tests that run in parallel and name the exact page.
   for (const [name, prefs] of SETTINGS) {
-    test(name, async ({ page }) => {
-      await withPrefs(page, prefs);
-      for (const path of SAMPLE) {
+    for (const path of SAMPLE) {
+      test(`${name}: ${path}`, async ({ page }) => {
+        await withPrefs(page, prefs);
         await page.goto(path);
         await expectNoAxeViolations(page, `${path} with ${name}`);
-      }
-    });
+      });
+    }
   }
 });
 

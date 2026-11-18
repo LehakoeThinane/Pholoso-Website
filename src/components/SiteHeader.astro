@@ -175,6 +175,23 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     flex: none;
   }
 
+  /* Small screens: the logo and the buttons do not fit side by side, so both rows are
+     centred (logo on top; Donate and Menu together below) instead of hanging left */
+  @media (max-width: 61.99rem) {
+    .site-header__inner {
+      justify-content: center;
+    }
+    .site-header__home {
+      flex-basis: 100%;
+      justify-content: center;
+      margin-right: 0;
+    }
+    /* The opened menu is centred under them too */
+    .site-nav__list {
+      align-items: center;
+    }
+  }
+
   /* Small screens with JavaScript: collapsed until the menu button opens it */
   @media (max-width: 61.99rem) {
     :global(.js) .site-header:not([data-menu='open']) .site-nav {
@@ -182,20 +199,31 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     }
   }
 
+  /*
+   * Wide screens: two rows. Logo and Donate on top; the menu on its own centred row below.
+   * The full menu (about 840px) plus logo and Donate does not fit beside each other inside the
+   * page width, and squeezing it made links break onto two lines. Links never break here.
+   */
   @media (min-width: 62rem) {
-    .site-header__inner {
-      flex-wrap: nowrap;
-    }
     .site-header__menu-button {
       display: none;
     }
     .site-nav {
-      order: 1;
-      flex-basis: auto;
+      border-top: var(--border-width) solid var(--color-line);
+      padding-top: var(--space-2xs);
     }
     .site-nav__list {
       flex-direction: row;
-      gap: var(--space-2xs);
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-2xs) var(--space-s);
+    }
+    .site-nav__list a {
+      white-space: nowrap;
+    }
+    .site-nav__list .site-nav__kids {
+      align-self: center;
     }
   }
 </style>

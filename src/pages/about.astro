@@ -103,7 +103,7 @@ const values = [
     </CardGrid>
   </Section>
 
-  <Section labelledby="mission-title">
+  <Section labelledby="mission-title" class="statements">
     <CardGrid columns={2}>
       <div>
         <h2 id="mission-title">Our mission</h2>
@@ -198,6 +198,12 @@ const values = [
 </BaseLayout>
 
 <style>
+  /* Mission and vision: short statements, centred like the other headings */
+  :global(.statements) h2,
+  :global(.statements) p {
+    text-align: center;
+    margin-inline: auto;
+  }
   :global(.trust) + :global(.panel) {
     margin-top: var(--space-l);
   }
