@@ -93,9 +93,8 @@ const common = {
       rows={rows}
       maxlength={maxlength}
       autocomplete={autocomplete}
-    >
-        {value}
-      </textarea>
+      set:text={value ?? ''}
+    />
   ) : type === 'select' ? (
     <select {...common} class="field__control" autocomplete={autocomplete}>
       {options.map((o) => (

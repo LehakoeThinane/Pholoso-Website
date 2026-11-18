@@ -85,3 +85,5 @@ jobs:
           node-version: 24
       - name: Syntax (php -l)
         run: node scripts/php-lint.mjs
+      - name: Form handler tests (Microsoft 365 mock, mail() capture)
+        run: php tests/php/contact-test.php

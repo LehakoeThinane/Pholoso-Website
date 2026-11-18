@@ -6,6 +6,7 @@
 import { initComfort } from './comfort';
 import { initCopy } from './copy';
 import { initFilters } from './filters';
+import { initForms } from './forms';
 import { initInterests } from './interests';
 import { initListen } from './listen';
 import { initMenu } from './menu';
@@ -40,4 +41,5 @@ run('listen', initListen);
 run('filters', initFilters);
 run('interests', initInterests);
 run('copy', initCopy);
+run('forms', initForms);
 run('print', initPrint);

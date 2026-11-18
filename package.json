@@ -17,7 +17,8 @@
     "format": "prettier --write .",
     "check:dist": "node scripts/check-dist.mjs",
     "check:contrast": "node scripts/contrast.ts",
-    "lint:php": "node scripts/php-lint.mjs"
+    "lint:php": "node scripts/php-lint.mjs",
+    "test:php": "node scripts/php-lint.mjs && php tests/php/contact-test.php"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "5.3.0",
