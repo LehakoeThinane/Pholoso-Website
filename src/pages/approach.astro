@@ -4,6 +4,7 @@ import Button from '../components/Button.astro';
 import InterestExplorer from '../components/InterestExplorer.astro';
 import ListenButton from '../components/ListenButton.astro';
 import PageHero from '../components/PageHero.astro';
+import PartnerForParents from '../components/PartnerForParents.astro';
 import Quote from '../components/Quote.astro';
 import Section from '../components/Section.astro';
 import SectionHeading from '../components/SectionHeading.astro';
@@ -46,6 +47,13 @@ const interests = (await ordered('interests')).map((i) => ({
         },
       ]}
     />
+  </Section>
+
+  <Section id="2toiq" labelledby="parents-2toiq-title" class="partner-section">
+    <div id="parents-2toiq-title" class="visually-hidden">
+      For parents: learning activities from 2to.iQ
+    </div>
+    <PartnerForParents />
   </Section>
 
   <Section variant="dark" labelledby="hlompho-title" narrow>

@@ -1,0 +1,99 @@
+---
+/**
+ * PartnerForParents: points parents and caregivers to our edtech partner 2to.iQ for learning
+ * activities. Used on Our approach (#2toiq, the target of Kids' World's grown-up links),
+ * Resources and Contact.
+ *
+ * Keep the description to what 2to.iQ says about itself, and keep the note that it is a
+ * separate company with its own privacy notice: it has accounts and stores personal
+ * information, which this website does not.
+ *
+ * Props:
+ * - level: heading level (default 2)
+ * - compact: shorter version for sidebars
+ */
+import { site } from '../config/site';
+import ExternalLink from './ExternalLink.astro';
+import Art from './kids/Art.astro';
+
+interface Props {
+  level?: 2 | 3;
+  compact?: boolean;
+}
+
+const { level = 2, compact = false } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+
+<div class:list={['partner-parents', { 'partner-parents--compact': compact }]}>
+  {!compact && <Art name="icons/friends" class="partner-parents__art" />}
+  <div>
+    <p class="partner-parents__eyebrow">For parents and caregivers</p>
+    <Heading class="partner-parents__title">Learning activities from 2to.iQ</Heading>
+    <p>
+      Our partner {site.partner.name} offers calm, accessible thinking activities for learners, used
+      together with their families, teachers and therapists.
+    </p>
+    {!compact && (
+      <p>
+        On 2to.iQ, parents and guardians can see how their child is doing and stay in touch with the
+        child's teachers and therapists. Learners have their own space, with a picture password
+        instead of a typed one.
+      </p>
+    )}
+    <p class="partner-parents__link">
+      <ExternalLink href={site.partner.url}>See what 2to.iQ offers families</ExternalLink>
+    </p>
+    <p class="partner-parents__note">
+      2to.iQ is a separate company with its own website, accounts and privacy notice. Please read
+      how it uses your information before you sign up.
+    </p>
+  </div>
+</div>
+
+<style>
+  .partner-parents {
+    display: grid;
+    gap: var(--space-m);
+    align-items: start;
+    padding: var(--space-l);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-m);
+    background: var(--kids-leaf);
+    color: var(--color-text);
+  }
+  @media (min-width: 40rem) {
+    .partner-parents:not(.partner-parents--compact) {
+      grid-template-columns: 5rem 1fr;
+    }
+  }
+  :global(.partner-parents__art) {
+    width: 5rem;
+    height: 5rem;
+  }
+  .partner-parents__eyebrow {
+    margin: 0 0 var(--space-3xs);
+    font-weight: 700;
+    font-size: var(--step--1);
+  }
+  .partner-parents__title {
+    font-size: var(--step-2);
+  }
+  .partner-parents__link {
+    font-weight: 700;
+    font-size: var(--step-1);
+  }
+  .partner-parents__note {
+    margin: 0;
+    font-size: var(--step--1);
+  }
+  .partner-parents--compact {
+    padding: var(--space-m);
+  }
+  .partner-parents--compact .partner-parents__title {
+    font-size: var(--step-1);
+  }
+  .partner-parents--compact .partner-parents__link {
+    font-size: var(--step-0);
+  }
+</style>
