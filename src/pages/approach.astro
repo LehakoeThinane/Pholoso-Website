@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import InterestExplorer from '../components/InterestExplorer.astro';
+import ListenButton from '../components/ListenButton.astro';
+import PageHero from '../components/PageHero.astro';
+import Quote from '../components/Quote.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Steps from '../components/Steps.astro';
+import { site } from '../config/site';
+import { ordered } from '../lib/content';
+
+const interests = (await ordered('interests')).map((i) => ({
+  slug: i.id,
+  name: i.data.name,
+  cards: i.data.cards,
+}));
+---
+
+<BaseLayout
+  title="Our approach"
+  description="How the Pholoso Afrika Foundation works: advocacy and awareness, learning technology with 2to.iQ, connecting the support around a child, and the Hlompho principle."
+>
+  <PageHero
+    eyebrow="Our approach"
+    title={site.coreIdea}
+    lead="We work in three areas at the same time. Each one makes the others stronger."
+  />
+
+  <Section labelledby="areas-title">
+    <SectionHeading id="areas-title" title="Our three areas of work" />
+    <Steps
+      steps={[
+        {
+          title: 'Advocacy and awareness',
+          text: 'We bring neurodivergent children into the national conversation about inclusion, education and community support. When people understand, attitudes change. When attitudes change, systems change.',
+        },
+        {
+          title: 'Learning technology',
+          text: 'With our edtech partner 2to.iQ, we help build adaptive learning technology designed around how learners think, communicate and take part.',
+        },
+        {
+          title: 'Connecting the support',
+          text: 'We connect the people around a child: schools, parents, teachers, therapists, researchers and funders. Support that is split up helps no one. Connected support changes outcomes.',
+        },
+      ]}
+    />
+  </Section>
+
+  <Section variant="dark" labelledby="hlompho-title" narrow>
+    <div id="hlompho-text">
+      <SectionHeading id="hlompho-title" eyebrow="A principle we work by" title="Hlompho" />
+      <p>
+        <i lang="st">Hlompho</i> means respect, honour and reverence. For us, it means starting with
+        what a child loves.
+      </p>
+      <Quote cite={`The Hlompho principle, ${site.name}`}>
+        A child's passion is not a side interest. It is something to honour, because it may be the
+        clearest doorway into how they learn.
+      </Quote>
+      <p>
+        Every child has something worth seeing before they are assessed, corrected or asked to
+        adapt. Interests often show how a child thinks, communicates and makes sense of the world.
+        Starting there makes learning more personal and more humane.
+      </p>
+    </div>
+    <ListenButton target="hlompho-text" label="the Hlompho principle" />
+  </Section>
+
+  <Section labelledby="explorer-title">
+    <SectionHeading
+      id="explorer-title"
+      eyebrow="Interests as a doorway"
+      title="One interest, four areas of learning"
+      lead="A child's interest is not a distraction from learning. Used well, it leads into every subject. Here are six examples."
+    />
+    <InterestExplorer id="interests" interests={interests} />
+  </Section>
+
+  <Section variant="cta" labelledby="cta-title">
+    <h2 id="cta-title" class="cta__title">
+      Help build education that fits every mind
+    </h2>
+    <p>Partners do more than give. They help change the systems where children learn.</p>
+    <div class="cta__actions">
+      <Button variant="green" href="/get-involved/">
+        Ways to get involved
+      </Button>
+      <Button variant="outline" href="/donate/">
+        Donate
+      </Button>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .cta__title {
+    font-size: var(--step-3);
+  }
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+/**
+ * ListenButton: "Listen to this" for one block of text, read aloud with the browser's own
+ * speech (lang en-ZA). Hidden unless the browser supports speech, and never autoplays.
+ * Reads the text as it appears on the page (including the current wording setting).
+ * Behaviour: src/scripts/listen.ts.
+ *
+ * Props:
+ * - target: id of the element to read
+ * - label: what will be read, for screen readers ("this story")
+ */
+interface Props {
+  target: string;
+  label?: string;
+}
+
+const { target, label = 'this section' } = Astro.props;
+---
+
+<button type="button" class="listen" data-listen={target} aria-pressed="false" hidden>
+  <span aria-hidden="true" class="listen__icon">
+    ▶
+  </span>
+  <span>
+    Listen<span class="visually-hidden"> to {label}</span>
+  </span>
+</button>
+
+<style>
+  .listen {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: var(--target-min);
+    padding: var(--space-3xs) var(--space-s);
+    border: var(--border-width) solid var(--color-text);
+    border-radius: 999px;
+    background: transparent;
+    font-weight: 700;
+    font-size: var(--step--1);
+    cursor: pointer;
+  }
+  .listen[hidden] {
+    display: none;
+  }
+  .listen[aria-pressed='true'] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  .listen__icon {
+    font-size: 0.8em;
+  }
+</style>

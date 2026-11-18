@@ -1,0 +1,53 @@
+---
+/**
+ * PageHero: the opening of every page other than Home. Holds the page's only <h1>.
+ *
+ * Props:
+ * - title: the <h1> text
+ * - eyebrow: short label above the heading
+ * - lead: one or two plain sentences saying what this page is for
+ * - level: 1 (default). Only the styleguide uses 2, to keep one <h1> per page.
+ *
+ * Slot: default (extra content under the lead, such as a Listen button or a notice).
+ */
+interface Props {
+  title: string;
+  eyebrow?: string;
+  lead?: string;
+  level?: 1 | 2;
+}
+
+const { title, eyebrow, lead, level = 1 } = Astro.props;
+const Heading = `h${level}` as 'h1' | 'h2';
+---
+
+<div class="page-hero">
+  <div class="container">
+    {eyebrow && <p class="page-hero__eyebrow triangle-marker">{eyebrow}</p>}
+    <Heading class="page-hero__title">{title}</Heading>
+    {lead && <p class="page-hero__lead">{lead}</p>}
+    <slot />
+  </div>
+</div>
+
+<style>
+  .page-hero {
+    background: var(--color-surface);
+    padding-block: var(--space-xl);
+    border-bottom: var(--border-width) solid var(--color-line);
+  }
+  .page-hero__eyebrow {
+    font-weight: 700;
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2xs);
+  }
+  .page-hero__title {
+    max-width: 24ch;
+  }
+  .page-hero__lead {
+    font-size: var(--step-1);
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+  }
+</style>

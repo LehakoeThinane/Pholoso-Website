@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import TickList from '../components/TickList.astro';
+import Value from '../components/Value.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  title="Accessibility"
+  description="How the Pholoso Afrika Foundation website is built to be accessible and comfortable, how to use the Comfort & access settings, and how to report a problem."
+>
+  <PageHero
+    eyebrow="Accessibility"
+    title="Accessibility statement"
+    lead="We want this website to be comfortable and easy to use for everyone, including neurodivergent people."
+  />
+
+  <Section narrow>
+    <div class="prose">
+      <h2>What we have done</h2>
+      <p>
+        We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. We also
+        follow guidance on designing for neurodivergent and autistic people.
+      </p>
+      <TickList
+        items={[
+          'No animation, autoplay, pop-ups or moving content.',
+          'Plain language, short sentences and clear headings.',
+          'Large, readable text in the Atkinson Hyperlegible typeface.',
+          'Links are always underlined. Links to other websites are marked with an arrow and open in the same tab.',
+          'Every page and form works without JavaScript.',
+          'Forms have visible labels, explain mistakes clearly and have no time limits.',
+          'The same menu, footer and help links on every page.',
+        ]}
+      />
+
+      <h2 id="comfort">Comfort & access settings</h2>
+      <p>
+        Choose the "Comfort & access" button at the bottom right of any page to change how the site
+        looks and behaves. Your choices are saved only in your own browser, on this device.
+      </p>
+      <ul>
+        <li>
+          <strong>Quick start:</strong> one-tap presets for feeling overwhelmed, finding reading
+          hard, or not seeing clearly.
+        </li>
+        <li>
+          <strong>Colours:</strong> Standard, Calm (softer and muted), High contrast, or Dim
+          (darker, for light sensitivity).
+        </li>
+        <li>
+          <strong>Text size:</strong> 100%, 115%, 130% or 150%.
+        </li>
+        <li>
+          <strong>Reading spacing:</strong> more space between lines, letters and words.
+        </li>
+        <li>
+          <strong>Reading guide:</strong> a band that helps you keep your place.
+        </li>
+        <li>
+          <strong>Reduce motion</strong>, <strong>Simplified page</strong> and{' '}
+          <strong>Hide images</strong>.
+        </li>
+        <li>
+          <strong>Identity-first wording</strong> (see below).
+        </li>
+        <li>
+          <strong>Reset all settings</strong> returns everything to normal.
+        </li>
+      </ul>
+      <p>The settings need JavaScript. Without it, the website still works in its standard form.</p>
+
+      <h2 id="wording">Why you can change the wording</h2>
+      <p>
+        Some people prefer person-first language, such as "child with autism". Others prefer
+        identity-first language, such as "autistic child". We use person-first language by default
+        and respect each person's choice. Turn on "Identity-first wording" to switch these phrases
+        across the website.
+      </p>
+
+      <h2>Your own browser and device settings</h2>
+      <p>
+        We respect the settings on your device. If your device asks for less motion, more contrast
+        or a dark theme, the website starts in the matching mode. Browser zoom up to 400% and
+        Windows high contrast mode are supported. "Listen" buttons use your browser's built-in voice
+        and only appear if your browser can read aloud.
+      </p>
+
+      <h2>Report a problem</h2>
+      <p>
+        If something on this website is hard to use, please tell us. Email{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a> and tell us which page and what went
+        wrong. We will reply <Value value={site.accessibility.responseTime} />.
+      </p>
+      <p>
+        You can read the guidance we follow:{' '}
+        <ExternalLink href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</ExternalLink> and{' '}
+        <ExternalLink href="https://www.w3.org/TR/coga-usable/">
+          Making content usable for people with cognitive and learning disabilities
+        </ExternalLink>
+        .
+      </p>
+      <p>This statement was last reviewed on {site.accessibility.lastReviewed}.</p>
+    </div>
+  </Section>
+</BaseLayout>

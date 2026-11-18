@@ -1,0 +1,44 @@
+---
+/**
+ * One published resource. Only resources with status "published" get a page.
+ */
+import type { GetStaticPaths } from 'astro';
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ListenButton from '../../components/ListenButton.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/Section.astro';
+import { ordered } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const published = await ordered('resources', (r) => r.data.status === 'published');
+  return published.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  entry: CollectionEntry<'resources'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const checked = entry.data.lastChecked?.toLocaleDateString('en-ZA', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary}>
+  <PageHero eyebrow={entry.data.audience} title={entry.data.title} lead={entry.data.summary}>
+    {checked && <p>Last checked: {checked}</p>}
+  </PageHero>
+  <Section narrow>
+    <ListenButton target="resource-body" label="this guide" />
+    <div class="prose" id="resource-body">
+      <Content />
+    </div>
+    <p>
+      <a href="/resources/">Back to all resources</a>
+    </p>
+  </Section>
+</BaseLayout>

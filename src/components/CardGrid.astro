@@ -1,0 +1,50 @@
+---
+/**
+ * CardGrid: lays out Cards (or Panels, Stats) in one column on phones and up to `columns`
+ * on wider screens.
+ *
+ * Props:
+ * - columns: 2 or 3 (default 3)
+ * - as: 'div' (default) or 'ul' when the cards form a list
+ */
+interface Props {
+  columns?: 2 | 3;
+  as?: 'div' | 'ul';
+}
+
+const { columns = 3, as: Tag = 'div' } = Astro.props;
+---
+
+<Tag class:list={['card-grid', `card-grid--${columns}`]}>
+  <slot />
+</Tag>
+
+<style>
+  .card-grid {
+    display: grid;
+    gap: var(--space-m);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  @media (min-width: 40rem) {
+    .card-grid--2,
+    .card-grid--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 62rem) {
+    .card-grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .card-grid > :global(li) {
+    margin: 0;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-grid > :global(li > *) {
+    flex: 1;
+  }
+</style>

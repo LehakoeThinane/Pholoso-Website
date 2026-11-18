@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import Hero from '../components/Hero.astro';
+import Photo from '../components/Photo.astro';
+import Quote from '../components/Quote.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Stat from '../components/Stat.astro';
+import Term from '../components/Term.astro';
+import TrustBlock from '../components/TrustBlock.astro';
+import { site } from '../config/site';
+import { stats } from '../config/sources';
+import { ordered } from '../lib/content';
+import { isTodo } from '../lib/todo';
+import hero from '../assets/images/hero.jpg';
+import classroom from '../assets/images/classroom.jpg';
+
+const [featured] = await ordered('stories', (s) => s.data.featured);
+const storyNote = isTodo(site.stories.notice)
+  ? 'The source of this story is being confirmed.'
+  : site.stories.notice;
+
+// Structured data for search engines (schema.org NGO). A data block, not a script, so the
+// Content-Security-Policy allows it.
+const ngo = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: site.name,
+  alternateName: site.shortName,
+  url: `${site.url}/`,
+  logo: `${site.url}/logo.png`,
+  image: `${site.url}/og-image.png`,
+  email: site.email,
+  description: site.mission,
+  slogan: site.tagline,
+  foundingDate: String(site.founded),
+  areaServed: [
+    { '@type': 'Country', name: 'South Africa' },
+    { '@type': 'Continent', name: 'Africa' },
+  ],
+  identifier: [
+    { '@type': 'PropertyValue', propertyID: 'NPO number', value: site.registration.npo },
+    {
+      '@type': 'PropertyValue',
+      propertyID: 'PBO number (Section 18A)',
+      value: site.registration.pbo,
+    },
+    {
+      '@type': 'PropertyValue',
+      propertyID: 'CIPC registration number',
+      value: site.registration.cipc,
+    },
+  ],
+};
+---
+
+<BaseLayout
+  fullTitle={`${site.name}: inclusive education for neurodivergent children in South Africa`}
+  description="The Pholoso Afrika Foundation works for inclusive, adaptive education for neurodivergent children in South Africa and Africa. Donate, partner or get involved."
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ngo)} />
+  <Hero
+    eyebrow={site.name}
+    title={site.tagline}
+    image={hero}
+    imageAlt="A teacher helps a boy use a tablet at a classroom table, while other children draw. One child wears headphones."
+  >
+    <p>
+      We work for education that fits neurodivergent children in South Africa, including{' '}
+      <Term t="children-with-autism" /> and children with ADHD.
+    </p>
+    <Fragment slot="actions">
+      <Button variant="gold" href="/donate/">
+        Donate
+      </Button>
+      <Button variant="outline" href="/approach/">
+        See how we work
+      </Button>
+    </Fragment>
+  </Hero>
+
+  <Section labelledby="problem-title">
+    <SectionHeading
+      id="problem-title"
+      eyebrow="The problem"
+      title="Too many children are left out of learning"
+      lead="School systems are often built for one way of learning. Children who learn differently are left behind or left out."
+    />
+    <CardGrid columns={2}>
+      <Stat {...stats.outOfSchool} />
+      <Stat {...stats.autismWorldwide} />
+    </CardGrid>
+  </Section>
+
+  <div class="photo-band">
+    <div class="container">
+      <Photo
+        src={classroom}
+        alt="A teacher leans over a table where three children use tablets. A poster on the wall says: Everyone learns differently. Everyone belongs."
+        sizes="(min-width: 72rem) 68rem, 100vw"
+      />
+    </div>
+  </div>
+
+  <Section variant="alt" labelledby="what-title">
+    <SectionHeading
+      id="what-title"
+      eyebrow="What we do"
+      title="Three areas of work"
+      lead={site.coreIdea}
+    />
+    <CardGrid>
+      <Card title="Advocacy and awareness">
+        <p>
+          We bring neurodivergent children into the national conversation about education. When
+          people understand, attitudes change, and then systems change.
+        </p>
+      </Card>
+      <Card title="Learning technology">
+        <p>
+          With our partner 2to.iQ, we help build learning technology that adapts to how each child
+          thinks, communicates and takes part.
+        </p>
+      </Card>
+      <Card title="Connecting the support">
+        <p>
+          We connect the people around a child: families, teachers, therapists, researchers and
+          funders. Connected support works better than separate efforts.
+        </p>
+      </Card>
+    </CardGrid>
+    <p class="after-cards">
+      <a href="/approach/">Read about our approach</a>
+    </p>
+  </Section>
+
+  <Section variant="dark" labelledby="partner-title">
+    <div class="split">
+      <div>
+        <SectionHeading
+          id="partner-title"
+          eyebrow="Our edtech partner"
+          title="2to.iQ: learning that adapts to the child"
+        />
+        <p>
+          {site.partner.name} builds an adaptive learning platform designed first for neurodivergent
+          learners. It adapts to how each learner thinks, communicates and engages, instead of
+          asking the child to fit the system.
+        </p>
+        <p>
+          The name comes from the Sesotho word <i lang="st">thuto</i>, which means learning.
+        </p>
+      </div>
+      <div>
+        <h3 class="split__heading">Who does what</h3>
+        <ul>
+          <li>
+            <strong>The Foundation</strong> leads advocacy and awareness and connects the support
+            around each child.
+          </li>
+          <li>
+            <strong>2to.iQ</strong>, a separate company, builds the learning technology.
+          </li>
+        </ul>
+        <p>
+          <ExternalLink href={site.partner.url}>Visit the 2to.iQ website</ExternalLink>
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  {featured && (
+    <Section labelledby="voice-title" narrow>
+      <SectionHeading id="voice-title" eyebrow="A voice from our stories" title="In their words" />
+      <Quote cite={featured.data.who} note={storyNote} large>
+        {featured.data.quote}
+      </Quote>
+      <p class="after-quote">
+        <a href="/stories/">Read the stories and what they ask us to change</a>
+      </p>
+    </Section>
+  )}
+
+  <Section variant="alt" labelledby="help-title">
+    <SectionHeading
+      id="help-title"
+      eyebrow="Ways to help"
+      title="How you can help"
+      lead="Choose the way that fits you."
+    />
+    <CardGrid>
+      <Card title="Give" href="/donate/" linkText="How to donate">
+        <p>
+          Donate by bank transfer. South African taxpayers can ask for a Section 18A tax receipt.
+        </p>
+      </Card>
+      <Card
+        title="Partner with us"
+        href="/get-involved/#partners"
+        linkText="Ways for companies to partner"
+      >
+        <p>
+          Companies and funders can support our work as part of CSI or ESG goals. It may also count
+          towards B-BBEE.
+        </p>
+      </Card>
+      <Card
+        title="Schools and educators"
+        href="/get-involved/#schools"
+        linkText="Ways for schools to take part"
+      >
+        <p>Work with us on inclusive teaching, or ask about piloting 2to.iQ.</p>
+      </Card>
+    </CardGrid>
+  </Section>
+
+  <Section labelledby="trust-title">
+    <SectionHeading id="trust-title" eyebrow="Trust" title="Why you can trust us" />
+    <TrustBlock />
+  </Section>
+</BaseLayout>
+
+<style>
+  .photo-band {
+    padding-block: var(--space-l);
+  }
+  .after-cards,
+  .after-quote {
+    margin-top: var(--space-l);
+    font-weight: 700;
+  }
+  .split {
+    display: grid;
+    gap: var(--space-l);
+  }
+  @media (min-width: 62rem) {
+    .split {
+      grid-template-columns: 1.3fr 1fr;
+      gap: var(--space-xl);
+    }
+  }
+  .split__heading {
+    font-size: var(--step-1);
+  }
+</style>
+
+<script>
+  import '../scripts/legacy-redirect';
+</script>

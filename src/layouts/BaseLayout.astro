@@ -1,0 +1,84 @@
+---
+/**
+ * BaseLayout: the HTML shell for every page.
+ *
+ * Props:
+ * - title: the page name ("About us"). Rendered as "About us | Pholoso Afrika Foundation".
+ * - fullTitle: optional complete title, used as-is (the home page uses this).
+ * - description: unique meta description (about 150 characters).
+ * - noindex: true for pages that must stay out of search results (thank-you, 404, styleguide).
+ *
+ * Slots: default (page content, inside <main>) and "head" (extra head tags, e.g. JSON-LD).
+ *
+ * The CSP forbids inline scripts and styles: never add <script is:inline> or <style is:inline>.
+ * Plain <script> blocks are fine: Astro bundles them into external files.
+ * /prefs.js is render-blocking on purpose, so saved Comfort & access settings apply before
+ * the first paint.
+ */
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/print.css';
+import font400 from '@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2?url';
+import ComfortPanel from '../components/ComfortPanel.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SkipLink from '../components/SkipLink.astro';
+import { site } from '../config/site';
+import { lang } from '../config/strings';
+
+type Props = ({ title: string; fullTitle?: string } | { title?: undefined; fullTitle: string }) & {
+  description: string;
+  noindex?: boolean;
+};
+
+const { title, fullTitle, description, noindex = false } = Astro.props;
+const pageTitle = fullTitle ?? `${title} | ${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#134B42" />
+    <script is:inline src="/prefs.js"></script>
+    <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_ZA" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site.url}/og-image.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}: ${site.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${site.url}/og-image.png`} />
+    <meta name="twitter:image:alt" content={`${site.name}: ${site.tagline}`} />
+    <slot name="head" />
+  </head>
+  <body>
+    <SkipLink />
+    <SiteHeader currentPath={Astro.url.pathname} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+    <ComfortPanel />
+    <div id="announcer" class="visually-hidden" aria-live="polite"></div>
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

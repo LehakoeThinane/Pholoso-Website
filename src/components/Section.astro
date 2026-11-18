@@ -1,0 +1,68 @@
+---
+/**
+ * Section: a full-width band with a centred container.
+ *
+ * Section rhythm (brief §10): default (paper) → alt (paper-alt) → dark (green) for emphasis,
+ * and a gold 'cta' band at most once per page.
+ *
+ * Props:
+ * - variant: 'default' | 'alt' | 'dark' | 'cta'
+ * - id: anchor id (for example "the-gap")
+ * - labelledby: id of the heading that names this section (makes it a named region)
+ * - narrow: limit the container to the reading measure
+ * - decorative: mark as non-essential, so "Simplified page" can hide it
+ */
+interface Props {
+  variant?: 'default' | 'alt' | 'dark' | 'cta';
+  id?: string;
+  labelledby?: string;
+  narrow?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'default',
+  id,
+  labelledby,
+  narrow = false,
+  decorative = false,
+  class: className,
+} = Astro.props;
+---
+
+<section
+  id={id}
+  aria-labelledby={labelledby}
+  data-decorative={decorative ? '' : undefined}
+  class:list={[
+    'section',
+    `section--${variant}`,
+    { 'on-dark': variant === 'dark', 'on-cta': variant === 'cta' },
+    className,
+  ]}
+>
+  <div class:list={['container', { section__narrow: narrow }]}>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--space-2xl);
+    background-color: var(--color-bg);
+  }
+  .section--alt {
+    background-color: var(--color-surface);
+  }
+  .section--cta {
+    padding-block: var(--space-xl);
+  }
+  .section__narrow {
+    max-width: calc(var(--measure) + 2 * var(--gutter));
+  }
+  :global([data-theme='contrast']) .section--dark,
+  :global([data-theme='contrast']) .section--cta {
+    border-block: 2px solid var(--color-border);
+  }
+</style>

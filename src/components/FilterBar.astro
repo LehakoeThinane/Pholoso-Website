@@ -1,0 +1,76 @@
+---
+/**
+ * FilterBar: toggle buttons that filter a list of items by their data-category.
+ * Hidden without JavaScript (everything is shown instead). Behaviour: src/scripts/filters.ts.
+ * The result count is announced in a polite live region.
+ *
+ * Props:
+ * - target: id of the element containing the items (each item has data-category)
+ * - label: group label ("Show stories from")
+ * - filters: [{ value, label }]. An "All" button is added first.
+ * - noun: what is being counted, singular and plural (["story", "stories"])
+ */
+interface Props {
+  target: string;
+  label: string;
+  filters: { value: string; label: string }[];
+  noun: [string, string];
+}
+
+const { target, label, filters, noun } = Astro.props;
+const labelId = `${target}-filter-label`;
+---
+
+<div
+  class="filter-bar"
+  data-filter-target={target}
+  data-noun-one={noun[0]}
+  data-noun-many={noun[1]}
+  hidden
+>
+  <p class="filter-bar__label" id={labelId}>
+    {label}
+  </p>
+  <div class="filter-bar__buttons" role="group" aria-labelledby={labelId}>
+    <button type="button" class="filter-bar__button" data-filter="all" aria-pressed="true">
+      All
+    </button>
+    {filters.map((f) => (
+      <button type="button" class="filter-bar__button" data-filter={f.value} aria-pressed="false">
+        {f.label}
+      </button>
+    ))}
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+</div>
+
+<style>
+  .filter-bar {
+    margin-bottom: var(--space-l);
+  }
+  .filter-bar[hidden] {
+    display: none;
+  }
+  .filter-bar__label {
+    font-weight: 700;
+    margin-bottom: var(--space-2xs);
+  }
+  .filter-bar__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+  .filter-bar__button {
+    min-height: var(--target-min);
+    padding-inline: var(--space-s);
+    border: 2px solid var(--color-text);
+    border-radius: 999px;
+    background: transparent;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .filter-bar__button[aria-pressed='true'] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+</style>

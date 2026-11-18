@@ -1,0 +1,68 @@
+---
+/**
+ * SignupForm: email sign-up for occasional updates (or "tell me when this is ready" on
+ * Resources). Collects only an email address and consent.
+ *
+ * Props:
+ * - id: unique per page ("footer-signup", "resources-signup")
+ * - heading / level: optional heading above the form
+ * - intro: one sentence about what people will receive
+ * - submit: button text
+ */
+import Checkbox from './Checkbox.astro';
+import Field from './Field.astro';
+import Form from './Form.astro';
+
+interface Props {
+  id: string;
+  heading?: string;
+  level?: 2 | 3;
+  intro: string;
+  submit?: string;
+}
+
+const { id, heading, level = 2, intro, submit = 'Sign up' } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+
+<div class="signup">
+  {heading && <Heading class="signup__heading">{heading}</Heading>}
+  <p>{intro}</p>
+  <Form
+    id={id}
+    type="newsletter"
+    label={heading ?? 'Sign up for updates'}
+    submit={submit}
+    requiredNote={false}
+    compact
+  >
+    <Field
+      id={`${id}-email`}
+      name="email"
+      label="Email address"
+      type="email"
+      required
+      autocomplete="email"
+      inputmode="email"
+      maxlength={254}
+    />
+    <input type="hidden" name="list" value={id} />
+    <div class="signup__consent">
+      <Checkbox
+        id={`${id}-consent`}
+        name="consent"
+        label="I agree to receive occasional emails. I can unsubscribe at any time."
+        required
+      >
+        I agree to receive occasional emails and can unsubscribe at any time. See the{' '}
+        <a href="/privacy/">privacy notice</a>.
+      </Checkbox>
+    </div>
+  </Form>
+</div>
+
+<style>
+  .signup__heading {
+    font-size: var(--step-1);
+  }
+</style>

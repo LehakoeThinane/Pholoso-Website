@@ -1,0 +1,53 @@
+---
+/**
+ * Stat: a sourced statistic. Every statistic on the site shows its source as a link
+ * (brief §7, §16). Never add a statistic without a primary source.
+ *
+ * Props:
+ * - figure: the number as written ("Up to 70%", "About 1 in 100")
+ * - text: what the number means, in one plain sentence
+ * - source: { label, href, prefix? }. prefix defaults to "Source:"; use
+ *   "According to studies cited in" where the source is a review of other studies.
+ */
+import ExternalLink from './ExternalLink.astro';
+
+interface Props {
+  figure: string;
+  text: string;
+  source: { label: string; href: string; prefix?: string };
+}
+
+const { figure, text, source } = Astro.props;
+---
+
+<figure class="stat">
+  <p class="stat__figure">{figure}</p>
+  <p class="stat__text">{text}</p>
+  <figcaption class="stat__source">
+    {`${source.prefix ?? 'Source:'} `}
+    <ExternalLink href={source.href}>{source.label}</ExternalLink>
+  </figcaption>
+</figure>
+
+<style>
+  .stat {
+    box-shadow: var(--elevation);
+    margin: 0;
+    padding: var(--space-m);
+    border-top: 4px solid var(--color-accent);
+    background: var(--color-bg);
+  }
+  .stat__figure {
+    font-size: var(--step-4);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--space-2xs);
+  }
+  .stat__text {
+    font-size: var(--step-1);
+  }
+  .stat__source {
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+</style>

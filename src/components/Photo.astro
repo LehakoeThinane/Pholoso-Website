@@ -1,0 +1,86 @@
+---
+/**
+ * Photo: a responsive, optimised photo (AVIF and WebP, JPEG fallback) via astro:assets.
+ *
+ * Props:
+ * - src: an imported image (import hero from '../assets/images/hero.jpg')
+ * - alt: meaningful description, or "" if the photo is decorative
+ * - priority: true only for the hero photo (eager loading, fetchpriority="high").
+ *   Every other photo lazy-loads.
+ * - sizes: the rendered width, for the browser to pick a file (default: full container)
+ * - widths: candidate widths in pixels
+ * - caption: optional visible caption
+ * - essential: keep the photo when "Hide images" is on (shown as its alt text instead)
+ * - class: applied to the <img>
+ */
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  priority?: boolean;
+  sizes?: string;
+  widths?: number[];
+  caption?: string;
+  essential?: boolean;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  priority = false,
+  sizes = '(min-width: 72rem) 72rem, 100vw',
+  widths = [360, 640, 960, 1280],
+  caption,
+  essential = false,
+  class: className,
+} = Astro.props;
+
+const usableWidths = widths.filter((w) => w <= src.width);
+---
+
+<figure
+  class="photo"
+  data-essential={essential ? '' : undefined}
+  data-decorative={alt === '' ? '' : undefined}
+  data-alt={essential && alt ? alt : undefined}
+>
+  <Picture
+    src={src}
+    alt={alt}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    widths={usableWidths.length ? usableWidths : [src.width]}
+    sizes={sizes}
+    priority={priority}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding="async"
+    class:list={['photo__img', className]}
+  />
+  {caption && <figcaption class="photo__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .photo {
+    margin: 0;
+  }
+  .photo__img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-m);
+  }
+  .photo__caption {
+    margin-top: var(--space-2xs);
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+  /* Calm: soften each photo (never the whole page) */
+  :global([data-theme='calm']) .photo__img {
+    filter: saturate(0.6) contrast(0.92);
+  }
+  :global([data-theme='dim']) .photo__img {
+    filter: brightness(0.85);
+  }
+</style>

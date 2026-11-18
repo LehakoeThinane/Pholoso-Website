@@ -1,0 +1,95 @@
+---
+/**
+ * DefinitionList: label/value pairs (registration details, bank details).
+ *
+ * Props:
+ * - items: [{ term, value, copy? }]. Values may be config placeholders (rendered by Value).
+ *   copy: true adds a "Copy" button, which appears only when the browser supports the
+ *   Clipboard API (src/scripts/copy.ts). Placeholder values never get a copy button.
+ * - label: optional accessible name for the list (e.g. "Bank details")
+ */
+import { isTodo } from '../lib/todo';
+import Value from './Value.astro';
+
+interface Item {
+  term: string;
+  value: string;
+  copy?: boolean;
+}
+interface Props {
+  items: Item[];
+  label?: string;
+}
+
+const { items, label } = Astro.props;
+---
+
+<dl class="definition-list" aria-label={label}>
+  {items.map((item) => (
+    <div class="definition-list__row">
+      <dt>{item.term}</dt>
+      <dd>
+        <span class="definition-list__value">
+          <Value value={item.value} />
+        </span>
+        {item.copy && !isTodo(item.value) && (
+          <button
+            type="button"
+            class="definition-list__copy"
+            data-copy={item.value}
+            data-copy-label={item.term}
+            hidden
+          >
+            Copy<span class="visually-hidden"> {item.term}</span>
+          </button>
+        )}
+      </dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .definition-list {
+    margin: 0 0 var(--para-space);
+    border-top: var(--border-width) solid var(--color-line);
+  }
+  .definition-list__row {
+    display: grid;
+    gap: var(--space-3xs) var(--space-m);
+    padding-block: var(--space-xs);
+    border-bottom: var(--border-width) solid var(--color-line);
+  }
+  @media (min-width: 40rem) {
+    .definition-list__row {
+      grid-template-columns: minmax(10rem, 1fr) 2fr;
+      align-items: center;
+    }
+  }
+  dt {
+    font-weight: 700;
+  }
+  dd {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .definition-list__value {
+    font-variant-numeric: tabular-nums;
+  }
+  .definition-list__copy {
+    min-height: var(--target-min);
+    min-width: var(--target-min);
+    padding-inline: var(--space-s);
+    border: var(--border-width) solid var(--color-text);
+    border-radius: var(--radius-s);
+    background: transparent;
+    font-weight: 700;
+    font-size: var(--step--1);
+    cursor: pointer;
+  }
+  .definition-list__copy[hidden] {
+    display: none;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+/**
+ * ExternalLink: a link to another website. Shows a visible ↗ and tells screen-reader users
+ * it leads elsewhere. Opens in the same tab (never a new tab), per brief §8.
+ *
+ * Props:
+ * - href: the full URL
+ * - class: optional class
+ * Slot: the link text (descriptive, never "click here").
+ */
+import { strings } from '../config/strings';
+
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+---
+
+<a href={href} class:list={['external-link', className]}>
+  <slot />
+  <span class="external-link__mark" aria-hidden="true">
+    {' ↗'}
+  </span>
+  <span class="visually-hidden">{` ${strings.externalLink}`}</span>
+</a>
+
+<style>
+  .external-link__mark {
+    white-space: nowrap;
+  }
+</style>

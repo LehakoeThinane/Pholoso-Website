@@ -1,0 +1,43 @@
+---
+/**
+ * FormStatus: a polite live region under the submit button. The form script writes
+ * "Sending…", the success message or a delivery problem here.
+ *
+ * Props:
+ * - id: unique per form
+ * - state: 'idle' | 'sending' | 'success' | 'error' (styleguide only)
+ * - message: text to show now (styleguide only)
+ */
+interface Props {
+  id: string;
+  state?: 'idle' | 'sending' | 'success' | 'error';
+  message?: string;
+}
+
+const { id, state = 'idle', message } = Astro.props;
+---
+
+<div class="form-status" id={id} role="status" aria-live="polite" data-state={state}>
+  {message}
+</div>
+
+<style>
+  .form-status:empty {
+    display: none;
+  }
+  .form-status {
+    margin-top: var(--space-m);
+    padding: var(--space-s) var(--space-m);
+    border: 2px solid var(--color-border);
+    border-left-width: 6px;
+    border-radius: var(--radius-s);
+    max-width: var(--measure);
+    font-weight: 700;
+  }
+  .form-status[data-state='success'] {
+    border-color: var(--color-success);
+  }
+  .form-status[data-state='error'] {
+    border-color: var(--color-error);
+  }
+</style>

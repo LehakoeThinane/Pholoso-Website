@@ -1,0 +1,183 @@
+---
+/**
+ * SiteHeader: logo, primary navigation and the Donate button. Not sticky, so it can never
+ * cover focused content (WCAG 2.4.11).
+ *
+ * Below 62rem the navigation becomes a disclosure menu, but only once
+ * src/scripts/menu.ts has run (it sets data-menu on the header and reveals the button).
+ * Without JavaScript the full navigation is simply shown.
+ *
+ * Props:
+ * - currentPath: the page's path (for example "/about/"), used to mark the current link.
+ */
+import { Image } from 'astro:assets';
+import logo from '../assets/logo/logo.png';
+import { primaryNav, strings } from '../config/strings';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const isCurrent = (href: string) => currentPath === href || currentPath.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__home" href="/">
+      <Image
+        src={logo}
+        alt={strings.homeLinkLabel}
+        width={240}
+        densities={[1, 2]}
+        loading="eager"
+        class="site-header__logo"
+      />
+    </a>
+
+    <a
+      class="site-header__donate"
+      href="/donate/"
+      aria-current={isCurrent('/donate/') ? 'page' : undefined}
+    >
+      {strings.donate}
+    </a>
+
+    <button
+      class="site-header__menu-button"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      hidden
+    >
+      {strings.menuButton}
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label={strings.primaryNavLabel}>
+      <ul class="site-nav__list">
+        {primaryNav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--color-bg);
+    border-bottom: var(--border-width) solid var(--color-line);
+  }
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s) var(--space-m);
+    padding-block: var(--space-s);
+  }
+  .site-header__home {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    margin-right: auto;
+  }
+  .site-header__logo {
+    width: 12rem;
+    max-width: 55vw;
+    height: auto;
+  }
+
+  /* Donate: gold button, always visible */
+  .site-header__donate {
+    order: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--button-min);
+    padding-inline: var(--space-m);
+    border-radius: var(--radius-s);
+    background: var(--color-cta-bg);
+    background-image: var(--gloss);
+    box-shadow: var(--gloss-shadow);
+    color: var(--color-cta-text);
+    border: var(--border-width) solid var(--color-cta-text);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .site-header__donate:hover {
+    text-decoration: underline;
+  }
+  .site-header__donate:focus-visible {
+    outline-color: var(--color-focus);
+  }
+
+  .site-header__menu-button {
+    order: 3;
+    min-height: var(--button-min);
+    min-width: var(--button-min);
+    padding-inline: var(--space-s);
+    border: var(--border-width) solid var(--color-text);
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .site-header__menu-button[hidden] {
+    display: none;
+  }
+
+  .site-nav {
+    order: 4;
+    flex-basis: 100%;
+  }
+  .site-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .site-nav__list li {
+    margin: 0;
+    max-width: none;
+  }
+  .site-nav__list a {
+    display: flex;
+    align-items: center;
+    min-height: var(--target-min);
+    padding-inline: var(--space-2xs);
+    font-weight: 700;
+    text-decoration-thickness: 0.06em;
+  }
+  .site-nav__list a[aria-current='page'] {
+    text-decoration-thickness: 0.2em;
+  }
+
+  /* Small screens with JavaScript: collapsed until the menu button opens it */
+  @media (max-width: 61.99rem) {
+    .site-header[data-menu='closed'] .site-nav {
+      display: none;
+    }
+  }
+
+  @media (min-width: 62rem) {
+    .site-header__inner {
+      flex-wrap: nowrap;
+    }
+    .site-header__menu-button {
+      display: none;
+    }
+    .site-nav {
+      order: 1;
+      flex-basis: auto;
+    }
+    .site-nav__list {
+      flex-direction: row;
+      gap: var(--space-2xs);
+    }
+  }
+</style>

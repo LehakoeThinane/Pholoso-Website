@@ -1,0 +1,123 @@
+---
+/**
+ * StoryCard: one lived-experience story, as an <article>.
+ *
+ * Props:
+ * - id: unique anchor (the story's slug)
+ * - category: filter key ('parents' | 'young-people' | 'educators' | 'professionals')
+ * - categoryLabel: visible tag ("Parent")
+ * - quote: the story's quote, used as its heading
+ * - who: pseudonym and role ("Thandi, mother of Sipho, 7")
+ * - misunderstand, friction, helps: the three answers in "What this story asks us to change"
+ * - change: the change it asks for (highlighted)
+ * - level: heading level for the quote (default 3)
+ */
+import ListenButton from './ListenButton.astro';
+
+interface Props {
+  id: string;
+  category: string;
+  categoryLabel: string;
+  quote: string;
+  who: string;
+  misunderstand: string;
+  friction: string;
+  helps: string;
+  change: string;
+  level?: 2 | 3;
+}
+
+const {
+  id,
+  category,
+  categoryLabel,
+  quote,
+  who,
+  misunderstand,
+  friction,
+  helps,
+  change,
+  level = 3,
+} = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+
+<article class="story" id={id} data-category={category} aria-labelledby={`${id}-title`}>
+  <div id={`${id}-text`}>
+    <p class="story__tag">{categoryLabel}</p>
+    <Heading class="story__quote" id={`${id}-title`}>
+      “{quote}”
+    </Heading>
+    <p class="story__who">{who}</p>
+  </div>
+  <ListenButton target={`${id}-text`} label="this story" />
+  <details class="story__details">
+    <summary>What this story asks us to change</summary>
+    <dl class="story__dl">
+      <dt>What people often misunderstand</dt>
+      <dd>{misunderstand}</dd>
+      <dt>Where the system creates friction</dt>
+      <dd>{friction}</dd>
+      <dt>What helps</dt>
+      <dd>{helps}</dd>
+    </dl>
+    <p class="story__change">
+      <strong>The change it asks for:</strong> {change}
+    </p>
+  </details>
+</article>
+
+<style>
+  .story {
+    box-shadow: var(--elevation);
+    padding: var(--space-m);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    background: var(--color-bg);
+  }
+  .story[hidden] {
+    display: none;
+  }
+  .story__tag {
+    display: inline-block;
+    margin: 0 0 var(--space-xs);
+    padding: 0 var(--space-2xs);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-s);
+    font-size: var(--step--1);
+    font-weight: 700;
+  }
+  .story__quote {
+    font-size: var(--step-2);
+  }
+  .story__who {
+    color: var(--color-text-muted);
+  }
+  .story__details {
+    margin-top: var(--space-s);
+    border-top: var(--border-width) solid var(--color-line);
+  }
+  .story__details summary {
+    display: flex;
+    align-items: center;
+    min-height: var(--button-min);
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+  .story__dl dt {
+    font-weight: 700;
+    margin-top: var(--space-s);
+  }
+  .story__dl dd {
+    margin: var(--space-3xs) 0 0;
+  }
+  .story__change {
+    margin: var(--space-m) 0 0;
+    padding: var(--space-s);
+    border-left: 4px solid var(--color-accent);
+    background: var(--color-surface);
+  }
+</style>

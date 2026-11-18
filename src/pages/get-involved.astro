@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
+import DefinitionList from '../components/DefinitionList.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import TickList from '../components/TickList.astro';
+import { site } from '../config/site';
+import family from '../assets/images/family.jpg';
+---
+
+<BaseLayout
+  title="Get involved"
+  description="Ways to support the Pholoso Afrika Foundation: give as a donor, partner as a company or funder, or work with us as a school or educator."
+>
+  <PageHero
+    eyebrow="Get involved"
+    title="Help change the systems where children learn"
+    lead="Inclusive education affects children's development, fairness in schools and people's work later in life. There is a way for everyone to help."
+  />
+
+  <Section labelledby="ways-title">
+    <h2 id="ways-title" class="visually-hidden">
+      Ways to get involved
+    </h2>
+    <CardGrid>
+      <Card id="donors" title="Donors" level={2} href="/donate/" linkText="How to donate">
+        <TickList
+          items={[
+            'Give by bank transfer (EFT).',
+            'South African taxpayers can ask for a Section 18A tax receipt.',
+            'Early support helps us build systems that last.',
+          ]}
+        />
+      </Card>
+      <Card
+        id="partners"
+        title="Companies and funders"
+        level={2}
+        href="/contact/?topic=partner"
+        linkText="Talk to us about partnering"
+      >
+        <TickList
+          items={[
+            'May count towards B-BBEE socio-economic development, because most of the children we serve are Black children with disabilities.',
+            'Funding educator training may count towards B-BBEE skills development.',
+            'Fits corporate social investment (CSI) and ESG goals.',
+          ]}
+        />
+        <p class="caveat">
+          B-BBEE value depends on your situation. Please confirm with your verification agency or
+          adviser.
+        </p>
+      </Card>
+      <Card
+        id="schools"
+        title="Schools and educators"
+        level={2}
+        href="/contact/?topic=school"
+        linkText="Talk to us as a school"
+      >
+        <TickList
+          items={[
+            'Ask about piloting 2to.iQ with support from us.',
+            'Get support for inclusive, learner-centred teaching.',
+            'Join a network of specialists who work together.',
+          ]}
+        />
+      </Card>
+    </CardGrid>
+  </Section>
+
+  <div class="photo-band">
+    <div class="container">
+      <Photo
+        src={family}
+        alt="A woman talks with a mother, a father and their young daughter around a table with a laptop and a notebook."
+        sizes="(min-width: 72rem) 68rem, 100vw"
+      />
+    </div>
+  </div>
+
+  <Section variant="alt" labelledby="registration-title" narrow>
+    <SectionHeading
+      id="registration-title"
+      title="Our registration details"
+      lead="You can check these details before you give or partner with us."
+    />
+    <DefinitionList
+      label="Registration details"
+      items={[
+        { term: 'Name', value: site.name },
+        { term: 'Organisation type', value: site.legalForm },
+        { term: 'NPO number', value: site.registration.npo },
+        { term: 'CIPC registration', value: site.registration.cipc },
+        {
+          term: 'PBO number',
+          value: `${site.registration.pbo}${site.registration.section18A ? ' (Section 18A approved)' : ''}`,
+        },
+        { term: 'Founded', value: String(site.founded) },
+      ]}
+    />
+    <p>
+      Our policies are available on request.{' '}
+      <a href="/contact/?topic=partner">Ask us for our policies</a>.
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .caveat {
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+    margin-top: var(--space-s);
+  }
+  .photo-band {
+    padding-block: var(--space-l);
+  }
+</style>

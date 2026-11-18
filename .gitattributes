@@ -1,0 +1,13 @@
+# Unix line endings in every checkout, including Windows, so Prettier and the PHP and
+# shell scripts behave the same everywhere.
+* text=auto eol=lf
+
+# Binary files: never touch line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff2 binary
+*.pdf binary

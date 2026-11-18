@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, stabilise]
+    branches: [main, rebuild]
   pull_request:
   workflow_dispatch:
 
@@ -35,19 +35,36 @@ jobs:
           echo "clean: files and history"
 
   site:
-    name: Static checks and upload set
+    name: Lint, type-check, build and built-output checks
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - run: node tests/check-site.mjs
-      - run: node tools/build-dist.mjs
-      - name: Release script syntax and backup safety
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm check
+      - name: Colour contrast of every token pair in every theme
+        run: pnpm check:contrast
+      - name: Production build must refuse TODO placeholders
         run: |
-          bash -n tools/deploy.sh tools/check-live.sh tests/deploy-test.sh
-          bash tests/deploy-test.sh
+          if grep -q '"TODO:' src/config/site.ts && pnpm build; then
+            echo "::error::Build succeeded although TODO placeholders remain"; exit 1
+          fi
+          echo "TODO guard OK"
+      - name: Preview build
+        run: pnpm build:preview
+      - run: pnpm check:dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          include-hidden-files: true
+          retention-days: 7
+      # Later milestones add: html-validate, link check, Playwright + axe, Lighthouse CI.
 
   php:
     name: PHP ${{ matrix.php }}
@@ -61,39 +78,14 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl
+          extensions: curl, mbstring
           coverage: none
-      - name: Syntax
-        run: for f in contact.php config.example.php lib/*.php tests/php/*.php tests/e2e/*.php; do php -l "$f"; done
-      - name: Contact form tests
-        run: php tests/php/contact-test.php
-      - name: .htaccess blocking rules
-        run: php tests/php/htaccess-test.php
-
-  browser:
-    name: Browser tests (accessibility, Comfort & access, forms)
-    runs-on: ubuntu-24.04
-    needs: [site]
-    steps:
-      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: curl
-          coverage: none
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npx playwright test
-      - name: Keep the report when tests fail
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 14
+          node-version: 24
+      - name: Syntax (php -l)
+        run: node scripts/php-lint.mjs
+      - name: Form handler tests (Microsoft 365 mock, mail() capture)
+        run: php tests/php/contact-test.php
+      - name: .htaccess rules (private paths, IfModule wrapping, CSP)
+        run: php tests/php/htaccess-test.php

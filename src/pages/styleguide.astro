@@ -1,0 +1,501 @@
+---
+/**
+ * Component catalogue. Start here when changing the design: every component and state on
+ * one page, in every colour theme. Not linked from the site and not indexed (noindex,
+ * excluded from the sitemap).
+ *
+ * All sample text on this page is labelled "Example" and is not real content.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
+import Checkbox from '../components/Checkbox.astro';
+import ChoiceGroup from '../components/ChoiceGroup.astro';
+import DataTable from '../components/DataTable.astro';
+import DefinitionList from '../components/DefinitionList.astro';
+import Disclosure from '../components/Disclosure.astro';
+import ErrorSummary from '../components/ErrorSummary.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import Field from '../components/Field.astro';
+import FilterBar from '../components/FilterBar.astro';
+import FormStatus from '../components/FormStatus.astro';
+import Hero from '../components/Hero.astro';
+import InterestExplorer from '../components/InterestExplorer.astro';
+import ListenButton from '../components/ListenButton.astro';
+import Notice from '../components/Notice.astro';
+import PageHero from '../components/PageHero.astro';
+import Panel from '../components/Panel.astro';
+import Photo from '../components/Photo.astro';
+import Quote from '../components/Quote.astro';
+import RegistrationLine from '../components/RegistrationLine.astro';
+import Section from '../components/Section.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Stat from '../components/Stat.astro';
+import Steps from '../components/Steps.astro';
+import StoryCard from '../components/StoryCard.astro';
+import Term from '../components/Term.astro';
+import TickList from '../components/TickList.astro';
+import TrustBlock from '../components/TrustBlock.astro';
+import Value from '../components/Value.astro';
+import { site } from '../config/site';
+import { terms } from '../config/terms';
+import classroom from '../assets/images/classroom.jpg';
+import hero from '../assets/images/hero.jpg';
+
+const themes = [
+  { value: 'standard', label: 'Standard' },
+  { value: 'calm', label: 'Calm' },
+  { value: 'contrast', label: 'High contrast' },
+  { value: 'dim', label: 'Dim' },
+];
+
+const exampleCards = [
+  { area: 'Numbers', text: 'Example card text for the first area.' },
+  { area: 'Reading and language', text: 'Example card text for the second area.' },
+  { area: 'Science and the world', text: 'Example card text for the third area.' },
+  { area: 'Social and emotional', text: 'Example card text for the fourth area.' },
+];
+---
+
+<BaseLayout
+  title="Component catalogue"
+  description="Every component of the Pholoso Afrika Foundation website, in every state and colour theme."
+  noindex
+>
+  <PageHero
+    title="Component catalogue"
+    eyebrow="For developers"
+    lead="Every component and state on one page. All sample text here is an example, not real content."
+  >
+    <nav aria-label="Catalogue sections" class="sg-toc">
+      <ul>
+        <li>
+          <a href="#sg-themes">Colour themes</a>
+        </li>
+        <li>
+          <a href="#sg-type">Type and links</a>
+        </li>
+        <li>
+          <a href="#sg-buttons">Buttons</a>
+        </li>
+        <li>
+          <a href="#sg-sections">Sections and heroes</a>
+        </li>
+        <li>
+          <a href="#sg-content">Content blocks</a>
+        </li>
+        <li>
+          <a href="#sg-data">Facts and tables</a>
+        </li>
+        <li>
+          <a href="#sg-forms">Forms</a>
+        </li>
+        <li>
+          <a href="#sg-features">Stories and interests</a>
+        </li>
+      </ul>
+    </nav>
+  </PageHero>
+
+  <Section labelledby="sg-themes">
+    <SectionHeading
+      id="sg-themes"
+      title="Colour themes"
+      lead="Each block below uses one Comfort & access colour theme. Use Tab to see the focus ring on each background."
+    />
+    <div class="sg-themes">
+      {themes.map((t) => (
+        <div class="sg-theme" data-theme={t.value === 'standard' ? undefined : t.value}>
+          <h3 class="sg-theme__name">{t.label}</h3>
+          <p>
+            Body text with <a href="#sg-themes">a link</a>.{' '}
+            <span class="sg-muted">Muted text.</span>
+          </p>
+          <p class="sg-row">
+            <Button variant="gold">Gold</Button>
+            <Button variant="green">Green</Button>
+            <Button variant="outline">Outline</Button>
+          </p>
+          <div class="on-dark sg-swatch">
+            <p>
+              Dark section with <a href="#sg-themes">a link</a>.
+            </p>
+            <Button variant="gold">Gold</Button>
+          </div>
+          <div class="on-cta sg-swatch">
+            <p>
+              Gold band with <a href="#sg-themes">a link</a>.
+            </p>
+            <Button variant="green">Green</Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <Section variant="alt" labelledby="sg-type" narrow>
+    <SectionHeading id="sg-type" title="Type and links" eyebrow="Eyebrow with the brand triangle" />
+    <h3>Heading level 3</h3>
+    <h4>Heading level 4</h4>
+    <p>
+      Body text is 18px with a line height of at least 1.6, left-aligned, and no wider than about 66
+      characters. Internal links are underlined: <a href="/about/">About us</a>. External links show
+      an arrow and stay in the same tab:{' '}
+      <ExternalLink href="https://www.w3.org/TR/coga-usable/">
+        W3C guidance on cognitive accessibility
+      </ExternalLink>
+      .
+    </p>
+    <p>
+      Wording that switches with Comfort & access: <Term t="children-with-autism" />,{' '}
+      <Term t="child-with-autism" />. All pairs:
+    </p>
+    <TickList items={Object.values(terms).map((p) => `${p.pf} → ${p.if}`)} marker="triangle" />
+    <p>
+      A placeholder from the site config: <Value value={site.bank.accountNumber} />
+    </p>
+  </Section>
+
+  <Section labelledby="sg-buttons">
+    <SectionHeading id="sg-buttons" title="Buttons" />
+    <p class="sg-row">
+      <Button variant="gold" href="/donate/">
+        Gold link
+      </Button>
+      <Button variant="green">Green button</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="outline" aria-pressed="true">
+        Pressed toggle
+      </Button>
+      <ListenButton target="sg-buttons" label="the buttons section" />
+    </p>
+    <p>The Listen button appears only in browsers that can read aloud.</p>
+  </Section>
+
+  <section aria-labelledby="sg-sections" class="sg-block">
+    <div class="container">
+      <h2 id="sg-sections">Sections and heroes</h2>
+      <p>Home page hero (dark green), shown with a level 2 heading here:</p>
+    </div>
+    <Hero level={2} eyebrow="Example eyebrow" title="Example hero heading" image={hero} imageAlt="">
+      <p>Example sentence explaining the page.</p>
+      <Fragment slot="actions">
+        <Button variant="gold" href="/donate/">
+          Donate
+        </Button>
+        <Button variant="outline" href="/approach/">
+          See how we work
+        </Button>
+      </Fragment>
+    </Hero>
+    <div class="container">
+      <p>Page hero, used at the top of every other page:</p>
+    </div>
+    <PageHero
+      level={2}
+      eyebrow="Example eyebrow"
+      title="Example page title"
+      lead="Example lead sentence."
+    />
+    <Section variant="dark" labelledby="sg-dark">
+      <SectionHeading
+        id="sg-dark"
+        level={3}
+        eyebrow="Dark section"
+        title="For emphasis"
+        lead="Text, links and focus rings adapt automatically."
+      />
+      <Button variant="gold" href="/donate/">
+        Gold on dark
+      </Button>
+      <Button variant="outline" href="/about/">
+        Outline on dark
+      </Button>
+    </Section>
+    <Section variant="cta" labelledby="sg-cta">
+      <SectionHeading
+        id="sg-cta"
+        level={3}
+        title="Gold call-to-action band (once per page at most)"
+      />
+      <Button variant="green" href="/donate/">
+        Green on gold
+      </Button>
+    </Section>
+  </section>
+
+  <Section variant="alt" labelledby="sg-content">
+    <SectionHeading id="sg-content" title="Content blocks" />
+    <CardGrid>
+      <Card title="Card" tag="Tag" href="/about/" linkText="Example link to a page">
+        <p>Example card text.</p>
+      </Card>
+      <Card title="Card without a link">
+        <p>Example card text.</p>
+      </Card>
+      <Panel title="Panel">
+        <p>Example panel text for grouped facts.</p>
+      </Panel>
+    </CardGrid>
+    <h3 class="sg-gap">Quote</h3>
+    <Quote cite="Example Name, example role" note="Example provenance label" large>
+      Example quote text.
+    </Quote>
+    <h3 class="sg-gap">Steps</h3>
+    <Steps
+      steps={[
+        { title: 'Example first step', text: 'Example explanation.' },
+        { title: 'Example second step' },
+        { title: 'Example third step', text: 'Example explanation.' },
+      ]}
+    />
+    <h3 class="sg-gap">Tick list</h3>
+    <TickList items={['Example item one', 'Example item two', 'Example item three']} />
+    <h3 class="sg-gap">Notices</h3>
+    <Notice title="Information">Example information.</Notice>
+    <Notice variant="warning" title="Warning">
+      Example warning.
+    </Notice>
+    <Notice variant="error" title="Problem">
+      Example error.
+    </Notice>
+    <Notice variant="success" title="Done">
+      Example success.
+    </Notice>
+    <h3 class="sg-gap">Disclosure</h3>
+    <Disclosure summary="Example question" level={4}>
+      <p>Example answer.</p>
+    </Disclosure>
+    <Disclosure summary="Example question, open" level={4} open>
+      <p>Example answer.</p>
+    </Disclosure>
+    <h3 class="sg-gap">Photo</h3>
+    <Photo
+      src={classroom}
+      alt=""
+      caption="Example caption. Decorative photos have empty alt text."
+      sizes="(min-width: 48rem) 40rem, 100vw"
+    />
+  </Section>
+
+  <Section labelledby="sg-data">
+    <SectionHeading id="sg-data" title="Facts and tables" />
+    <CardGrid columns={2}>
+      <Stat
+        figure="About 1 in 100"
+        text="children worldwide is autistic."
+        source={{
+          label: 'World Health Organization, autism fact sheet (2023)',
+          href: 'https://www.who.int/news-room/fact-sheets/detail/autism-spectrum-disorders',
+        }}
+      />
+      <Stat
+        figure="Example figure"
+        text="Example meaning of the figure."
+        source={{ label: 'Example source', href: 'https://example.org/', prefix: 'According to' }}
+      />
+    </CardGrid>
+    <h3 class="sg-gap">Definition list with copy buttons</h3>
+    <DefinitionList
+      label="Example bank details"
+      items={[
+        { term: 'Account name', value: site.bank.accountName, copy: true },
+        { term: 'Account number', value: site.bank.accountNumber, copy: true },
+        { term: 'Reference', value: `${site.bank.referencePrefix} + your surname` },
+      ]}
+    />
+    <DataTable
+      caption="Example table"
+      columns={['Year', 'Commitment', 'What it says']}
+      rows={[
+        ['Example year', 'Example commitment', 'Example summary.'],
+        ['Example year', 'Example commitment', 'Example summary.'],
+      ]}
+    />
+    <h3 class="sg-gap">Trust block</h3>
+    <TrustBlock headingLevel={4} />
+    <RegistrationLine />
+  </Section>
+
+  <Section variant="alt" labelledby="sg-forms" narrow>
+    <SectionHeading
+      id="sg-forms"
+      title="Forms"
+      lead="Shown in their error state. All questions are required unless marked optional."
+    />
+    <ErrorSummary
+      id="sg-errors"
+      errors={[
+        { field: 'sg-email', message: 'Enter an email address, like name@example.com' },
+        { field: 'sg-consent', message: 'Tick the box to agree' },
+      ]}
+    />
+    <div class="sg-form">
+      <Field name="sg-name" label="Your name" autocomplete="name" maxlength={100} />
+      <Field
+        name="sg-email"
+        label="Email address"
+        type="email"
+        required
+        autocomplete="email"
+        inputmode="email"
+        hint="We will only use this to reply to you."
+        maxlength={254}
+        error="Enter an email address, like name@example.com"
+      />
+      <Field
+        name="sg-topic"
+        label="What is it about?"
+        type="select"
+        required
+        options={[
+          { value: 'general', label: 'Example option one' },
+          { value: 'story', label: 'Example option two' },
+        ]}
+      />
+      <Field name="sg-message" label="Message" type="textarea" required maxlength={5000} rows={4} />
+      <ChoiceGroup
+        name="sg-type"
+        legend="Example choice"
+        required
+        inline
+        options={[
+          { value: 'a', label: 'Option A' },
+          { value: 'b', label: 'Option B' },
+          { value: 'c', label: 'Option C' },
+        ]}
+        error="Choose one option"
+      />
+      <Checkbox
+        name="sg-consent"
+        label="Example consent sentence."
+        required
+        error="Tick the box to agree"
+      />
+      <Checkbox name="sg-guardian" label="Example optional checkbox." />
+      <Button variant="green">Send</Button>
+      <FormStatus
+        id="sg-status"
+        state="success"
+        message="Example: Thank you. Your message was sent."
+      />
+      <FormStatus
+        id="sg-status-2"
+        state="error"
+        message="Example: The message could not be sent."
+      />
+    </div>
+  </Section>
+
+  <Section labelledby="sg-features">
+    <SectionHeading id="sg-features" title="Stories and interests" />
+    <FilterBar
+      target="sg-stories"
+      label="Show stories from"
+      filters={[
+        { value: 'parents', label: 'Parents' },
+        { value: 'young-people', label: 'Young people' },
+      ]}
+      noun={['story', 'stories']}
+    />
+    <div id="sg-stories" class="sg-stories">
+      <StoryCard
+        id="sg-story-1"
+        category="parents"
+        categoryLabel="Example category"
+        quote="Example story quote."
+        who="Example pseudonym, example role"
+        misunderstand="Example answer."
+        friction="Example answer."
+        helps="Example answer."
+        change="Example change."
+      />
+      <StoryCard
+        id="sg-story-2"
+        category="young-people"
+        categoryLabel="Example category"
+        quote="Second example story quote."
+        who="Example pseudonym, example role"
+        misunderstand="Example answer."
+        friction="Example answer."
+        helps="Example answer."
+        change="Example change."
+      />
+    </div>
+    <h3 class="sg-gap">Interest explorer</h3>
+    <InterestExplorer
+      id="sg-explorer"
+      level={4}
+      interests={[
+        { slug: 'example-one', name: 'Example one', cards: exampleCards },
+        { slug: 'example-two', name: 'Example two', cards: exampleCards },
+      ]}
+    />
+  </Section>
+</BaseLayout>
+
+<style>
+  .sg-toc ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-m);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-m) 0 0;
+  }
+  .sg-toc li {
+    margin: 0;
+  }
+  .sg-toc a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+  .sg-themes {
+    display: grid;
+    gap: var(--space-m);
+  }
+  @media (min-width: 62rem) {
+    .sg-themes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .sg-theme {
+    padding: var(--space-m);
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-m);
+  }
+  .sg-theme__name {
+    font-size: var(--step-1);
+  }
+  .sg-muted {
+    color: var(--color-text-muted);
+  }
+  .sg-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    max-width: none;
+  }
+  .sg-swatch {
+    padding: var(--space-s);
+    margin-top: var(--space-s);
+    border-radius: var(--radius-s);
+  }
+  .sg-block {
+    padding-top: var(--space-2xl);
+  }
+  .sg-gap {
+    margin-top: var(--space-xl);
+  }
+  .sg-form {
+    max-width: 36rem;
+  }
+  .sg-stories {
+    display: grid;
+    gap: var(--space-m);
+  }
+</style>

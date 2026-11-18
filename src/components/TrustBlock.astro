@@ -1,0 +1,76 @@
+---
+/**
+ * TrustBlock: why donors, families and partners can trust the Foundation:
+ * safeguarding, privacy by design, governance, tax-deductible giving, and the
+ * registration line. Facts come from src/config/site.ts.
+ *
+ * Props:
+ * - headingLevel: level of each item heading (default 3)
+ */
+import { site } from '../config/site';
+import CardGrid from './CardGrid.astro';
+import RegistrationLine from './RegistrationLine.astro';
+
+interface Props {
+  headingLevel?: 3 | 4;
+}
+
+const { headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h3' | 'h4';
+---
+
+<div class="trust">
+  <CardGrid columns={2} as="ul">
+    <li class="trust__item">
+      <Heading>Child safeguarding</Heading>
+      <p>
+        Please do not include a child's full name or medical details in a message. Contact us to
+        discuss safeguarding before sharing a child's story or taking part in an activity.
+      </p>
+    </li>
+    <li class="trust__item">
+      <Heading>Privacy by design</Heading>
+      <p>
+        We ask only for what we need, and this website uses no tracking. Read our{' '}
+        <a href="/privacy/">privacy notice</a> to see how we handle information and how to ask us to
+        see, correct or delete it.
+      </p>
+    </li>
+    <li class="trust__item">
+      <Heading>Governance</Heading>
+      <p>
+        {site.name} is a {site.legalForm.charAt(0).toLowerCase() + site.legalForm.slice(1)}. Our
+        policies are available on request.
+      </p>
+    </li>
+    <li class="trust__item">
+      <Heading>Tax-deductible giving</Heading>
+      <p>
+        We are approved under Section 18A. South African taxpayers may be able to deduct donations
+        with a valid Section 18A receipt, within SARS limits.{' '}
+        <a href="/donate/">How to request a receipt</a>.
+      </p>
+    </li>
+  </CardGrid>
+  <RegistrationLine class="trust__registration" />
+</div>
+
+<style>
+  .trust__item {
+    box-shadow: var(--elevation);
+    padding: var(--space-m);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    background: var(--color-bg);
+  }
+  .trust__item :global(h3),
+  .trust__item :global(h4) {
+    font-size: var(--step-1);
+  }
+  .trust__item p {
+    margin: 0;
+  }
+  .trust :global(.trust__registration) {
+    margin-top: var(--space-m);
+  }
+</style>

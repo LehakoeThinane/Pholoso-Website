@@ -1,0 +1,31 @@
+---
+/**
+ * SkipLink: the first focusable element on every page. Moves to <main id="main">.
+ * No props.
+ */
+import { strings } from '../config/strings';
+---
+
+<a class="skip-link" href="#main">
+  {strings.skipLink}
+</a>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: var(--space-s);
+    top: -100vh;
+    z-index: 100;
+    padding: var(--space-xs) var(--space-s);
+    min-height: var(--target-min);
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    font-weight: 700;
+    border-radius: var(--radius-s);
+  }
+  .skip-link:focus {
+    top: var(--space-s);
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
+  }
+</style>

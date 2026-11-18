@@ -1,0 +1,50 @@
+---
+/**
+ * TickList: a bulleted list with tick marks (or the brand triangle with `marker="triangle"`).
+ *
+ * Props:
+ * - items: list item texts
+ * - marker: 'tick' (default) or 'triangle'
+ */
+interface Props {
+  items: string[];
+  marker?: 'tick' | 'triangle';
+}
+
+const { items, marker = 'tick' } = Astro.props;
+---
+
+<ul class:list={['tick-list', `tick-list--${marker}`]}>
+  {items.map((item) => (
+    <li>{item}</li>
+  ))}
+</ul>
+
+<style>
+  .tick-list {
+    list-style: none;
+    padding: 0;
+  }
+  .tick-list li {
+    position: relative;
+    padding-left: 1.75em;
+    margin-top: var(--space-2xs);
+  }
+  .tick-list--tick li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: var(--color-link);
+  }
+  .tick-list--triangle li::before {
+    content: '';
+    position: absolute;
+    left: 0.2em;
+    top: 0.5em;
+    width: 0.7em;
+    height: 0.6em;
+    background: var(--color-accent);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+</style>
