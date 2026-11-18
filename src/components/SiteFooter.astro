@@ -1,0 +1,142 @@
+---
+/**
+ * SiteFooter: logo and tagline, the update sign-up (slot "signup", added with the forms),
+ * Explore and Get involved links, contact details, the registration line, copyright,
+ * Privacy and Accessibility links. Leaves room at the bottom for the floating
+ * Comfort & access button. No props.
+ */
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo.png';
+import { registrationLine, site } from '../config/site';
+import { footerExplore, footerGetInvolved, strings } from '../config/strings';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <Image src={logo} alt={site.name} width={220} densities={[1, 2]} class="site-footer__logo" />
+      <p class="site-footer__tagline">{site.tagline}</p>
+      <slot name="signup" />
+    </div>
+
+    <nav aria-label={strings.footerNavLabel} class="site-footer__nav">
+      <div>
+        <h2 class="site-footer__heading">{strings.footer.explore}</h2>
+        <ul>
+          {footerExplore.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 class="site-footer__heading">{strings.footer.getInvolved}</h2>
+        <ul>
+          {footerGetInvolved.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+
+    <div class="site-footer__contact">
+      <h2 class="site-footer__heading">{strings.footer.contact}</h2>
+      <p>
+        Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+        <br />
+        {site.location}
+      </p>
+      <p>
+        <a href="/contact/">Send us a message</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="container site-footer__legal">
+    <p class="site-footer__registration">{registrationLine}</p>
+    <ul class="site-footer__legal-links">
+      <li>{`© ${year} ${site.name}`}</li>
+      <li>
+        <a href="/privacy/">{strings.footer.privacy}</a>
+      </li>
+      <li>
+        <a href="/accessibility/">{strings.footer.accessibility}</a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-surface);
+    border-top: var(--border-width) solid var(--color-line);
+    padding-top: var(--space-xl);
+    /* Room for the floating Comfort & access button */
+    padding-bottom: calc(var(--space-2xl) + var(--button-min));
+    font-size: var(--step--1);
+  }
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-l);
+  }
+  @media (min-width: 48rem) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 2fr 1.2fr;
+    }
+  }
+  .site-footer__logo {
+    width: 11rem;
+    height: auto;
+    margin-bottom: var(--space-s);
+  }
+  .site-footer__tagline {
+    font-size: var(--step-0);
+    font-weight: 700;
+  }
+  .site-footer__nav {
+    display: grid;
+    gap: var(--space-l);
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  }
+  .site-footer__heading {
+    font-size: var(--step-0);
+    margin-bottom: var(--space-2xs);
+  }
+  .site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .site-footer li {
+    margin: 0;
+  }
+  .site-footer li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+  .site-footer__legal {
+    margin-top: var(--space-l);
+    padding-top: var(--space-m);
+    border-top: var(--border-width) solid var(--color-line);
+    color: var(--color-text-muted);
+  }
+  .site-footer__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-m);
+  }
+  .site-footer__legal-links li + li {
+    margin-top: 0;
+  }
+  .site-footer__registration {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+</style>

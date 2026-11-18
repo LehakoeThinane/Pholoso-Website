@@ -1,0 +1,175 @@
+/*
+ * Global base styles. Component styles live in each component (scoped).
+ * Calm by design: no animation, no layout transitions, no sticky elements that cover focus.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--font-size-root);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: var(--line-height);
+  letter-spacing: var(--letter-space);
+  word-spacing: var(--word-space);
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+/* Smooth scrolling only when the visitor has not asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* The site uses no animation. This is a safety net for anything incidental. */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+  line-height: var(--line-height-tight);
+  margin: 0 0 var(--space-s);
+  font-weight: 700;
+}
+h1 {
+  font-size: var(--step-4);
+}
+h2 {
+  font-size: var(--step-3);
+}
+h3 {
+  font-size: var(--step-2);
+}
+h4 {
+  font-size: var(--step-1);
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote,
+figure,
+table {
+  margin: 0 0 var(--para-space);
+}
+
+p,
+li,
+dd,
+blockquote {
+  max-width: var(--measure);
+}
+
+li + li {
+  margin-top: var(--space-3xs);
+}
+
+/* Links look like links: always underlined (spec §7.2, brief §8) */
+a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+a:hover {
+  text-decoration-thickness: 0.16em;
+}
+
+/* Focus is always visible, on every background */
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+img,
+picture,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  color: inherit;
+}
+
+/* Visually hidden, still read by screen readers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Page width container */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Keep room at the end of the page so the floating Comfort & access button never covers content */
+main {
+  display: block;
+}
+main:focus {
+  outline: none;
+}
+
+/* Windows forced-colours mode: themes step aside, borders and focus stay visible */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid CanvasText;
+  }
+  a {
+    color: LinkText;
+  }
+}

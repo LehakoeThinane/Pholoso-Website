@@ -1,0 +1,21 @@
+---
+// Temporary home page for the scaffold milestone. Replaced by the full home page (brief §7).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  fullTitle={`${site.name}: inclusive education for neurodivergent children in South Africa`}
+  description="The Pholoso Afrika Foundation advances inclusive, adaptive education for neurodivergent children in South Africa and Africa."
+>
+  <div class="container placeholder">
+    <h1>{site.tagline}</h1>
+    <p>{site.coreIdea}</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .placeholder {
+    padding-block: var(--space-2xl);
+  }
+</style>

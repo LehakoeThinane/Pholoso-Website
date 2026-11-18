@@ -1,15 +1,38 @@
 {
   "name": "pholoso-website",
   "private": true,
-  "description": "Pholoso Afrika Foundation website: checks and browser tests (nothing here is deployed).",
+  "type": "module",
+  "description": "pholoso.africa: the Pholoso Afrika Foundation website. Static Astro build plus one PHP form handler.",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
-    "check": "node tests/check-site.mjs",
-    "test:php": "php tests/php/contact-test.php && php tests/php/htaccess-test.php",
-    "test:e2e": "playwright test",
-    "test": "npm run check && npm run test:php && npm run test:e2e"
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:preview": "cross-env ALLOW_TODO=1 astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "check:dist": "node scripts/check-dist.mjs",
+    "lint:php": "node scripts/php-lint.mjs"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "5.3.0",
+    "astro": "7.4.12"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.13.0",
-    "@playwright/test": "1.64.1"
+    "@astrojs/check": "0.9.12",
+    "@playwright/test": "1.65.1",
+    "@types/node": "24",
+    "@typescript-eslint/parser": "8.73.0",
+    "cross-env": "^10.1.0",
+    "eslint": "10.15.0",
+    "eslint-plugin-astro": "3.2.1",
+    "prettier": "3.10.1",
+    "prettier-plugin-astro": "1.1.2",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "8.73.0"
   }
 }
