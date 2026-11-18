@@ -104,7 +104,7 @@
 }
 
 /* Calm: softer, muted, no bright gold (spec §7.2) */
-:root[data-theme='calm'] {
+[data-theme='calm'] {
   --color-bg: #f6f3ee;
   --color-surface: #eef2ec;
   --color-text: #2f3a36;
@@ -129,7 +129,7 @@
 }
 
 /* High contrast: white, black, darker greens, strong borders (spec §7.2) */
-:root[data-theme='contrast'] {
+[data-theme='contrast'] {
   --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-text: #000000;
@@ -156,7 +156,7 @@
 }
 
 /* Dim: for light sensitivity (spec §7.2) */
-:root[data-theme='dim'] {
+[data-theme='dim'] {
   --color-bg: #1c2321;
   --color-surface: #232c29;
   --color-text: #e6e9e4;

@@ -173,3 +173,53 @@ main:focus {
     color: LinkText;
   }
 }
+
+/*
+ * Surface contexts. A dark or gold block remaps the semantic tokens, so every component
+ * inside it (text, links, focus rings, outline buttons) stays readable without its own rules.
+ */
+.on-dark {
+  --color-bg: var(--color-dark-bg);
+  --color-surface: var(--color-dark-surface);
+  --color-text: var(--color-dark-text);
+  --color-text-muted: var(--color-dark-text-muted);
+  --color-link: var(--color-dark-link);
+  --color-focus: var(--color-dark-focus);
+  --color-accent: var(--color-dark-accent);
+  --color-line: var(--color-dark-text-muted);
+  --color-border: var(--color-dark-text-muted);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.on-cta {
+  --color-bg: var(--color-cta-bg);
+  --color-text: var(--color-cta-text);
+  --color-text-muted: var(--color-cta-text);
+  --color-link: var(--color-cta-text);
+  --color-focus: var(--color-on-cta-focus);
+  --color-border: var(--color-cta-text);
+  --color-btn-bg: var(--color-cta-text);
+  --color-btn-text: var(--color-cta-bg);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Brand motif: the small gold triangle from the logo. Decorative only. */
+.triangle-marker::before {
+  content: '';
+  display: inline-block;
+  width: 0.7em;
+  height: 0.6em;
+  margin-right: 0.45em;
+  background: var(--color-accent);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+/* Content written by editors (Markdown) */
+.prose > * + * {
+  margin-top: var(--para-space);
+}
+.prose h2,
+.prose h3 {
+  margin-top: var(--space-l);
+}

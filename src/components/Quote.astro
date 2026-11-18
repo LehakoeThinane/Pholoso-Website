@@ -1,0 +1,61 @@
+---
+/**
+ * Quote: a pull quote with attribution.
+ *
+ * Props:
+ * - cite: who said it ("Thandi, parent (pseudonym)")
+ * - note: optional provenance label shown under the attribution
+ *   (for example "A composite story based on common experiences")
+ * - large: bigger type, for a featured quote
+ * Slot: the quoted text (without quotation marks; they are added by CSS).
+ */
+interface Props {
+  cite: string;
+  note?: string;
+  large?: boolean;
+}
+
+const { cite, note, large = false } = Astro.props;
+---
+
+<figure class:list={['quote', { 'quote--large': large }]}>
+  <blockquote class="quote__text">
+    <slot />
+  </blockquote>
+  <figcaption class="quote__cite">
+    {cite}
+    {note && <span class="quote__note">{note}</span>}
+  </figcaption>
+</figure>
+
+<style>
+  .quote {
+    margin: 0;
+    padding-left: var(--space-m);
+    border-left: 4px solid var(--color-accent);
+  }
+  .quote__text {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+  .quote--large .quote__text {
+    font-size: var(--step-2);
+  }
+  .quote__text::before {
+    content: '“';
+  }
+  .quote__text::after {
+    content: '”';
+  }
+  .quote__text :global(p) {
+    display: inline;
+  }
+  .quote__cite {
+    color: var(--color-text-muted);
+  }
+  .quote__note {
+    display: block;
+    font-size: var(--step--1);
+  }
+</style>

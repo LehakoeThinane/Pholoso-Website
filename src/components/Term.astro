@@ -1,0 +1,25 @@
+---
+/**
+ * Term: a phrase that switches between person-first (default) and identity-first wording.
+ * Renders <span class="term" data-pf="…" data-if="…">children with autism</span>;
+ * src/scripts/comfort.ts swaps the text when "Identity-first wording" is on.
+ *
+ * Props:
+ * - t: a key from src/config/terms.ts (preferred), or
+ * - pf / if: an explicit pair, for one-off phrases
+ * - cap: capitalise the first letter (start of a sentence)
+ */
+import { terms, type TermKey } from '../config/terms';
+
+type Props = { cap?: boolean } & ({ t: TermKey } | { t?: undefined; pf: string; if: string });
+
+const props = Astro.props;
+const pair = props.t ? terms[props.t] : { pf: props.pf, if: props.if };
+const capitalise = (s: string) => (props.cap ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+const pf = capitalise(pair.pf);
+const idf = capitalise(pair.if);
+---
+
+<span class="term" data-pf={pf} data-if={idf}>
+  {pf}
+</span>

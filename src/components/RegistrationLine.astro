@@ -1,0 +1,22 @@
+---
+/**
+ * RegistrationLine: "NPO 333-132-NPO · CIPC 2025/951168/08 · PBO 930090077 (Section 18A
+ * approved)", built from src/config/site.ts. No props other than an optional class.
+ */
+import { registrationLine } from '../config/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<p class:list={['registration-line', className]}>{registrationLine}</p>
+
+<style>
+  .registration-line {
+    font-weight: 700;
+    font-size: var(--step--1);
+  }
+</style>

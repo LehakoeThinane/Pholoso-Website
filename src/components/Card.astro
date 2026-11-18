@@ -1,0 +1,74 @@
+---
+/**
+ * Card: a bordered block with a heading. Use inside a CardGrid-style wrapper (.card-grid).
+ *
+ * Props:
+ * - title: card heading
+ * - level: heading level (default 3)
+ * - id: anchor id for the card (e.g. "donors")
+ * - tag: optional small label above the heading
+ * - href / linkText: optional link at the bottom of the card. linkText must make sense on
+ *   its own ("Read how to donate", never "Click here").
+ *
+ * Slot: default (card body).
+ */
+interface Props {
+  title: string;
+  level?: 2 | 3 | 4;
+  id?: string;
+  tag?: string;
+  href?: string;
+  linkText?: string;
+}
+
+const { title, level = 3, id, tag, href, linkText } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
+---
+
+<div class="card" id={id}>
+  {tag && <p class="card__tag">{tag}</p>}
+  <Heading class="card__title">{title}</Heading>
+  <div class="card__body">
+    <slot />
+  </div>
+  {href && linkText && (
+    <p class="card__link">
+      <a href={href}>{linkText}</a>
+    </p>
+  )}
+</div>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-m);
+    background: var(--color-bg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+  }
+  .card__tag {
+    margin: 0 0 var(--space-2xs);
+    font-size: var(--step--1);
+    font-weight: 700;
+    color: var(--color-text-muted);
+  }
+  .card__title {
+    font-size: var(--step-2);
+  }
+  .card__body {
+    flex: 1;
+  }
+  .card__body :global(> :last-child) {
+    margin-bottom: 0;
+  }
+  .card__link {
+    margin: var(--space-s) 0 0;
+    font-weight: 700;
+  }
+  .card__link a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+</style>

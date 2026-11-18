@@ -1,0 +1,66 @@
+---
+/**
+ * ErrorSummary: placed at the top of a form. Hidden until a submit fails; then the form
+ * script lists each problem as a link to its field and moves focus here.
+ *
+ * Props:
+ * - id: unique per form (e.g. "contact-errors")
+ * - errors: [{ field, message }] to render now (styleguide only; links go to "#f-<field>")
+ */
+interface Props {
+  id: string;
+  errors?: { field: string; message: string }[];
+}
+
+const { id, errors = [] } = Astro.props;
+---
+
+<div
+  class="error-summary"
+  id={id}
+  tabindex="-1"
+  aria-labelledby={`${id}-title`}
+  hidden={errors.length === 0}
+  data-error-summary
+>
+  <h2 class="error-summary__title" id={`${id}-title`}>
+    There is a problem
+  </h2>
+  <p class="error-summary__intro">Please check these answers:</p>
+  <ul class="error-summary__list">
+    {errors.map((e) => (
+      <li>
+        <a href={`#f-${e.field}`}>{e.message}</a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .error-summary {
+    padding: var(--space-m);
+    margin-bottom: var(--space-l);
+    border: 4px solid var(--color-error);
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+    max-width: var(--measure);
+  }
+  .error-summary[hidden] {
+    display: none;
+  }
+  .error-summary:focus-visible {
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
+  }
+  .error-summary__title {
+    font-size: var(--step-2);
+  }
+  .error-summary__list {
+    margin: 0;
+    padding-left: 1.25em;
+  }
+  .error-summary__list :global(a) {
+    color: var(--color-error);
+    font-weight: 700;
+  }
+</style>

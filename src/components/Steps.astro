@@ -1,0 +1,61 @@
+---
+/**
+ * Steps: a numbered list of steps (for example the three donation steps).
+ *
+ * Props:
+ * - steps: [{ title, text? }], in order. Keep each step to one action.
+ */
+interface Props {
+  steps: { title: string; text?: string }[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="steps">
+  {steps.map((step, i) => (
+    <li class="steps__item">
+      <span class="steps__number" aria-hidden="true">
+        {i + 1}
+      </span>
+      <div>
+        <p class="steps__title">{step.title}</p>
+        {step.text && <p class="steps__text">{step.text}</p>}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .steps {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-m);
+  }
+  .steps__item {
+    display: flex;
+    gap: var(--space-s);
+    align-items: flex-start;
+    margin: 0;
+  }
+  .steps__number {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    font-weight: 700;
+  }
+  .steps__title {
+    font-weight: 700;
+    font-size: var(--step-1);
+    margin-bottom: var(--space-3xs);
+  }
+  .steps__text {
+    margin: 0;
+  }
+</style>

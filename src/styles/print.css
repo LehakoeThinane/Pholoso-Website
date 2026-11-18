@@ -1,0 +1,93 @@
+/*
+ * Print: content only. Navigation, widgets and interactive controls are hidden,
+ * colours are black on white, and link addresses are printed after the link text.
+ */
+@media print {
+  :root,
+  [data-theme] {
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-text: #000000;
+    --color-text-muted: #333333;
+    --color-link: #000000;
+    --color-border: #666666;
+    --color-line: #999999;
+    --color-dark-bg: #ffffff;
+    --color-dark-surface: #ffffff;
+    --color-dark-text: #000000;
+    --color-dark-text-muted: #333333;
+    --color-dark-link: #000000;
+    --color-cta-bg: #ffffff;
+    --color-cta-text: #000000;
+    --text-scale: 1;
+    font-size: 11pt;
+  }
+
+  .skip-link,
+  .site-nav,
+  .site-header__menu-button,
+  .site-header__donate,
+  .site-footer__nav,
+  .comfort,
+  .listen,
+  .filter-bar,
+  .explorer__picker,
+  .definition-list__copy,
+  form,
+  [data-decorative] {
+    display: none !important;
+  }
+
+  /* Every interest is printed, even if only one is shown on screen */
+  .explorer__panel[hidden],
+  .story[hidden] {
+    display: block !important;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .section,
+  .hero,
+  .page-hero {
+    padding-block: 1rem !important;
+    border: 0 !important;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+  a[href^='/']::after {
+    content: ' (pholoso.africa' attr(href) ')';
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+  a[href^='mailto:']::after {
+    content: '';
+  }
+  .site-header__home::after,
+  .external-link__mark {
+    display: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  figure,
+  table,
+  .card,
+  .story,
+  .stat {
+    break-inside: avoid;
+  }
+  .photo__img {
+    max-height: 8cm;
+    width: auto;
+  }
+}

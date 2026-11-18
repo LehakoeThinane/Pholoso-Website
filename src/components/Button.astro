@@ -1,0 +1,94 @@
+---
+/**
+ * Button: renders <a> when `href` is given, otherwise <button>.
+ *
+ * Props:
+ * - variant: 'gold' (main call to action, e.g. Donate) | 'green' | 'outline' | 'outline-light'
+ *   ('outline-light' forces light colours, for photos or custom dark areas; inside a dark
+ *   Section, plain 'outline' already adapts).
+ * - href: makes it a link. External links should use ExternalLink instead.
+ * - type: for <button>; defaults to "button".
+ * - hidden: start hidden (for buttons that only work with JavaScript).
+ * - Any other attribute (data-*, aria-*) is passed through.
+ *
+ * Do not put a gold button inside a gold (cta) Section: use 'green' there.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'gold' | 'green' | 'outline' | 'outline-light';
+type Props = {
+  variant?: Variant;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+} & Omit<HTMLAttributes<'button'> & HTMLAttributes<'a'>, 'type' | 'class'>;
+
+const { variant = 'green', href, type = 'button', class: className, ...rest } = Astro.props;
+const classes = ['button', `button--${variant}`, className];
+---
+
+{href ? (
+  <a href={href} class:list={classes} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class:list={classes} {...rest}>
+    <slot />
+  </button>
+)}
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-height: var(--button-min);
+    min-width: var(--button-min);
+    padding: var(--space-2xs) var(--space-m);
+    border: 2px solid transparent;
+    border-radius: var(--radius-s);
+    font-weight: 700;
+    font-size: var(--step-0);
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .button:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+  .button[hidden] {
+    display: none;
+  }
+  .button--gold {
+    background: var(--color-cta-bg);
+    color: var(--color-cta-text);
+    border-color: var(--color-cta-text);
+  }
+  .button--green {
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    border-color: var(--color-btn-bg);
+  }
+  .button--outline {
+    background: transparent;
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+  .button--outline-light {
+    background: transparent;
+    color: var(--color-dark-text);
+    border-color: var(--color-dark-text);
+  }
+  .button--outline-light:focus-visible {
+    outline-color: var(--color-dark-focus);
+  }
+  .button[aria-pressed='true'] {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+</style>

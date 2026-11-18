@@ -1,0 +1,91 @@
+---
+/**
+ * Notice: a boxed message. Static by default; it never pops up or moves.
+ *
+ * Props:
+ * - variant: 'info' (default) | 'warning' | 'error' | 'success'
+ * - title: optional bold first line
+ * - id: anchor id. With `targetOnly`, the notice is hidden until the URL fragment points at
+ *   it (#id), which lets the no-JavaScript form flow show an error after a redirect.
+ * - targetOnly: see above
+ * - level: heading level for the title (default: a bold paragraph, not a heading)
+ */
+interface Props {
+  variant?: 'info' | 'warning' | 'error' | 'success';
+  title?: string;
+  id?: string;
+  targetOnly?: boolean;
+  level?: 2 | 3 | 4;
+}
+
+const { variant = 'info', title, id, targetOnly = false, level } = Astro.props;
+const Title = level ? (`h${level}` as 'h2' | 'h3' | 'h4') : 'p';
+const icon = { info: 'i', warning: '!', error: '!', success: '✓' }[variant];
+const label = { info: 'Note', warning: 'Warning', error: 'Problem', success: 'Done' }[variant];
+---
+
+<div id={id} class:list={['notice', `notice--${variant}`, { 'notice--target-only': targetOnly }]}>
+  <span class="notice__icon" aria-hidden="true">
+    {icon}
+  </span>
+  <div class="notice__body">
+    {title && (
+      <Title class="notice__title">
+        <span class="visually-hidden">{label}: </span>
+        {title}
+      </Title>
+    )}
+    <slot />
+  </div>
+</div>
+
+<style>
+  .notice {
+    display: flex;
+    gap: var(--space-s);
+    padding: var(--space-m);
+    margin-bottom: var(--para-space);
+    border: 2px solid var(--notice-colour, var(--color-border));
+    border-left-width: 6px;
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+  .notice--info {
+    --notice-colour: var(--color-link);
+  }
+  .notice--warning {
+    --notice-colour: var(--color-text);
+  }
+  .notice--error {
+    --notice-colour: var(--color-error);
+  }
+  .notice--success {
+    --notice-colour: var(--color-success);
+  }
+  .notice--target-only {
+    display: none;
+  }
+  .notice--target-only:target {
+    display: flex;
+  }
+  .notice__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--notice-colour);
+    color: var(--color-bg);
+    font-weight: 700;
+  }
+  .notice__title {
+    font-size: var(--step-1);
+    font-weight: 700;
+    margin-bottom: var(--space-2xs);
+  }
+  .notice__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,136 @@
+---
+/**
+ * InterestExplorer: shows how one interest can open a door into four areas of learning
+ * (the Hlompho principle). Without JavaScript all interests are shown, one section each.
+ * With JavaScript (src/scripts/interests.ts) a row of toggle buttons (aria-pressed) shows
+ * one interest at a time.
+ *
+ * Props:
+ * - id: unique id for the explorer
+ * - interests: [{ slug, name, cards: [{ area, text }] }], from the `interests` collection
+ * - level: heading level for each interest name (default 3)
+ */
+interface Interest {
+  slug: string;
+  name: string;
+  cards: { area: string; text: string }[];
+}
+interface Props {
+  id: string;
+  interests: Interest[];
+  level?: 3 | 4;
+}
+
+const { id, interests, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h3' | 'h4';
+const CardHeading = `h${level + 1}` as 'h4' | 'h5';
+---
+
+<div class="explorer" id={id} data-explorer>
+  <div class="explorer__picker" hidden data-explorer-picker>
+    <p class="explorer__picker-label" id={`${id}-label`}>
+      Choose an interest
+    </p>
+    <div class="explorer__buttons" role="group" aria-labelledby={`${id}-label`}>
+      {interests.map((interest, i) => (
+        <button
+          type="button"
+          class="explorer__button"
+          aria-pressed={i === 0 ? 'true' : 'false'}
+          aria-controls={`${id}-${interest.slug}`}
+          data-interest={interest.slug}
+        >
+          {interest.name}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {interests.map((interest) => (
+    <section
+      class="explorer__panel"
+      id={`${id}-${interest.slug}`}
+      aria-labelledby={`${id}-${interest.slug}-title`}
+      data-interest-panel={interest.slug}
+    >
+      <Heading class="explorer__title" id={`${id}-${interest.slug}-title`}>
+        If a child loves {interest.name.toLowerCase()}
+      </Heading>
+      <ul class="explorer__cards">
+        {interest.cards.map((card) => (
+          <li class="explorer__card">
+            <CardHeading class="explorer__area">{card.area}</CardHeading>
+            <p>{card.text}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+  <p class="visually-hidden" aria-live="polite" data-explorer-status></p>
+</div>
+
+<style>
+  .explorer__picker {
+    margin-bottom: var(--space-m);
+  }
+  .explorer__picker[hidden] {
+    display: none;
+  }
+  .explorer__picker-label {
+    font-weight: 700;
+    margin-bottom: var(--space-2xs);
+  }
+  .explorer__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+  .explorer__button {
+    min-height: var(--button-min);
+    padding-inline: var(--space-m);
+    border: 2px solid var(--color-text);
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .explorer__button[aria-pressed='true'] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  .explorer__panel + .explorer__panel {
+    margin-top: var(--space-xl);
+  }
+  .explorer__panel[hidden] {
+    display: none;
+  }
+  .explorer__title {
+    font-size: var(--step-2);
+  }
+  .explorer__cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-s);
+  }
+  @media (min-width: 40rem) {
+    .explorer__cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .explorer__card {
+    margin: 0;
+    padding: var(--space-m);
+    border: var(--border-width) solid var(--color-border);
+    border-top: 4px solid var(--color-accent);
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+  }
+  .explorer__area {
+    font-size: var(--step-1);
+  }
+  .explorer__card p {
+    margin: 0;
+  }
+</style>

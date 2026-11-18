@@ -16,6 +16,7 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "check:dist": "node scripts/check-dist.mjs",
+    "check:contrast": "node scripts/contrast.ts",
     "lint:php": "node scripts/php-lint.mjs"
   },
   "dependencies": {

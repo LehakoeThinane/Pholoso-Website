@@ -47,6 +47,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm check
+      - name: Colour contrast of every token pair in every theme
+        run: pnpm check:contrast
       - name: Production build must refuse TODO placeholders
         run: |
           if grep -q '"TODO:' src/config/site.ts && pnpm build; then
@@ -62,7 +64,7 @@ jobs:
           path: dist/
           include-hidden-files: true
           retention-days: 7
-      # Later milestones add: html-validate, link check, contrast, Playwright + axe, Lighthouse CI.
+      # Later milestones add: html-validate, link check, Playwright + axe, Lighthouse CI.
 
   php:
     name: PHP ${{ matrix.php }}

@@ -1,0 +1,109 @@
+---
+/**
+ * DataTable: an accessible table with a caption, column headers (scope="col") and, by
+ * default, a row header in the first column (scope="row"). On narrow screens each row is
+ * shown as a stacked block, with the column name before each value, so the page never
+ * scrolls sideways. Explicit ARIA roles keep the table semantics when CSS stacks the rows.
+ *
+ * Props:
+ * - caption: visible table caption (what the table shows)
+ * - columns: column header texts
+ * - rows: one array of cell texts per row, in column order
+ * - rowHeaders: treat the first cell of each row as its header (default true)
+ */
+interface Props {
+  caption: string;
+  columns: string[];
+  rows: string[][];
+  rowHeaders?: boolean;
+}
+
+const { caption, columns, rows, rowHeaders = true } = Astro.props;
+---
+
+<div class="data-table">
+  <table role="table">
+    <caption>{caption}</caption>
+    <thead role="rowgroup">
+      <tr role="row">
+        {columns.map((c) => (
+          <th scope="col" role="columnheader">
+            {c}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody role="rowgroup">
+      {rows.map((row) => (
+        <tr role="row">
+          {row.map((cell, i) =>
+            i === 0 && rowHeaders ? (
+              <th scope="row" role="rowheader" data-label={columns[i]}>
+                {cell}
+              </th>
+            ) : (
+              <td role="cell" data-label={columns[i]}>
+                {cell}
+              </td>
+            ),
+          )}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .data-table {
+    margin-bottom: var(--para-space);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+  }
+  caption {
+    text-align: left;
+    font-weight: 700;
+    font-size: var(--step-1);
+    padding-bottom: var(--space-xs);
+  }
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: var(--space-xs) var(--space-s);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  thead th {
+    border-bottom-width: 2px;
+  }
+
+  @media (max-width: 39.99rem) {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    tr {
+      display: block;
+      padding-block: var(--space-xs);
+      border-bottom: 2px solid var(--color-border);
+    }
+    th,
+    td {
+      display: block;
+      border: 0;
+      padding: var(--space-3xs) 0;
+    }
+    td::before {
+      content: attr(data-label);
+      display: block;
+      font-weight: 700;
+      font-size: var(--step--1);
+      color: var(--color-text-muted);
+    }
+  }
+</style>
