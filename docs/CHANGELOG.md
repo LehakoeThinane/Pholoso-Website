@@ -8,6 +8,37 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-18 · `dev` · Fix Lighthouse failures in CI (layout shift from fonts)
+
+**Why:** Lighthouse failed in CI (GitHub's Linux machines) although it passed locally:
+layout shift 0.049 on About and 0.028 on Stories (budget 0.02), and home performance 0.93.
+
+**Cause:** while Atkinson Hyperlegible loads, the browser shows a fallback font. The fallback
+list started with `system-ui`, which on Linux is a much wider font (DejaVu Sans), so lines
+rewrapped when Atkinson arrived. Headings also swapped late because only the regular weight
+was preloaded, and heading widths were set in `ch` units, which change with the font.
+
+**What changed**
+
+- New `Atkinson Fallback` face (Arial / Liberation Sans, scaled to Atkinson's measured width,
+  ascent and descent) placed before `system-ui` (`src/styles/fonts.css`, `tokens.css`).
+- The bold weight is preloaded too, not only the regular.
+- Heading widths in `PageHero` and `Hero` changed from `24ch` / `18ch` to the same widths in
+  `em` (15.65em / 11.74em), so they do not change when the font swaps.
+- Lighthouse runs 3 times per page in CI (single runs on shared machines are noisy).
+
+**Results:** reproduced locally by delaying the font 2 seconds with a Linux-like fallback:
+phone-size layout shift went from 0.021–0.041 to 0.0002–0.002 on every page. Without a delay
+it is 0 on every page at both sizes. Local Lighthouse (3 runs): 100 in all four categories,
+CLS 0.000, CSS 13.7 KB (budget 14 KB).
+
+**Known limit:** on desktop, with a deliberately delayed font, a few pages (About, Donate,
+Privacy) can still shift 0.03–0.05 because one heading breaks at a different word in the
+fallback. Removing that entirely needs `font-display: optional` instead of the brief's `swap`;
+not changed. CI tests phone size, where this does not occur.
+
+---
+
 ## 2026-11-18 · `dev` · Milestone 9: handover docs, smoke test, optional deploy
 
 **Why:** brief §15 and §18.9: a stranger should be able to maintain and deploy the site from

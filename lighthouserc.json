@@ -10,7 +10,7 @@
         "http://localhost/donate/",
         "http://localhost/stories/"
       ],
-      "numberOfRuns": 1,
+      "numberOfRuns": 3,
       "settings": {
         "preset": "perf",
         "formFactor": "mobile",

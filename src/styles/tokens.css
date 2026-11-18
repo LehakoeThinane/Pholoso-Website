@@ -82,7 +82,8 @@
 
   /* Type */
   --font-body:
-    'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    'Atkinson Hyperlegible', 'Atkinson Fallback', system-ui, -apple-system, 'Segoe UI', Roboto,
+    Arial, sans-serif;
   --text-scale: 1; /* Comfort & access text size: 1, 1.15, 1.3, 1.5 */
   --font-size-root: calc(112.5% * var(--text-scale)); /* 18px at the default browser size */
   --line-height: 1.6;
