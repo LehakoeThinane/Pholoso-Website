@@ -30,12 +30,14 @@ const { figure, text, source } = Astro.props;
 </figure>
 
 <style>
+  /* Centred (owner decision, 18 Nov 2026): headings and short text. Long text stays left. */
   .stat {
+    text-align: center;
     box-shadow: var(--elevation);
     margin: 0;
     padding: var(--space-m);
     border-top: 4px solid var(--color-accent);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
   }
   .stat__figure {
     font-size: var(--step-4);

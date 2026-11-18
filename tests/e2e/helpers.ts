@@ -39,6 +39,13 @@ export function watch(page: Page) {
 export const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 
 export async function expectNoAxeViolations(page: Page, context = ''): Promise<void> {
+  // Let entrance animations finish first: mid-fade, text is partly transparent and axe would
+  // measure the wrong contrast. (Endless animations, such as the breathing shape, are skipped.)
+  await page.waitForFunction(() =>
+    document
+      .getAnimations()
+      .every((a) => a.playState !== 'running' || a.effect?.getTiming().iterations === Infinity),
+  );
   const { violations } = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
   const summary = violations
     .map(

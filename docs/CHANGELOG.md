@@ -8,6 +8,46 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-18 · `dev` · New hero design, gloss everywhere, centred text
+
+**Why:** owner design direction, modelled on a reference layout (a photo bleeding to the edge
+behind a shaped border). Design only: no wording, colours or branding changed.
+
+**What changed**
+
+- **Home hero:** the photo fills the right half of the green band, out to the screen edge,
+  behind a rounded-point edge (two straight diagonals meeting in a broad rounded tip) with a
+  thin deep-green line that glows softly. Pill-shaped buttons, a larger heading, and the text
+  centred in the green area. On phones the photo sits under the text, with the same rounded
+  point facing up. Without images (Hide images, Simplified page) the text takes the full width.
+- **Text animation:** the hero text fades and rises in once as the page opens (staggered,
+  under one second). Off with reduced motion, Calm colours or Simplified page.
+- **Doors moved under the hero.** "I'm a grown-up → Find out about our work" now goes to the
+  first section below ("The problem", `#our-work`) instead of up to the hero.
+- **Gloss everywhere in the Standard theme:** a soft sheen on cards, panels, stats, notices,
+  page heroes, Kids' World picture buttons, cards, toggles, the doors and coloured bands, not
+  only buttons. Off in Calm, High contrast, Dim, Simplified page and forced colours. Components
+  now set fills with `background-color`, so one shared rule can add the sheen. The contrast
+  script checks text and links over the sheen (all pass, 6.6:1 or more).
+- **Centred headings and short text everywhere:** page titles, section headings and intros,
+  cards, stats, the call-to-action band, Kids' World headings and hero, the doors. Long
+  paragraphs, lists, forms, tables, notices and stories stay left-aligned (owner chose this
+  over centring everything; brief §8 readability).
+- **One "motion allowed" flag:** `public/prefs.js` sets `data-anim` on the page when motion is
+  allowed; CSS animations and the Kids' World scripts both use it.
+- **Browser tests:** axe now waits for entrance animations to finish (mid-fade text is partly
+  transparent, which gave false contrast failures in High contrast and Dim). The home-page test
+  checks the doors come straight after the hero.
+- **CSS budget raised to 16 KB** (owner decision); now 14.6 KB.
+
+**Results:** 150 browser tests pass. Lighthouse (3 runs): 100 in all four categories on all
+six sampled pages, CLS 0.000. Decisions recorded in DECISIONS.md §11, §13, §14.
+
+**Noticed, not changed:** at about 1280 px wide the main menu is tight, and "About us", "Our
+approach" and "Get involved" break onto two lines each.
+
+---
+
 ## 2026-11-18 · `dev` · Fix Lighthouse failures in CI (layout shift from fonts)
 
 **Why:** Lighthouse failed in CI (GitHub's Linux machines) although it passed locally:

@@ -57,6 +57,10 @@ const {
   }
   .section--cta {
     padding-block: var(--space-xl);
+    text-align: center; /* short call to action: centred */
+  }
+  .section--cta :global(p) {
+    margin-inline: auto;
   }
   .section__narrow {
     max-width: calc(var(--measure) + 2 * var(--gutter));

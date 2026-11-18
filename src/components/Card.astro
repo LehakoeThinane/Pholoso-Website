@@ -39,12 +39,14 @@ const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
 </div>
 
 <style>
+  /* Centred (owner decision, 18 Nov 2026): headings and short text. Long text stays left. */
   .card {
+    text-align: center;
     box-shadow: var(--elevation);
     display: flex;
     flex-direction: column;
     padding: var(--space-m);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-m);
   }

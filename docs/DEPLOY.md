@@ -78,7 +78,7 @@ put there.
 
 Open these in a private browser window (so nothing old is remembered):
 
-1. <https://pholoso.africa/> shows the new site, with the two big doors at the top.
+1. <https://pholoso.africa/> shows the new site: the green introduction, with the two big doors under it.
 2. <https://pholoso.africa/kids/> opens Kids' World.
 3. <https://pholoso.africa/this-does-not-exist/> shows "We could not find that page".
 4. <http://www.pholoso.africa/> ends up at <https://pholoso.africa/> (no www, with the lock).

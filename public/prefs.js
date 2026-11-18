@@ -93,6 +93,9 @@
     set('data-focus', e.focus === 'strong' ? 'strong' : '');
     set('data-identity', e.identityFirst ? 'first' : '');
     set('data-sound', e.sound && e.theme !== 'calm' ? 'on' : '');
+    // Motion allowed: the device does not ask for less motion (e.motion includes that), and
+    // Reduce motion, Calm colours and Simplified page are off. CSS animations use [data-anim].
+    set('data-anim', e.motion !== 'reduced' && e.theme !== 'calm' && !e.simple ? 'on' : '');
     // Lets Kids' World toggles and the panel stay in step when either changes a setting.
     if (typeof CustomEvent === 'function') {
       document.dispatchEvent(new CustomEvent('pholoso:prefs', { detail: e }));
