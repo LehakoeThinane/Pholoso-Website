@@ -18,7 +18,12 @@
     "check:dist": "node scripts/check-dist.mjs",
     "check:contrast": "node scripts/contrast.ts",
     "lint:php": "node scripts/php-lint.mjs",
-    "test:php": "node scripts/php-lint.mjs && php tests/php/contact-test.php && php tests/php/htaccess-test.php"
+    "test:php": "node scripts/php-lint.mjs && php tests/php/contact-test.php && php tests/php/htaccess-test.php",
+    "check:html": "html-validate \"dist/**/*.html\"",
+    "check:links": "node scripts/check-links.mjs",
+    "test:e2e": "playwright test",
+    "test:lighthouse": "lhci autorun",
+    "make:printables": "node scripts/make-printables.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.5",
@@ -27,12 +32,16 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.0",
+    "@lhci/cli": "0.16.1",
     "@playwright/test": "1.65.1",
     "@types/node": "24",
     "@typescript-eslint/parser": "8.73.0",
-    "cross-env": "^10.1.0",
+    "cross-env": "10.1.0",
     "eslint": "10.15.0",
     "eslint-plugin-astro": "3.2.1",
+    "html-validate": "11.21.1",
+    "linkinator": "8.1.0",
     "prettier": "3.10.1",
     "prettier-plugin-astro": "1.1.2",
     "typescript": "~6.0.3",
