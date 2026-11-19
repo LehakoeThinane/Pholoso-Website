@@ -122,7 +122,8 @@ written Parent Guide.
    live site, and once without JavaScript if possible.
 
 **To switch it off again quickly:** set `enabled` back to `false`. The coach pages then say the
-coach is not open, and nothing is sent to the AI provider.
+coach is not open, and nothing is sent to the AI provider. The server may keep using the old
+setting for a few seconds (on some hosting, up to a minute) before it notices the change.
 
 **Old conversations** are deleted 30 days after they start. This happens on its own as people
 use the coach. (Stage 3 adds a nightly cron job, so it also happens on quiet days.)

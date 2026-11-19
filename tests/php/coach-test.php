@@ -135,7 +135,11 @@ file_put_contents($configFile, '<?php return ' . var_export($config([]), true) .
 function call(string $method, string $url, array $data = [], bool $json = true, array $headers = []): array
 {
     global $base;
-    $h = $json ? ['Content-Type: application/json', 'Accept: application/json', "Origin: $base"] : ['Content-Type: application/x-www-form-urlencoded'];
+    $h = $json ? ['Content-Type: application/json', 'Accept: application/json'] : ['Content-Type: application/x-www-form-urlencoded'];
+    // Scripts send their own Origin; a test may give another one (only one header is ever sent)
+    if ($json && !preg_grep('/^Origin:/i', $headers)) {
+        $h[] = "Origin: $base";
+    }
     $ctx = stream_context_create(['http' => [
         'method' => $method, 'ignore_errors' => true, 'follow_location' => 0, 'timeout' => 30,
         'header' => implode("\r\n", array_merge($h, $headers)),
@@ -326,7 +330,13 @@ try {
         && (int) $sqlite->query("SELECT COUNT(*) FROM coach_feedback WHERE session_uuid = '$id'")->fetchColumn() === 0);
 
     echo "Switched off\n";
-    file_put_contents($configFile, '<?php return ' . var_export($config(['enabled' => false]), true) . ';');
+    // A separate server with its own settings file: PHP may cache a settings file it has already
+    // read for a few seconds, so a running server would not notice a change at once.
+    $offFile = $tmp . '/config-off.php';
+    file_put_contents($offFile, '<?php return ' . var_export($config(['enabled' => false]), true) . ';');
+    $offPort = free_port();
+    $procs[] = start_server(array_merge($phpCmd, ['-S', "127.0.0.1:$offPort", '-t', $public, __DIR__ . '/router.php']), $public, $env + ['PHOLOSO_CONFIG' => $offFile], $offPort);
+    $base = "http://127.0.0.1:$offPort";
     $r = call('POST', '/api/coach/start.php', ['children' => [['name' => 'Ben']]]);
     check('while switched off, the coach says it is not open (503)', $r['status'] === 503 && ($r['json']['code'] ?? '') === 'unavailable');
     $r = call('GET', '/coach-health.php', [], false);

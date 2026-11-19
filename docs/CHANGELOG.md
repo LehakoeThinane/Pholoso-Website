@@ -8,6 +8,19 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Fix: two Parent Coach tests failed on GitHub (Linux)
+
+**Why:** the PHP jobs failed on GitHub while passing on the development computer. Both causes were in the tests, not the coach.
+
+**What changed**
+
+- **Switched off:** the test changed the settings file while its server was running. On Linux, PHP caches files it has read for a few seconds, so the server still saw the coach as on. The check now uses its own server. DEPLOY.md notes that switching the coach off can take a few seconds (up to a minute on some hosting).
+- **Another website is refused:** the test sent two `Origin` headers; older PHP versions read the first. It now sends one. The coach's check was correct.
+
+**Checks:** 64 PHP checks pass locally, including with PHP's file cache switched on. The rest of the GitHub run (browser tests, Lighthouse, live mode) had already passed.
+
+---
+
 ## 2026-11-19 · `dev` · Parent Coach, Stage 2 (server, database, AI behind switches)
 
 **Why:** owner direction: continue with Stage 2, build for MySQL, and install PHP locally so the
