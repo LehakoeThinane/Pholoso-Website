@@ -25,8 +25,28 @@ unknown is a visible placeholder.
 **Test results (local, 18 November 2026):** 150 browser tests passed, 0 failed (axe: no
 accessibility violations on any page, at phone and desktop size). HTML, links, contrast,
 type checks and lint all clean. Lighthouse (mobile): 100 for Performance, Accessibility, Best
-Practices and SEO on every sampled page. CI on GitHub runs the same checks; confirm the latest
-run is green in the repository's **Actions** tab.
+Practices and SEO on every sampled page, no layout shift, CSS 14.6 KB (budget 16 KB). CI on
+GitHub runs the same checks; confirm the latest run is green in the repository's **Actions**
+tab (the developer could not see it: the GitHub command-line tool was not logged in).
+
+**Design changes after milestone 9 (owner decisions, 18 November 2026; see DECISIONS.md §11–§14):**
+
+- **Home hero:** the photo fills the right of the green band behind a rounded-point edge with a
+  soft glowing line; pill buttons; centred text that fades in once on load (off with reduced
+  motion, Calm colours or Simplified page).
+- **Doors** ("I'm a kid" / "I'm a grown-up") now sit **under** the hero, not above it as the
+  brief first asked.
+- **Gloss** on all surfaces in the Standard theme, not only buttons.
+- **Centred** page titles, section headings, intros, cards and Kids' World headings; long text,
+  lists, forms and tables stay left-aligned.
+- **Header (19 November):** four menu entries in one row between the logo and Donate:
+  Kids' World, About (About us, Our approach), Stories & resources (Stories, Resources) and Get
+  involved (Ways to help, Contact us). Groups open on click, work without JavaScript, and close
+  with Esc. Every page is still listed in the footer. On phones the header is centred.
+- **Small labels above headings removed** everywhere (19 November), e.g. "The problem", "Trust",
+  and the hero's "Pholoso Afrika Foundation".
+- **Quotes centred**, with a short gold bar above instead of a bar down the left (19 November).
+- **CSS budget** raised to 16 KB.
 
 ## 2. Definition of done (brief §20)
 
@@ -35,7 +55,7 @@ run is green in the repository's **Actions** tab.
 | A child can use Kids' World without help; Calm mode in one tap               | Built and tested. Not yet tried by children; worth a short session with a few families. |
 | All pages exist, read well at 390 px and 1280 px, accurate and sourced       | Yes                                                                                   |
 | Everything works without JavaScript                                          | Yes (tested)                                                                          |
-| axe: 0 violations on every page and comfort state; Lighthouse budgets met    | Yes (CSS budget raised to 14 KB by owner decision)                                    |
+| axe: 0 violations on every page and comfort state; Lighthouse budgets met    | Yes (CSS budget raised to 16 KB by owner decision)                                    |
 | No inline scripts or styles; CSP blocks nothing needed                       | Yes in the build. **Confirm on the live server** with the smoke test.                 |
 | No third-party requests                                                      | Yes (tested)                                                                          |
 | Forms deliver correctly formatted email; no-JS and JS paths tested; anti-spam | Tested with mock mail. **Real delivery needs Microsoft 365 setup**, then a live test. |
@@ -43,6 +63,10 @@ run is green in the repository's **Actions** tab.
 | README, DEPLOY, CONTENT-GUIDE, DECISIONS written                             | Yes                                                                                   |
 
 ## 3. Facts still to fill in (`src/config/site.ts`)
+
+None of these are on the current live site: on 18 November 2026 pholoso.africa was still the
+old single-page site, with no bank details, address, Information Officer, accessibility
+response time or story provenance. They must come from the Foundation directly.
 
 The production build will not run until these are replaced with confirmed values.
 

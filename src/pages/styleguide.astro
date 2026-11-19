@@ -65,7 +65,6 @@ const exampleCards = [
 >
   <PageHero
     title="Component catalogue"
-    eyebrow="For developers"
     lead="Every component and state on one page. All sample text here is an example, not real content."
   >
     <nav aria-label="Catalogue sections" class="sg-toc">
@@ -135,7 +134,7 @@ const exampleCards = [
   </Section>
 
   <Section variant="alt" labelledby="sg-type" narrow>
-    <SectionHeading id="sg-type" title="Type and links" eyebrow="Eyebrow with the brand triangle" />
+    <SectionHeading id="sg-type" title="Type and links" />
     <h3>Heading level 3</h3>
     <h4>Heading level 4</h4>
     <p>
@@ -178,7 +177,7 @@ const exampleCards = [
       <h2 id="sg-sections">Sections and heroes</h2>
       <p>Home page hero (dark green), shown with a level 2 heading here:</p>
     </div>
-    <Hero level={2} eyebrow="Example eyebrow" title="Example hero heading" image={hero} imageAlt="">
+    <Hero level={2} title="Example hero heading" image={hero} imageAlt="">
       <p>Example sentence explaining the page.</p>
       <Fragment slot="actions">
         <Button variant="gold" href="/donate/">
@@ -192,17 +191,11 @@ const exampleCards = [
     <div class="container">
       <p>Page hero, used at the top of every other page:</p>
     </div>
-    <PageHero
-      level={2}
-      eyebrow="Example eyebrow"
-      title="Example page title"
-      lead="Example lead sentence."
-    />
+    <PageHero level={2} title="Example page title" lead="Example lead sentence." />
     <Section variant="dark" labelledby="sg-dark">
       <SectionHeading
         id="sg-dark"
         level={3}
-        eyebrow="Dark section"
         title="For emphasis"
         lead="Text, links and focus rings adapt automatically."
       />

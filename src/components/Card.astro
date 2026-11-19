@@ -50,6 +50,10 @@ const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-m);
   }
+  /* Lists, tables and forms inside a card stay left-aligned (easier to read) */
+  .card :global(:is(ul, ol, dl, table, form)) {
+    text-align: left;
+  }
   .card__tag {
     margin: 0 0 var(--space-2xs);
     font-size: var(--step--1);

@@ -128,8 +128,8 @@
    * turn it off (spec §7.2: no gradients or shadows there). The highlight strengths are
    * limited so text keeps its contrast; scripts/contrast.ts checks the lightest point.
    */
-  --gloss-highlight: 0.18; /* white at the top of buttons */
-  --gloss-band-highlight: 0.06; /* white in the top corner of dark bands */
+  --gloss-highlight: 0.24; /* white at the top of buttons */
+  --gloss-band-highlight: 0.08; /* white in the top corner of dark bands */
   --gloss: linear-gradient(
     180deg,
     rgb(255 255 255 / var(--gloss-highlight)) 0%,
@@ -148,22 +148,25 @@
   --gloss-cta: linear-gradient(180deg, rgb(255 255 255 / 0.18) 0%, rgb(255 255 255 / 0) 65%);
   /* Sheen on cards, panels, picture buttons and coloured bands (global.css). It only lightens,
      so dark text gains contrast; on dark sections a much fainter one is used (.on-dark). */
-  --gloss-surface-highlight: 0.45;
+  --gloss-surface-highlight: 0.6;
+  /* A brighter top, a soft fade through the middle: reads as a glossy surface */
   --gloss-surface: linear-gradient(
     180deg,
     rgb(255 255 255 / var(--gloss-surface-highlight)) 0%,
-    rgb(255 255 255 / 0) 60%
+    rgb(255 255 255 / calc(var(--gloss-surface-highlight) * 0.35)) 42%,
+    rgb(255 255 255 / 0) 72%
   );
   --elevation: 0 1px 2px rgb(22 36 31 / 0.06), 0 4px 14px rgb(22 36 31 / 0.06);
 
   color-scheme: light;
 }
 
-/* Flat everywhere except the Standard theme */
+/* Flat everywhere except the Standard theme, and when Glossy colours is switched off */
 [data-theme='calm'],
 [data-theme='contrast'],
 [data-theme='dim'],
-:root[data-simple='on'] {
+:root[data-simple='on'],
+:root[data-gloss='off'] {
   --gloss: none;
   --gloss-shadow: none;
   --gloss-band: none;

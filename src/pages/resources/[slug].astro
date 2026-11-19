@@ -29,7 +29,7 @@ const checked = entry.data.lastChecked?.toLocaleDateString('en-ZA', {
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.summary}>
-  <PageHero eyebrow={entry.data.audience} title={entry.data.title} lead={entry.data.summary}>
+  <PageHero title={entry.data.title} lead={entry.data.summary}>
     {checked && <p>Last checked: {checked}</p>}
   </PageHero>
   <Section narrow>

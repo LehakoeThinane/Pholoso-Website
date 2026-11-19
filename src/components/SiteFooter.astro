@@ -1,9 +1,12 @@
 ---
 /**
- * SiteFooter: logo and tagline, the update sign-up form,
- * Explore and Get involved links, contact details, the registration line, copyright,
- * Privacy and Accessibility links. Leaves room at the bottom for the floating
- * Comfort & access button. No props.
+ * SiteFooter, in three tidy parts:
+ * 1. Updates: a compact sign-up strip (heading and intro on the left; email and Sign up side by
+ *    side on the right, with the consent tick below).
+ * 2. Four even columns: logo and tagline, Explore, Get involved, Contact us.
+ * 3. A bottom bar: the registration line, then copyright and the Privacy, Accessibility and
+ *    Comfort & access links.
+ * Leaves room at the bottom for the floating Comfort & access button. No props.
  */
 import { Image } from 'astro:assets';
 import logo from '../assets/logo/logo.png';
@@ -15,15 +18,20 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container site-footer__grid">
-    <div class="site-footer__brand">
-      <Image src={logo} alt={site.name} width={220} densities={[1, 2]} class="site-footer__logo" />
-      <p class="site-footer__tagline">{site.tagline}</p>
+  <div class="container">
+    <div class="site-footer__updates">
       <SignupForm
         id="footer-signup"
         heading="Get occasional updates"
         intro="News about our work, a few times a year."
       />
+    </div>
+  </div>
+
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <Image src={logo} alt={site.name} width={220} densities={[1, 2]} class="site-footer__logo" />
+      <p class="site-footer__tagline">{site.tagline}</p>
     </div>
 
     <nav aria-label={strings.footerNavLabel} class="site-footer__nav">
@@ -51,14 +59,15 @@ const year = new Date().getFullYear();
 
     <div class="site-footer__contact">
       <h2 class="site-footer__heading">{strings.footer.contact}</h2>
-      <p>
-        Email: <a href={`mailto:${site.email}`}>{site.email}</a>
-        <br />
-        {site.location}
-      </p>
-      <p>
-        <a href="/contact/">Send us a message</a>
-      </p>
+      <ul>
+        <li>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+        <li>
+          <a href="/contact/">Send us a message</a>
+        </li>
+        <li class="site-footer__place">{site.location}</li>
+      </ul>
     </div>
   </div>
 
@@ -87,17 +96,114 @@ const year = new Date().getFullYear();
     border-top: var(--border-width) solid var(--color-line);
     padding-top: var(--space-xl);
     /* Room for the floating Comfort & access button */
-    padding-bottom: calc(var(--space-2xl) + var(--button-min));
+    padding-bottom: calc(var(--space-xl) + var(--button-min));
     font-size: var(--step--1);
   }
+
+  /* 1. Updates strip: a card across the top */
+  .site-footer__updates {
+    padding: var(--space-m) var(--space-l);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-m);
+    background-color: var(--color-bg);
+    background-image: var(--gloss-surface);
+  }
+  .site-footer__updates :global(.signup) {
+    display: grid;
+    gap: 0 var(--space-xl);
+    align-items: center;
+  }
+  .site-footer__updates :global(.signup__heading) {
+    margin-bottom: var(--space-3xs);
+  }
+  .site-footer__updates :global(.signup > p) {
+    margin: 0 0 var(--space-s);
+    color: var(--color-text-muted);
+  }
+  /* Email field and Sign up button side by side; the other parts keep their own rows */
+  .site-footer__updates :global(form) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-s);
+    max-width: none;
+  }
+  .site-footer__updates :global(form > *) {
+    grid-column: 1 / -1;
+  }
+  .site-footer__updates :global(form > .field) {
+    grid-column: 1;
+    grid-row: 3;
+    margin-bottom: 0;
+  }
+  .site-footer__updates :global(form > .button) {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: end;
+  }
+  .site-footer__updates :global(.signup__consent) {
+    grid-row: 4;
+    margin-top: var(--space-s);
+  }
+  /* Narrow phones: the email box full width, then the consent tick, then the button */
+  @media (max-width: 29.99rem) {
+    .site-footer__updates {
+      padding: var(--space-m);
+    }
+    .site-footer__updates :global(form) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .site-footer__updates :global(form > .button) {
+      grid-column: 1;
+      grid-row: 5;
+      justify-self: start;
+      margin-top: var(--space-xs);
+    }
+  }
+  @media (min-width: 48rem) {
+    .site-footer__updates :global(.signup) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+      grid-template-areas:
+        'heading form'
+        'intro form';
+    }
+    .site-footer__updates :global(.signup__heading) {
+      grid-area: heading;
+      align-self: end;
+    }
+    .site-footer__updates :global(.signup > p) {
+      grid-area: intro;
+      align-self: start;
+      margin: 0;
+    }
+    .site-footer__updates :global(form) {
+      grid-area: form;
+    }
+  }
+
+  /* 2. Four even columns */
   .site-footer__grid {
     display: grid;
     gap: var(--space-l);
+    margin-top: var(--space-xl);
   }
-  @media (min-width: 48rem) {
+  @media (min-width: 40rem) {
     .site-footer__grid {
-      grid-template-columns: 1.4fr 2fr 1.2fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
+  @media (min-width: 62rem) {
+    .site-footer__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    /* The two link lists are columns 2 and 3 of the same grid */
+    .site-footer__nav {
+      grid-column: span 2;
+    }
+  }
+  .site-footer__nav {
+    display: grid;
+    gap: var(--space-l);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .site-footer__logo {
     width: 11rem;
@@ -107,11 +213,7 @@ const year = new Date().getFullYear();
   .site-footer__tagline {
     font-size: var(--step-0);
     font-weight: 700;
-  }
-  .site-footer__nav {
-    display: grid;
-    gap: var(--space-l);
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    max-width: 22rem;
   }
   .site-footer__heading {
     font-size: var(--step-0);
@@ -125,16 +227,32 @@ const year = new Date().getFullYear();
   .site-footer li {
     margin: 0;
   }
-  .site-footer li a {
+  .site-footer__grid li a {
     display: inline-flex;
     align-items: center;
     min-height: var(--target-min);
   }
+  .site-footer__place {
+    padding-top: var(--space-2xs);
+    color: var(--color-text-muted);
+  }
+
+  /* 3. Bottom bar */
   .site-footer__legal {
-    margin-top: var(--space-l);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-l);
+    margin-top: var(--space-xl);
     padding-top: var(--space-m);
     border-top: var(--border-width) solid var(--color-line);
     color: var(--color-text-muted);
+  }
+  .site-footer__registration {
+    margin: 0;
+    font-weight: 700;
+    color: var(--color-text);
   }
   .site-footer__legal-links {
     display: flex;
@@ -142,11 +260,9 @@ const year = new Date().getFullYear();
     align-items: center;
     gap: 0 var(--space-m);
   }
-  .site-footer__legal-links li + li {
-    margin-top: 0;
-  }
-  .site-footer__registration {
-    font-weight: 700;
-    color: var(--color-text);
+  .site-footer__legal-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
   }
 </style>

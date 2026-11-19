@@ -268,19 +268,73 @@ main:focus {
   );
 }
 [data-theme] .on-dark,
-:root[data-simple='on'] .on-dark {
+:root[data-simple='on'] .on-dark,
+:root[data-gloss='off'] .on-dark {
   --gloss-surface: none;
 }
 
-/* Brand motif: the small gold triangle from the logo. Decorative only. */
-.triangle-marker::before {
-  content: '';
-  display: inline-block;
-  width: 0.7em;
-  height: 0.6em;
-  margin-right: 0.45em;
-  background-color: var(--color-accent);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+/*
+ * Gentle motion: things you can click lift a little on hover and settle when pressed; menu
+ * groups slide open. Short (under 0.2 s), and only when motion is allowed: [data-anim] is set
+ * by public/prefs.js unless the device asks for less motion or Reduce motion, Calm colours or
+ * Simplified page is on. Plain cards do not move, so nothing pretends to be a link.
+ */
+[data-anim]
+  :is(
+    .button,
+    .site-header__donate,
+    .site-nav__kids,
+    .door,
+    .pic-btn,
+    .story-link,
+    .printable__link,
+    .read-to-me,
+    .kids-toggle,
+    .picker__button,
+    .face-button,
+    .feeling__link,
+    .gate__back,
+    .breathe__button,
+    .comfort-toggle
+  ) {
+  transition:
+    translate 0.18s ease-out,
+    box-shadow 0.18s ease-out,
+    background-color 0.18s ease-out;
+}
+@media (hover: hover) {
+  [data-anim]
+    :is(
+      .button,
+      .site-header__donate,
+      .site-nav__kids,
+      .door,
+      .pic-btn,
+      .story-link,
+      .printable__link,
+      .read-to-me,
+      .kids-toggle,
+      .picker__button,
+      .face-button,
+      .feeling__link,
+      .gate__back,
+      .breathe__button,
+      .comfort-toggle
+    ):hover {
+    translate: 0 -2px;
+  }
+}
+[data-anim] .site-nav__group[open] .site-nav__sub {
+  animation: menu-open 0.16s ease-out;
+}
+[data-anim] .site-nav__chevron {
+  transition: rotate 0.16s ease-out;
+}
+@keyframes menu-open {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
 }
 
 /* Content written by editors (Markdown) */
@@ -296,8 +350,7 @@ main:focus {
 
 /* Simplified page: hide decorative pictures and sections, keep content and navigation */
 :root[data-simple='on'] [data-decorative],
-:root[data-simple='on'] .photo:not([data-essential]),
-:root[data-simple='on'] .triangle-marker::before {
+:root[data-simple='on'] .photo:not([data-essential]) {
   display: none !important;
 }
 

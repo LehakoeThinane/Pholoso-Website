@@ -30,6 +30,9 @@ const { steps } = Astro.props;
   .steps {
     list-style: none;
     padding: 0;
+    /* Centred as a block under a centred heading; the text inside stays left-aligned */
+    max-width: calc(var(--measure) + 4rem);
+    margin-inline: auto;
     display: grid;
     gap: var(--space-m);
   }

@@ -103,6 +103,20 @@ const sw = (key: string) => `cp-${key}`;
         </p>
       </div>
     ))}
+    <div class="comfort__switch comfort__switch--gloss">
+      <input
+        type="checkbox"
+        role="switch"
+        id="cp-gloss"
+        data-setting="gloss"
+        aria-describedby="cp-gloss-hint"
+      />
+      <label for="cp-gloss">Glossy colours</label>
+      <p class="comfort__hint" id="cp-gloss-hint">
+        A soft shine on buttons, cards and coloured areas. Turn it off for flat colours. Standard
+        colours only.
+      </p>
+    </div>
   </fieldset>
 
   <fieldset class="comfort__group">

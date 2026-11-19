@@ -8,6 +8,117 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Footer rearranged
+
+**Why:** owner feedback: the footer looked disorganised. The sign-up form made the first column
+very tall, the link columns floated at the top with empty space under them, and the
+registration and copyright lines sat loose at the bottom.
+
+**What changed** (same content and wording, new arrangement):
+
+1. **Updates strip** across the top, as a card: heading and short intro on the left; the email
+   box and Sign up button side by side on the right, with the consent tick below. On narrow
+   phones: email, consent, then the button.
+2. **Four even columns:** logo and tagline, Explore, Get involved, Contact us (email, "Send us a
+   message", location). Two columns on tablets, one on phones.
+3. **Bottom bar:** the registration line, then copyright with Privacy notice, Accessibility and
+   Comfort & access settings.
+
+Error messages for the sign-up form still appear correctly in the new layout. 198 browser tests
+pass; Lighthouse passes all budgets.
+
+---
+
+## 2026-11-19 · `dev` · Glossy colours switch, richer gloss, gentle motion
+
+**Why:** owner direction for the Standard theme: more gloss on the colours, a way to switch the
+gloss on and off (the most important part), and reasonable motion.
+
+**What changed**
+
+- **"Glossy colours" switch** in Comfort & access, under the colour choices. On by default; off
+  makes every surface flat while keeping the Standard colours (buttons, cards, picture buttons,
+  coloured bands, the hero edge glow). Saved on the device and applied before the page draws,
+  like the other settings (`data-gloss="off"`). Calm, High contrast, Dim and Simplified page are
+  always flat, as before.
+- **Richer gloss in Standard:** a brighter, glossier top on surfaces (a bright top fading through
+  the middle), slightly more shine on buttons and dark bands. Every text and link colour over the
+  gloss still passes contrast (lowest: white on the green button's shiniest point, 5.09:1).
+- **Gentle motion:** clickable things (buttons, Donate, doors, picture buttons, toggles) lift 2 px
+  on hover and settle when pressed; menu groups slide open; the chevron turns. All under 0.2 s,
+  and only when motion is allowed (not with the device's reduced motion, Reduce motion, Calm
+  colours or Simplified page). Plain cards do not move, so nothing pretends to be a link.
+- **Tests:** axe with gloss off on the sample pages; the switch is on by default, flattens the
+  page and is remembered across pages. 198 passed, 0 failed. Lighthouse 100 on all six sampled
+  pages; CSS 15.1 KB (budget 16 KB).
+
+---
+
+## 2026-11-19 · `dev` · Four-item menu, labels above headings removed, quotes centred
+
+**Why:** owner direction: a shorter menu on one row between the logo and Donate, no small labels
+above headings, and the featured quote centred.
+
+**What changed**
+
+- **Menu: four entries in one row** between the logo and Donate (header 169 px → 91 px tall):
+  - Kids' World (its own link, first, as the brief asks)
+  - About ▾: About us, Our approach
+  - Stories & resources ▾: Stories, Resources
+  - Get involved ▾: Ways to help, Contact us
+  Groups are native disclosures: they open on click or Enter (not hover), work without
+  JavaScript, and announce as collapsed or expanded. One opens at a time; Esc closes it and returns
+  focus; a click elsewhere or tabbing away closes it. The group with the current page is
+  underlined. On phones the groups open in place inside the Menu. Every page is still in the
+  footer.
+- **Fixed during testing:** on phones, tapping a second group while one was open could miss
+  (closing the first group moved the second under the finger). Taps no longer trigger that
+  close.
+- **Labels above headings removed everywhere:** all 31 (e.g. "The problem", "What we do",
+  "Trust", the page-hero labels, and the hero's "Pholoso Afrika Foundation"), plus "For parents
+  and caregivers" on the 2to.iQ box. The option is removed from the Hero, PageHero and
+  SectionHeading components, and the triangle-marker style is gone.
+- **Quotes centred** (home "In their words" and the Hlompho quote), with a short gold bar above
+  instead of a bar down the left.
+- **Tests:** new browser tests for the one-row menu (wide screens), groups by keyboard and
+  pointer, Esc and click-away, and groups without JavaScript. 191 passed, 0 failed.
+- DECISIONS.md §15; HANDOVER.md updated.
+
+---
+
+## 2026-11-18 · `dev` · Header menu, alignment pass, handover update
+
+**What changed**
+
+- **Header menu (wide screens):** the menu now has its own centred row under the logo and
+  Donate button. Side by side it needed about 1,255 px but the page allows 1,224 px, so links
+  were breaking onto two lines ("About us", "Our approach", "Get involved"). Links no longer
+  break at any width.
+- **Header (phones):** logo centred on top, Donate and Menu centred below it (they were hanging
+  to the left), and the opened menu is centred too.
+- **Alignment pass** (every page checked at 1280 px and 390 px):
+  - Page-hero labels ("About us", "Donate" …) now sit centred over their headings.
+  - Section headings written straight into a page (e.g. "How to give", "Our bank details") are
+    centred like the others; About's "Our mission" / "Our vision" too.
+  - Lists, tables and forms inside centred cards stay left-aligned (Get involved's tick lists
+    were centred, with the ticks stranded on the left).
+  - Numbered steps (Our approach, Donate) are centred as a block under their heading; their
+    text stays left-aligned.
+  - The stories filter row and table captions are centred.
+  - Kids' World grids fill the whole row (Kids like me left an empty sixth column); each
+    picture story's heading and Read it to me button are centred.
+  - Make and do: every Print it button has the same two-line shape.
+- **Browser tests:** the comfort-setting accessibility checks run one page per test (45 short
+  tests instead of 9 long ones that were close to timing out, because axe works harder with
+  the gloss gradients). 186 passed, 0 failed.
+- **HANDOVER.md** updated for today's design changes and the 16 KB budget.
+
+**The 9 missing facts:** checked https://pholoso.africa/ on 18 November 2026. It is still the
+old single-page site and contains none of them (no bank details, address, Information Officer,
+accessibility response time or story provenance), so they remain placeholders.
+
+---
+
 ## 2026-11-18 · `dev` · New hero design, gloss everywhere, centred text
 
 **Why:** owner design direction, modelled on a reference layout (a photo bleeding to the edge

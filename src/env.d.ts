@@ -14,6 +14,7 @@ interface ComfortPrefs {
   identityFirst?: boolean;
   rate?: 0.75 | 1 | 1.25 | 1.5;
   sound?: boolean;
+  gloss?: boolean;
 }
 
 /** Settings after device preferences are applied. */
@@ -29,6 +30,7 @@ interface ComfortEffective {
   identityFirst: boolean;
   rate: 0.75 | 1 | 1.25 | 1.5;
   sound: boolean;
+  gloss: boolean;
 }
 
 interface Window {

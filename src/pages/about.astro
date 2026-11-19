@@ -58,18 +58,13 @@ const values = [
   description="Who the Pholoso Afrika Foundation is: our belief, mission, vision and values, the gap in inclusive education, and how we are governed."
 >
   <PageHero
-    eyebrow="About us"
     title="Every child should learn in a way that fits how their mind works"
     lead={`${site.name} is a South African registered non-profit company. We work for inclusive, adaptive education for neurodivergent children, in schools, communities and families.`}
   />
 
   <Section labelledby="belief-title" narrow>
     <div id="belief-text">
-      <SectionHeading
-        id="belief-title"
-        eyebrow="What we believe"
-        title="Difference is not a deficit"
-      />
+      <SectionHeading id="belief-title" title="Difference is not a deficit" />
       <p>
         Neurodivergent learners are not defined by limits. They think, communicate, process
         information and take part in the world in different ways.
@@ -83,11 +78,7 @@ const values = [
   </Section>
 
   <Section variant="alt" labelledby="entities-title">
-    <SectionHeading
-      id="entities-title"
-      eyebrow="Two organisations, one mission"
-      title="The Foundation and 2to.iQ"
-    />
+    <SectionHeading id="entities-title" title="The Foundation and 2to.iQ" />
     <CardGrid columns={2}>
       <Panel title={site.name}>
         <p>A registered non-profit company and Public Benefit Organisation.</p>
@@ -103,7 +94,7 @@ const values = [
     </CardGrid>
   </Section>
 
-  <Section labelledby="mission-title">
+  <Section labelledby="mission-title" class="statements">
     <CardGrid columns={2}>
       <div>
         <h2 id="mission-title">Our mission</h2>
@@ -123,7 +114,7 @@ const values = [
   </Section>
 
   <Section variant="alt" labelledby="values-title">
-    <SectionHeading id="values-title" eyebrow="What we stand for" title="Our six values" />
+    <SectionHeading id="values-title" title="Our six values" />
     <CardGrid as="ul">
       {values.map((v) => (
         <li>
@@ -138,7 +129,6 @@ const values = [
   <Section id="the-gap" labelledby="gap-title">
     <SectionHeading
       id="gap-title"
-      eyebrow="The gap"
       title="The commitments exist. Delivery has not caught up."
       lead="South Africa has had an inclusive education policy since 2001, and it has signed the main international commitments. For many children, daily reality still falls short."
     />
@@ -175,7 +165,7 @@ const values = [
   </Section>
 
   <Section variant="alt" labelledby="trust-title">
-    <SectionHeading id="trust-title" eyebrow="Trust" title="How we work responsibly" />
+    <SectionHeading id="trust-title" title="How we work responsibly" />
     <TrustBlock />
     <Panel title="About the words we use" level={3}>
       <p>
@@ -198,6 +188,12 @@ const values = [
 </BaseLayout>
 
 <style>
+  /* Mission and vision: short statements, centred like the other headings */
+  :global(.statements) h2,
+  :global(.statements) p {
+    text-align: center;
+    margin-inline: auto;
+  }
   :global(.trust) + :global(.panel) {
     margin-top: var(--space-l);
   }

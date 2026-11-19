@@ -65,7 +65,6 @@ const ngo = {
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(ngo)} />
   <Hero
-    eyebrow={site.name}
     title={site.tagline}
     image={hero}
     imageAlt="A teacher helps a boy use a tablet at a classroom table, while other children draw. One child wears headphones."
@@ -103,7 +102,6 @@ const ngo = {
   <Section id="our-work" labelledby="problem-title">
     <SectionHeading
       id="problem-title"
-      eyebrow="The problem"
       title="Too many children are left out of learning"
       lead="School systems are often built for one way of learning. Children who learn differently are left behind or left out."
     />
@@ -124,12 +122,7 @@ const ngo = {
   </div>
 
   <Section variant="alt" labelledby="what-title">
-    <SectionHeading
-      id="what-title"
-      eyebrow="What we do"
-      title="Three areas of work"
-      lead={site.coreIdea}
-    />
+    <SectionHeading id="what-title" title="Three areas of work" lead={site.coreIdea} />
     <CardGrid>
       <Card title="Advocacy and awareness">
         <p>
@@ -158,11 +151,7 @@ const ngo = {
   <Section variant="dark" labelledby="partner-title">
     <div class="split">
       <div>
-        <SectionHeading
-          id="partner-title"
-          eyebrow="Our edtech partner"
-          title="2to.iQ: learning that adapts to the child"
-        />
+        <SectionHeading id="partner-title" title="2to.iQ: learning that adapts to the child" />
         <p>
           {site.partner.name} builds an adaptive learning platform designed first for neurodivergent
           learners. It adapts to how each learner thinks, communicates and engages, instead of
@@ -197,7 +186,7 @@ const ngo = {
 
   {featured && (
     <Section labelledby="voice-title" narrow>
-      <SectionHeading id="voice-title" eyebrow="A voice from our stories" title="In their words" />
+      <SectionHeading id="voice-title" title="In their words" />
       <Quote cite={featured.data.who} note={storyNote} large>
         {featured.data.quote}
       </Quote>
@@ -208,12 +197,7 @@ const ngo = {
   )}
 
   <Section variant="alt" labelledby="help-title">
-    <SectionHeading
-      id="help-title"
-      eyebrow="Ways to help"
-      title="How you can help"
-      lead="Choose the way that fits you."
-    />
+    <SectionHeading id="help-title" title="How you can help" lead="Choose the way that fits you." />
     <CardGrid>
       <Card title="Give" href="/donate/" linkText="How to donate">
         <p>
@@ -241,7 +225,7 @@ const ngo = {
   </Section>
 
   <Section labelledby="trust-title">
-    <SectionHeading id="trust-title" eyebrow="Trust" title="Why you can trust us" />
+    <SectionHeading id="trust-title" title="Why you can trust us" />
     <TrustBlock />
   </Section>
 </BaseLayout>

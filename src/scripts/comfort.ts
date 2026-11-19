@@ -7,7 +7,15 @@ import { announce } from './announce';
 import { applyTerms } from './terms';
 
 type Setting =
-  'spacing' | 'guide' | 'focus' | 'motion' | 'simple' | 'images' | 'identityFirst' | 'sound';
+  | 'spacing'
+  | 'guide'
+  | 'focus'
+  | 'motion'
+  | 'simple'
+  | 'images'
+  | 'identityFirst'
+  | 'sound'
+  | 'gloss';
 
 const LABELS: Record<Setting, string> = {
   spacing: 'Reading spacing',
@@ -18,6 +26,7 @@ const LABELS: Record<Setting, string> = {
   images: 'Hide images',
   identityFirst: 'Identity-first wording',
   sound: "Sounds in Kids' World",
+  gloss: 'Glossy colours',
 };
 const THEMES = { standard: 'Standard', calm: 'Calm', contrast: 'High contrast', dim: 'Dim' };
 

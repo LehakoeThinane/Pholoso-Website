@@ -74,11 +74,13 @@ if (kb > MAX_KB) throw new Error(`Printable ${file} is ${kb} KB (limit ${MAX_KB}
     flex: 1;
   }
   .printable__link {
+    /* Always two lines ("Print it" over the file size), so every card's button is the same shape */
     display: inline-flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0 var(--space-2xs);
+    gap: 0;
+    min-width: 11rem;
     min-height: var(--kids-target);
     padding: var(--space-2xs) var(--space-m);
     border: 3px solid var(--color-text);

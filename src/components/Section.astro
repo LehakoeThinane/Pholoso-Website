@@ -62,6 +62,10 @@ const {
   .section--cta :global(p) {
     margin-inline: auto;
   }
+  /* Section headings written straight into a section are centred, like SectionHeading */
+  .section > .container > :global(h2) {
+    text-align: center;
+  }
   .section__narrow {
     max-width: calc(var(--measure) + 2 * var(--gutter));
   }

@@ -4,7 +4,6 @@
  *
  * Props:
  * - title: the <h1> text
- * - eyebrow: short label above the heading
  * - lead: one or two plain sentences saying what this page is for
  * - level: 1 (default). Only the styleguide uses 2, to keep one <h1> per page.
  *
@@ -12,18 +11,16 @@
  */
 interface Props {
   title: string;
-  eyebrow?: string;
   lead?: string;
   level?: 1 | 2;
 }
 
-const { title, eyebrow, lead, level = 1 } = Astro.props;
+const { title, lead, level = 1 } = Astro.props;
 const Heading = `h${level}` as 'h1' | 'h2';
 ---
 
 <div class="page-hero">
   <div class="container">
-    {eyebrow && <p class="page-hero__eyebrow triangle-marker">{eyebrow}</p>}
     <Heading class="page-hero__title">{title}</Heading>
     {lead && <p class="page-hero__lead">{lead}</p>}
     <slot />
@@ -38,12 +35,6 @@ const Heading = `h${level}` as 'h1' | 'h2';
     text-align: center;
     border-bottom: var(--border-width) solid var(--color-line);
   }
-  .page-hero__eyebrow {
-    font-weight: 700;
-    font-size: var(--step--1);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-2xs);
-  }
   .page-hero__title {
     max-width: 15.65em; /* = 24ch in Atkinson Bold; em, so it does not change when the font swaps in */
     margin-inline: auto;
@@ -55,7 +46,7 @@ const Heading = `h${level}` as 'h1' | 'h2';
   }
   /* Anything else placed in the hero (notices, buttons) is centred as a block; notices keep
      their own left-aligned text */
-  .page-hero :global(.container > :not(.page-hero__eyebrow, .page-hero__title, .page-hero__lead)) {
+  .page-hero :global(.container > :not(.page-hero__title, .page-hero__lead)) {
     margin-inline: auto;
   }
   .page-hero :global(.notice) {

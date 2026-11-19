@@ -78,4 +78,5 @@ export interface ComfortPrefsForTests {
   focus: 'strong' | 'normal';
   identityFirst: boolean;
   sound: boolean;
+  gloss: boolean;
 }
