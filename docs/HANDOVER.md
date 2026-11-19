@@ -21,6 +21,7 @@ unknown is a visible placeholder.
 | 7. Images and SEO                                | Done: optimised images, share image, structured data, sitemap, robots, `.htaccess`                |
 | 8. Quality gate                                  | Done, except the **manual screen-reader test** (section 4)                                        |
 | 9. Docs and handover                             | Done (this report)                                                                                |
+| 4c. Parent Guide, Phase 1 (scripted) | Done (19 November): 7 draft topics, a page per step, chat on top. **Needs professional review** (section 4). Phase 2 (AI) not built. |
 
 **Test results (local, 18 November 2026):** 150 browser tests passed, 0 failed (axe: no
 accessibility violations on any page, at phone and desktop size). HTML, links, contrast,
@@ -104,16 +105,21 @@ Before going live:
 7. **Manual screen-reader test:** follow the script in [a11y-testing.md](a11y-testing.md) with
    NVDA and VoiceOver, and record the results.
 8. **2to.iQ:** confirm the address parents should be sent to (currently https://2toiq.africa).
-9. **Merge `dev` into `main`** by pull request once the above is agreed.
+9. **Parent Guide:** choose a qualified professional (for example an educational psychologist
+   or an occupational therapist) to review all seven topics in `src/content/guides/`; supply
+   verified, current South African helpline numbers for "Need help now?"; and confirm the name
+   ("Parent Guide" is a placeholder). Until the review, every reply says "Draft – under review"
+   and the step pages stay out of search engines.
+10. **Merge `dev` into `main`** by pull request once the above is agreed.
 
 Going live and after:
 
-10. **Deploy** following [DEPLOY.md](DEPLOY.md): back up the current site first.
-11. **Run the smoke test** against the live site, and send a real test message through each
+11. **Deploy** following [DEPLOY.md](DEPLOY.md): back up the current site first.
+12. **Run the smoke test** against the live site, and send a real test message through each
     form (contact, updates, Section 18A receipt) to check delivery and formatting.
-12. **Google Search Console:** verify the domain and submit
+13. **Google Search Console:** verify the domain and submit
     `https://pholoso.africa/sitemap-index.xml`.
-13. Record the release in [CHANGELOG.md](CHANGELOG.md).
+14. Record the release in [CHANGELOG.md](CHANGELOG.md).
 
 Optional:
 

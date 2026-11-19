@@ -1,0 +1,81 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+# Check before review: the SIAS policy and support-team names match current Department of
+# Basic Education guidance.
+order: 4
+title: 'Talking to my child’s school'
+keywords:
+  [
+    school,
+    teacher,
+    teachers,
+    class,
+    classroom,
+    principal,
+    sias,
+    support,
+    team,
+    learning,
+    homework,
+    bullying,
+    bullied,
+    teased,
+    meeting,
+    district,
+    inclusive,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'You know {name} best, and the school can help too. What do you want to talk to the school about?'
+    choices:
+      - { label: '{Name} is struggling in class', next: 2 }
+      - { label: 'I am worried about how {name} is treated', next: 3 }
+      - { label: 'I want to share what helps {name}', next: 4 }
+
+  - step: 2
+    message: 'Start by asking the class teacher for a meeting. Most South African schools also have a support team, often called the School-Based Support Team.'
+    suggestions:
+      - 'Before the meeting, write down what you see at home: strengths, worries and what helps.'
+      - 'Ask what the teacher sees, and listen. You may each notice different things.'
+      - 'Agree on one or two small changes to try, and a date to talk again.'
+    choices:
+      - { label: 'What if nothing changes?', next: 5 }
+      - { label: 'Getting an assessment in South Africa', next: assessment }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'If {name} is teased, left out or treated unfairly, you have every right to raise it. Be calm, clear and specific.'
+    suggestions:
+      - 'Write down what happened, when, and who was involved.'
+      - 'Ask the teacher or principal for a meeting, and ask what the school will do.'
+      - 'Ask {name} what would make school feel safer, in words, pictures or drawings.'
+    choices:
+      - { label: 'What if nothing changes?', next: 5 }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'Sharing what works at home can make a big difference at school. Keep it short and practical.'
+    suggestions:
+      - 'Make a one-page “All about me” sheet: what {name} loves, what is hard, and what helps.'
+      - 'Include {interest}. Interests are a doorway into how a child learns.'
+      - 'Ask the teacher to tell you what works in class too.'
+    learnMore:
+      - { label: 'Our approach: start with what the child loves', href: '/approach/' }
+    choices:
+      - { label: '{Name} is struggling in class', next: 2 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 5
+    message: 'If things do not improve, you can ask the school to follow the national SIAS policy (Screening, Identification, Assessment and Support). It sets out how schools plan support for learners.'
+    suggestions:
+      - 'Ask in writing for the school’s support team to look at {name}’s needs.'
+      - 'If more help is needed, the school can ask the district support team for advice.'
+      - 'Keep copies of emails, letters and notes from every meeting.'
+    learnMore:
+      - { label: 'The gap between policy and practice', href: '/about/#the-gap' }
+    choices:
+      - { label: 'Getting an assessment in South Africa', next: assessment }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }

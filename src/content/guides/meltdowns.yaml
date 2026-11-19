@@ -1,0 +1,78 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+order: 1
+title: 'Meltdowns and big feelings'
+keywords:
+  [
+    meltdown,
+    tantrum,
+    angry,
+    anger,
+    screaming,
+    shouting,
+    hitting,
+    upset,
+    crying,
+    calm,
+    overwhelmed,
+    shutdown,
+    feelings,
+    emotions,
+    outburst,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'Big feelings are hard for everyone. When {name} has a big feeling, what usually happens?'
+    choices:
+      - { label: '{Name} has a meltdown', next: 2 }
+      - { label: '{Name} goes quiet or shuts down', next: 3 }
+      - { label: 'It happens at the same times each day', next: 4 }
+
+  - step: 2
+    message: 'A meltdown is not naughty behaviour. It happens when the brain is overloaded and cannot cope for a moment. In the moment, safety and calm matter most.'
+    suggestions:
+      - 'Keep your voice low and use very few words. Questions and reasoning can wait.'
+      - 'Make the space quieter: dim the lights, switch off the TV, and ask other people to give space.'
+      - 'Stay close and stay calm. Afterwards, offer water, rest or {interest}.'
+    learnMore:
+      - { label: 'The Calm corner in Kids’ World', href: '/kids/calm-corner/' }
+    choices:
+      - { label: 'How do I talk about it afterwards?', next: 5 }
+      - { label: 'Can I stop meltdowns before they start?', next: 4 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'Going quiet or very still can also be a reaction to overload. {Name} is not ignoring you. Their body is protecting them from too much.'
+    suggestions:
+      - 'Give time and space, and stay nearby so {name} knows you are there.'
+      - 'Do not insist on talking or eye contact. A nod or pointing is enough for now.'
+      - 'When {name} is ready, offer a calm, familiar activity.'
+    choices:
+      - { label: 'Can I stop this before it starts?', next: 4 }
+      - { label: 'How do I talk about it afterwards?', next: 5 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'Overload usually builds up slowly. Noticing the pattern helps you step in early.'
+    suggestions:
+      - 'For one week, note when big feelings happen: the time, the place and what came just before.'
+      - 'Look for common causes: hunger, tiredness, noise, crowds or a change of plan.'
+      - 'Plan short, calm breaks before the hard times, not only after them.'
+    choices:
+      - { label: 'Tell me about sensory overload', next: sensory }
+      - { label: 'How do I talk about it afterwards?', next: 5 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 5
+    message: 'Once {name} is calm, a short, kind chat can help. Choose a quiet time, perhaps later the same day.'
+    suggestions:
+      - 'Name the feeling without blame: “That was a big feeling. It was hard.”'
+      - 'Ask what helped. Pictures or a feelings chart can help if words are hard.'
+      - 'Agree on one calming thing to try next time, such as a quiet corner or headphones.'
+    learnMore:
+      - { label: 'How do I feel today? in Kids’ World', href: '/kids/feelings/' }
+    choices:
+      - { label: 'Tell me about sensory overload', next: sensory }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }

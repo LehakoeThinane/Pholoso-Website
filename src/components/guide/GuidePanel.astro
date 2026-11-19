@@ -1,0 +1,170 @@
+---
+/**
+ * GuidePanel: the Parent Guide's chat-style card. Behaviour: src/scripts/guide.ts.
+ * Styles: src/styles/guide.css (loaded only on guide pages; see GuideStyles.astro).
+ *
+ * Props:
+ * - topics: every guide topic (for the topic buttons on the welcome screen)
+ * - welcome: show the welcome message and topic buttons (the opening page)
+ *
+ * Slot: default: the guide messages already on the page (a step page has one).
+ *
+ * Without JavaScript: Info opens and closes (native <details>), Feedback is a link, and every
+ * answer is a link to the next step's page. Settings, the message box and the message actions
+ * need JavaScript, so they are shown only when it runs.
+ */
+import { guide } from '../../config/guide';
+import { stepHref, type GuideTopic } from '../../lib/guide';
+import Field from '../Field.astro';
+import Art from '../kids/Art.astro';
+import GetHelpCard from './GetHelpCard.astro';
+
+interface Props {
+  topics: GuideTopic[];
+  welcome?: boolean;
+}
+const { topics, welcome = false } = Astro.props;
+const anyDraft = topics.some((t) => !t.data.reviewed);
+---
+
+<div class="guide" data-guide>
+  <div class="guide__bar">
+    <p class="guide__title">
+      {guide.name} <span class="guide__beta">Beta</span>
+    </p>
+    <div class="guide__tools">
+      <details class="guide__tool" data-guide-drawer>
+        <summary>Info</summary>
+        <div class="guide__drawer">
+          <h2 class="guide__drawer-title">About this guide</h2>
+          <p>
+            A helper for parents and caregivers, written by people at the Foundation. It offers
+            short, practical, strengths-based ideas.
+          </p>
+          <p>
+            <strong>It does not diagnose, treat or give therapy</strong>, and it does not replace a
+            doctor, psychologist, therapist or teacher. For anything serious, please talk to a
+            professional.
+          </p>
+          {anyDraft && (
+            <p>
+              <strong>Draft – under review:</strong> a qualified professional has not yet checked
+              this advice.
+            </p>
+          )}
+          <p>
+            <strong>Privacy:</strong> nothing you type or tap is sent anywhere. Your settings stay
+            in this browser. Read our <a href="/privacy/">privacy notice</a>.
+          </p>
+          <GetHelpCard level={3} />
+        </div>
+      </details>
+      <a class="guide__tool" href={guide.feedbackHref}>
+        Feedback
+      </a>
+      <details class="guide__tool" data-guide-drawer data-js-only>
+        <summary>Settings</summary>
+        <div class="guide__drawer">
+          <h2 class="guide__drawer-title">Your settings</h2>
+          <p>
+            The guide can use names in its messages. These are saved only in this browser, on this
+            device. Nothing is sent to us.
+          </p>
+          <form class="guide__settings" data-guide-settings>
+            <Field
+              id="guide-parent"
+              name="parent"
+              label="Your first name"
+              autocomplete="given-name"
+              maxlength={40}
+            />
+            <Field
+              id="guide-child"
+              name="child"
+              label="Your child’s first name or nickname"
+              autocomplete="off"
+              maxlength={40}
+            />
+            <Field
+              id="guide-interests"
+              name="interests"
+              label="Something your child loves"
+              hint="For example: trains, music or drawing."
+              autocomplete="off"
+              maxlength={60}
+            />
+            <div class="guide__settings-actions">
+              <button type="submit" class="guide__button">
+                Save
+              </button>
+              <button type="button" class="guide__button guide__button--plain" data-guide-clear>
+                Clear everything
+              </button>
+            </div>
+          </form>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="guide__log" role="log" aria-live="polite" aria-label="Conversation" data-guide-log>
+    {welcome && (
+      <div class="msg msg--guide msg--welcome" data-msg>
+        <Art name="mascot/hello" class="guide__avatar" />
+        <p class="guide__welcome">
+          Welcome<span data-greet></span>!
+        </p>
+        <p>
+          I share short, practical ideas for parents and caregivers of neurodivergent children.
+          Choose a topic to start.
+        </p>
+        <p class="msg__note">
+          I do not diagnose or give medical advice, and I do not replace a doctor, therapist or
+          teacher.
+        </p>
+        <ul class="choices choices--topics" aria-label="Topics">
+          {topics.map((t) => (
+            <li>
+              <a class="choice" href={stepHref(t.id, 1)} data-go>
+                {t.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+    <slot />
+  </div>
+
+  <form class="guide__composer" data-guide-composer data-js-only>
+    <label class="guide__composer-label" for="guide-input">
+      Type your message
+    </label>
+    <div class="guide__composer-row">
+      <input
+        id="guide-input"
+        type="text"
+        maxlength="300"
+        autocomplete="off"
+        enterkeyhint="send"
+        aria-describedby="guide-input-hint"
+      />
+      <button type="submit" class="guide__button">
+        Send
+      </button>
+    </div>
+    <p class="guide__composer-hint" id="guide-input-hint">
+      The guide searches its topics and this website, on your device. Nothing is sent.
+    </p>
+  </form>
+
+  <template data-guide-help>
+    <div class="msg msg--guide msg--help" data-msg>
+      <GetHelpCard level={3} />
+    </div>
+  </template>
+</div>
+
+<script>
+  import '../../scripts/guide';
+</script>

@@ -121,6 +121,27 @@ Recheck figures at least once a year; sources get updated.
 - **Gallery:** only drawings sent by a parent or guardian with consent, checked by a person,
   shown with a first name or nickname and age only. Never fake children's artwork.
 
+## 6b. Writing the Parent Guide
+
+Each topic is one file in `src/content/guides/` (copy an existing one). The build checks every
+file and stops with a clear message if something is wrong.
+
+- **One question at a time.** Each step has a short message, up to three practical ideas, up to
+  two "Learn more" links to pages on this website, and two or three answers.
+- **About 120 words per step at most** (message plus ideas). The build counts.
+- **Answers** lead to a step number in the same topic, another topic's name (for example
+  `sleep`), or `home` (the list of topics). The guide adds "Something else" by itself.
+- **Names:** write `{name}` (or `{Name}` at the start of a sentence) for the child, and
+  `{interest}` for something they love. Without settings these read "your child" and
+  "something they love", so every sentence must still make sense that way.
+- **Strengths-based and kind.** No punishment, no blame, no "naughty". Practical things a tired
+  parent can try today. South African where it matters (schools, clinics, data costs).
+- **Never:** diagnosis, medication, legal advice, or helpline numbers (those come only from the
+  Foundation, verified, in `src/config/guide.ts`). When unsure, point to a professional.
+- **Review.** Every topic starts `reviewed: false` and shows "Draft – under review". Only change
+  it to `reviewed: true` (and fill in `reviewedBy`) after a qualified professional chosen by
+  the Foundation has approved every step. Changing a reviewed topic needs a new review.
+
 ## 7. Pictures
 
 - Every meaningful picture needs **alt text** that says what it shows and why it matters

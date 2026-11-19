@@ -1,0 +1,17 @@
+---
+/**
+ * GuideText: guide wording with {name}, {Name} and {interest} shown as their defaults
+ * ("your child"…), each in a marked span the chat script swaps for the parent's settings.
+ */
+import { guide } from '../../config/guide';
+import { parts } from '../../lib/guide';
+
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+{parts(text).map((p) =>
+  typeof p === 'string' ? p : <span data-t={p.token}>{guide.defaults[p.token]}</span>,
+)}

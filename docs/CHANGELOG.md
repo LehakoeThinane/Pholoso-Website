@@ -8,6 +8,50 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Parent Guide, Phase 1 (scripted guide)
+
+**Why:** owner direction: start the Parent Guide from the brief (§7b), the scripted part first.
+Also: the project rule is now clarified as "no tool credited as an author or co-author".
+
+**What changed**
+
+- **New pages:** `/parent-guide/` (welcome, topic buttons, how-it-works demo) and a page for
+  every step of every topic (34 steps across 7 topics), so the guide works without JavaScript.
+- **Seven draft topics** (`src/content/guides/`): meltdowns and big feelings; screen time and
+  transitions; sleep and routines; talking to my child's school; sensory overload; getting an
+  assessment in South Africa; looking after myself. Each step: one short message, up to three
+  ideas, "Learn more" links to site pages, two or three answers. All marked **Draft – under
+  review**.
+- **Chat:** with JavaScript, answers become buttons and replies are added on the same page.
+  Focus moves to the new answers; the conversation is a polite live log for screen readers.
+  Under every reply: Helpful, Not helpful, Copy, Listen, Report a problem.
+- **Message box:** searches the guide's topics and key site pages on the device. Danger words
+  (for example "not breathing", "abused") stop the guide and show **Need help now?** with general
+  emergency wording (no helpline numbers until the Foundation supplies verified ones).
+- **Settings:** your first name, your child's name and something they love, saved only in the
+  browser; they personalise the messages ("When Luna has a big feeling…"). "Clear everything"
+  removes them and the conversation.
+- **Info panel:** what the guide is and is not (no diagnosis, treatment or therapy), draft
+  status, privacy, and Need help now?
+- **Home page:** new section "Help for parents, right now" with a still demo of the guide (Play
+  demo replays it, only when motion is allowed) and a "Try the Parent Guide" button.
+- **Footer:** Parent Guide added under Explore. Not added to the four-item menu.
+- **Privacy notice:** says the guide's settings stay in the browser and nothing is sent.
+- **Build:** warns about unreviewed topics and missing helplines (does not block).
+- **CI:** the repository check now looks for tools credited as authors, committers or
+  co-authors, instead of banning the word everywhere.
+- **Caching:** `.json` files are re-checked like pages, so guide updates show straight away.
+
+**Checks:** 28 new browser tests (no-JS crawl reaches every step, chat, keyboard, search,
+danger words, settings, actions, axe with drawers open, demo with and without motion).
+Guide page script about 10 KB (budget 15 KB); the guide's 1.4 KB stylesheet loads only on guide
+pages.
+
+**Follow-ups:** professional review of all seven topics; verified helpline numbers; confirm the
+name; Phase 2 (AI replies) only after those.
+
+---
+
 ## 2026-11-19 · `dev` · Header calls to action, card design, 2to.iQ section structure
 
 **Why:** owner direction: move the hero's buttons to the top-right corner, fix the design of the

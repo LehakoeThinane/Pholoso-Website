@@ -183,3 +183,28 @@ screens show Donate alone (the page stays in the menu under About). The brief as
 and "See how we work" in the hero; the owner moved them. Cards lifting on hover is decorative
 (most cards are not links): it is small (3 px), short, and only runs when motion is allowed. The
 glow is part of the gloss and switches off with it.
+
+## 17. Parent Guide: scripted first, AI later and off
+
+**Decision:** build the Parent Guide (brief §7b) as a guide written by people first. Every step
+is a real page (`/parent-guide/<topic>/<step>/`), so it works without JavaScript; with
+JavaScript the same content runs as a chat on one page, loaded from `/parent-guide/guides.json`
+(built from the same files). The AI phase is not built yet. Owner decision, 19 November 2026.
+
+**Why:** the scripted guide is free to run, fully under the Foundation's control, and safe to
+review line by line. The AI phase only makes sense once the scripted content has been reviewed
+and the Foundation has chosen a budget, helplines and privacy wording.
+
+**Notes:**
+
+- Nothing is sent anywhere: settings (names, an interest) stay in the browser; the message box
+  searches the guide and a list of site pages on the device; danger words (src/config/guide.ts)
+  show "Need help now?" with general emergency wording until verified numbers are supplied.
+- The guide's styles are a separate stylesheet loaded only on guide pages, so the site-wide CSS
+  does not grow; its script loads only there too (about 10 KB of script on a guide page).
+- Unreviewed topics: "Draft – under review" on every reply, step pages `noindex`, and a build
+  warning. Step pages are never in the sitemap: `/parent-guide/` is the way in.
+- Not in the four-item menu (the owner's four tabs); linked from the home page, the footer, and
+  the guide's own search. Could join "Stories & resources" once reviewed.
+- The home-page demo never plays by itself. All three steps are shown still; "Play demo" replays
+  them one at a time, only when motion is allowed, with "Turn off motion" while playing.

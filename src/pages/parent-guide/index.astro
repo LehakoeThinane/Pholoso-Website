@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Notice from '../../components/Notice.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/Section.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import GuideDemo from '../../components/guide/GuideDemo.astro';
+import GuidePanel from '../../components/guide/GuidePanel.astro';
+import { guide } from '../../config/guide';
+import { guideTopics } from '../../lib/guide';
+// The guide's own stylesheet, loaded only on guide pages (the site-wide one stays small)
+import guideCss from '../../styles/guide.css?url';
+
+const topics = await guideTopics();
+const anyDraft = topics.some((t) => !t.data.reviewed);
+---
+
+<BaseLayout
+  title={guide.name}
+  description="A step-by-step helper for parents and caregivers of neurodivergent children: meltdowns, screen time, sleep, school, sensory overload, assessments and looking after yourself."
+>
+  <link slot="head" rel="stylesheet" href={guideCss} />
+  <PageHero
+    title={guide.name}
+    lead="Short, practical ideas for parents and caregivers. Choose a topic, tap the answer that fits, and the guide suggests what to try."
+  >
+    {anyDraft && (
+      <Notice title="Draft – under review">
+        <p>
+          A qualified professional has not yet checked the advice in this guide. Please treat it as
+          general ideas, not professional advice.
+        </p>
+      </Notice>
+    )}
+  </PageHero>
+
+  <Section labelledby="guide-title">
+    <h2 id="guide-title" class="visually-hidden">
+      Start the guide
+    </h2>
+    <GuidePanel topics={topics} welcome />
+  </Section>
+
+  <Section variant="alt" labelledby="how-title">
+    <SectionHeading
+      id="how-title"
+      title="How the guide works"
+      lead="It asks one question at a time. You tap the answer that fits best."
+    />
+    <GuideDemo />
+  </Section>
+</BaseLayout>

@@ -5,6 +5,7 @@
  */
 import { initComfort } from './comfort';
 import { initCopy } from './copy';
+import { initDemo } from './demo';
 import { initFilters } from './filters';
 import { initForms } from './forms';
 import { initInterests } from './interests';
@@ -43,3 +44,4 @@ run('interests', initInterests);
 run('copy', initCopy);
 run('forms', initForms);
 run('print', initPrint);
+run('demo', initDemo);

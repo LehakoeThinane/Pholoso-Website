@@ -49,8 +49,9 @@ Options -Indexes
 
 # --- Caching -------------------------------------------------------------------
 <IfModule mod_headers.c>
-  # Pages change with every update: browsers must check for a new version.
-  <FilesMatch "\.html$">
+  # Pages (and the Parent Guide's guides.json) change with every update: browsers must check
+  # for a new version.
+  <FilesMatch "\.(html|json)$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
   # Unhashed files (favicon, logo, share image, prefs.js): cache briefly.

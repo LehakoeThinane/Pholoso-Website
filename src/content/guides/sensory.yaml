@@ -1,0 +1,82 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+order: 5
+title: 'Sensory overload'
+keywords:
+  [
+    sensory,
+    senses,
+    noise,
+    noisy,
+    loud,
+    sound,
+    light,
+    bright,
+    crowds,
+    busy,
+    shops,
+    mall,
+    clothes,
+    labels,
+    textures,
+    food,
+    picky,
+    eating,
+    touch,
+    smell,
+    headphones,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'Many neurodivergent children feel sounds, lights, textures or crowds more strongly than other people do. When does {name} seem overwhelmed?'
+    choices:
+      - { label: 'In busy, noisy places', next: 2 }
+      - { label: 'With clothes, food or touch', next: 3 }
+      - { label: 'I am not sure yet', next: 4 }
+
+  - step: 2
+    message: 'Noise and crowds can feel painful, not just annoying. A plan makes outings easier.'
+    suggestions:
+      - 'Try ear defenders or headphones, and sunglasses or a cap for bright light.'
+      - 'Go at quieter times, and keep visits short.'
+      - 'Agree on a signal {name} can use when it gets too much, and a quiet place to go.'
+    choices:
+      - { label: 'What is a sensory break?', next: 5 }
+      - { label: 'Help with meltdowns', next: meltdowns }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'Some children feel textures and tastes very strongly. This is real, not fussiness.'
+    suggestions:
+      - 'Cut out labels, and choose soft, seamless clothes that {name} likes.'
+      - 'Offer a new food next to familiar ones, without pressure to eat it.'
+      - 'Ask before touching, and notice which kinds of touch {name} enjoys, such as firm hugs.'
+    choices:
+      - { label: 'What is a sensory break?', next: 5 }
+      - { label: 'Getting an assessment in South Africa', next: assessment }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'That is fine. Watching closely for a week or two often shows a pattern.'
+    suggestions:
+      - 'Note where {name} was, what they could hear, see and feel, and how they reacted.'
+      - 'Notice what calms them too: a quiet corner, movement, a favourite object, or {interest}.'
+      - 'Share what you notice with teachers, so they can help too.'
+    choices:
+      - { label: 'In busy, noisy places', next: 2 }
+      - { label: 'With clothes, food or touch', next: 3 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 5
+    message: 'A sensory break is a few minutes somewhere calm, doing something that settles the body.'
+    suggestions:
+      - 'Try a quiet corner with a blanket, soft light and a favourite object.'
+      - 'Some children settle with movement: jumping, swinging, or carrying something heavy.'
+      - 'Plan breaks before busy times, not only after them.'
+    learnMore:
+      - { label: 'The Calm corner in Kids’ World', href: '/kids/calm-corner/' }
+    choices:
+      - { label: 'Talking to my child’s school', next: school }
+      - { label: 'Help with meltdowns', next: meltdowns }
+      - { label: 'Ask about something else', next: home }

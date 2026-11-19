@@ -1,0 +1,76 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+order: 2
+title: 'Screen time and transitions'
+keywords:
+  [
+    screen,
+    screens,
+    tablet,
+    phone,
+    games,
+    gaming,
+    tv,
+    television,
+    youtube,
+    transition,
+    transitions,
+    stopping,
+    change,
+    switching,
+    timer,
+    warning,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'Stopping something you enjoy is hard, especially for children who focus deeply. How does {name} react when screen time ends?'
+    choices:
+      - { label: '{Name} has a meltdown', next: 2 }
+      - { label: '{Name} negotiates for more time', next: 3 }
+      - { label: '{Name} seems to ignore me', next: 4 }
+
+  - step: 2
+    message: 'Strong reactions often come from a sudden stop. The brain needs time to move from one thing to the next.'
+    suggestions:
+      - 'Give warnings at 10 minutes, 5 minutes and 1 minute. A visual timer helps.'
+      - 'Stop at a natural break, like the end of a level or an episode, not in the middle.'
+      - 'Have the next activity ready, ideally something {name} enjoys.'
+    choices:
+      - { label: 'What if warnings are not enough?', next: 5 }
+      - { label: 'Help with meltdowns', next: meltdowns }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'Negotiating is a good sign: {name} is using words to ask for what they want. Clear, predictable rules make it easier for both of you.'
+    suggestions:
+      - 'Agree on the rules together at a calm time, not while the screen is on.'
+      - 'Show the plan with pictures or a list, so the rule belongs to the plan, not to you.'
+      - 'Offer a real choice: “Five more minutes now, or save them for after supper?”'
+    choices:
+      - { label: 'What if warnings are not enough?', next: 5 }
+      - { label: 'Help with daily routines', next: sleep }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'When {name} seems to ignore you, they may not have heard you. Deep focus can block out sound.'
+    suggestions:
+      - 'Come close and say {name}’s name first. Wait until they look up or answer.'
+      - 'Touch their shoulder gently, if they like touch.'
+      - 'Use the same short phrase each time, such as “Screen time is finishing.”'
+    choices:
+      - { label: 'What if warnings are not enough?', next: 5 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 5
+    message: 'Some children need more than warnings. A visual schedule shows the whole day, so the end of screen time is expected, not a surprise.'
+    suggestions:
+      - 'Draw or print a simple picture for each part of the day, in order.'
+      - 'Let {name} move or tick off each picture when it is done.'
+      - 'Keep the order the same on most days. Predictable days are calmer days.'
+    learnMore:
+      - { label: 'Resources for families', href: '/resources/' }
+    choices:
+      - { label: 'Help with daily routines', next: sleep }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }

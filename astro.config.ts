@@ -34,7 +34,12 @@ export default defineConfig({
   integrations: [
     todoGuard(),
     sitemap({
-      filter: (page) => !notInSitemap.some((path) => new URL(page).pathname.startsWith(path)),
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        // Parent Guide steps: the opening page (/parent-guide/) is the way in
+        if (path.startsWith('/parent-guide/') && path !== '/parent-guide/') return false;
+        return !notInSitemap.some((p) => path.startsWith(p));
+      },
     }),
   ],
 });

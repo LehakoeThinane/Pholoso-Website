@@ -1,0 +1,38 @@
+---
+/**
+ * GetHelpCard: "Need help now?". Shown in the guide's Info panel, and in the conversation
+ * when the parent types words that suggest danger or an emergency (src/config/guide.ts).
+ *
+ * Helpline numbers come only from guide.helplines, which the Foundation fills in with
+ * verified, current numbers. Until then the card gives general emergency wording.
+ *
+ * Props: level: heading level for "Need help now?" (default 3).
+ */
+import { guide } from '../../config/guide';
+
+interface Props {
+  level?: 2 | 3 | 4;
+}
+const { level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
+---
+
+<div class="help-card">
+  <Heading class="help-card__title">Need help now?</Heading>
+  <p>
+    If a child or an adult is in danger, or this is a medical emergency, call your local emergency
+    number now.
+  </p>
+  {guide.helplines.length > 0 && (
+    <ul class="help-card__list">
+      {guide.helplines.map((h) => (
+        <li>
+          <strong>{h.name}</strong>: <a href={`tel:${h.number.replace(/\s/g, '')}`}>{h.number}</a>
+          {` (${h.when})`}
+        </li>
+      ))}
+    </ul>
+  )}
+  <p>You can also tell someone you trust who is nearby, such as a family member or neighbour.</p>
+  <p class="help-card__note">This guide cannot respond to emergencies.</p>
+</div>

@@ -4,6 +4,7 @@ import Card from '../components/Card.astro';
 import DoorCard from '../components/DoorCard.astro';
 import CardGrid from '../components/CardGrid.astro';
 import ExternalLink from '../components/ExternalLink.astro';
+import GuideDemo from '../components/guide/GuideDemo.astro';
 import Hero from '../components/Hero.astro';
 import Photo from '../components/Photo.astro';
 import Quote from '../components/Quote.astro';
@@ -172,6 +173,15 @@ const ngo = {
         </p>
       </div>
     </div>
+  </Section>
+
+  <Section variant="alt" labelledby="guide-home-title">
+    <SectionHeading
+      id="guide-home-title"
+      title="Help for parents, right now"
+      lead="Our Parent Guide asks one question at a time, then suggests practical things to try. It is a draft while a professional reviews it."
+    />
+    <GuideDemo cta />
   </Section>
 
   {featured && (

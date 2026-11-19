@@ -1,4 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
 import type { AstroIntegration } from 'astro';
+import { guide } from '../config/guide';
 import { site } from '../config/site';
 import { findTodos } from '../lib/todo';
 
@@ -13,6 +15,20 @@ export default function todoGuard(): AstroIntegration {
     hooks: {
       'astro:config:setup': ({ command, logger }) => {
         if (command !== 'build') return;
+        // Parent Guide: warn (never block) about what still needs the Foundation's sign-off
+        const dir = 'src/content/guides';
+        const drafts = readdirSync(dir).filter(
+          (f) =>
+            f.endsWith('.yaml') && /^reviewed:\s*false/m.test(readFileSync(`${dir}/${f}`, 'utf8')),
+        );
+        if (drafts.length)
+          logger.warn(
+            `Parent Guide: ${drafts.length} topic(s) not yet reviewed by a qualified professional (shown as "Draft – under review"): ${drafts.join(', ')}`,
+          );
+        if (guide.helplines.length === 0)
+          logger.warn(
+            'Parent Guide: no verified helpline numbers yet (src/config/guide.ts). "Need help now?" shows general emergency wording only.',
+          );
         const todos = findTodos(site);
         if (todos.length === 0) return;
         const list = todos.map((t) => `  - ${t.path}: ${t.value}`).join('\n');

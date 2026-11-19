@@ -147,7 +147,82 @@ const kidsFeelings = defineCollection({
   }),
 });
 
+/* ---------- Parent Guide (src/content/guides/*.yaml: one file per topic) ---------- */
+
+/** Rough word count, for the "short replies" rule. */
+const words = (s: string) => s.split(/\s+/).filter(Boolean).length;
+
+const guideStep = z.object({
+  /** Step number: 1 is where the topic starts. Becomes the URL /parent-guide/<topic>/<step>/. */
+  step: z.number().int().min(1),
+  /** What the guide says. {name}, {Name} and {interest} are swapped for the parent's settings. */
+  message: z.string().min(10),
+  /** At most three short, practical ideas. */
+  suggestions: z.array(z.string()).max(3).default([]),
+  /** Pages on this website that go further. */
+  learnMore: z
+    .array(
+      z.object({
+        label: z.string(),
+        href: z.string().startsWith('/', 'Guide links must stay on this website'),
+      }),
+    )
+    .max(2)
+    .default([]),
+  /**
+   * Two or three answer buttons. `next` is a step number in this topic, another topic's id
+   * (its first step), or "home" (the list of topics). The guide adds "Something else" itself.
+   */
+  choices: z
+    .array(z.object({ label: z.string().max(60), next: z.union([z.number().int(), z.string()]) }))
+    .min(2)
+    .max(3),
+});
+
+const guides = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/guides' }),
+  schema: z
+    .object({
+      order: z.number().int(),
+      /** The topic button on the guide's opening screen. */
+      title: z.string().max(45),
+      /** Extra words people might type when looking for this topic (on-device search). */
+      keywords: z.array(z.string()).default([]),
+      /**
+       * false until a qualified professional chosen by the Foundation has approved this topic.
+       * Unreviewed topics show "Draft – under review", their pages are kept out of search
+       * engines (noindex), and every build lists them in a warning.
+       */
+      reviewed: z.boolean(),
+      /** Who approved it and when, once reviewed (kept for the record; not shown). */
+      reviewedBy: z.string().optional(),
+      steps: z.array(guideStep).min(3),
+    })
+    .superRefine((topic, ctx) => {
+      const numbers = topic.steps.map((s) => s.step);
+      numbers.forEach((n, i) => {
+        if (n !== i + 1)
+          ctx.addIssue({ code: 'custom', message: `Steps must be numbered 1, 2, 3… in order` });
+      });
+      for (const s of topic.steps) {
+        const count = words([s.message, ...s.suggestions].join(' '));
+        if (count > 120)
+          ctx.addIssue({
+            code: 'custom',
+            message: `Step ${s.step} has ${count} words. Keep each reply to about 120 words.`,
+          });
+        for (const c of s.choices)
+          if (typeof c.next === 'number' && !numbers.includes(c.next))
+            ctx.addIssue({
+              code: 'custom',
+              message: `Step ${s.step}: answer "${c.label}" points to step ${c.next}, which does not exist`,
+            });
+      }
+    }),
+});
+
 export const collections = {
+  guides,
   stories,
   interests,
   resources,
