@@ -27,11 +27,13 @@ jobs:
           # author, committer, co-author or "generated with" line. (The words themselves may
           # appear in files where the product needs them, e.g. naming a data processor.)
           a=cla; b=ude
-          pattern="${a}${b}|noreply@anthr|generated with"
-          if git log --all --format="%H %an <%ae> %cn <%ce>%n%(trailers)" | grep -n -i -E "$pattern"; then
+          tool="${a}${b}|noreply@anthr"
+          # Authors, committers and trailers (Co-Authored-By and similar) must not name a tool
+          if git log --all --format="%H %an <%ae> %cn <%ce>%n%(trailers)" | grep -n -i -E "$tool"; then
             echo "::error::A tool is credited as an author or co-author"; exit 1
           fi
-          if git log --all --format="%B" | grep -n -i -E "^co-authored-by:.*(${pattern})|generated with"; then
+          # A "Generated with <tool>" line in a message. ("Regenerated with pnpm" is fine.)
+          if git log --all --format="%B" | grep -n -i -E "(^|[^a-z])generated (with|by) .*(${tool})"; then
             echo "::error::Tool attribution found in a commit message"; exit 1
           fi
           echo "clean: authors, committers and trailers"

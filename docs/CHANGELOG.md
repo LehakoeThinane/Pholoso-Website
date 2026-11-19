@@ -8,6 +8,14 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Fix: repository check flagged "Regenerated with pnpm"
+
+**Why:** CI failed on the repository check. It looked for the words "generated with" anywhere in commit messages, and an earlier message says "Regenerated with pnpm 9.15.9". Nothing credited a tool.
+
+**What changed:** the check now looks for tools named as author, committer or co-author, and for "Generated with/by" lines that name a tool. Verified against the whole history (clean) and against a sample credit line (caught).
+
+---
+
 ## 2026-11-19 · `dev` · Parent Coach, Stage 1 (screens against a practice script)
 
 **Why:** brief v4 replaces the scripted guide with an AI Parent Coach. Owner decisions: keep the
