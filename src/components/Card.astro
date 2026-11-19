@@ -42,7 +42,7 @@ const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
   /* Centred (owner decision, 18 Nov 2026): headings and short text. Long text stays left. */
   .card {
     text-align: center;
-    box-shadow: var(--elevation);
+    box-shadow: var(--card-glow);
     display: flex;
     flex-direction: column;
     padding: var(--space-m);
@@ -77,5 +77,19 @@ const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
     display: inline-flex;
     align-items: center;
     min-height: var(--target-min);
+  }
+  /* Glow brightens on hover; the card lifts a little only when motion is allowed */
+  @media (hover: hover) {
+    .card:hover {
+      box-shadow: var(--card-glow-hover);
+    }
+    :global([data-anim]) .card:hover {
+      translate: 0 -3px;
+    }
+  }
+  :global([data-anim]) .card {
+    transition:
+      translate 0.2s ease-out,
+      box-shadow 0.2s ease-out;
   }
 </style>

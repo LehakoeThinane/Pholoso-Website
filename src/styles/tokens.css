@@ -157,6 +157,13 @@
     rgb(255 255 255 / 0) 72%
   );
   --elevation: 0 1px 2px rgb(22 36 31 / 0.06), 0 4px 14px rgb(22 36 31 / 0.06);
+  /* Cards: a soft warm-gold glow around the edge and a gentle shadow; brighter on hover */
+  --card-glow:
+    0 0 0 1px rgb(238 168 56 / 0.28), 0 0 22px rgb(238 168 56 / 0.18),
+    0 10px 24px rgb(19 75 66 / 0.08);
+  --card-glow-hover:
+    0 0 0 1px rgb(238 168 56 / 0.55), 0 0 32px rgb(238 168 56 / 0.32),
+    0 16px 32px rgb(19 75 66 / 0.12);
 
   color-scheme: light;
 }
@@ -173,6 +180,8 @@
   --gloss-cta: none;
   --gloss-surface: none;
   --elevation: none;
+  --card-glow: none;
+  --card-glow-hover: none;
 }
 @media (forced-colors: active) {
   :root {
@@ -182,6 +191,8 @@
     --gloss-cta: none;
     --gloss-surface: none;
     --elevation: none;
+    --card-glow: none;
+    --card-glow-hover: none;
   }
 }
 

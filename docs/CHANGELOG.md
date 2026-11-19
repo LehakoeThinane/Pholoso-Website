@@ -8,6 +8,37 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Header calls to action, card design, 2to.iQ section structure
+
+**Why:** owner direction: move the hero's buttons to the top-right corner, fix the design of the
+cards (with motion and a glowing, shadow-like border), make the two doors the same size, and
+structure the green 2to.iQ section properly.
+
+**What changed**
+
+- **Calls to action in the top-right corner:** "See how we work" and "Donate" now sit together at
+  the far right of the header (pill buttons). The header spans the full screen width, so the
+  logo is at the far left and the buttons at the far right. The hero no longer has its own
+  buttons; its text sits centred in the green.
+  - "See how we work" shows from 1280 px wide (it needs the room); narrower, Donate shows alone
+    and the same page is in the menu under About.
+  - The one-row menu now starts at 1056 px (was 992 px, where Donate ran 26 px off the screen).
+    Checked at nine widths from 390 to 1882 px: nothing overflows, margins are even.
+- **Stat cards** ("Up to 70%", "About 1 in 127"): a proper card with rounded corners, a soft
+  border, the gloss and a short gold bar above the figure. The source sits at the bottom with
+  room for two lines, so the dividers and sources line up across the row.
+- **Card glow and motion:** stat cards and regular cards have a soft warm-gold glow around the
+  edge and a gentle shadow. On hover the glow brightens and the card lifts 3 px (lift only when
+  motion is allowed). The glow follows the Glossy colours switch and is off in the flat themes.
+- **Doors:** "I'm a kid" and "I'm a grown-up" are now exactly the same size (were 1.25 : 1).
+- **2to.iQ section:** the heading and introduction (what 2to.iQ is, the *thuto* name) centred on
+  top, then two matching panels side by side, "Who does what" and "For parents and caregivers",
+  with their headings level and left-aligned text. Same wording as before.
+
+198 browser tests pass. DECISIONS.md §16.
+
+---
+
 ## 2026-11-19 · `dev` · Even spacing and balanced rows
 
 **Why:** owner feedback: the footer sign-up card had more space under the form than above it.

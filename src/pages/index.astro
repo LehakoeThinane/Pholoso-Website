@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import DoorCard from '../components/DoorCard.astro';
 import CardGrid from '../components/CardGrid.astro';
@@ -73,14 +72,6 @@ const ngo = {
       We work for education that fits neurodivergent children in South Africa, including{' '}
       <Term t="children-with-autism" /> and children with ADHD.
     </p>
-    <Fragment slot="actions">
-      <Button variant="gold" href="/donate/">
-        Donate
-      </Button>
-      <Button variant="outline" href="/approach/">
-        See how we work
-      </Button>
-    </Fragment>
   </Hero>
 
   <nav class="doors" aria-label="Choose your way in">
@@ -149,20 +140,17 @@ const ngo = {
   </Section>
 
   <Section variant="dark" labelledby="partner-title">
-    <div class="split">
-      <div>
-        <SectionHeading id="partner-title" title="2to.iQ: learning that adapts to the child" />
-        <p>
-          {site.partner.name} builds an adaptive learning platform designed first for neurodivergent
-          learners. It adapts to how each learner thinks, communicates and engages, instead of
-          asking the child to fit the system.
-        </p>
-        <p>
-          The name comes from the Sesotho word <i lang="st">thuto</i>, which means learning.
-        </p>
-      </div>
-      <div>
-        <h3 class="split__heading">Who does what</h3>
+    <SectionHeading
+      id="partner-title"
+      title="2to.iQ: learning that adapts to the child"
+      lead={`${site.partner.name} builds an adaptive learning platform designed first for neurodivergent learners. It adapts to how each learner thinks, communicates and engages, instead of asking the child to fit the system.`}
+    />
+    <p class="partner__name">
+      The name comes from the Sesotho word <i lang="st">thuto</i>, which means learning.
+    </p>
+    <div class="partner">
+      <div class="partner__panel">
+        <h3 class="partner__heading">Who does what</h3>
         <ul>
           <li>
             <strong>The Foundation</strong> leads advocacy and awareness and connects the support
@@ -172,12 +160,14 @@ const ngo = {
             <strong>2to.iQ</strong>, a separate company, builds the learning technology.
           </li>
         </ul>
-        <h3 class="split__heading">For parents and caregivers</h3>
+      </div>
+      <div class="partner__panel">
+        <h3 class="partner__heading">For parents and caregivers</h3>
         <p>
           Looking for learning activities for your child? 2to.iQ offers calm, accessible activities
           that families, teachers and therapists use together.
         </p>
-        <p>
+        <p class="partner__link">
           <ExternalLink href={site.partner.url}>See what 2to.iQ offers families</ExternalLink>
         </p>
       </div>
@@ -247,7 +237,7 @@ const ngo = {
   }
   @media (min-width: 48rem) {
     .doors__list {
-      grid-template-columns: 1.25fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr)); /* equal size */
       gap: var(--space-l);
     }
   }
@@ -261,18 +251,40 @@ const ngo = {
     text-align: center;
     font-weight: 700;
   }
-  .split {
-    display: grid;
-    gap: var(--space-l);
+  /* 2to.iQ section: heading and introduction centred, then two matching panels */
+  .partner__name {
+    margin: calc(-1 * var(--space-s)) auto var(--space-l);
+    text-align: center;
+    color: var(--color-text-muted);
   }
-  @media (min-width: 62rem) {
-    .split {
-      grid-template-columns: 1.3fr 1fr;
-      gap: var(--space-xl);
+  .partner {
+    display: grid;
+    gap: var(--space-m);
+  }
+  @media (min-width: 48rem) {
+    .partner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
-  .split__heading {
+  .partner__panel {
+    padding: var(--space-l);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-l);
+    background-color: var(--color-surface);
+    background-image: var(--gloss-surface);
+  }
+  .partner__panel > :last-child {
+    margin-bottom: 0;
+  }
+  .partner__heading {
     font-size: var(--step-1);
+    margin-bottom: var(--space-s);
+  }
+  .partner__panel ul {
+    padding-left: 1.2em;
+  }
+  .partner__link {
+    font-weight: 700;
   }
 </style>
 

@@ -3,7 +3,9 @@
  * SiteHeader: logo, primary navigation and the Donate button. Not sticky, so it can never
  * cover focused content (WCAG 2.4.11).
  *
- * Wide screens (62rem and up): one row: logo, the four menu entries, Donate.
+ * Wide screens (66rem, 1056px, and up): one row across the full screen width: logo at the far left,
+ * the four menu entries, and the two calls to action ("See how we work", Donate) in the
+ * top-right corner. Phones show Donate and Menu ("See how we work" is in the menu).
  * Menu groups ("About", "Stories & resources", "Get involved") are native <details>
  * disclosures: they open on click or Enter (never on hover), work without JavaScript, and
  * screen readers announce them as collapsed or expanded. src/scripts/menu.ts adds: one open
@@ -40,6 +42,14 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
         loading="eager"
         class="site-header__logo"
       />
+    </a>
+
+    <a
+      class="site-header__secondary"
+      href={strings.seeHowWeWork.href}
+      aria-current={isCurrent(strings.seeHowWeWork.href) ? 'page' : undefined}
+    >
+      {strings.seeHowWeWork.label}
     </a>
 
     <a
@@ -120,6 +130,8 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     border-bottom: var(--border-width) solid var(--color-line);
   }
   .site-header__inner {
+    /* Full screen width, so the calls to action sit in the top-right corner */
+    max-width: none;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -138,6 +150,28 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     height: auto;
   }
 
+  /* Calls to action, top right: pill buttons like the rest of the site */
+  .site-header__secondary {
+    display: none; /* wide screens only (see below) */
+    order: 2;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--button-min);
+    padding-inline: var(--space-m);
+    border: 2px solid var(--color-text);
+    border-radius: 999px;
+    background-color: var(--color-bg);
+    background-image: var(--gloss-surface);
+    color: var(--color-text);
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .site-header__secondary:hover,
+  .site-header__secondary[aria-current='page'] {
+    text-decoration: underline;
+  }
+
   /* Donate: gold button, always visible */
   .site-header__donate {
     order: 2;
@@ -146,7 +180,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     justify-content: center;
     min-height: var(--button-min);
     padding-inline: var(--space-m);
-    border-radius: var(--radius-s);
+    border-radius: 999px;
     background-color: var(--color-cta-bg);
     background-image: var(--gloss);
     box-shadow: var(--gloss-shadow);
@@ -261,7 +295,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
 
   /* Small screens: logo on top; Donate and Menu centred below; the opened menu centred, with
      groups opening in place under their heading */
-  @media (max-width: 61.99rem) {
+  @media (max-width: 65.99rem) {
     .site-header__inner {
       justify-content: center;
     }
@@ -289,16 +323,20 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
   }
 
   /* Small screens with JavaScript: collapsed until the menu button opens it */
-  @media (max-width: 61.99rem) {
+  @media (max-width: 65.99rem) {
     :global(.js) .site-header:not([data-menu='open']) .site-nav {
       display: none;
     }
   }
 
   /* Wide screens: one row. Logo, the four menu entries (centred in the space), Donate. */
-  @media (min-width: 62rem) {
+  @media (min-width: 66rem) {
     .site-header__inner {
       flex-wrap: nowrap;
+      gap: var(--space-s);
+    }
+    .site-header__logo {
+      width: 11rem;
     }
     .site-header__menu-button {
       display: none;
@@ -312,7 +350,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      gap: var(--space-s);
+      gap: var(--space-2xs);
     }
     .site-nav__group {
       position: relative;
@@ -340,6 +378,13 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     }
     .site-nav__sub a:hover {
       background-color: var(--color-surface);
+    }
+  }
+  /* Room for the second button from 1280px wide (80rem; media queries count 16px per rem).
+     Narrower: Donate only; the same page is in the menu under About. */
+  @media (min-width: 80rem) {
+    .site-header__secondary {
+      display: inline-flex;
     }
   }
   @media (forced-colors: active) {

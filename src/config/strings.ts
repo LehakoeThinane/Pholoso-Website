@@ -27,6 +27,8 @@ export const strings = {
   footerNavLabel: 'Footer',
   menuButton: 'Menu',
   donate: 'Donate',
+  /** Second header button (wide screens), next to Donate. */
+  seeHowWeWork: { href: '/approach/', label: 'See how we work' },
   externalLink: '(opens another website)',
   toBeConfirmed: 'To be confirmed',
   footer: {

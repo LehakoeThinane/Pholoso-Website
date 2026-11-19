@@ -63,9 +63,11 @@ const narrowEdge = 'M0,0.2 L0.4,0.04 C0.46,0.01 0.54,0.01 0.6,0.04 L1,0.2';
       <div class="hero__lead">
         <slot />
       </div>
-      <div class="hero__actions">
-        <slot name="actions" />
-      </div>
+      {Astro.slots.has('actions') && (
+        <div class="hero__actions">
+          <slot name="actions" />
+        </div>
+      )}
     </div>
   </div>
 

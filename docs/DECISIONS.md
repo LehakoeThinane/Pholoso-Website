@@ -171,3 +171,15 @@ JavaScript, and announce as collapsed or expanded. `src/scripts/menu.ts` keeps o
 and closes on Esc, a click elsewhere, or keyboard focus leaving the group (not on taps, which would
 shift the phone menu under the finger). Every page stays one click inside its group and is also
 listed in the footer, so help stays in the same place on every page (WCAG 3.2.6).
+
+## 16. Calls to action in the header; cards that glow and lift
+
+**Decision:** "See how we work" and "Donate" sit in the top-right corner of a full-width header
+instead of in the home hero. Cards (statistics and regular cards) have a soft gold glow and lift
+slightly on hover. Owner decisions, 19 November 2026.
+
+**Notes:** "See how we work" needs about 1280 px of screen to fit beside the menu; narrower
+screens show Donate alone (the page stays in the menu under About). The brief asked for Donate
+and "See how we work" in the hero; the owner moved them. Cards lifting on hover is decorative
+(most cards are not links): it is small (3 px), short, and only runs when motion is allowed. The
+glow is part of the gloss and switches off with it.
