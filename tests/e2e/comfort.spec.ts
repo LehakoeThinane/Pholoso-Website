@@ -17,6 +17,7 @@ const SETTINGS: [string, Partial<ComfortPrefsForTests>][] = [
   ['reduce motion', { motion: 'reduced' }],
   ['strong focus', { focus: 'strong' }],
   ['identity-first wording', { identityFirst: true }],
+  ['gloss off', { gloss: false }],
 ];
 
 test.describe('axe with each comfort setting', () => {
@@ -78,4 +79,23 @@ test('identity-first wording swaps every switchable term', async ({ page }) => {
     const wanted = await term.getAttribute('data-if');
     await expect(term).toHaveText(wanted!);
   }
+});
+
+test('Glossy colours: on by default in Standard; the switch makes colours flat and is remembered', async ({
+  page,
+}) => {
+  await page.goto('/about/');
+  const html = page.locator('html');
+  const card = page.locator('.card').first();
+  const sheen = () => card.evaluate((el) => getComputedStyle(el).backgroundImage);
+  await expect(html).not.toHaveAttribute('data-gloss', 'off');
+  expect(await sheen()).toContain('gradient');
+  await page.locator('[data-comfort-open]').click();
+  await expect(page.locator('#cp-gloss')).toBeChecked();
+  await page.locator('#cp-gloss').uncheck();
+  await expect(html).toHaveAttribute('data-gloss', 'off');
+  expect(await sheen()).toBe('none');
+  await page.keyboard.press('Escape');
+  await page.goto('/donate/');
+  await expect(html).toHaveAttribute('data-gloss', 'off');
 });

@@ -4,7 +4,7 @@
  * (the Content-Security-Policy forbids inline scripts). Keep it tiny and dependency-free.
  *
  * Storage: localStorage "pholoso-comfort" = {"v":1, theme, text, spacing, guide, motion,
- * simple, images, focus, identityFirst, rate, sound}. Settings never leave the device.
+ * simple, images, focus, identityFirst, rate, sound, gloss}. Settings never leave the device.
  * The same key and format were used by the previous site, so saved choices carry over.
  *
  * This file owns the mapping from settings to <html> attributes. The panel
@@ -73,6 +73,8 @@
       rate: [0.75, 1, 1.25, 1.5].indexOf(s.rate) > -1 ? s.rate : 1,
       // Kids' World tap sounds: off unless chosen, and always off in the Calm theme.
       sound: !!s.sound,
+      // Glossy colours: on unless switched off (only visible in the Standard theme)
+      gloss: s.gloss !== false,
     };
   }
 
@@ -93,6 +95,7 @@
     set('data-focus', e.focus === 'strong' ? 'strong' : '');
     set('data-identity', e.identityFirst ? 'first' : '');
     set('data-sound', e.sound && e.theme !== 'calm' ? 'on' : '');
+    set('data-gloss', e.gloss ? '' : 'off');
     // Motion allowed: the device does not ask for less motion (e.motion includes that), and
     // Reduce motion, Calm colours and Simplified page are off. CSS animations use [data-anim].
     set('data-anim', e.motion !== 'reduced' && e.theme !== 'calm' && !e.simple ? 'on' : '');

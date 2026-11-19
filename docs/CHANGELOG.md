@@ -8,6 +8,31 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Glossy colours switch, richer gloss, gentle motion
+
+**Why:** owner direction for the Standard theme: more gloss on the colours, a way to switch the
+gloss on and off (the most important part), and reasonable motion.
+
+**What changed**
+
+- **"Glossy colours" switch** in Comfort & access, under the colour choices. On by default; off
+  makes every surface flat while keeping the Standard colours (buttons, cards, picture buttons,
+  coloured bands, the hero edge glow). Saved on the device and applied before the page draws,
+  like the other settings (`data-gloss="off"`). Calm, High contrast, Dim and Simplified page are
+  always flat, as before.
+- **Richer gloss in Standard:** a brighter, glossier top on surfaces (a bright top fading through
+  the middle), slightly more shine on buttons and dark bands. Every text and link colour over the
+  gloss still passes contrast (lowest: white on the green button's shiniest point, 5.09:1).
+- **Gentle motion:** clickable things (buttons, Donate, doors, picture buttons, toggles) lift 2 px
+  on hover and settle when pressed; menu groups slide open; the chevron turns. All under 0.2 s,
+  and only when motion is allowed (not with the device's reduced motion, Reduce motion, Calm
+  colours or Simplified page). Plain cards do not move, so nothing pretends to be a link.
+- **Tests:** axe with gloss off on the sample pages; the switch is on by default, flattens the
+  page and is remembered across pages. 198 passed, 0 failed. Lighthouse 100 on all six sampled
+  pages; CSS 15.1 KB (budget 16 KB).
+
+---
+
 ## 2026-11-19 · `dev` · Four-item menu, labels above headings removed, quotes centred
 
 **Why:** owner direction: a shorter menu on one row between the logo and Donate, no small labels
