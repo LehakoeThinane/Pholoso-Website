@@ -86,13 +86,14 @@ const { href, icon, label, colour, size = 'nav', current = false, hint } = Astro
   }
 
   .pic-btn--door {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: var(--space-s);
+    /* Picture above the words, all centred: even space on every side */
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-xs);
     min-height: 7rem;
-    padding: var(--space-s) var(--space-m);
+    padding: var(--space-m);
     border-radius: var(--radius-xl);
-    text-align: left;
+    text-align: center;
     box-shadow: 0 6px 0 var(--color-text);
   }
   .pic-btn--door :global(.pic-btn__art) {
@@ -102,6 +103,7 @@ const { href, icon, label, colour, size = 'nav', current = false, hint } = Astro
   .pic-btn--door .pic-btn__text {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: var(--space-3xs);
   }
   .pic-btn--door .pic-btn__label {

@@ -102,7 +102,7 @@ const year = new Date().getFullYear();
 
   /* 1. Updates strip: a card across the top */
   .site-footer__updates {
-    padding: var(--space-m) var(--space-l);
+    padding: var(--space-l); /* the same space on all four sides */
     border: var(--border-width) solid var(--color-line);
     border-radius: var(--radius-m);
     background-color: var(--color-bg);
@@ -143,6 +143,14 @@ const year = new Date().getFullYear();
   .site-footer__updates :global(.signup__consent) {
     grid-row: 4;
     margin-top: var(--space-s);
+  }
+  /* The consent tick is the last item in this card: drop the spacing it carries for long forms,
+     so the space under it matches the space above the email label (the card's own padding) */
+  .site-footer__updates :global(.checkbox) {
+    margin-bottom: 0;
+  }
+  .site-footer__updates :global(.checkbox__row label) {
+    padding-bottom: 0;
   }
   /* Narrow phones: the email box full width, then the consent tick, then the button */
   @media (max-width: 29.99rem) {

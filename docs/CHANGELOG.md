@@ -8,6 +8,33 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Even spacing and balanced rows
+
+**Why:** owner feedback: the footer sign-up card had more space under the form than above it.
+"Everything must be balanced in terms of spacing and proportion."
+
+**What changed**
+
+- **Footer sign-up card:** the consent tick carried spacing meant for long forms (a 27 px margin
+  plus 9 px label padding), which doubled the space at the bottom. Removed inside the card, and
+  the card now has the same padding on all four sides. Measured: top 39 / bottom 40 / left 37 /
+  right 37 px (28 px all round on phones).
+- **Site-wide check:** every card-like box on every page was measured at 1280 px and 390 px for
+  lopsided inner spacing. Fixed:
+  - Kids' World home buttons: picture above the words, all centred (they were left-aligned
+    with a gap on the right).
+  - Kids' World notes ("What you tap here is not saved…", prompts): fit their text and sit
+    centred (up to 397 px was empty on one side).
+  - Gallery "Would you like your drawing here?": picture and text centred as a group.
+  - The Kids' World header pill: equal padding on both sides.
+- **Even rows in Kids' World grids:** items are equal-sized and a shorter last row is centred,
+  instead of leaving a row hanging to the left. Desktop / tablet: home 3 + 3; What do you love
+  3 + 3 + 3; feelings 4 + 3; story buttons 5 / 3 + 2; printables, calm ideas and gallery 4 / 2 + 2.
+
+198 browser tests pass; Lighthouse passes all budgets.
+
+---
+
 ## 2026-11-19 · `dev` · Footer rearranged
 
 **Why:** owner feedback: the footer looked disorganised. The sign-up form made the first column

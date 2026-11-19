@@ -54,23 +54,57 @@
   text-align: center;
   margin-inline: auto;
 }
+/*
+ * Kids' World grids: even rows of equal-sized items. A shorter last row is centred, so a row
+ * is never left hanging to one side (6 items: 3 + 3; 7 faces: 4 + 3 centred).
+ * Columns: 1 on small phones, 2 from 30rem, --cols-mid from 48rem, --cols-wide from 62rem.
+ * Defaults suit 4 items (2 + 2, then 4). For other counts: .kids-grid--wide-3 (6 or 9 items),
+ * .kids-grid--wide-5 (5 items), or set --cols-mid / --cols-wide on the list.
+ */
 .kids-grid {
+  --gap: var(--space-m);
+  --cols: 1;
+  --cols-mid: 2;
+  --cols-wide: 4;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: var(--space-m);
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 15rem), 1fr)
-  ); /* fill the row: no gaps */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
 }
 .kids-grid > li {
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   margin: 0;
   max-width: none;
 }
 .kids-grid--small {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  --gap: var(--space-s);
+  --cols: 2;
+}
+.kids-grid--wide-3 {
+  --cols-mid: 3;
+  --cols-wide: 3;
+}
+.kids-grid--wide-5 {
+  --cols-mid: 3;
+  --cols-wide: 5;
+}
+@media (min-width: 30rem) {
+  .kids-grid {
+    --cols: 2;
+  }
+}
+@media (min-width: 48rem) {
+  .kids-grid {
+    --cols: var(--cols-mid);
+  }
+}
+@media (min-width: 62rem) {
+  .kids-grid {
+    --cols: var(--cols-wide);
+  }
 }
 
 /* ---------- Speech bubble ---------- */
@@ -108,7 +142,12 @@
 }
 
 /* ---------- Kids' notice: a plain, friendly box ---------- */
+/* Notes fit their text and sit centred, so there is no empty strip on one side */
 .kids-note {
+  text-align: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
   display: flex;
   align-items: center;
   gap: var(--space-s);

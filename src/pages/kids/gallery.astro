@@ -93,7 +93,8 @@ const mascotPictures = [
   }
   @media (min-width: 40rem) {
     .send {
-      grid-template-columns: 6rem 1fr;
+      grid-template-columns: 6rem auto;
+      justify-content: center; /* picture and text centred as a group */
     }
   }
   .send :global(.send__art) {
