@@ -8,6 +8,27 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Footer rearranged
+
+**Why:** owner feedback: the footer looked disorganised. The sign-up form made the first column
+very tall, the link columns floated at the top with empty space under them, and the
+registration and copyright lines sat loose at the bottom.
+
+**What changed** (same content and wording, new arrangement):
+
+1. **Updates strip** across the top, as a card: heading and short intro on the left; the email
+   box and Sign up button side by side on the right, with the consent tick below. On narrow
+   phones: email, consent, then the button.
+2. **Four even columns:** logo and tagline, Explore, Get involved, Contact us (email, "Send us a
+   message", location). Two columns on tablets, one on phones.
+3. **Bottom bar:** the registration line, then copyright with Privacy notice, Accessibility and
+   Comfort & access settings.
+
+Error messages for the sign-up form still appear correctly in the new layout. 198 browser tests
+pass; Lighthouse passes all budgets.
+
+---
+
 ## 2026-11-19 · `dev` · Glossy colours switch, richer gloss, gentle motion
 
 **Why:** owner direction for the Standard theme: more gloss on the colours, a way to switch the
