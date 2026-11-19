@@ -99,6 +99,36 @@ uploaded it.
 
 ---
 
+## Parent Coach (only when the Foundation has approved it)
+
+The coach stays **off** until the Foundation has approved the strategies, the helplines, the
+privacy notice wording and a monthly budget. Switching it on takes a developer and about an
+hour. Until then, skip this section: the coach pages say "not open yet" and point to the
+written Parent Guide.
+
+1. **Database.** In cPanel, open **MySQL Databases**. Create a database (for example
+   `ACCOUNT_coach`), a user with a long random password, and add the user to the database with
+   **All privileges**. Write the three names down somewhere safe.
+2. **Tables.** Open **phpMyAdmin**, choose the new database, open the **SQL** tab, paste the
+   contents of `server/migrations/001_coach.sql` from the repository, and press **Go**.
+3. **Settings.** In `pholoso-private/config.php` (Step 0), fill in the `coach` section (see
+   `config.example.php`): the database names, the AI provider's API key, and the daily budget.
+   Leave `enabled` as `false` for now.
+4. **Build and upload** with the coach in live mode: the developer runs `pnpm build:live`
+   instead of `pnpm build`, then uploads `dist-live/` the usual way (Parts 1 and 2).
+5. **Check.** Open `https://pholoso.africa/coach-health.php`. Every line except "Coach switched
+   on" should say OK. Fix anything marked NOT OK (each line says how).
+6. **Switch on.** Set `enabled` to `true` in `config.php`, then try one full conversation on the
+   live site, and once without JavaScript if possible.
+
+**To switch it off again quickly:** set `enabled` back to `false`. The coach pages then say the
+coach is not open, and nothing is sent to the AI provider.
+
+**Old conversations** are deleted 30 days after they start. This happens on its own as people
+use the coach. (Stage 3 adds a nightly cron job, so it also happens on quiet days.)
+
+---
+
 ## If something goes wrong
 
 **The whole site shows "500 Internal Server Error".**

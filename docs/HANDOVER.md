@@ -23,6 +23,7 @@ unknown is a visible placeholder.
 | 9. Docs and handover                             | Done (this report)                                                                                |
 | 4c. Parent Guide, Phase 1 (scripted) | Done (19 November): 7 draft topics, a page per step, chat on top. **Needs professional review** (section 4). Phase 2 (AI) not built. |
 | 4c. Parent Coach (brief v4), Stage 1 of 3 | Done (19 November): landing, onboarding, chat and all message cards, against a practice script; 2 draft strategies. Off in production. Stage 2: database, sessions, API. Stage 3: accounts, reminders, deletion. |
+| 4c. Parent Coach, Stage 2 of 3 | Done (19 November): MySQL tables, PHP API, AI behind two switches (live build + `enabled`), no-JavaScript forms, health check. Tested against a mock AI only. |
 
 **Test results (local, 18 November 2026):** 150 browser tests passed, 0 failed (axe: no
 accessibility violations on any page, at phone and desktop size). HTML, links, contrast,
@@ -111,7 +112,12 @@ Before going live:
    verified, current South African helpline numbers for "Need help now?"; and confirm the name
    ("Parent Guide" is a placeholder). Until the review, every reply says "Draft – under review"
    and the step pages stay out of search engines.
-10. **Parent Coach (brief v4):** confirm the name ("Pholoso Parent Coach" is a working name)
+10. **Parent Coach privacy review:** the POPIA reviewer should look at the coach section of the
+    privacy notice (shown once the coach is live): it names the AI provider, the transfer
+    outside South Africa, and that children's learning and thinking differences can be health
+    information, processed with the parent's agreement. Also confirm 30 days is the right
+    retention period.
+10a. **Parent Coach (brief v4):** confirm the name ("Pholoso Parent Coach" is a working name)
     and the first topic (screen time); choose a professional to review the strategy library
     (`src/content/coach-strategies/`); and, before it opens, approve the privacy notice wording
     for the AI provider and the cross-border transfer, and a monthly budget. Stage 1 runs only

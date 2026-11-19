@@ -23,7 +23,7 @@ const open = coach.mode !== 'off';
     <h1 class="visually-hidden">Get started with {coach.name}</h1>
     {open ? (
       <>
-        <div class="onboard" data-onboard data-js-only>
+        <div class="onboard" data-onboard data-mode={coach.mode} data-js-only>
           <div class="onboard__top">
             <button type="button" class="onboard__back" data-ob-back>
               <span aria-hidden="true">←</span> Back
@@ -157,6 +157,7 @@ const open = coach.mode !== 'off';
             {coach.mode === 'mock' && (
               <p class="onboard__hint">{coach.practiceNote} Nothing is sent anywhere.</p>
             )}
+            <p class="onboard__error" role="alert" data-ob-error hidden />
             <div class="onboard__actions">
               <button type="submit" class="cbutton cbutton--gold">
                 Start
@@ -169,14 +170,88 @@ const open = coach.mode !== 'off';
             <p role="status">Getting things ready…</p>
           </div>
         </div>
-        <div data-js-hide>
-          <Notice title="The coach needs JavaScript for now">
+        {coach.mode === 'live' ? (
+          <form
+            class="onboard onboard--plain"
+            method="post"
+            action="/api/coach/start.php"
+            data-js-hide
+          >
+            <h2>A few questions before you begin</h2>
+            <label class="onboard__label" for="nj-parent">
+              Your first name or nickname <span class="onboard__hint">(optional)</span>
+            </label>
+            <input
+              class="onboard__input"
+              id="nj-parent"
+              name="parent"
+              type="text"
+              autocomplete="given-name"
+              maxlength="40"
+            />
+            <label class="onboard__label" for="nj-child">
+              Your child’s first name or nickname <span class="onboard__hint">(optional)</span>
+            </label>
+            <input
+              class="onboard__input"
+              id="nj-child"
+              name="child_name"
+              type="text"
+              autocomplete="off"
+              maxlength="40"
+            />
+            <label class="onboard__label" for="nj-age">
+              Age <span class="onboard__hint">(optional)</span>
+            </label>
+            <input
+              class="onboard__input onboard__input--age"
+              id="nj-age"
+              name="child_age"
+              type="text"
+              inputmode="numeric"
+              maxlength="2"
+              autocomplete="off"
+            />
+            <fieldset class="onboard__options">
+              <legend>
+                Does your child have any learning and thinking differences? Choose all that apply.
+              </legend>
+              {coach.differences.map((d) => (
+                <label class="onboard__option">
+                  <input type="checkbox" name="differences[]" value={d.value} />
+                  <span>{d.label}</span>
+                </label>
+              ))}
+            </fieldset>
+            <h2>An important note before you begin</h2>
+            <ul class="onboard__note">
+              <li>This coach uses AI, not a person. AI can make mistakes or leave things out.</li>
+              <li>Check anything important with a doctor or another professional.</li>
+              <li>It does not replace therapy, or clinical or medical support.</li>
+              <li>
+                Your messages are sent to an AI provider outside South Africa to write the replies.
+                Please do not include surnames, ID numbers, school names or addresses.
+              </li>
+            </ul>
             <p>
-              In the meantime, the written <a href="/parent-guide/">Parent Guide</a> works in any
-              browser.
+              Read our <a href="/privacy/">privacy notice</a>. By choosing Start, you agree to this.
             </p>
-          </Notice>
-        </div>
+            <div class="onboard__actions">
+              <button type="submit" class="cbutton cbutton--gold">
+                Start
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div data-js-hide>
+            <Notice title="The coach needs JavaScript for now">
+              <p>
+                In the meantime, the written <a href="/parent-guide/">Parent Guide</a> works in any
+                browser.
+              </p>
+            </Notice>
+          </div>
+        )}
       </>
     ) : (
       <Notice title="The coach is not open yet">

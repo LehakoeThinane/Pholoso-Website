@@ -241,3 +241,43 @@ nothing), `live` from Stage 2.
 - Continue buttons use `aria-disabled` rather than `disabled`, so keyboard and screen-reader
   users can still reach them and hear why they cannot continue yet.
 - Never copies Understood's text, illustrations, colours or name; only the kind of flow.
+
+## 19. Parent Coach Stage 2: PHP API, MySQL, and the AI only within a fixed arc
+
+**Decision:** the coach's server side is plain PHP 7.4+ (no Composer) under `public/api/coach/`
+and `public/lib/coach/`, with MySQL through PDO and prepared statements. The AI provider is
+called over HTTPS with cURL (the brief's choice for shared hosting). Owner confirmed MySQL, 19
+November 2026.
+
+**How the AI is kept on the path:**
+
+- The server decides the stage; the AI writes only the words for that stage. Its `next_stage`
+  can only move forward one step or stay (to answer a question); anything else is corrected.
+- Every reply must match a JSON schema (the API's structured outputs), and the server checks it
+  again. A strategy that is not in the approved library is rejected; titles always come from the
+  library. A reply that fails is retried once, then the parent sees "please try again" and
+  nothing is saved.
+- The opening question, choosing a child, the turn limit, "the coach is resting" and the
+  closing card need no AI.
+
+**Defaults (all in the private config):** model `claude-opus-5-5`, effort `medium`, refusal
+fallback on, 25-second timeout, 15 turns per conversation, 40 requests per visitor per hour, a
+daily budget of US$5 estimated from the token counts the provider reports. The system prompt
+and the library are sent first and marked for caching, so most of each request is billed at
+the cached rate.
+
+**Privacy:** ID numbers, phone numbers and email addresses are removed before anything is stored
+or sent. Danger words are checked in the browser and on the server before the AI is asked; the
+AI can also flag an emergency. Conversations are deleted 30 days after they start.
+
+**Notes:**
+
+- Replies are not streamed: shared hosting usually buffers output, and a non-streamed reply is
+  announced once by screen readers. The page shows "The coach is thinking…" instead.
+- Without JavaScript, `/parent-coach/s/<id>/` is drawn by PHP from the built chat page, so the
+  look stays the same; answers and the message box become plain forms.
+- Tests never call the real API: `tests/php/mock-ai.php` stands in for it, with SQLite in place
+  of MySQL (the migration is written so both accept it).
+- The production build keeps the coach off (`COACH_MODE` unset). `pnpm build:live` builds the
+  live version once the Foundation approves it, and `enabled` in the private config is a second
+  switch that can turn it off without a new upload.

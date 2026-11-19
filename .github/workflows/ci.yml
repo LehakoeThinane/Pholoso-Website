@@ -122,7 +122,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl, mbstring
+          extensions: curl, mbstring, pdo_sqlite
           coverage: none
       - uses: actions/setup-node@v4
         with:
@@ -133,3 +133,28 @@ jobs:
         run: php tests/php/contact-test.php
       - name: .htaccess rules (private paths, IfModule wrapping, CSP)
         run: php tests/php/htaccess-test.php
+      - name: Parent Coach API (SQLite, mock AI; never the real API)
+        run: php tests/php/coach-test.php
+
+  coach-live:
+    name: Parent Coach in live mode (PHP API + mock AI, Playwright)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, mbstring, pdo_sqlite
+          coverage: none
+      - run: pnpm install --frozen-lockfile
+      - name: Build with the coach in live mode
+        run: pnpm build:live
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Live-mode journeys (with and without JavaScript)
+        run: pnpm test:e2e:live

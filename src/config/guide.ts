@@ -5,6 +5,7 @@
  * anywhere: personal settings stay in the browser, and the free-text box searches this
  * website on the device.
  */
+import crisis from '../../public/lib/coach/crisis-words.json';
 
 export const guide = {
   /** Placeholder name: the Foundation may rename it (for example "Ask Pholoso"). */
@@ -25,43 +26,11 @@ export const guide = {
 
   /**
    * Words that suggest someone may be in danger or need urgent help. If the parent types one,
-   * the guide stops and shows the "Get help now" card. Checked on the device only.
+   * the guide (and the Parent Coach) stops and shows the "Get help now" card. One list for the
+   * browser and the server: public/lib/coach/crisis-words.json.
    * Kept broad on purpose: showing the card when it is not needed is far safer than missing it.
    */
-  crisisWords: [
-    'suicide',
-    'suicidal',
-    'kill myself',
-    'kill himself',
-    'kill herself',
-    'kill themselves',
-    'want to die',
-    'end my life',
-    'hurt myself',
-    'hurting myself',
-    'self harm',
-    'self-harm',
-    'harm myself',
-    'abuse',
-    'abused',
-    'abusing',
-    'molest',
-    'rape',
-    'raped',
-    'beaten',
-    'beats me',
-    'beats my',
-    'hits me',
-    'unsafe at home',
-    'not breathing',
-    'unconscious',
-    'overdose',
-    'poisoned',
-    'swallowed',
-    'seizure',
-    'emergency',
-    'in danger',
-  ],
+  crisisWords: crisis.words,
 
   /** Pages the free-text box can suggest, with words people might type for each. */
   searchPages: [

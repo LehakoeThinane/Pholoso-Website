@@ -5,6 +5,7 @@ export default [
   {
     ignores: [
       'dist/',
+      'dist-live/',
       '.astro/',
       'node_modules/',
       'test-results/',

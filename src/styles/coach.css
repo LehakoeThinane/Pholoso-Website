@@ -661,3 +661,19 @@
     border: 1px solid CanvasText;
   }
 }
+
+/* Onboarding without JavaScript (live mode): one plain form */
+.onboard--plain .onboard__input,
+.onboard--plain .onboard__options {
+  margin-bottom: var(--space-m);
+}
+.onboard__input--age {
+  max-width: 6rem;
+}
+.onboard__error {
+  font-weight: 700;
+  color: var(--color-error);
+}
+.onboard__error[hidden] {
+  display: none;
+}

@@ -36,3 +36,4 @@ desktop.ini
 # Astro and test tooling
 .astro/
 .lighthouseci/
+dist-live/

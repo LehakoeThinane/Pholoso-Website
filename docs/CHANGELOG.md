@@ -8,6 +8,47 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Parent Coach, Stage 2 (server, database, AI behind switches)
+
+**Why:** owner direction: continue with Stage 2, build for MySQL, and install PHP locally so the
+server code is tested before it is pushed.
+
+**What changed**
+
+- **Database:** `server/migrations/001_coach.sql` (sessions, messages, feedback, and the tables
+  Stage 3 needs for accounts). Run once in phpMyAdmin.
+- **Server (`public/api/coach/`):** start a session, take a turn, skip to the end, rate, give
+  feedback, and open a saved session. Each session has its own address,
+  `/parent-coach/s/<id>/`, kept for 30 days.
+- **The AI:** called only from the server, with the key in the private config. The server keeps
+  the fixed arc; every reply must match the coach's message format and may only use approved
+  strategies. Failed replies are retried once, then "please try again".
+- **Safety and privacy:** danger words checked on the server too; the AI can flag an emergency
+  or a concern; ID numbers, phone numbers and emails removed before storing or sending.
+- **Limits:** 15 turns per conversation, 40 requests per visitor per hour, 25-second timeout, a
+  daily budget (the coach "rests" until tomorrow and points to the Parent Guide).
+- **Without JavaScript:** onboarding is one plain form, and the chat page is drawn by the
+  server with answers and the message box as plain forms.
+- **Browser:** the chat screen now works with either the practice script or the server, with no
+  visible difference; errors keep the parent's message in the box.
+- **`/coach-health.php`:** says, in plain words, whether the hosting has everything the coach
+  needs, without showing any secret.
+- **Privacy notice:** a Parent Coach section, shown only when the coach is live (for the POPIA
+  review).
+- **Docs:** DEPLOY.md "Parent Coach" steps; config.example.php `coach` section; DECISIONS §19.
+- **PHP installed on the development computer** (PHP 8.3, with the database and cURL
+  extensions), so all PHP tests now run locally as well as in CI.
+
+**Checks:** 64 new PHP checks (the full arc, schema and library checks, invented strategies,
+non-JSON replies, refusals, timeouts, provider errors, emergencies, concerns, privacy stripping,
+turn limit, budget, rate limit, no-JS flow, expiry and deletion, switched off, health check). 6
+new live-mode browser tests (phone and desktop). The AI provider is never called by any test.
+
+**Follow-ups:** Stage 3 (passwordless accounts, reminders by cron, self-service deletion).
+Owner: approve strategies, helplines, privacy wording and budget; create the database.
+
+---
+
 ## 2026-11-19 · `dev` · Fix: repository check flagged "Regenerated with pnpm"
 
 **Why:** CI failed on the repository check. It looked for the words "generated with" anywhere in commit messages, and an earlier message says "Regenerated with pnpm 9.15.9". Nothing credited a tool.

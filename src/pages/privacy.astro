@@ -12,6 +12,7 @@ import Notice from '../components/Notice.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
 import Value from '../components/Value.astro';
+import { coach } from '../config/coach';
 import { registrationLine, site } from '../config/site';
 ---
 
@@ -136,6 +137,46 @@ import { registrationLine, site } from '../config/site';
         Personal information sent through forms is emailed to us. It is not stored on the web
         server.
       </p>
+
+      {
+        /* Shown only when the Parent Coach is open (COACH_MODE=live). DRAFT for the POPIA
+         review: processor named, cross-border transfer, children's health information (special
+         personal information, processed with the parent's consent), 30-day retention. */
+        coach.mode === 'live' && (
+          <>
+            <h2>The Parent Coach</h2>
+            <p>
+              The {coach.name} is a coaching conversation for parents and caregivers. When you use
+              it, we keep:
+            </p>
+            <ul>
+              <li>
+                what you tell it during onboarding: your first name or nickname, your children’s
+                first names or nicknames and ages, and any learning and thinking differences you
+                choose (this can be health information about your child, so we ask for your
+                agreement before you start);
+              </li>
+              <li>the conversation, your ratings and any feedback you give.</li>
+            </ul>
+            <p>
+              We remove ID numbers, phone numbers and email addresses from what you type before
+              anything is stored or sent. To write each reply, your messages and the details above
+              are sent to <strong>Anthropic</strong>, a company in the United States that provides
+              the AI. This is a transfer of personal information outside South Africa, for the sole
+              purpose of writing the coach’s replies.
+            </p>
+            <p>
+              A conversation is kept on our database for 30 days, so you can come back to it, and is
+              then deleted automatically, with its feedback and rating. Anyone with the
+              conversation’s web address can open it, so do not share that address.
+            </p>
+            <p>
+              If you use voice input, your browser may send your voice to its maker to turn it into
+              text. We never receive or record your voice.
+            </p>
+          </>
+        )
+      }
 
       <h2>Cookies, tracking and your settings</h2>
       <p>

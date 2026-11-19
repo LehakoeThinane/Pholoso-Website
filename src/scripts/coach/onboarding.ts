@@ -186,15 +186,45 @@ export function initOnboarding(): void {
   });
 
   function start(): void {
+    Object.values(steps).forEach((el) => (el.hidden = true));
+    steps.loading.hidden = false;
+    back.hidden = true;
+    if (root!.dataset.mode === 'live') {
+      // Live: the server creates the session and gives it its own address
+      fetch('/api/coach/start.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(profile),
+      })
+        .then((r) => r.json() as Promise<{ ok: boolean; url?: string; message?: string }>)
+        .then((r) => {
+          if (r.ok && r.url) location.assign(r.url);
+          else failed(r.message);
+        })
+        .catch(() => failed());
+      return;
+    }
+    // Practice: everything stays in this browser tab
     try {
       sessionStorage.setItem(PROFILE, JSON.stringify(profile));
     } catch {
       /* Storage blocked: the chat will ask again */
     }
-    Object.values(steps).forEach((el) => (el.hidden = true));
-    steps.loading.hidden = false;
-    back.hidden = true;
     window.setTimeout(() => location.assign('/parent-coach/chat/'), 600);
+  }
+
+  function failed(
+    message = 'The coach could not start just now. Please try again in a moment.',
+  ): void {
+    steps.loading.hidden = true;
+    back.hidden = false;
+    show(screens.length - 1);
+    announce(message);
+    const note = steps.note.querySelector<HTMLElement>('[data-ob-error]');
+    if (note) {
+      note.textContent = message;
+      note.hidden = false;
+    }
   }
 
   addRow(false);

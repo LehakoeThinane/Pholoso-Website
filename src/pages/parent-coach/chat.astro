@@ -40,7 +40,7 @@ const strategies = (await getCollection('coachStrategies')).filter((e) =>
           </h1>
           {coach.mode === 'mock' && <p class="coach__practice">{coach.practiceNote}</p>}
         </div>
-        <div data-js-hide>
+        <div data-js-hide data-coach-nojs>
           <Notice title="The coach needs JavaScript for now">
             <p>
               In the meantime, the written <a href="/parent-guide/">Parent Guide</a> works in any
@@ -64,12 +64,19 @@ const strategies = (await getCollection('coachStrategies')).filter((e) =>
         </p>
         <div class="coach__dock" data-coach-dock data-js-only>
           <ul class="coach__chips" aria-label="Suggested answers" data-coach-chips hidden />
-          <form class="coach__composer" data-coach-composer>
+          <form
+            class="coach__composer"
+            id="coach-composer"
+            method="post"
+            action="/api/coach/turn.php"
+            data-coach-composer
+          >
+            <input type="hidden" name="id" value="" data-coach-id />
             <label class="coach__label" for="coach-input">
               Your message
             </label>
             <div class="coach__row">
-              <textarea id="coach-input" rows="2" maxlength="1000" />
+              <textarea id="coach-input" name="message" rows="2" maxlength="1000" />
               <button type="button" class="coach__icon" data-coach-mic aria-pressed="false" hidden>
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2Z" />

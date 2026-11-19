@@ -54,6 +54,8 @@ export interface Message {
   blocks?: Block[];
   /** Parent messages */
   text?: string;
+  /** "Need help now?" (danger words): coaching stopped */
+  help?: boolean;
 }
 
 export interface Session {

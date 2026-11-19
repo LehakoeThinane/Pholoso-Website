@@ -37,4 +37,31 @@ return [
     // Spam protection: at most 5 submissions per visitor per 10 minutes.
     'rate_limit'    => ['max' => 5, 'window' => 600],
     'min_seconds'   => 3,   // checked only when the form script supplies the timing
+
+    // Pholoso Parent Coach (docs/DEPLOY.md, "Parent Coach"). Leave 'enabled' => false until the
+    // Foundation has approved the strategies, the helplines, the privacy notice and a budget.
+    // The website must also be built with COACH_MODE=live for the pages to use it.
+    'coach' => [
+        'enabled'          => false,
+        // The MySQL database from cPanel > MySQL Databases (run server/migrations/001_coach.sql)
+        'db'               => [
+            'dsn'      => 'mysql:host=localhost;dbname=ACCOUNT_coach;charset=utf8mb4',
+            'user'     => '',
+            'password' => '',
+        ],
+        // The AI provider's API key (from its console). Never put it anywhere else.
+        'api_key'          => '',
+        // The model and how hard it thinks. The model must support structured outputs.
+        'model'            => 'claude-opus-5-5',
+        'effort'           => 'medium',   // low | medium | high
+        'fallbacks'        => true,       // retry declined requests on a suitable model
+        'timeout'          => 25,         // seconds before "please try again"
+        'max_turns'        => 15,         // per conversation
+        'rate_limit'       => ['max' => 40, 'window' => 3600],   // per visitor per hour
+        // Daily spending cap in US dollars. When reached, the coach "rests" until tomorrow
+        // (UTC) and points to the written Parent Guide. Prices: USD per million tokens for the
+        // model above; check the provider's pricing page when changing the model.
+        'daily_budget_usd' => 5.0,
+        'price_per_mtok'   => ['input' => 4.0, 'output' => 20.0, 'cache_write' => 5.0, 'cache_read' => 0.2],
+    ],
 ];
