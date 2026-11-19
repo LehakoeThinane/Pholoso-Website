@@ -208,3 +208,36 @@ and the Foundation has chosen a budget, helplines and privacy wording.
   the guide's own search. Could join "Stories & resources" once reviewed.
 - The home-page demo never plays by itself. All three steps are shown still; "Play demo" replays
   them one at a time, only when motion is allowed, with "Turn off motion" while playing.
+
+## 18. Parent Coach (brief v4): built in three stages, off until approved
+
+**Decision:** brief v4 replaces the scripted guide with an AI coach (onboarding, a fixed
+eight-stage coaching arc, optional accounts). The scripted Parent Guide stays as the fallback
+when the coach is off, resting (budget reached) or unavailable. The coach is built in three
+stages: (1) the screens and message cards against a practice script, (2) the database, sessions
+and PHP API, (3) accounts, reminders and deletion. Owner decisions, 19 November 2026.
+
+**How it is switched:** `COACH_MODE` (src/config/coach.ts): `off` in production (the landing page
+says it is not open yet and points to the Parent Guide; no draft strategy is published),
+`mock` in preview builds and tests (a practice script in the browser, clearly labelled, sends
+nothing), `live` from Stage 2.
+
+**Notes:**
+
+- The practice script returns exactly the reply format the AI must return
+  (`{ blocks, choices, placeholder, next_stage, safety_flag }`, src/scripts/coach/types.ts), and
+  only uses strategies from the library, so Stage 2 swaps the engine, not the screens.
+- Session address: `/parent-coach/chat/?s=<id>` for now (works on any static host); Stage 2 adds
+  `/parent-coach/s/<id>/`, rendered by PHP so it also works without JavaScript.
+- Without JavaScript, Stage 1 onboarding and chat point to the Parent Guide; Stage 2 makes them
+  plain forms posted to the server, as the brief asks.
+- Replies appear block by block when motion is allowed and all at once otherwise; the
+  conversation is marked busy until a reply is complete, so screen readers announce it once.
+  (The brief's word-by-word streaming would make screen readers announce fragments.)
+- "Get started" is not sticky: nothing on the site covers content (same reason as the header).
+- Voice input needs the microphone, so the Permissions-Policy now allows it for this website
+  only (`microphone=(self)`); the browser still asks the parent first, and a note says the
+  browser may send the voice to its maker. Nothing is recorded by us.
+- Continue buttons use `aria-disabled` rather than `disabled`, so keyboard and screen-reader
+  users can still reach them and hear why they cannot continue yet.
+- Never copies Understood's text, illustrations, colours or name; only the kind of flow.

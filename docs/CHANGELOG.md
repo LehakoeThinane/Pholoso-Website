@@ -8,6 +8,51 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Parent Coach, Stage 1 (screens against a practice script)
+
+**Why:** brief v4 replaces the scripted guide with an AI Parent Coach. Owner decisions: keep the
+Parent Guide as the fallback, and build the coach in stages. This is Stage 1.
+
+**What changed**
+
+- **`/parent-coach/`:** landing page with a child and the mascot, "Welcome to Pholoso Parent
+  Coach (Beta)", one sentence on who it is for, three promise cards (free, checked by
+  professionals, your information is yours), the how-it-works demo, and Get started.
+- **Onboarding (`/parent-coach/start/`):** one question per screen: your name, your children
+  (add or remove rows), one screen per child for learning and thinking differences (autism
+  included), and an important note about AI and privacy. Back, Skip, Continue, and a segmented
+  progress bar with "Step 2 of 5" as text.
+- **Chat (`/parent-coach/chat/`):** "Welcome, Sam!", the first question with big buttons, then
+  chips above the message box; a placeholder that fits each question; voice input where the
+  browser supports it; message actions (Good response, Bad response with "What went wrong?",
+  Copy text, Listen); "Jump to latest reply".
+- **Message cards:** reassurance, explanation, "A strategy to try", "Say this", "How to introduce
+  it", "Your plan for Luna" (when it's calm / when screen time ends / right after), a tip for
+  pushback, "Save your progress" (accounts come in Stage 3), and a closing card with a 1–5 star
+  rating and "Start a new conversation".
+- **The coaching arc:** ask → reassure and explain → offer one strategy → the child's interests
+  → where → the plan → pushback → close. All four answers at the second step rejoin the arc.
+  Free text works at every step. Two children: the coach asks which one first.
+- **Practice script, not AI:** replies come from a fixed script in the browser, labelled on
+  every coach page. It uses the same reply format the AI will use in Stage 2. Nothing is sent.
+- **Strategy library:** two draft screen-time strategies (Next-up activity, Countdown you can
+  see), marked draft. Only approved ones will ever reach the AI.
+- **Safety:** danger words end the coaching and show "Need help now?".
+- **Production:** the coach is off: the landing page says it is not open yet and points to the
+  Parent Guide; no draft strategy is published.
+- **Microphone:** allowed for this website only, for voice input (was blocked everywhere).
+
+**Checks:** 26 new browser tests (onboarding with and without skips and with two children, the
+full arc to the rating, each branch, free text, placeholders, actions by keyboard, reload,
+danger words, no-JS, nothing sent). Chat page script about 11.5 KB, plus 2.5 KB for the
+practice script in preview builds (budget 15 KB). Coach styles load only on coach pages.
+
+**Follow-ups:** Stage 2 (database, sessions, PHP API, AI behind a switch, no-JS forms), Stage 3
+(passwordless accounts, reminders, deletion). Owner: name, first topic, strategy reviewer,
+helplines, privacy wording, budget.
+
+---
+
 ## 2026-11-19 · `dev` · Parent Guide, Phase 1 (scripted guide)
 
 **Why:** owner direction: start the Parent Guide from the brief (§7b), the scripted part first.

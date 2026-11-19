@@ -142,6 +142,24 @@ file and stops with a clear message if something is wrong.
   it to `reviewed: true` (and fill in `reviewedBy`) after a qualified professional chosen by
   the Foundation has approved every step. Changing a reviewed topic needs a new review.
 
+## 6c. The Parent Coach's strategy library
+
+Each strategy is one file in `src/content/coach-strategies/<topic>/` (copy an existing one).
+The coach never invents strategies: the AI only personalises and explains entries from this
+library, and **only entries with `status: approved` are ever sent to it.**
+
+- Each entry has: a title, a one-sentence summary, why it helps, the exact words to say
+  (`sayThis`), how to introduce it to the child at a calm time, a three-part plan (when it's
+  calm / when screen time ends / right after), why consistency matters, common obstacles with a
+  tip for each, when not to use it, and when to seek professional help.
+- Placeholders: `{child}` (the child's name), `{activity}` (something they enjoy) and
+  `{place}` (where it will be ready).
+- Same tone as the rest of the site: strengths-based, practical, no punishment, no blame.
+  Start from what the child loves (Hlompho).
+- **Approval:** a qualified South African professional chosen by the Foundation reads the entry,
+  then set `status: approved`, `reviewedBy` and `reviewedOn`. The build refuses an approved
+  entry without them. Changing an approved entry needs a new review.
+
 ## 7. Pictures
 
 - Every meaningful picture needs **alt text** that says what it shows and why it matters

@@ -221,8 +221,45 @@ const guides = defineCollection({
     }),
 });
 
+/* ---------- Parent Coach strategy library (src/content/coach-strategies/<topic>/*.md) ---------- */
+
+const coachStrategies = defineCollection({
+  loader: glob({ pattern: '*/*.md', base: './src/content/coach-strategies' }),
+  schema: z
+    .object({
+      id: z.string().regex(/^[a-z0-9-]+$/),
+      order: z.number().int(),
+      title: z.string().max(40),
+      /** An illustration name from src/assets/illustrations (e.g. "icons/blocks"). */
+      illustration: z.string(),
+      summary: z.string(),
+      why: z.string(),
+      /** The exact short phrase to use every time. */
+      sayThis: z.string().max(120),
+      /** How to explain the change to the child at a calm time. */
+      introduce: z.string(),
+      plan: z.object({ calm: z.string(), ends: z.string(), after: z.string() }),
+      consistency: z.string(),
+      obstacles: z.array(z.object({ title: z.string(), tip: z.string() })).min(1),
+      /** When not to use it (contraindications). */
+      avoidWhen: z.string(),
+      seekHelp: z.string(),
+      /**
+       * Only 'approved' entries are ever sent to the AI. Approval needs a qualified South
+       * African professional chosen by the Foundation (reviewedBy, reviewedOn).
+       */
+      status: z.enum(['draft', 'approved']),
+      reviewedBy: z.string().default(''),
+      reviewedOn: z.string().default(''),
+    })
+    .refine((s) => s.status !== 'approved' || (s.reviewedBy && s.reviewedOn), {
+      message: 'An approved strategy needs reviewedBy and reviewedOn',
+    }),
+});
+
 export const collections = {
   guides,
+  coachStrategies,
   stories,
   interests,
   resources,

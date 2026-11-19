@@ -22,6 +22,7 @@ unknown is a visible placeholder.
 | 8. Quality gate                                  | Done, except the **manual screen-reader test** (section 4)                                        |
 | 9. Docs and handover                             | Done (this report)                                                                                |
 | 4c. Parent Guide, Phase 1 (scripted) | Done (19 November): 7 draft topics, a page per step, chat on top. **Needs professional review** (section 4). Phase 2 (AI) not built. |
+| 4c. Parent Coach (brief v4), Stage 1 of 3 | Done (19 November): landing, onboarding, chat and all message cards, against a practice script; 2 draft strategies. Off in production. Stage 2: database, sessions, API. Stage 3: accounts, reminders, deletion. |
 
 **Test results (local, 18 November 2026):** 150 browser tests passed, 0 failed (axe: no
 accessibility violations on any page, at phone and desktop size). HTML, links, contrast,
@@ -110,16 +111,21 @@ Before going live:
    verified, current South African helpline numbers for "Need help now?"; and confirm the name
    ("Parent Guide" is a placeholder). Until the review, every reply says "Draft – under review"
    and the step pages stay out of search engines.
-10. **Merge `dev` into `main`** by pull request once the above is agreed.
+10. **Parent Coach (brief v4):** confirm the name ("Pholoso Parent Coach" is a working name)
+    and the first topic (screen time); choose a professional to review the strategy library
+    (`src/content/coach-strategies/`); and, before it opens, approve the privacy notice wording
+    for the AI provider and the cross-border transfer, and a monthly budget. Stage 1 runs only
+    in practice mode (preview builds); production keeps the coach off.
+11. **Merge `dev` into `main`** by pull request once the above is agreed.
 
 Going live and after:
 
-11. **Deploy** following [DEPLOY.md](DEPLOY.md): back up the current site first.
-12. **Run the smoke test** against the live site, and send a real test message through each
+12. **Deploy** following [DEPLOY.md](DEPLOY.md): back up the current site first.
+13. **Run the smoke test** against the live site, and send a real test message through each
     form (contact, updates, Section 18A receipt) to check delivery and formatting.
-13. **Google Search Console:** verify the domain and submit
+14. **Google Search Console:** verify the domain and submit
     `https://pholoso.africa/sitemap-index.xml`.
-14. Record the release in [CHANGELOG.md](CHANGELOG.md).
+15. Record the release in [CHANGELOG.md](CHANGELOG.md).
 
 Optional:
 

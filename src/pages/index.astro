@@ -5,6 +5,7 @@ import DoorCard from '../components/DoorCard.astro';
 import CardGrid from '../components/CardGrid.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import GuideDemo from '../components/guide/GuideDemo.astro';
+import { coach } from '../config/coach';
 import Hero from '../components/Hero.astro';
 import Photo from '../components/Photo.astro';
 import Quote from '../components/Quote.astro';
@@ -179,9 +180,13 @@ const ngo = {
     <SectionHeading
       id="guide-home-title"
       title="Help for parents, right now"
-      lead="Our Parent Guide asks one question at a time, then suggests practical things to try. It is a draft while a professional reviews it."
+      lead="Tap the answer that fits, and get practical ideas to try at home. Our guides are drafts while professionals review them."
     />
-    <GuideDemo cta />
+    {coach.mode === 'off' ? (
+      <GuideDemo cta />
+    ) : (
+      <GuideDemo cta ctaHref="/parent-coach/" ctaLabel={`Try ${coach.name}`} />
+    )}
   </Section>
 
   {featured && (

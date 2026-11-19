@@ -8,20 +8,29 @@
  * "Turn off motion" and "Replay" controls. Without JavaScript, or with Reduce motion, Calm
  * colours or Simplified page, there is nothing to play.
  *
- * Props: cta: show the "Try the Parent Guide" button (not needed on the guide's own page).
+ * Props: cta: show a button under the demo (ctaHref, ctaLabel; default: the Parent Guide).
  */
 import Button from '../Button.astro';
 
 interface Props {
   cta?: boolean;
+  ctaHref?: string;
+  ctaLabel?: string;
+  /** Who answers in the demo: "guide" (default) or "coach". */
+  who?: string;
 }
-const { cta = false } = Astro.props;
+const {
+  cta = false,
+  ctaHref = '/parent-guide/',
+  ctaLabel = 'Try the Parent Guide',
+  who = 'guide',
+} = Astro.props;
 ---
 
 <div class="demo" data-demo>
   <ol class="demo__steps">
     <li class="demo__step is-on" data-demo-step>
-      <p class="demo__caption">The guide asks one question</p>
+      <p class="demo__caption">The {who} asks one question</p>
       <div class="demo__bubble">
         <p>How does Luna react when screen time ends?</p>
         <ul class="demo__choices" aria-label="Example answers">
@@ -40,7 +49,7 @@ const { cta = false } = Astro.props;
       </div>
     </li>
     <li class="demo__step is-on" data-demo-step>
-      <p class="demo__caption">The guide suggests what to try</p>
+      <p class="demo__caption">The {who} suggests what to try</p>
       <div class="demo__bubble">
         <p>Strong reactions often come from a sudden stop. Try:</p>
         <ul>
@@ -60,8 +69,8 @@ const { cta = false } = Astro.props;
   </div>
   {cta && (
     <p class="demo__cta">
-      <Button variant="green" href="/parent-guide/">
-        Try the Parent Guide
+      <Button variant="green" href={ctaHref}>
+        {ctaLabel}
       </Button>
     </p>
   )}

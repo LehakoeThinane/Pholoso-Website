@@ -3,7 +3,14 @@ import { defineConfig } from 'astro/config';
 import todoGuard from './src/integrations/todo-guard';
 
 /** Pages marked noindex: kept out of the sitemap too. */
-const notInSitemap = ['/thank-you/', '/styleguide/', '/404', '/kids/ask-a-grown-up/'];
+const notInSitemap = [
+  '/thank-you/',
+  '/styleguide/',
+  '/404',
+  '/kids/ask-a-grown-up/',
+  '/parent-coach/start/',
+  '/parent-coach/chat/',
+];
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({

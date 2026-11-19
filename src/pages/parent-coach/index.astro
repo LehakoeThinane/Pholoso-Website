@@ -1,0 +1,120 @@
+---
+/**
+ * Parent Coach landing page (brief v4 §7b, screen 0). While the coach is off (production,
+ * until the Foundation approves it), this page says so and points to the written Parent Guide.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import Notice from '../../components/Notice.astro';
+import Section from '../../components/Section.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import GuideDemo from '../../components/guide/GuideDemo.astro';
+import Art from '../../components/kids/Art.astro';
+import { coach } from '../../config/coach';
+import { site } from '../../config/site';
+import coachCss from '../../styles/coach.css?url';
+
+const open = coach.mode !== 'off';
+const promises = [
+  {
+    art: 'icons/heart',
+    title: 'Free, always',
+    text: 'No fees and no paywalls.',
+  },
+  {
+    art: 'icons/friends',
+    title: 'Checked by professionals',
+    text: 'Every strategy the coach suggests is approved by a qualified professional before it is used.',
+  },
+  {
+    art: 'icons/star',
+    title: 'Your information is yours',
+    text: 'We never sell or share it. We use it only to help you.',
+    link: { href: '/privacy/', label: 'Read our privacy notice' },
+  },
+];
+---
+
+<BaseLayout
+  title={coach.name}
+  description="A short, guided coaching conversation for parents of children aged 5–10 who learn and think differently, starting with screen-time transitions."
+>
+  <link slot="head" rel="stylesheet" href={coachCss} />
+  <div class="clanding">
+    <div class="container clanding__inner">
+      <div class="clanding__art" aria-hidden="true">
+        <Art name="children/lerato" class="clanding__child" />
+        <Art name="mascot/hello" class="clanding__mascot" />
+      </div>
+      <h1 class="clanding__title">
+        Welcome to {coach.name} <span class="clanding__beta">Beta</span>
+      </h1>
+      <p class="clanding__by">by {site.name}</p>
+      <p class="clanding__lead">
+        A short coaching conversation for parents of children aged {coach.topic.ages} who learn and
+        think differently. It starts with {coach.topic.label}, with more topics to come.
+      </p>
+      {open ? (
+        <p class="clanding__start">
+          <Button variant="gold" href="/parent-coach/start/">
+            Get started
+          </Button>
+        </p>
+      ) : (
+        <Notice title="The coach is not open yet">
+          <p>
+            We are preparing it with professionals. In the meantime, our written{' '}
+            <a href="/parent-guide/">Parent Guide</a> has practical ideas you can use today.
+          </p>
+        </Notice>
+      )}
+      {coach.mode === 'mock' && (
+        <Notice title="Practice mode">
+          <p>
+            Replies come from a fixed practice script, not from AI. The strategies are drafts, not
+            yet reviewed.
+          </p>
+        </Notice>
+      )}
+    </div>
+  </div>
+
+  <Section labelledby="promise-title">
+    <h2 id="promise-title" class="visually-hidden">
+      Our promises
+    </h2>
+    <ul class="cpromises">
+      {promises.map((p) => (
+        <li class="cpromise">
+          <Art name={p.art} class="cpromise__art" />
+          <h3 class="cpromise__title">{p.title}</h3>
+          <p>{p.text}</p>
+          {p.link && (
+            <p>
+              <a href={p.link.href}>{p.link.label}</a>
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section variant="alt" labelledby="coach-demo-title">
+    <SectionHeading
+      id="coach-demo-title"
+      title="How it works"
+      lead="The coach asks about one struggle, explains why it happens, and helps you make a plan with the exact words to use."
+    />
+    <GuideDemo who="coach" />
+    {open && (
+      <p class="clanding__start">
+        <Button variant="gold" href="/parent-coach/start/">
+          Get started
+        </Button>
+      </p>
+    )}
+    <p class="clanding__alt">
+      Prefer to read? Try the written <a href="/parent-guide/">Parent Guide</a>.
+    </p>
+  </Section>
+</BaseLayout>

@@ -210,9 +210,11 @@ test.describe('the demo', () => {
     await demo.getByRole('button', { name: 'Turn off motion' }).click();
     for (const s of await steps.all()) await expect(s).toBeVisible();
     await expect(demo.getByRole('button', { name: 'Replay' })).toBeFocused();
-    await expect(demo.getByRole('link', { name: 'Try the Parent Guide' })).toHaveAttribute(
+    // Preview builds point to the Parent Coach (practice mode); production, with the coach
+    // off, points to the Parent Guide
+    await expect(demo.getByRole('link', { name: 'Try Pholoso Parent Coach' })).toHaveAttribute(
       'href',
-      '/parent-guide/',
+      '/parent-coach/',
     );
   });
 
