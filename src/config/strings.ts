@@ -12,6 +12,14 @@ export interface NavItem {
   icon?: string;
 }
 
+/** A menu heading that opens a short list of related pages (a dropdown in the header). */
+export interface NavGroup {
+  label: string;
+  children: NavItem[];
+}
+
+export type NavEntry = NavItem | NavGroup;
+
 export const strings = {
   skipLink: 'Skip to main content',
   homeLinkLabel: 'Pholoso Afrika Foundation, home',
@@ -30,15 +38,34 @@ export const strings = {
   },
 } as const;
 
-/** Primary navigation, in order. Donate is rendered separately as a button. */
-export const primaryNav: NavItem[] = [
+/**
+ * Primary navigation, in order: four entries, so the menu fits on one row between the logo
+ * and the Donate button (rendered separately). Groups open a short list of related pages.
+ * Every page is also listed in the footer.
+ */
+export const primaryNav: NavEntry[] = [
   { href: '/kids/', label: 'Kids’ World', icon: 'mascot/hello' },
-  { href: '/about/', label: 'About us' },
-  { href: '/approach/', label: 'Our approach' },
-  { href: '/stories/', label: 'Stories' },
-  { href: '/get-involved/', label: 'Get involved' },
-  { href: '/resources/', label: 'Resources' },
-  { href: '/contact/', label: 'Contact' },
+  {
+    label: 'About',
+    children: [
+      { href: '/about/', label: 'About us' },
+      { href: '/approach/', label: 'Our approach' },
+    ],
+  },
+  {
+    label: 'Stories & resources',
+    children: [
+      { href: '/stories/', label: 'Stories' },
+      { href: '/resources/', label: 'Resources' },
+    ],
+  },
+  {
+    label: 'Get involved',
+    children: [
+      { href: '/get-involved/', label: 'Ways to help' },
+      { href: '/contact/', label: 'Contact us' },
+    ],
+  },
 ];
 
 export const footerExplore: NavItem[] = [

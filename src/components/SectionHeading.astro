@@ -1,28 +1,25 @@
 ---
 /**
- * SectionHeading: optional eyebrow (with the gold triangle), the heading, and an optional lead.
+ * SectionHeading: the heading, and an optional lead.
  *
  * Props:
  * - title: heading text
  * - id: heading id (pass the same id to Section's `labelledby`)
- * - eyebrow: short label above the heading
  * - lead: one or two sentences below the heading
  * - level: 2 (default), 3 or 4. Keep the page outline strict: h1 → h2 → h3.
  */
 interface Props {
   title: string;
   id?: string;
-  eyebrow?: string;
   lead?: string;
   level?: 2 | 3 | 4;
 }
 
-const { title, id, eyebrow, lead, level = 2 } = Astro.props;
+const { title, id, lead, level = 2 } = Astro.props;
 const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
 ---
 
 <div class="section-heading">
-  {eyebrow && <p class="section-heading__eyebrow triangle-marker">{eyebrow}</p>}
   <Heading id={id} class="section-heading__title">
     {title}
   </Heading>
@@ -36,13 +33,6 @@ const Heading = `h${level}` as 'h2' | 'h3' | 'h4';
     margin: 0 auto var(--space-l);
     max-width: var(--measure);
     text-align: center;
-  }
-  .section-heading__eyebrow {
-    margin: 0 0 var(--space-2xs);
-    font-size: var(--step--1);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
   }
   .section-heading__title {
     margin-bottom: var(--space-xs);

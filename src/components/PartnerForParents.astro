@@ -28,7 +28,6 @@ const Heading = `h${level}` as 'h2' | 'h3';
 <div class:list={['partner-parents', { 'partner-parents--compact': compact }]}>
   {!compact && <Art name="icons/friends" class="partner-parents__art" />}
   <div>
-    <p class="partner-parents__eyebrow">For parents and caregivers</p>
     <Heading class="partner-parents__title">Learning activities from 2to.iQ</Heading>
     <p>
       Our partner {site.partner.name} offers calm, accessible thinking activities for learners, used
@@ -70,11 +69,6 @@ const Heading = `h${level}` as 'h2' | 'h3';
   :global(.partner-parents__art) {
     width: 5rem;
     height: 5rem;
-  }
-  .partner-parents__eyebrow {
-    margin: 0 0 var(--space-3xs);
-    font-weight: 700;
-    font-size: var(--step--1);
   }
   .partner-parents__title {
     font-size: var(--step-2);

@@ -45,3 +45,11 @@ test('forms post to the handler as normal HTML forms', async ({ page }) => {
   await expect(form).toHaveAttribute('method', /post/i);
   await expect(form).toHaveAttribute('action', /contact\.php$/);
 });
+
+test('menu groups still open and reach every page without JavaScript', async ({ page }) => {
+  await page.goto('/');
+  const group = page.locator('[data-nav-group]', { hasText: 'Stories & resources' });
+  await group.locator('summary').click();
+  await group.getByRole('link', { name: 'Resources' }).click();
+  await expect(page).toHaveURL(/\/resources\/$/);
+});

@@ -272,17 +272,6 @@ main:focus {
   --gloss-surface: none;
 }
 
-/* Brand motif: the small gold triangle from the logo. Decorative only. */
-.triangle-marker::before {
-  content: '';
-  display: inline-block;
-  width: 0.7em;
-  height: 0.6em;
-  margin-right: 0.45em;
-  background-color: var(--color-accent);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-
 /* Content written by editors (Markdown) */
 .prose > * + * {
   margin-top: var(--para-space);
@@ -296,8 +285,7 @@ main:focus {
 
 /* Simplified page: hide decorative pictures and sections, keep content and navigation */
 :root[data-simple='on'] [data-decorative],
-:root[data-simple='on'] .photo:not([data-essential]),
-:root[data-simple='on'] .triangle-marker::before {
+:root[data-simple='on'] .photo:not([data-essential]) {
   display: none !important;
 }
 

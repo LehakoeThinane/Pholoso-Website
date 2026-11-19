@@ -157,3 +157,17 @@ owner-approved exception, kept small: it runs once, never repeats, never hides t
 not run, and is switched off by the device's reduced-motion setting, Reduce motion, Calm
 colours and Simplified page (one flag, `data-anim`, set by `public/prefs.js`). The
 glow, like all gloss, appears only in the Standard theme.
+
+## 15. Four-item menu with groups; no labels above headings
+
+**Decision:** the header menu has four entries in one row between the logo and Donate: Kids' World,
+About, Stories & resources, Get involved. The last three open a short list of pages. Small labels
+above headings ("eyebrows") are removed site-wide, including the hero's. Quotes are centred.
+Owner decisions, 19 November 2026.
+
+**How:** groups are native `<details>` disclosures: they open on click or Enter, never on hover
+(hover menus are hard for keyboard, touch and many neurodivergent users), work without
+JavaScript, and announce as collapsed or expanded. `src/scripts/menu.ts` keeps one open at a time
+and closes on Esc, a click elsewhere, or keyboard focus leaving the group (not on taps, which would
+shift the phone menu under the finger). Every page stays one click inside its group and is also
+listed in the footer, so help stays in the same place on every page (WCAG 3.2.6).

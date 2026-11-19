@@ -39,8 +39,13 @@ tab (the developer could not see it: the GitHub command-line tool was not logged
 - **Gloss** on all surfaces in the Standard theme, not only buttons.
 - **Centred** page titles, section headings, intros, cards and Kids' World headings; long text,
   lists, forms and tables stay left-aligned.
-- **Header:** on wide screens the menu has its own centred row under the logo and Donate (it did
-  not fit beside them, and links were breaking onto two lines); on phones the header is centred.
+- **Header (19 November):** four menu entries in one row between the logo and Donate:
+  Kids' World, About (About us, Our approach), Stories & resources (Stories, Resources) and Get
+  involved (Ways to help, Contact us). Groups open on click, work without JavaScript, and close
+  with Esc. Every page is still listed in the footer. On phones the header is centred.
+- **Small labels above headings removed** everywhere (19 November), e.g. "The problem", "Trust",
+  and the hero's "Pholoso Afrika Foundation".
+- **Quotes centred**, with a short gold bar above instead of a bar down the left (19 November).
 - **CSS budget** raised to 16 KB.
 
 ## 2. Definition of done (brief §20)

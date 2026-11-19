@@ -8,6 +8,38 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-19 · `dev` · Four-item menu, labels above headings removed, quotes centred
+
+**Why:** owner direction: a shorter menu on one row between the logo and Donate, no small labels
+above headings, and the featured quote centred.
+
+**What changed**
+
+- **Menu: four entries in one row** between the logo and Donate (header 169 px → 91 px tall):
+  - Kids' World (its own link, first, as the brief asks)
+  - About ▾: About us, Our approach
+  - Stories & resources ▾: Stories, Resources
+  - Get involved ▾: Ways to help, Contact us
+  Groups are native disclosures: they open on click or Enter (not hover), work without
+  JavaScript, and announce as collapsed or expanded. One opens at a time; Esc closes it and returns
+  focus; a click elsewhere or tabbing away closes it. The group with the current page is
+  underlined. On phones the groups open in place inside the Menu. Every page is still in the
+  footer.
+- **Fixed during testing:** on phones, tapping a second group while one was open could miss
+  (closing the first group moved the second under the finger). Taps no longer trigger that
+  close.
+- **Labels above headings removed everywhere:** all 31 (e.g. "The problem", "What we do",
+  "Trust", the page-hero labels, and the hero's "Pholoso Afrika Foundation"), plus "For parents
+  and caregivers" on the 2to.iQ box. The option is removed from the Hero, PageHero and
+  SectionHeading components, and the triangle-marker style is gone.
+- **Quotes centred** (home "In their words" and the Hlompho quote), with a short gold bar above
+  instead of a bar down the left.
+- **Tests:** new browser tests for the one-row menu (wide screens), groups by keyboard and
+  pointer, Esc and click-away, and groups without JavaScript. 191 passed, 0 failed.
+- DECISIONS.md §15; HANDOVER.md updated.
+
+---
+
 ## 2026-11-18 · `dev` · Header menu, alignment pass, handover update
 
 **What changed**
