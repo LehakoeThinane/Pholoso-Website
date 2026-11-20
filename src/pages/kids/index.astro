@@ -1,8 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import Art from '../../components/kids/Art.astro';
-import KidsHero from '../../components/kids/KidsHero.astro';
-import PictureButton from '../../components/kids/PictureButton.astro';
+import Bunting from '../../components/kids/Bunting.astro';
+import ColourCard, { type CardColour } from '../../components/kids/ColourCard.astro';
+import KidsSky from '../../components/kids/KidsSky.astro';
+import KidsTitle from '../../components/kids/KidsTitle.astro';
+import Pholo from '../../components/kids/Pholo.astro';
+import ReadToMe from '../../components/kids/ReadToMe.astro';
+import TornEdge from '../../components/kids/TornEdge.astro';
 import { kids, kidsNav } from '../../config/strings';
 import KidsLayout from '../../layouts/KidsLayout.astro';
 import { dayNumber } from '../../lib/day-number';
@@ -11,14 +16,8 @@ const facts = await getCollection('kidsFacts');
 // Without JavaScript the fact for the build date shows; with it, today's (same formula).
 const buildFact = dayNumber(new Date()) % facts.length;
 
-const hints: Record<string, string> = {
-  '/kids/what-do-you-love/': 'Find fun ideas',
-  '/kids/calm-corner/': 'Breathe slowly',
-  '/kids/make-and-do/': 'Print and colour',
-  '/kids/kids-like-me/': 'Picture stories',
-  '/kids/gallery/': 'Look at pictures',
-  '/kids/feelings/': 'How do you feel?',
-};
+// The six doors' colours, as on the mood board
+const doorColour: CardColour[] = ['coral-strong', 'ocean', 'grape', 'brand', 'berry', 'amber'];
 const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
 ---
 
@@ -26,30 +25,39 @@ const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
   title="Kids’ World"
   description="A happy, calm place for children to play, read along, colour and learn. Made by the Pholoso Afrika Foundation."
 >
-  <KidsHero
-    title="Welcome to Kids’ World!"
-    says={`Hello! I’m ${kids.mascotName}. I’m so glad you’re here.`}
-    pose="hello"
-    wave
-  />
-
-  <section class="container kids-section" aria-labelledby="choose-title">
-    <h2 id="choose-title">What would you like to do?</h2>
-    <ul class="kids-grid kids-grid--wide-3">
-      {kidsNav.map((item) => (
-        <li>
-          <PictureButton
-            href={item.href}
-            icon={item.icon}
-            label={item.label}
-            colour={item.colour}
-            size="door"
-            hint={hints[item.href]}
-          />
-        </li>
-      ))}
-    </ul>
-  </section>
+  <div class="welcome kids-bg--sky">
+    <KidsSky />
+    <div class="container welcome__inner">
+      <div class="welcome__text">
+        <KidsTitle />
+        <p class="welcome__lead">Hello! This is your place to play, learn and feel calm.</p>
+        <ReadToMe />
+      </div>
+      <div class="welcome__pholo">
+        <p class="bubble bubble--down">
+          <span class="visually-hidden">{kids.mascotName} says: </span>
+          Hi! I’m {kids.mascotName}. I’m so glad you’re here!
+        </p>
+        <Pholo tap play="arrive" class="welcome__mascot" />
+      </div>
+    </div>
+    <nav class="container welcome__doors" aria-label="Kids’ World activities">
+      <ul class="colour-cards">
+        {kidsNav.map((item, i) => (
+          <li>
+            <ColourCard
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+              colour={doorColour[i] ?? 'brand'}
+              tilt={i + 1}
+            />
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <TornEdge layers={['leaf', 'brand']} />
+  </div>
 
   <section class="container kids-section" aria-labelledby="fact-title">
     <div class="fact kids-bg--lilac">
@@ -71,6 +79,7 @@ const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
   </section>
 
   <section class="container kids-section" aria-labelledby="welcome-title">
+    <Bunting />
     <h2 id="welcome-title">Everyone is welcome here</h2>
     <p>Every child learns in their own way. Your way is a good way.</p>
     <div class="cast" aria-hidden="true">

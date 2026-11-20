@@ -8,11 +8,11 @@
 import { site } from '../../config/site';
 import { kids, strings } from '../../config/strings';
 import Art from './Art.astro';
-import Wave from './Wave.astro';
+import TornEdge from './TornEdge.astro';
 ---
 
 <footer class="kids-footer">
-  <Wave edge="top" />
+  <TornEdge layers={['leaf']} seed={23} />
   <div class="kids-footer__band">
     <div class="container">
       <p class="kids-footer__help">
@@ -56,7 +56,7 @@ import Wave from './Wave.astro';
     margin-top: var(--space-2xl);
     color: var(--color-text);
   }
-  .kids-footer :global(.wave) {
+  .kids-footer :global(.torn) {
     color: var(--kids-leaf);
   }
   .kids-footer__band {

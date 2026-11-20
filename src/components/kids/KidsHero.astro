@@ -15,7 +15,7 @@
 import { kids, type KidsColour } from '../../config/strings';
 import Pholo from './Pholo.astro';
 import ReadToMe from './ReadToMe.astro';
-import Wave from './Wave.astro';
+import TornEdge from './TornEdge.astro';
 
 interface Props {
   title: string;
@@ -51,15 +51,14 @@ const { title, says, pose = 'hello', colour = 'sunshine', wave = false } = Astro
       <slot />
     </div>
   </div>
-  <Wave edge="top" />
+  <TornEdge />
 </div>
 
 <style>
   .kids-hero {
     padding-top: var(--space-l);
   }
-  .kids-hero :global(.wave) {
-    color: var(--color-bg);
+  .kids-hero :global(.torn) {
     margin-top: var(--space-l);
   }
   .kids-hero__inner {

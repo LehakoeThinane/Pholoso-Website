@@ -8,6 +8,33 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Brief v5, part 2: the Kids' World redesign
+
+**Why:** owner direction: carry on with brief v5. This part builds the mood board's Kids' World.
+
+**What changed**
+
+- **Kids' World home, as on the mood board:** a flat sky with a crayon sun, clouds and stars;
+  the multicolour "Kids' World" title (each letter a different colour, white outline, a small
+  tilt; screen readers hear the plain words); "Hello! This is your place to play, learn and feel
+  calm."; a big gold "Read it to me" button; Pholo with "Hi! I'm Pholo. I'm so glad you're
+  here!"; six bold colour doors (coral, ocean, grape, green, berry, amber), each tilted a little
+  with a white frame and a solid shadow; torn-paper grass.
+- **Graphics kit, drawn in code (almost no data):** torn-paper edges, the crayon sun and stars
+  (a small SVG "crayon" filter), clouds, a dashed doodle path, and bunting made of the logo's
+  triangle.
+- **Every Kids' World page:** torn-paper edges instead of the soft wave (top band and footer);
+  the "Read it to me" button is now gold.
+- **Calm colours, High contrast and Dim** have their own versions: no sun, clouds or doodles in
+  Calm; muted doors; light title letters with a dark outline in Dim.
+- **Docs:** DECISIONS §23 (including where the site differs from the mood board, and why).
+
+**Checks:** all 284 browser tests pass, including new ones: the title reads as plain words; the
+six doors; no doodle sits behind text. Lighthouse on /kids/ (local): performance 100,
+accessibility 100, no layout shift, 18.1 KB of styles (Kids' World budget 20 KB).
+
+---
+
 ## 2026-11-20 · `dev` · Fix: Kids' World layout shift; separate stylesheet budget
 
 **Why:** CI's Lighthouse found two problems on Kids' World after part 1.

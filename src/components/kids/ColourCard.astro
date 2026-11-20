@@ -1,0 +1,32 @@
+---
+/**
+ * ColourCard: a bold colour door (brief v5 §10, mood board): a strong colour with white
+ * Fredoka text, a white 4px frame, a slight tilt and a solid shadow below. Used for the six
+ * Kids' World doors on the Kids' World home page. Styles: src/styles/kids.css (.colour-card).
+ *
+ * Props:
+ * - href, label: where it goes and what it says
+ * - icon: an illustration name (e.g. "icons/heart"), shown in a white circle
+ * - colour: 'coral-strong' | 'ocean' | 'grape' | 'brand' | 'berry' | 'amber'
+ * - tilt: 1 to 6 (each a small, different tilt)
+ */
+import Art from './Art.astro';
+
+export type CardColour = 'coral-strong' | 'ocean' | 'grape' | 'brand' | 'berry' | 'amber';
+interface Props {
+  href: string;
+  label: string;
+  icon: string;
+  colour: CardColour;
+  tilt?: number;
+}
+
+const { href, label, icon, colour, tilt = 1 } = Astro.props;
+---
+
+<a class={`colour-card colour-card--${colour} colour-card--tilt${tilt}`} href={href}>
+  <span class="colour-card__icon">
+    <Art name={icon} class="colour-card__art" />
+  </span>
+  <span class="colour-card__label">{label}</span>
+</a>
