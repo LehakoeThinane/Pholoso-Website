@@ -171,3 +171,161 @@ JavaScript, and announce as collapsed or expanded. `src/scripts/menu.ts` keeps o
 and closes on Esc, a click elsewhere, or keyboard focus leaving the group (not on taps, which would
 shift the phone menu under the finger). Every page stays one click inside its group and is also
 listed in the footer, so help stays in the same place on every page (WCAG 3.2.6).
+
+## 16. Calls to action in the header; cards that glow and lift
+
+**Decision:** "See how we work" and "Donate" sit in the top-right corner of a full-width header
+instead of in the home hero. Cards (statistics and regular cards) have a soft gold glow and lift
+slightly on hover. Owner decisions, 19 November 2026.
+
+**Notes:** "See how we work" needs about 1280 px of screen to fit beside the menu; narrower
+screens show Donate alone (the page stays in the menu under About). The brief asked for Donate
+and "See how we work" in the hero; the owner moved them. Cards lifting on hover is decorative
+(most cards are not links): it is small (3 px), short, and only runs when motion is allowed. The
+glow is part of the gloss and switches off with it.
+
+## 17. Parent Guide: scripted first, AI later and off
+
+**Decision:** build the Parent Guide (brief §7b) as a guide written by people first. Every step
+is a real page (`/parent-guide/<topic>/<step>/`), so it works without JavaScript; with
+JavaScript the same content runs as a chat on one page, loaded from `/parent-guide/guides.json`
+(built from the same files). The AI phase is not built yet. Owner decision, 19 November 2026.
+
+**Why:** the scripted guide is free to run, fully under the Foundation's control, and safe to
+review line by line. The AI phase only makes sense once the scripted content has been reviewed
+and the Foundation has chosen a budget, helplines and privacy wording.
+
+**Notes:**
+
+- Nothing is sent anywhere: settings (names, an interest) stay in the browser; the message box
+  searches the guide and a list of site pages on the device; danger words (src/config/guide.ts)
+  show "Need help now?" with general emergency wording until verified numbers are supplied.
+- The guide's styles are a separate stylesheet loaded only on guide pages, so the site-wide CSS
+  does not grow; its script loads only there too (about 10 KB of script on a guide page).
+- Unreviewed topics: "Draft – under review" on every reply, step pages `noindex`, and a build
+  warning. Step pages are never in the sitemap: `/parent-guide/` is the way in.
+- Not in the four-item menu (the owner's four tabs); linked from the home page, the footer, and
+  the guide's own search. Could join "Stories & resources" once reviewed.
+- The home-page demo never plays by itself. All three steps are shown still; "Play demo" replays
+  them one at a time, only when motion is allowed, with "Turn off motion" while playing.
+
+## 18. Parent Coach (brief v4): built in three stages, off until approved
+
+**Decision:** brief v4 replaces the scripted guide with an AI coach (onboarding, a fixed
+eight-stage coaching arc, optional accounts). The scripted Parent Guide stays as the fallback
+when the coach is off, resting (budget reached) or unavailable. The coach is built in three
+stages: (1) the screens and message cards against a practice script, (2) the database, sessions
+and PHP API, (3) accounts, reminders and deletion. Owner decisions, 19 November 2026.
+
+**How it is switched:** `COACH_MODE` (src/config/coach.ts): `off` in production (the landing page
+says it is not open yet and points to the Parent Guide; no draft strategy is published),
+`mock` in preview builds and tests (a practice script in the browser, clearly labelled, sends
+nothing), `live` from Stage 2.
+
+**Notes:**
+
+- The practice script returns exactly the reply format the AI must return
+  (`{ blocks, choices, placeholder, next_stage, safety_flag }`, src/scripts/coach/types.ts), and
+  only uses strategies from the library, so Stage 2 swaps the engine, not the screens.
+- Session address: `/parent-coach/chat/?s=<id>` for now (works on any static host); Stage 2 adds
+  `/parent-coach/s/<id>/`, rendered by PHP so it also works without JavaScript.
+- Without JavaScript, Stage 1 onboarding and chat point to the Parent Guide; Stage 2 makes them
+  plain forms posted to the server, as the brief asks.
+- Replies appear block by block when motion is allowed and all at once otherwise; the
+  conversation is marked busy until a reply is complete, so screen readers announce it once.
+  (The brief's word-by-word streaming would make screen readers announce fragments.)
+- "Get started" is not sticky: nothing on the site covers content (same reason as the header).
+- Voice input needs the microphone, so the Permissions-Policy now allows it for this website
+  only (`microphone=(self)`); the browser still asks the parent first, and a note says the
+  browser may send the voice to its maker. Nothing is recorded by us.
+- Continue buttons use `aria-disabled` rather than `disabled`, so keyboard and screen-reader
+  users can still reach them and hear why they cannot continue yet.
+- Never copies Understood's text, illustrations, colours or name; only the kind of flow.
+
+## 19. Parent Coach Stage 2: PHP API, MySQL, and the AI only within a fixed arc
+
+**Decision:** the coach's server side is plain PHP 7.4+ (no Composer) under `public/api/coach/`
+and `public/lib/coach/`, with MySQL through PDO and prepared statements. The AI provider is
+called over HTTPS with cURL (the brief's choice for shared hosting). Owner confirmed MySQL, 19
+November 2026.
+
+**How the AI is kept on the path:**
+
+- The server decides the stage; the AI writes only the words for that stage. Its `next_stage`
+  can only move forward one step or stay (to answer a question); anything else is corrected.
+- Every reply must match a JSON schema (the API's structured outputs), and the server checks it
+  again. A strategy that is not in the approved library is rejected; titles always come from the
+  library. A reply that fails is retried once, then the parent sees "please try again" and
+  nothing is saved.
+- The opening question, choosing a child, the turn limit, "the coach is resting" and the
+  closing card need no AI.
+
+**Defaults (all in the private config):** model `claude-opus-5-5`, effort `medium`, refusal
+fallback on, 25-second timeout, 15 turns per conversation, 40 requests per visitor per hour, a
+daily budget of US$5 estimated from the token counts the provider reports. The system prompt
+and the library are sent first and marked for caching, so most of each request is billed at
+the cached rate.
+
+**Privacy:** ID numbers, phone numbers and email addresses are removed before anything is stored
+or sent. Danger words are checked in the browser and on the server before the AI is asked; the
+AI can also flag an emergency. Conversations are deleted 30 days after they start.
+
+**Notes:**
+
+- Replies are not streamed: shared hosting usually buffers output, and a non-streamed reply is
+  announced once by screen readers. The page shows "The coach is thinking…" instead.
+- Without JavaScript, `/parent-coach/s/<id>/` is drawn by PHP from the built chat page, so the
+  look stays the same; answers and the message box become plain forms.
+- Tests never call the real API: `tests/php/mock-ai.php` stands in for it, with SQLite in place
+  of MySQL (the migration is written so both accept it).
+- The production build keeps the coach off (`COACH_MODE` unset). `pnpm build:live` builds the
+  live version once the Foundation approves it, and `enabled` in the private config is a second
+  switch that can turn it off without a new upload.
+
+## 20. Pholo: the approved files, moving only on a trigger
+
+**Decision:** Pholo (brief v5 §10b) is drawn from the Foundation's approved SVG files without
+changes. The still poses are shown whenever Pholo is not moving; while a movement plays, the
+approved movement file is shown in the same place and size. 20 November 2026.
+
+**How the movements stay under control:** the approved movement files use SVG's own animation
+(SMIL). At build time every animation is changed to wait for a hidden trigger that belongs to
+that Pholo (`src/lib/pholo.ts`), so nothing can start by itself. `src/scripts/pholo.ts` fires
+the trigger only on its event (arriving on a Kids' World page once per visit, a tap, finishing
+an activity, Start in the Calm corner, read-aloud) and only when motion is allowed. Switching
+motion off mid-way, or leaving the page, stops every movement and shows the still pose.
+
+**Why SMIL and not CSS keyframes (the brief's preference):** the approved movements were made
+in SMIL; converting them to CSS would mean redrawing the timing and pivot points by hand, and
+any difference would change approved artwork. With the trigger approach the motion rules the
+brief cares about hold anyway: one switch (`data-anim`) decides, and nothing loops by itself.
+Trigger IDs use underscores: in SMIL timing a hyphen means "minus", so `a-go.begin` would never
+start (found and fixed while building; a test now checks that the arm really rotates).
+
+**Later upgrade path:** if a professional animator joins, Pholo can be rebuilt in Rive (state
+machines suit a character that reacts to events), keeping the same pose names (`hello`,
+`thinking`, `celebrate`, `calm`, `talk`) and triggers, so pages do not change. Not added now.
+
+## 21. Kids' World fonts and stylesheet
+
+**Decision:** Kids' World uses Fredoka (headings, buttons) and Andika (reading text, at least
+22px); grown-ups' pages keep Atkinson Hyperlegible. Each world preloads only its own fonts. The
+Kids' World styles and fonts are a separate stylesheet linked by KidsLayout only, so grown-ups'
+pages never download them (the shared stylesheet shrank from 14.7 KB to 14.0 KB).
+
+**Notes:** both fonts have metric-matched fallback faces (Arial adjusted to each font's size and
+line height), so text does not jump when the real font arrives. Fredoka has no glyphs for the
+Tshivenda letters ḓ ḽ ṅ ṋ ṱ; the font stack falls back to Andika for those letters only, as the
+brief asks. The font token `--font-kids-display` is the one place to change if the Foundation
+chooses Baloo 2 or Grandstander instead.
+
+## 22. A separate stylesheet budget for Kids' World
+
+**Decision:** Kids' World pages may load up to 20 KB of stylesheets; every other page keeps the
+16 KB budget. Owner decision, 20 November 2026.
+
+**Why:** Kids' World pages load the shared stylesheet plus their own (the kids' fonts, colours
+and, next, the graphics kit). The brief's own limit for a whole Kids' World page is 250 KB on
+first visit, so 4 KB more styling is small. The alternative (splitting the grown-ups' header,
+footer and hero styles into their own file) stays available if the kids' styles grow further.
+

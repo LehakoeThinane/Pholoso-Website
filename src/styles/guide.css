@@ -1,0 +1,322 @@
+/*
+ * Parent Guide (components/guide/). Loaded only on guide pages, through a <link> in each
+ * page's head, so the site-wide stylesheet stays small. Class names are global because
+ * src/scripts/guide.ts builds the same markup for replies added in the chat.
+ */
+
+.guide {
+  position: relative;
+  max-width: 30rem;
+  margin-inline: auto;
+  border: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-l);
+  background-color: var(--color-bg);
+  box-shadow: var(--card-glow);
+}
+
+/* ---------- Header: name, Beta, Info / Feedback / Settings ---------- */
+.guide__bar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-s);
+  border-bottom: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-l) var(--radius-l) 0 0;
+  background-color: var(--color-surface);
+  background-image: var(--gloss-surface);
+}
+.guide__title {
+  margin: 0;
+  font-weight: 700;
+}
+.guide__beta {
+  margin-left: var(--space-3xs);
+  padding: 0 var(--space-2xs);
+  border: var(--border-width) solid var(--color-text);
+  border-radius: 999px;
+  font-size: var(--step--1);
+}
+.guide__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+}
+.guide__tool > summary,
+a.guide__tool {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+  padding: 0 var(--space-xs);
+  border-radius: 999px;
+  color: var(--color-text);
+  font-size: var(--step--1);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+  list-style: none;
+}
+.guide__tool > summary::-webkit-details-marker {
+  display: none;
+}
+.guide__tool[open] > summary {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+.guide__drawer {
+  position: absolute;
+  inset: 100% 0 auto;
+  z-index: 2;
+  max-height: 70vh;
+  overflow: auto;
+  padding: var(--space-m);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: 0 0 var(--radius-m) var(--radius-m);
+  background-color: var(--color-bg);
+  box-shadow: var(--elevation);
+}
+.guide__drawer-title {
+  font-size: var(--step-1);
+}
+.guide__drawer > :last-child,
+.guide__settings .field:last-of-type {
+  margin-bottom: 0;
+}
+.guide__settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-m);
+}
+
+/* ---------- Buttons ---------- */
+.guide__button {
+  min-height: var(--button-min);
+  padding: var(--space-2xs) var(--space-m);
+  border: 2px solid var(--color-btn-bg);
+  border-radius: var(--radius-s);
+  background-color: var(--color-btn-bg);
+  background-image: var(--gloss);
+  color: var(--color-btn-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+.guide__button--plain {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-text);
+}
+
+/* ---------- The conversation ---------- */
+.guide__log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  padding: var(--space-m) var(--space-s);
+}
+.msg {
+  max-width: 100%;
+}
+.msg--guide .msg__body,
+.msg--welcome,
+.msg--help {
+  padding: var(--space-s);
+  border-radius: var(--radius-m) var(--radius-m) var(--radius-m) 4px;
+  background-color: var(--color-surface);
+}
+.msg--welcome {
+  text-align: center;
+}
+.msg--welcome .choices {
+  justify-content: center;
+}
+.guide__avatar {
+  width: 4.5rem;
+  margin: 0 auto var(--space-2xs);
+}
+.guide__welcome {
+  font-size: var(--step-2);
+  font-weight: 700;
+  margin-bottom: var(--space-2xs);
+}
+.msg--you {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: var(--space-xs) var(--space-s);
+  border-radius: var(--radius-m) var(--radius-m) 4px var(--radius-m);
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+}
+.msg--you p {
+  margin: 0;
+}
+.msg__from {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs) var(--space-xs);
+  margin: 0 0 var(--space-3xs);
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.msg__draft {
+  padding: 0 var(--space-2xs);
+  border: var(--border-width) solid var(--color-text);
+  border-radius: 999px;
+  color: var(--color-text);
+}
+.msg__body > :last-child,
+.msg--welcome > :last-child,
+.msg--help > :last-child {
+  margin-bottom: 0;
+}
+.msg__ideas {
+  padding-left: 1.2em;
+}
+.msg__note {
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+}
+
+/* Message actions: icon plus a visible word, each a 44px target */
+.msg__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+  margin-top: var(--space-2xs);
+}
+.msg__act {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: var(--target-min);
+  padding: 0 var(--space-xs);
+  border: var(--border-width) solid var(--color-line);
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--color-text);
+  font-size: var(--step--1);
+  text-decoration: none;
+  cursor: pointer;
+}
+.msg__act:hover {
+  border-color: var(--color-text);
+}
+.msg__act[aria-pressed='true'] {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+}
+
+/* Answer choices: large, full-width buttons (links without JavaScript) */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin: var(--space-s) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.choices[hidden] {
+  display: none;
+}
+.choice {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--button-min);
+  padding: var(--space-2xs) var(--space-s);
+  border: 2px solid var(--color-btn-bg);
+  border-radius: var(--radius-m);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.choice:hover {
+  background-color: var(--color-surface);
+  text-decoration: underline;
+}
+.choice--else {
+  border-style: dashed;
+  font-weight: 400;
+}
+.msg--welcome .choice {
+  justify-content: center;
+  text-align: center;
+}
+
+/* "Need help now?" */
+.help-card {
+  padding: var(--space-s);
+  border: 2px solid var(--color-text);
+  border-left-width: 6px;
+  border-radius: var(--radius-s);
+  background-color: var(--color-bg);
+}
+.help-card__title {
+  font-size: var(--step-1);
+}
+.help-card > :last-child {
+  margin-bottom: 0;
+}
+.help-card__note {
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+}
+
+/* ---------- Message box ---------- */
+.guide__composer {
+  padding: var(--space-s);
+  border-top: var(--border-width) solid var(--color-line);
+}
+.guide__composer-label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: var(--space-3xs);
+}
+.guide__composer-row {
+  display: flex;
+  gap: var(--space-2xs);
+}
+.guide__composer-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--button-min);
+  padding: var(--space-2xs) var(--space-xs);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background-color: var(--color-bg);
+}
+.guide__composer-hint {
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+}
+
+/* Step pages: "Parent Guide, step 2. All topics" */
+.guide-step__where {
+  margin: var(--space-2xs) auto 0;
+  color: var(--color-text-muted);
+}
+
+/* Phones: the card fills the width */
+@media (max-width: 40rem) {
+  .guide {
+    margin-inline: calc(-1 * var(--gutter) + var(--space-3xs));
+  }
+}
+
+@media (forced-colors: active) {
+  .msg--guide .msg__body,
+  .msg--welcome,
+  .msg--help,
+  .msg--you {
+    border: 1px solid CanvasText;
+  }
+}

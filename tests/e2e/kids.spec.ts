@@ -77,24 +77,27 @@ test('no celebration with Calm colours', async ({ page }) => {
   await expect(page.locator('.celebrate__star')).toHaveCount(0);
 });
 
-test('breathing shape animates only after Start, and Stop stops it', async ({ page }) => {
+test('Pholo breathes only after Start, and Stop stops him', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/kids/calm-corner/');
-  const shape = page.locator('[data-breathe-shape]');
-  const anim = () => shape.evaluate((el) => getComputedStyle(el).animationName);
-  expect(await anim()).toBe('none');
+  const pholo = page.locator('[data-breathe] [data-pholo="calm"]');
+  await expect(pholo).not.toHaveAttribute('data-playing');
   await page.locator('[data-breathe-start]').click();
-  expect(await anim()).toBe('kids-breathe');
+  await expect(pholo).toHaveAttribute('data-playing', '');
   await page.locator('[data-breathe-stop]').click();
-  expect(await anim()).toBe('none');
+  await expect(pholo).not.toHaveAttribute('data-playing');
   await expect(page.locator('[data-breathe-start]')).toBeFocused();
 });
 
-test('breathing under reduced motion: no movement, the numbers count instead', async ({ page }) => {
+test('breathing under reduced motion: Pholo stays still, the numbers count instead', async ({
+  page,
+}) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/kids/calm-corner/');
   await page.locator('[data-breathe-start]').click();
-  const shape = page.locator('[data-breathe-shape]');
-  expect(await shape.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+  await expect(page.locator('[data-breathe] [data-pholo="calm"]')).not.toHaveAttribute(
+    'data-playing',
+  );
   await expect(page.locator('[data-breathe-count]')).toHaveText(/^[1-4]$/);
   await expect(page.locator('[data-breathe-status]')).toContainText('Breathe in');
 });
@@ -128,10 +131,11 @@ test('feelings check-in sends nothing', async ({ page }) => {
   expect(posts).toEqual([]);
 });
 
-test('the mascot waves when tapped', async ({ page }) => {
+test('Pholo waves when tapped', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/kids/');
-  const mascot = page.locator('[data-mascot]');
-  await expect(mascot).toBeEnabled();
-  await mascot.click();
-  await expect(mascot).toHaveClass(/is-waving/);
+  const pholo = page.getByRole('button', { name: /^Wave to / });
+  await pholo.evaluate((el) => el.removeAttribute('data-playing')); // after the greeting
+  await pholo.click();
+  await expect(pholo).toHaveAttribute('data-playing', '');
 });

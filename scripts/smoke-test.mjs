@@ -82,7 +82,7 @@ if (isLive) {
   if (h('referrer-policy')) ok(`Referrer-Policy: ${h('referrer-policy')}`);
   else fail('Referrer-Policy missing');
   if (/camera=\(\)/.test(h('permissions-policy')))
-    ok('Permissions-Policy denies camera, microphone, location');
+    ok('Permissions-Policy denies camera and location, microphone only for this site');
   else fail('Permissions-Policy missing');
   if (isLive) {
     if (h('strict-transport-security')) ok('HSTS is on');

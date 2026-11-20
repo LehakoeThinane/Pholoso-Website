@@ -37,41 +37,49 @@ function textOf(el: HTMLElement): string {
   return (clone.textContent ?? '').replace(/\s+/g, ' ').trim();
 }
 
-export function initListen(): void {
-  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
-  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-listen]');
-  if (!buttons.length) return;
+export const canSpeak = () =>
+  'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
 
-  buttons.forEach((button) => {
+let stopsOnHide = false;
+
+/** Reads `target` aloud, or stops if `button` is already reading. `button` has aria-pressed. */
+export function toggleSpeech(button: HTMLElement, target: HTMLElement): void {
+  if (!stopsOnHide) {
+    window.addEventListener('pagehide', stop);
+    stopsOnHide = true;
+  }
+  if (current === button) {
+    stop();
+    announce('Reading stopped');
+    return;
+  }
+  stop();
+  const utterance = new SpeechSynthesisUtterance(textOf(target));
+  utterance.lang = 'en-ZA';
+  const voice = pickVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = window.pholosoComfort?.effective(window.pholosoComfort.read()).rate ?? 1;
+  utterance.onend = () => {
+    if (current === button) stop();
+  };
+  utterance.onerror = () => {
+    if (current === button) stop();
+  };
+  current = button;
+  button.setAttribute('aria-pressed', 'true');
+  window.speechSynthesis.speak(utterance);
+}
+
+export function initListen(): void {
+  if (!canSpeak()) return;
+  document.querySelectorAll<HTMLButtonElement>('[data-listen]').forEach((button) => {
     button.hidden = false;
     button.closest<HTMLElement>('[data-comfort-listen]')?.removeAttribute('hidden');
     button.addEventListener('click', () => {
-      if (current === button) {
-        stop();
-        announce('Reading stopped');
-        return;
-      }
-      stop();
       const key = button.dataset.listen ?? '';
       const target =
         key === 'main' ? document.getElementById('main') : document.getElementById(key);
-      if (!target) return;
-      const utterance = new SpeechSynthesisUtterance(textOf(target));
-      utterance.lang = 'en-ZA';
-      const voice = pickVoice();
-      if (voice) utterance.voice = voice;
-      utterance.rate = window.pholosoComfort?.effective(window.pholosoComfort.read()).rate ?? 1;
-      utterance.onend = () => {
-        if (current === button) stop();
-      };
-      utterance.onerror = () => {
-        if (current === button) stop();
-      };
-      current = button;
-      button.setAttribute('aria-pressed', 'true');
-      window.speechSynthesis.speak(utterance);
+      if (target) toggleSpeech(button, target);
     });
   });
-
-  window.addEventListener('pagehide', stop);
 }

@@ -1,0 +1,127 @@
+---
+/**
+ * Parent Coach chat screen. Behaviour: src/scripts/coach/chat.ts. Each session has its own
+ * address (/parent-coach/chat/?s=<id>); Stage 2 adds /parent-coach/s/<id>/, rendered by the
+ * server so it also works without JavaScript.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Notice from '../../components/Notice.astro';
+import GetHelpCard from '../../components/guide/GetHelpCard.astro';
+import Art from '../../components/kids/Art.astro';
+import Pholo from '../../components/kids/Pholo.astro';
+import { coach } from '../../config/coach';
+import coachCss from '../../styles/coach.css?url';
+
+const open = coach.mode !== 'off';
+const strategies = (await getCollection('coachStrategies')).filter((e) =>
+  e.id.startsWith(`${coach.topic.id}/`),
+);
+---
+
+<BaseLayout
+  title={`Coaching session | ${coach.name}`}
+  description={`Your ${coach.name} session.`}
+  noindex
+>
+  <link slot="head" rel="stylesheet" href={coachCss} />
+  <div class="container">
+    {open ? (
+      <div
+        class="coach"
+        data-coach
+        data-mode={coach.mode}
+        data-reasons={JSON.stringify(coach.feedbackReasons)}
+      >
+        <div class="coach__welcome">
+          <Art name="mascot/hello" class="coach__avatar" />
+          <h1 class="coach__hello">
+            Welcome
+            <span data-coach-greet />!
+          </h1>
+          {coach.mode === 'mock' && <p class="coach__practice">{coach.practiceNote}</p>}
+        </div>
+        <div data-js-hide data-coach-nojs>
+          <Notice title="The coach needs JavaScript for now">
+            <p>
+              In the meantime, the written <a href="/parent-guide/">Parent Guide</a> works in any
+              browser.
+            </p>
+          </Notice>
+        </div>
+        <a class="coach__jump" href="#main" data-coach-jump data-js-only>
+          Jump to latest reply
+        </a>
+        <div
+          class="coach__log"
+          role="log"
+          aria-live="polite"
+          aria-label="Conversation"
+          data-coach-log
+        />
+        <p class="coach__thinking" data-coach-thinking hidden>
+          <Pholo pose="thinking" class="coach__thinking-art" />
+          <span role="status">The coach is thinking…</span>
+        </p>
+        <div class="coach__dock" data-coach-dock data-js-only>
+          <ul class="coach__chips" aria-label="Suggested answers" data-coach-chips hidden />
+          <form
+            class="coach__composer"
+            id="coach-composer"
+            method="post"
+            action="/api/coach/turn.php"
+            data-coach-composer
+          >
+            <input type="hidden" name="id" value="" data-coach-id />
+            <label class="coach__label" for="coach-input">
+              Your message
+            </label>
+            <div class="coach__row">
+              <textarea id="coach-input" name="message" rows="2" maxlength="1000" />
+              <button type="button" class="coach__icon" data-coach-mic aria-pressed="false" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2Z" />
+                </svg>
+                <span class="visually-hidden">Speak your message</span>
+              </button>
+              <button type="submit" class="coach__icon coach__send" data-coach-send>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 4 4 12h5v8h6v-8h5Z" />
+                </svg>
+                <span class="visually-hidden">Send</span>
+              </button>
+            </div>
+            <p class="coach__mic-note" data-coach-mic-note hidden>
+              Your browser may send your voice to its maker to turn it into text. We never record
+              it.
+            </p>
+          </form>
+          <p class="coach__ai-note">{coach.mode === 'mock' ? coach.practiceNote : coach.aiNote}</p>
+        </div>
+
+        <template data-coach-help>
+          <div class="cmsg cmsg--coach cmsg--help">
+            <GetHelpCard level={2} />
+          </div>
+        </template>
+        {strategies.map((s) => (
+          <template data-coach-art={s.data.id}>
+            <Art name={s.data.illustration} class="cblock__art-img" />
+          </template>
+        ))}
+      </div>
+    ) : (
+      <>
+        <h1 class="coach__hello">{coach.name}</h1>
+        <Notice title="The coach is not open yet">
+          <p>
+            Try the written <a href="/parent-guide/">Parent Guide</a> in the meantime.
+          </p>
+        </Notice>
+      </>
+    )}
+  </div>
+  {open && <script>
+    import '../../scripts/coach/chat';
+  </script>}
+</BaseLayout>

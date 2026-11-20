@@ -14,8 +14,9 @@
  *
  * Behaviour (mascot wave, celebrations, sounds, games): src/scripts/kids/main.ts.
  */
-import '../styles/kids.css';
 import BaseLayout from './BaseLayout.astro';
+// Kids' World styles and fonts: their own stylesheet, so grown-ups' pages never load them
+import kidsCss from '../styles/kids.css?url';
 
 interface Props {
   title: string;
@@ -34,6 +35,7 @@ const { title, description, bodyClass, noindex = false } = Astro.props;
   bodyClass={bodyClass}
   noindex={noindex}
 >
+  <link slot="head" rel="stylesheet" href={kidsCss} />
   <slot />
   <div class="celebrate" data-celebrate aria-hidden="true"></div>
 </BaseLayout>

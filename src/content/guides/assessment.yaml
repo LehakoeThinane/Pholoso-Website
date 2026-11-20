@@ -1,0 +1,74 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+# Check before review: the referral routes described still match public and private services.
+order: 6
+title: 'Getting an assessment in South Africa'
+keywords:
+  [
+    assessment,
+    assess,
+    diagnosis,
+    diagnose,
+    diagnosed,
+    test,
+    testing,
+    psychologist,
+    paediatrician,
+    pediatrician,
+    doctor,
+    clinic,
+    hospital,
+    referral,
+    therapist,
+    occupational,
+    speech,
+    waiting,
+    list,
+    medical,
+    aid,
+    autism,
+    adhd,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'An assessment can help you understand how {name} thinks and learns, and what support would help. Where are you in the process?'
+    choices:
+      - { label: 'I am wondering whether to start', next: 2 }
+      - { label: 'I want to know who can assess', next: 3 }
+      - { label: 'We are on a waiting list', next: 4 }
+
+  - step: 2
+    message: 'You do not need to be certain before you ask. If you have noticed differences in how {name} plays, talks, learns or copes, it is worth talking to someone.'
+    suggestions:
+      - 'Write down what you notice, with examples, and note {name}’s strengths too.'
+      - 'Talk to your clinic, a GP or a paediatrician, and ask the teacher what they see.'
+      - 'An assessment describes needs. It does not change who {name} is.'
+    choices:
+      - { label: 'Who can assess?', next: 3 }
+      - { label: 'Talking to my child’s school', next: school }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'In South Africa, a team of professionals often works on an assessment: for example a paediatrician, a psychologist, a speech therapist or an occupational therapist.'
+    suggestions:
+      - 'In the public sector, start at your local clinic and ask for a referral.'
+      - 'With medical aid or private funds, a GP or paediatrician can refer you. Ask your medical aid what it covers.'
+      - 'Through school, the support team can ask the district for help.'
+    choices:
+      - { label: 'We are on a waiting list', next: 4 }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'Waiting lists can be long. There is a lot you can do while you wait.'
+    suggestions:
+      - 'Keep notes and examples, so the assessment is quicker and clearer.'
+      - 'Start support that helps now: routines, calm spaces and visual schedules.'
+      - 'Ask the school what support it can give before a formal assessment.'
+    learnMore:
+      - { label: 'Resources for families', href: '/resources/' }
+    choices:
+      - { label: 'Help with daily routines', next: sleep }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }

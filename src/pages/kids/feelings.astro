@@ -30,7 +30,7 @@ const feelings = await ordered('kidsFeelings');
   </KidsHero>
 
   <div class="container kids-section">
-    <ul class="faces" data-picker="feel-prompt" data-js-only>
+    <ul class="faces kids-grid kids-grid--small" data-picker="feel-prompt" data-js-only>
       {feelings.map((f) => (
         <li>
           <button
@@ -78,16 +78,8 @@ const feelings = await ordered('kidsFeelings');
 
 <style>
   .faces {
-    list-style: none;
-    margin: 0 0 var(--space-l);
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
-    gap: var(--space-s);
-  }
-  .faces li {
-    margin: 0;
-    max-width: none;
+    --cols-mid: 4; /* 7 faces: 4 + 3 */
+    margin-bottom: var(--space-l);
   }
   .faces[hidden],
   .feeling[hidden],

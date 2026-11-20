@@ -1,5 +1,6 @@
 /*
- * Kids' World styles (loaded by KidsLayout only).
+ * Kids' World styles: a separate stylesheet, linked by KidsLayout only, so grown-ups' pages
+ * never download them.
  *
  * Happy by default, calm on request (brief §8):
  *  - colour comes in big flat blocks; text always sits on a plain, high-contrast background
@@ -8,6 +9,108 @@
  *    motion setting, Calm colours or Simplified page. The one exception is the breathing
  *    shape in the Calm corner, which runs only after Start and has a Stop button.
  */
+
+/*
+ * Kids' World fonts (brief v5 §5), self-hosted from @fontsource (SIL Open Font License):
+ * - Fredoka 700: headings, buttons and the Kids' World title (--font-kids-display)
+ * - Andika 400 and 700: reading text, designed for beginning readers (--font-kids-text)
+ * Latin and Latin Extended, so South African languages render. Fredoka has no glyphs for the
+ * Tshivenda letters ḓ ḽ ṅ ṋ ṱ, so the font stack falls back to Andika for those letters only.
+ *
+ * The "Fallback" faces are Arial adjusted to each font's size and line height, so text does
+ * not move when the real font arrives (layout shift). Measured against Arial on a sample
+ * sentence (20 November 2026); re-measure if the fonts change.
+ */
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/fredoka/files/fredoka-latin-700-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/fredoka/files/fredoka-latin-ext-700-normal.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Andika';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/andika/files/andika-latin-400-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Andika';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/andika/files/andika-latin-ext-400-normal.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Andika';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/andika/files/andika-latin-700-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Andika';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/andika/files/andika-latin-ext-700-normal.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Fredoka Fallback';
+  font-weight: 700;
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans');
+  size-adjust: 101.29%;
+  ascent-override: 95.77%;
+  descent-override: 23.69%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Andika Fallback';
+  font-weight: 400;
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans');
+  size-adjust: 104.52%;
+  ascent-override: 116.73%;
+  descent-override: 37.31%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Andika Fallback';
+  font-weight: 700;
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans');
+  size-adjust: 109.95%;
+  ascent-override: 110.96%;
+  descent-override: 35.47%;
+  line-gap-override: 0%;
+}
 
 /* ---------- Colour blocks: text, links and focus all pass on every one (contrast.ts) ---------- */
 .kids-bg--sky {
@@ -33,6 +136,15 @@
 }
 
 /* ---------- Type: big, bold, friendly ---------- */
+/* Andika for reading (at least 22px), Fredoka for headings and buttons */
+.kids-world {
+  font-family: var(--font-kids-text);
+}
+.kids-world :is(h1, h2, h3, h4, button, .pic-btn, .door, .read-to-me, .bubble) {
+  font-family: var(--font-kids-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
 .kids-world h2 {
   font-size: clamp(1.6rem, 1.3rem + 1.5vw, 2.3rem);
 }
@@ -41,7 +153,7 @@
 }
 .kids-world main p,
 .kids-world main li {
-  font-size: var(--step-1);
+  font-size: max(1.25rem, var(--step-1)); /* at least 22px */
 }
 
 /* ---------- Layout helpers ---------- */
@@ -54,23 +166,57 @@
   text-align: center;
   margin-inline: auto;
 }
+/*
+ * Kids' World grids: even rows of equal-sized items. A shorter last row is centred, so a row
+ * is never left hanging to one side (6 items: 3 + 3; 7 faces: 4 + 3 centred).
+ * Columns: 1 on small phones, 2 from 30rem, --cols-mid from 48rem, --cols-wide from 62rem.
+ * Defaults suit 4 items (2 + 2, then 4). For other counts: .kids-grid--wide-3 (6 or 9 items),
+ * .kids-grid--wide-5 (5 items), or set --cols-mid / --cols-wide on the list.
+ */
 .kids-grid {
+  --gap: var(--space-m);
+  --cols: 1;
+  --cols-mid: 2;
+  --cols-wide: 4;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: var(--space-m);
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 15rem), 1fr)
-  ); /* fill the row: no gaps */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
 }
 .kids-grid > li {
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   margin: 0;
   max-width: none;
 }
 .kids-grid--small {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  --gap: var(--space-s);
+  --cols: 2;
+}
+.kids-grid--wide-3 {
+  --cols-mid: 3;
+  --cols-wide: 3;
+}
+.kids-grid--wide-5 {
+  --cols-mid: 3;
+  --cols-wide: 5;
+}
+@media (min-width: 30rem) {
+  .kids-grid {
+    --cols: 2;
+  }
+}
+@media (min-width: 48rem) {
+  .kids-grid {
+    --cols: var(--cols-mid);
+  }
+}
+@media (min-width: 62rem) {
+  .kids-grid {
+    --cols: var(--cols-wide);
+  }
 }
 
 /* ---------- Speech bubble ---------- */
@@ -108,7 +254,12 @@
 }
 
 /* ---------- Kids' notice: a plain, friendly box ---------- */
+/* Notes fit their text and sit centred, so there is no empty strip on one side */
 .kids-note {
+  text-align: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
   display: flex;
   align-items: center;
   gap: var(--space-s);
@@ -136,12 +287,6 @@
 /* [data-anim] (set by public/prefs.js) = motion allowed: the device does not ask for less
    motion, and Reduce motion, Calm colours and Simplified page are all off. */
 @media (prefers-reduced-motion: no-preference) {
-  /* Mascot waves when tapped */
-  [data-anim] .is-waving .mascot__wave {
-    transform-box: fill-box;
-    transform-origin: 0% 100%;
-    animation: kids-wave 0.8s ease-in-out 1;
-  }
   /* Flip cards turn to show their idea */
   [data-anim] .flip[open] .flip__back {
     animation: kids-flip 0.35s ease-out 1;
@@ -155,24 +300,8 @@
       translate 0.1s ease-out,
       box-shadow 0.1s ease-out;
   }
-  /* The breathing shape: 4 s in, 4 s out. Runs only after Start; Stop removes the class. */
-  [data-anim] .breathe__shape.is-breathing {
-    animation: kids-breathe 8s ease-in-out infinite;
-  }
 }
 
-@keyframes kids-wave {
-  0%,
-  100% {
-    rotate: 0deg;
-  }
-  25% {
-    rotate: -18deg;
-  }
-  60% {
-    rotate: 14deg;
-  }
-}
 @keyframes kids-flip {
   from {
     transform: perspective(40rem) rotateX(-70deg);
@@ -181,15 +310,6 @@
   to {
     transform: none;
     opacity: 1;
-  }
-}
-@keyframes kids-breathe {
-  0%,
-  100% {
-    transform: scale(0.6);
-  }
-  50% {
-    transform: scale(1);
   }
 }
 

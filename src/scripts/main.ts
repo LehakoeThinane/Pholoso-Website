@@ -5,11 +5,13 @@
  */
 import { initComfort } from './comfort';
 import { initCopy } from './copy';
+import { initDemo } from './demo';
 import { initFilters } from './filters';
 import { initForms } from './forms';
 import { initInterests } from './interests';
 import { initListen } from './listen';
 import { initMenu } from './menu';
+import { initPholo } from './pholo';
 import { applyTerms } from './terms';
 
 /** Print every expandable section open, then restore. */
@@ -36,6 +38,7 @@ run('terms', () => {
   applyTerms(api ? api.effective(api.read()).identityFirst : false);
 });
 run('menu', initMenu);
+run('pholo', initPholo);
 run('comfort', initComfort);
 run('listen', initListen);
 run('filters', initFilters);
@@ -43,3 +46,4 @@ run('interests', initInterests);
 run('copy', initCopy);
 run('forms', initForms);
 run('print', initPrint);
+run('demo', initDemo);

@@ -1,0 +1,55 @@
+---
+/**
+ * One step of one guide topic: /parent-guide/<topic>/<step>/. Every step is a real page, so
+ * the guide works without JavaScript (the answers are links to the next step).
+ * Steps are kept out of search engines while their topic is unreviewed, and always out of the
+ * sitemap: the opening page (/parent-guide/) is the way in.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Section from '../../../components/Section.astro';
+import GuideMessage from '../../../components/guide/GuideMessage.astro';
+import GuidePanel from '../../../components/guide/GuidePanel.astro';
+import { guide } from '../../../config/guide';
+import { guideTopics, type GuideTopic } from '../../../lib/guide';
+import guideCss from '../../../styles/guide.css?url';
+
+export const getStaticPaths = (async () => {
+  const topics = await guideTopics();
+  return topics.flatMap((topic) =>
+    topic.data.steps.map((s) => ({
+      params: { topic: topic.id, step: String(s.step) },
+      props: { topic, topics },
+    })),
+  );
+}) satisfies GetStaticPaths;
+
+interface Props {
+  topic: GuideTopic;
+  topics: GuideTopic[];
+}
+const { topic, topics } = Astro.props;
+const step = Number(Astro.params.step);
+---
+
+<BaseLayout
+  fullTitle={`${topic.data.title}, step ${step} | ${guide.name}`}
+  description={`${guide.name}: ${topic.data.title}. Short, practical ideas for parents and caregivers of neurodivergent children.`}
+  noindex={!topic.data.reviewed}
+>
+  <link slot="head" rel="stylesheet" href={guideCss} />
+  <PageHero title={topic.data.title}>
+    <p class="guide-step__where">
+      {guide.name}, step {step}. <a href="/parent-guide/">All topics</a>
+    </p>
+  </PageHero>
+  <Section labelledby="guide-title">
+    <h2 id="guide-title" class="visually-hidden">
+      The guide
+    </h2>
+    <GuidePanel topics={topics}>
+      <GuideMessage topic={topic} step={step} />
+    </GuidePanel>
+  </Section>
+</BaseLayout>

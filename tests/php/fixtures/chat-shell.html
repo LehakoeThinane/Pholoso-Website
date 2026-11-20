@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-ZA">
+  <head><meta charset="utf-8"><title>Coaching session | Pholoso Parent Coach</title></head>
+  <body>
+    <main id="main">
+      <div class="coach" data-coach data-mode="live" data-reasons="[]">
+        <h1 class="coach__hello">Welcome<span data-coach-greet></span>!</h1>
+        <div data-js-hide data-coach-nojs><div class="notice">The coach needs JavaScript for now</div></div>
+        <div class="coach__log" role="log" aria-live="polite" aria-label="Conversation" data-coach-log></div>
+        <div class="coach__dock" data-coach-dock data-js-only>
+          <ul class="coach__chips" aria-label="Suggested answers" data-coach-chips hidden></ul>
+          <form class="coach__composer" id="coach-composer" method="post" action="/api/coach/turn.php" data-coach-composer>
+            <input type="hidden" name="id" value="" data-coach-id>
+            <textarea id="coach-input" name="message" rows="2" maxlength="1000"></textarea>
+          </form>
+        </div>
+        <template data-coach-help><div class="cmsg cmsg--coach cmsg--help"><div class="help-card"><h2>Need help now?</h2></div></div></template>
+        <template data-coach-art="next-up-activity"><svg class="art"></svg></template>
+      </div>
+    </main>
+  </body>
+</html>

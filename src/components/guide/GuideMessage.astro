@@ -1,0 +1,77 @@
+---
+/**
+ * GuideMessage: one reply from the scripted guide, with its ideas, "learn more" links,
+ * message actions and answer choices. src/scripts/guide.ts builds the same markup for replies
+ * added in the chat, so the two must stay in step (class names and data attributes).
+ *
+ * Without JavaScript the answers are links to the next step's page; with it they become
+ * buttons and the conversation continues on the same page.
+ */
+import { guide } from '../../config/guide';
+import { choiceHref, type GuideTopic } from '../../lib/guide';
+import GuideText from './GuideText.astro';
+
+interface Props {
+  topic: GuideTopic;
+  step: number;
+}
+const { topic, step } = Astro.props;
+const s = topic.data.steps[step - 1]!;
+---
+
+<div class="msg msg--guide" data-msg>
+  <p class="msg__from">
+    <span>From our guide: {topic.data.title}</span>
+    {!topic.data.reviewed && <span class="msg__draft">Draft – under review</span>}
+  </p>
+  <div class="msg__body">
+    <p>
+      <GuideText text={s.message} />
+    </p>
+    {s.suggestions.length > 0 && (
+      <ul class="msg__ideas">
+        {s.suggestions.map((x) => (
+          <li>
+            <GuideText text={x} />
+          </li>
+        ))}
+      </ul>
+    )}
+    {s.learnMore.map((l) => (
+      <p class="msg__more">
+        Learn more: <a href={l.href}>{l.label}</a>
+      </p>
+    ))}
+  </div>
+  <div class="msg__actions">
+    <button type="button" class="msg__act" data-act="helpful" aria-pressed="false" data-js-only>
+      <span aria-hidden="true">✓</span> Helpful
+    </button>
+    <button type="button" class="msg__act" data-act="unhelpful" aria-pressed="false" data-js-only>
+      <span aria-hidden="true">✗</span> Not helpful
+    </button>
+    <button type="button" class="msg__act" data-act="copy" data-copy-only>
+      <span aria-hidden="true">⧉</span> Copy
+    </button>
+    <button type="button" class="msg__act" data-act="listen" aria-pressed="false" data-speech-only>
+      <span aria-hidden="true">▶</span> Listen
+    </button>
+    <a class="msg__act" href={guide.feedbackHref}>
+      <span aria-hidden="true">!</span> Report a problem
+    </a>
+  </div>
+  <ul class="choices" aria-label="Your answer">
+    {s.choices.map((c) => (
+      <li>
+        <a class="choice" href={choiceHref(topic.id, c.next)} data-go>
+          <GuideText text={c.label} />
+        </a>
+      </li>
+    ))}
+    <li data-js-only>
+      <button type="button" class="choice choice--else" data-act="else">
+        Something else
+      </button>
+    </li>
+  </ul>
+</div>

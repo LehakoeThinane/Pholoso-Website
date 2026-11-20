@@ -1,0 +1,72 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+order: 7
+title: 'Looking after myself'
+keywords:
+  [
+    me,
+    myself,
+    parent,
+    caregiver,
+    tired,
+    exhausted,
+    stressed,
+    stress,
+    burnout,
+    alone,
+    lonely,
+    worried,
+    worry,
+    anxious,
+    future,
+    support,
+    group,
+    help,
+    rest,
+    cope,
+    coping,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'Caring for a neurodivergent child is full of love, and it can also be tiring. How are you feeling right now?'
+    choices:
+      - { label: 'Tired and stretched', next: 2 }
+      - { label: 'Alone, or not understood', next: 3 }
+      - { label: 'Worried about the future', next: 4 }
+
+  - step: 2
+    message: 'Your own rest matters. A calmer parent helps a calmer child, and you deserve care too.'
+    suggestions:
+      - 'Choose one small thing that refills you, even ten minutes a day: a walk, tea outside, or music.'
+      - 'Ask for help with one task this week, from family, friends or neighbours.'
+      - 'If the tiredness does not lift, talk to a clinic nurse or a doctor about how you feel.'
+    choices:
+      - { label: 'I feel alone', next: 3 }
+      - { label: 'I am worried about the future', next: 4 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'Many parents feel this way. Other parents who understand can be a real comfort.'
+    suggestions:
+      - 'Look for a parent support group, online or near you. Your clinic or school may know of one.'
+      - 'Share one honest thing with someone you trust.'
+      - 'Read other families’ stories, so you know you are not the only one.'
+    learnMore:
+      - { label: 'Stories from families and educators', href: '/stories/' }
+    choices:
+      - { label: 'I am tired and stretched', next: 2 }
+      - { label: 'I am worried about the future', next: 4 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'It is natural to worry. With the right support, many neurodivergent children grow up to learn, work and live full lives.'
+    suggestions:
+      - 'Focus on the next small step, not the whole future at once.'
+      - 'Notice {name}’s strengths and interests. They point to what is possible.'
+      - 'Contact us if you would like help finding support.'
+    learnMore:
+      - { label: 'Contact us about support', href: '/contact/?topic=support' }
+    choices:
+      - { label: 'I am tired and stretched', next: 2 }
+      - { label: 'Ask about something else', next: home }

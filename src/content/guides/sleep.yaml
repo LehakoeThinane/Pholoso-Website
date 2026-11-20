@@ -1,0 +1,74 @@
+# Parent Guide topic. Draft written for review: do not set `reviewed: true` until a qualified
+# professional chosen by the Foundation has approved every step (docs/CONTENT-GUIDE.md).
+order: 3
+title: 'Sleep and routines'
+keywords:
+  [
+    sleep,
+    sleeping,
+    bedtime,
+    bed,
+    night,
+    waking,
+    wakes,
+    tired,
+    nap,
+    routine,
+    routines,
+    morning,
+    schedule,
+    insomnia,
+  ]
+reviewed: false
+steps:
+  - step: 1
+    message: 'Sleep affects mood, focus and learning. What is hardest about bedtime for {name}?'
+    choices:
+      - { label: 'Falling asleep', next: 2 }
+      - { label: 'Waking up in the night', next: 3 }
+      - { label: 'Getting ready for bed', next: 4 }
+
+  - step: 2
+    message: 'Many children find it hard to switch off at night, especially when their mind is busy or their senses are on alert.'
+    suggestions:
+      - 'Keep the last hour before bed calm and dim, and put screens away during that hour.'
+      - 'Try a quiet activity that repeats, such as a story, soft music or slow breathing.'
+      - 'Check the room. Some children need it fully dark and quiet; others like a night light or a steady sound.'
+    learnMore:
+      - { label: 'The Calm corner in Kids’ World', href: '/kids/calm-corner/' }
+    choices:
+      - { label: 'Help me make a bedtime routine', next: 4 }
+      - { label: 'When should I get help?', next: 5 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 3
+    message: 'Waking in the night is common. A calm, quiet response helps {name} learn that night-time is for sleeping.'
+    suggestions:
+      - 'Keep the lights low and talk very little.'
+      - 'Check simple causes: hunger, needing the toilet, being too hot or cold, or scratchy pyjamas.'
+      - 'Use the same short settling routine every time.'
+    choices:
+      - { label: 'Help me make a bedtime routine', next: 4 }
+      - { label: 'When should I get help?', next: 5 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 4
+    message: 'A bedtime routine that is the same every night tells the body it is time to sleep.'
+    suggestions:
+      - 'Choose three to five steps, such as bath, pyjamas, teeth, story and lights out.'
+      - 'Show the steps with pictures, and let {name} tick each one off.'
+      - 'Start at the same time each night, and on weekends too if you can.'
+    choices:
+      - { label: 'Falling asleep is still hard', next: 2 }
+      - { label: 'When should I get help?', next: 5 }
+      - { label: 'Ask about something else', next: home }
+
+  - step: 5
+    message: 'Talk to a clinic nurse or a doctor if poor sleep goes on for several weeks, or if you notice loud snoring, pauses in breathing, or great tiredness during the day.'
+    suggestions:
+      - 'Keep a simple sleep diary for two weeks and take it with you.'
+      - 'Ask whether a referral to a specialist would help.'
+    choices:
+      - { label: 'Getting an assessment in South Africa', next: assessment }
+      - { label: 'Looking after myself', next: looking-after-myself }
+      - { label: 'Ask about something else', next: home }

@@ -7,3 +7,6 @@ playwright-report/
 .lighthouseci/
 public/favicon.ico
 docs/
+tests/php/fixtures/
+dist-live/
+reference/

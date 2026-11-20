@@ -33,6 +33,8 @@ Options -Indexes
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+  # Parent Coach: a saved session's own address, drawn by the server (works without JavaScript)
+  RewriteRule ^parent-coach/s/([0-9a-f-]{36})/?$ /api/coach/session.php?id=$1 [L,QSA]
 </IfModule>
 
 # --- Security headers ----------------------------------------------------------
@@ -42,15 +44,17 @@ Options -Indexes
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  # Microphone: this website only, for voice input in the Parent Coach (the browser asks first).
+  Header always set Permissions-Policy "camera=(), microphone=(self), geolocation=(), payment=()"
   # HSTS for one year, sent only on HTTPS responses.
   Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
 </IfModule>
 
 # --- Caching -------------------------------------------------------------------
 <IfModule mod_headers.c>
-  # Pages change with every update: browsers must check for a new version.
-  <FilesMatch "\.html$">
+  # Pages (and the Parent Guide's guides.json) change with every update: browsers must check
+  # for a new version.
+  <FilesMatch "\.(html|json)$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
   # Unhashed files (favicon, logo, share image, prefs.js): cache briefly.

@@ -93,6 +93,13 @@ const pairs: Pair[] = [
     ['--color-link', `--kids-${c}`, TEXT, `kids' links on ${c}`],
     ['--color-focus', `--kids-${c}`, UI, `focus ring on ${c}`],
   ]),
+  // Kids' World bold cards and title letters: white text on strong colours
+  ...(['ocean', 'berry', 'grape', 'coral-strong', 'brand'] as const).map((c): Pair => [
+    '--kids-on-strong',
+    `--kids-${c}`,
+    TEXT,
+    `white text on ${c}`,
+  ]),
 ];
 
 const aaaPairs: Pair[] = [

@@ -8,6 +8,265 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Fix: Kids' World layout shift; separate stylesheet budget
+
+**Why:** CI's Lighthouse found two problems on Kids' World after part 1.
+
+**What changed**
+
+- **Layout shift on /kids/ (0.049, budget 0.02):** when Pholo's greeting started, his still
+  drawing was swapped for the moving one, which counted as a shift. Both drawings now sit in the
+  same place and only their visibility changes. Measured locally: 0.
+- **Stylesheet size on Kids' World (17.9 KB, budget 16 KB):** removed a font weight Kids' World
+  does not use and shortened the font character ranges; and, as the owner decided, Kids' World
+  pages now have their own budget of 20 KB (other pages keep 16 KB). DECISIONS §22.
+
+---
+
+## 2026-11-20 · `dev` · Brief v5, part 1: Pholo, the kids' fonts and colours
+
+**Why:** the Foundation sent brief v5 and a reference pack: the approved mascot Pholo (five
+poses, still and moving), a mood board, and new Kids' World fonts and colours. This is the first
+part; the Kids' World redesign, read-aloud audio and the grown-ups' additions follow.
+
+**What changed**
+
+- **Pholo, the approved mascot, replaces the starter mascot everywhere**, drawn from the
+  approved files without changes, in five poses: hello, thinking, celebrate, calm and talk.
+- **Pholo moves only on a trigger:** he waves once when a child arrives on a Kids' World page,
+  and again when tapped; jumps for joy when a child finishes "What do you love?"; breathes in
+  the Calm corner after Start (8 seconds a breath, inside his growing and shrinking circle) until
+  Stop; and thinks while the Parent Coach writes a reply. With reduced motion, Reduce motion,
+  Calm colours or Simplified page he stays still, and switching motion off stops him at once.
+- **Calm corner:** Pholo replaces the plain breathing circle; the big number countdown stays.
+- **Kids' World fonts:** Fredoka for headings and buttons, Andika for reading (at least 22px),
+  with Latin Extended so South African letters render. Kids' World preloads only these;
+  grown-ups' pages only Atkinson.
+- **Kids' strong colours:** ocean, berry, grape and coral-strong (white text), with versions for
+  Calm, High contrast and Dim. All pass the contrast check.
+- **Kids' World styles are now a separate stylesheet**, so grown-ups' pages load less.
+- **`reference/`** (the Foundation's source pack) is kept out of git and out of lint.
+- **Docs:** DECISIONS §20 (Pholo) and §21 (fonts); new `docs/CREDITS.md`.
+
+**Checks:** new Pholo tests: the still poses are the approved artwork; each movement starts only
+on its trigger and ends; the arm really rotates and the breathing circle really grows; nothing
+moves when motion is off; no movement can flash; nothing waits on a timer.
+
+**Found and fixed while building:** Pholo's movements did not start at first (a hyphen in the
+trigger name means "minus" in SVG timing). The first tests only checked a flag, so they passed;
+the new test checks real movement.
+
+---
+
+## 2026-11-19 · `dev` · Fix: two Parent Coach tests failed on GitHub (Linux)
+
+**Why:** the PHP jobs failed on GitHub while passing on the development computer. Both causes were in the tests, not the coach.
+
+**What changed**
+
+- **Switched off:** the test changed the settings file while its server was running. On Linux, PHP caches files it has read for a few seconds, so the server still saw the coach as on. The check now uses its own server. DEPLOY.md notes that switching the coach off can take a few seconds (up to a minute on some hosting).
+- **Another website is refused:** the test sent two `Origin` headers; older PHP versions read the first. It now sends one. The coach's check was correct.
+
+**Checks:** 64 PHP checks pass locally, including with PHP's file cache switched on. The rest of the GitHub run (browser tests, Lighthouse, live mode) had already passed.
+
+---
+
+## 2026-11-19 · `dev` · Parent Coach, Stage 2 (server, database, AI behind switches)
+
+**Why:** owner direction: continue with Stage 2, build for MySQL, and install PHP locally so the
+server code is tested before it is pushed.
+
+**What changed**
+
+- **Database:** `server/migrations/001_coach.sql` (sessions, messages, feedback, and the tables
+  Stage 3 needs for accounts). Run once in phpMyAdmin.
+- **Server (`public/api/coach/`):** start a session, take a turn, skip to the end, rate, give
+  feedback, and open a saved session. Each session has its own address,
+  `/parent-coach/s/<id>/`, kept for 30 days.
+- **The AI:** called only from the server, with the key in the private config. The server keeps
+  the fixed arc; every reply must match the coach's message format and may only use approved
+  strategies. Failed replies are retried once, then "please try again".
+- **Safety and privacy:** danger words checked on the server too; the AI can flag an emergency
+  or a concern; ID numbers, phone numbers and emails removed before storing or sending.
+- **Limits:** 15 turns per conversation, 40 requests per visitor per hour, 25-second timeout, a
+  daily budget (the coach "rests" until tomorrow and points to the Parent Guide).
+- **Without JavaScript:** onboarding is one plain form, and the chat page is drawn by the
+  server with answers and the message box as plain forms.
+- **Browser:** the chat screen now works with either the practice script or the server, with no
+  visible difference; errors keep the parent's message in the box.
+- **`/coach-health.php`:** says, in plain words, whether the hosting has everything the coach
+  needs, without showing any secret.
+- **Privacy notice:** a Parent Coach section, shown only when the coach is live (for the POPIA
+  review).
+- **Docs:** DEPLOY.md "Parent Coach" steps; config.example.php `coach` section; DECISIONS §19.
+- **PHP installed on the development computer** (PHP 8.3, with the database and cURL
+  extensions), so all PHP tests now run locally as well as in CI.
+
+**Checks:** 64 new PHP checks (the full arc, schema and library checks, invented strategies,
+non-JSON replies, refusals, timeouts, provider errors, emergencies, concerns, privacy stripping,
+turn limit, budget, rate limit, no-JS flow, expiry and deletion, switched off, health check). 6
+new live-mode browser tests (phone and desktop). The AI provider is never called by any test.
+
+**Follow-ups:** Stage 3 (passwordless accounts, reminders by cron, self-service deletion).
+Owner: approve strategies, helplines, privacy wording and budget; create the database.
+
+---
+
+## 2026-11-19 · `dev` · Fix: repository check flagged "Regenerated with pnpm"
+
+**Why:** CI failed on the repository check. It looked for the words "generated with" anywhere in commit messages, and an earlier message says "Regenerated with pnpm 9.15.9". Nothing credited a tool.
+
+**What changed:** the check now looks for tools named as author, committer or co-author, and for "Generated with/by" lines that name a tool. Verified against the whole history (clean) and against a sample credit line (caught).
+
+---
+
+## 2026-11-19 · `dev` · Parent Coach, Stage 1 (screens against a practice script)
+
+**Why:** brief v4 replaces the scripted guide with an AI Parent Coach. Owner decisions: keep the
+Parent Guide as the fallback, and build the coach in stages. This is Stage 1.
+
+**What changed**
+
+- **`/parent-coach/`:** landing page with a child and the mascot, "Welcome to Pholoso Parent
+  Coach (Beta)", one sentence on who it is for, three promise cards (free, checked by
+  professionals, your information is yours), the how-it-works demo, and Get started.
+- **Onboarding (`/parent-coach/start/`):** one question per screen: your name, your children
+  (add or remove rows), one screen per child for learning and thinking differences (autism
+  included), and an important note about AI and privacy. Back, Skip, Continue, and a segmented
+  progress bar with "Step 2 of 5" as text.
+- **Chat (`/parent-coach/chat/`):** "Welcome, Sam!", the first question with big buttons, then
+  chips above the message box; a placeholder that fits each question; voice input where the
+  browser supports it; message actions (Good response, Bad response with "What went wrong?",
+  Copy text, Listen); "Jump to latest reply".
+- **Message cards:** reassurance, explanation, "A strategy to try", "Say this", "How to introduce
+  it", "Your plan for Luna" (when it's calm / when screen time ends / right after), a tip for
+  pushback, "Save your progress" (accounts come in Stage 3), and a closing card with a 1–5 star
+  rating and "Start a new conversation".
+- **The coaching arc:** ask → reassure and explain → offer one strategy → the child's interests
+  → where → the plan → pushback → close. All four answers at the second step rejoin the arc.
+  Free text works at every step. Two children: the coach asks which one first.
+- **Practice script, not AI:** replies come from a fixed script in the browser, labelled on
+  every coach page. It uses the same reply format the AI will use in Stage 2. Nothing is sent.
+- **Strategy library:** two draft screen-time strategies (Next-up activity, Countdown you can
+  see), marked draft. Only approved ones will ever reach the AI.
+- **Safety:** danger words end the coaching and show "Need help now?".
+- **Production:** the coach is off: the landing page says it is not open yet and points to the
+  Parent Guide; no draft strategy is published.
+- **Microphone:** allowed for this website only, for voice input (was blocked everywhere).
+
+**Checks:** 26 new browser tests (onboarding with and without skips and with two children, the
+full arc to the rating, each branch, free text, placeholders, actions by keyboard, reload,
+danger words, no-JS, nothing sent). Chat page script about 11.5 KB, plus 2.5 KB for the
+practice script in preview builds (budget 15 KB). Coach styles load only on coach pages.
+
+**Follow-ups:** Stage 2 (database, sessions, PHP API, AI behind a switch, no-JS forms), Stage 3
+(passwordless accounts, reminders, deletion). Owner: name, first topic, strategy reviewer,
+helplines, privacy wording, budget.
+
+---
+
+## 2026-11-19 · `dev` · Parent Guide, Phase 1 (scripted guide)
+
+**Why:** owner direction: start the Parent Guide from the brief (§7b), the scripted part first.
+Also: the project rule is now clarified as "no tool credited as an author or co-author".
+
+**What changed**
+
+- **New pages:** `/parent-guide/` (welcome, topic buttons, how-it-works demo) and a page for
+  every step of every topic (34 steps across 7 topics), so the guide works without JavaScript.
+- **Seven draft topics** (`src/content/guides/`): meltdowns and big feelings; screen time and
+  transitions; sleep and routines; talking to my child's school; sensory overload; getting an
+  assessment in South Africa; looking after myself. Each step: one short message, up to three
+  ideas, "Learn more" links to site pages, two or three answers. All marked **Draft – under
+  review**.
+- **Chat:** with JavaScript, answers become buttons and replies are added on the same page.
+  Focus moves to the new answers; the conversation is a polite live log for screen readers.
+  Under every reply: Helpful, Not helpful, Copy, Listen, Report a problem.
+- **Message box:** searches the guide's topics and key site pages on the device. Danger words
+  (for example "not breathing", "abused") stop the guide and show **Need help now?** with general
+  emergency wording (no helpline numbers until the Foundation supplies verified ones).
+- **Settings:** your first name, your child's name and something they love, saved only in the
+  browser; they personalise the messages ("When Luna has a big feeling…"). "Clear everything"
+  removes them and the conversation.
+- **Info panel:** what the guide is and is not (no diagnosis, treatment or therapy), draft
+  status, privacy, and Need help now?
+- **Home page:** new section "Help for parents, right now" with a still demo of the guide (Play
+  demo replays it, only when motion is allowed) and a "Try the Parent Guide" button.
+- **Footer:** Parent Guide added under Explore. Not added to the four-item menu.
+- **Privacy notice:** says the guide's settings stay in the browser and nothing is sent.
+- **Build:** warns about unreviewed topics and missing helplines (does not block).
+- **CI:** the repository check now looks for tools credited as authors, committers or
+  co-authors, instead of banning the word everywhere.
+- **Caching:** `.json` files are re-checked like pages, so guide updates show straight away.
+
+**Checks:** 28 new browser tests (no-JS crawl reaches every step, chat, keyboard, search,
+danger words, settings, actions, axe with drawers open, demo with and without motion).
+Guide page script about 10 KB (budget 15 KB); the guide's 1.4 KB stylesheet loads only on guide
+pages.
+
+**Follow-ups:** professional review of all seven topics; verified helpline numbers; confirm the
+name; Phase 2 (AI replies) only after those.
+
+---
+
+## 2026-11-19 · `dev` · Header calls to action, card design, 2to.iQ section structure
+
+**Why:** owner direction: move the hero's buttons to the top-right corner, fix the design of the
+cards (with motion and a glowing, shadow-like border), make the two doors the same size, and
+structure the green 2to.iQ section properly.
+
+**What changed**
+
+- **Calls to action in the top-right corner:** "See how we work" and "Donate" now sit together at
+  the far right of the header (pill buttons). The header spans the full screen width, so the
+  logo is at the far left and the buttons at the far right. The hero no longer has its own
+  buttons; its text sits centred in the green.
+  - "See how we work" shows from 1280 px wide (it needs the room); narrower, Donate shows alone
+    and the same page is in the menu under About.
+  - The one-row menu now starts at 1056 px (was 992 px, where Donate ran 26 px off the screen).
+    Checked at nine widths from 390 to 1882 px: nothing overflows, margins are even.
+- **Stat cards** ("Up to 70%", "About 1 in 127"): a proper card with rounded corners, a soft
+  border, the gloss and a short gold bar above the figure. The source sits at the bottom with
+  room for two lines, so the dividers and sources line up across the row.
+- **Card glow and motion:** stat cards and regular cards have a soft warm-gold glow around the
+  edge and a gentle shadow. On hover the glow brightens and the card lifts 3 px (lift only when
+  motion is allowed). The glow follows the Glossy colours switch and is off in the flat themes.
+- **Doors:** "I'm a kid" and "I'm a grown-up" are now exactly the same size (were 1.25 : 1).
+- **2to.iQ section:** the heading and introduction (what 2to.iQ is, the *thuto* name) centred on
+  top, then two matching panels side by side, "Who does what" and "For parents and caregivers",
+  with their headings level and left-aligned text. Same wording as before.
+
+198 browser tests pass. DECISIONS.md §16.
+
+---
+
+## 2026-11-19 · `dev` · Even spacing and balanced rows
+
+**Why:** owner feedback: the footer sign-up card had more space under the form than above it.
+"Everything must be balanced in terms of spacing and proportion."
+
+**What changed**
+
+- **Footer sign-up card:** the consent tick carried spacing meant for long forms (a 27 px margin
+  plus 9 px label padding), which doubled the space at the bottom. Removed inside the card, and
+  the card now has the same padding on all four sides. Measured: top 39 / bottom 40 / left 37 /
+  right 37 px (28 px all round on phones).
+- **Site-wide check:** every card-like box on every page was measured at 1280 px and 390 px for
+  lopsided inner spacing. Fixed:
+  - Kids' World home buttons: picture above the words, all centred (they were left-aligned
+    with a gap on the right).
+  - Kids' World notes ("What you tap here is not saved…", prompts): fit their text and sit
+    centred (up to 397 px was empty on one side).
+  - Gallery "Would you like your drawing here?": picture and text centred as a group.
+  - The Kids' World header pill: equal padding on both sides.
+- **Even rows in Kids' World grids:** items are equal-sized and a shorter last row is centred,
+  instead of leaving a row hanging to the left. Desktop / tablet: home 3 + 3; What do you love
+  3 + 3 + 3; feelings 4 + 3; story buttons 5 / 3 + 2; printables, calm ideas and gallery 4 / 2 + 2.
+
+198 browser tests pass; Lighthouse passes all budgets.
+
+---
+
 ## 2026-11-19 · `dev` · Footer rearranged
 
 **Why:** owner feedback: the footer looked disorganised. The sign-up form made the first column

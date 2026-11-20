@@ -1,0 +1,180 @@
+---
+/**
+ * GuideDemo: a short preview of the Parent Guide, built from real HTML (readable, translatable).
+ * Behaviour: src/scripts/demo.ts.
+ *
+ * It never plays by itself: all three steps are shown, still, in order. With motion allowed
+ * there is a "Play demo" button that replays them one at a time; while playing there are
+ * "Turn off motion" and "Replay" controls. Without JavaScript, or with Reduce motion, Calm
+ * colours or Simplified page, there is nothing to play.
+ *
+ * Props: cta: show a button under the demo (ctaHref, ctaLabel; default: the Parent Guide).
+ */
+import Button from '../Button.astro';
+
+interface Props {
+  cta?: boolean;
+  ctaHref?: string;
+  ctaLabel?: string;
+  /** Who answers in the demo: "guide" (default) or "coach". */
+  who?: string;
+}
+const {
+  cta = false,
+  ctaHref = '/parent-guide/',
+  ctaLabel = 'Try the Parent Guide',
+  who = 'guide',
+} = Astro.props;
+---
+
+<div class="demo" data-demo>
+  <ol class="demo__steps">
+    <li class="demo__step is-on" data-demo-step>
+      <p class="demo__caption">The {who} asks one question</p>
+      <div class="demo__bubble">
+        <p>How does Luna react when screen time ends?</p>
+        <ul class="demo__choices" aria-label="Example answers">
+          <li class="demo__choice" data-demo-pick>
+            Luna has a meltdown
+          </li>
+          <li class="demo__choice">Luna negotiates for more time</li>
+          <li class="demo__choice">Luna ignores me</li>
+        </ul>
+      </div>
+    </li>
+    <li class="demo__step is-on" data-demo-step>
+      <p class="demo__caption">You tap the answer that fits</p>
+      <div class="demo__bubble demo__bubble--you">
+        <p>Luna has a meltdown</p>
+      </div>
+    </li>
+    <li class="demo__step is-on" data-demo-step>
+      <p class="demo__caption">The {who} suggests what to try</p>
+      <div class="demo__bubble">
+        <p>Strong reactions often come from a sudden stop. Try:</p>
+        <ul>
+          <li>warnings at 10, 5 and 1 minutes</li>
+          <li>stopping at the end of a level or episode</li>
+        </ul>
+      </div>
+    </li>
+  </ol>
+  <div class="demo__controls" data-js-only>
+    <button type="button" class="demo__button" data-demo-play>
+      Play demo
+    </button>
+    <button type="button" class="demo__button" data-demo-still hidden>
+      Turn off motion
+    </button>
+  </div>
+  {cta && (
+    <p class="demo__cta">
+      <Button variant="green" href={ctaHref}>
+        {ctaLabel}
+      </Button>
+    </p>
+  )}
+</div>
+
+<style>
+  .demo {
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+  .demo__steps {
+    list-style: none;
+    margin: 0 0 var(--space-m);
+    padding: var(--space-m);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-l);
+    background-color: var(--color-bg);
+    box-shadow: var(--card-glow);
+    counter-reset: demo;
+  }
+  .demo__step {
+    counter-increment: demo;
+    margin: 0;
+  }
+  .demo__step + .demo__step {
+    margin-top: var(--space-s);
+  }
+  .demo__caption {
+    margin: 0 0 var(--space-3xs);
+    font-size: var(--step--1);
+    font-weight: 700;
+    color: var(--color-text-muted);
+  }
+  .demo__caption::before {
+    content: counter(demo) '. ';
+  }
+  .demo__bubble {
+    width: fit-content;
+    max-width: 100%;
+    padding: var(--space-xs) var(--space-s);
+    border-radius: var(--radius-m) var(--radius-m) var(--radius-m) 4px;
+    background-color: var(--color-surface);
+  }
+  .demo__bubble p,
+  .demo__bubble ul {
+    margin: 0;
+  }
+  .demo__bubble--you {
+    margin-left: auto;
+    border-radius: var(--radius-m) var(--radius-m) 4px var(--radius-m);
+    background-color: var(--color-btn-bg);
+    color: var(--color-btn-text);
+  }
+  .demo__step:has(.demo__bubble--you) .demo__caption {
+    text-align: right;
+  }
+  .demo__choices {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3xs);
+    margin-top: var(--space-xs) !important;
+    padding: 0;
+    list-style: none;
+  }
+  .demo__choice {
+    padding: var(--space-3xs) var(--space-xs);
+    border: var(--border-width) solid var(--color-text);
+    border-radius: 999px;
+    font-size: var(--step--1);
+  }
+  .demo__choice.is-picked {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+  }
+  .demo__controls,
+  .demo__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-s);
+  }
+  .demo__button {
+    min-height: var(--target-min);
+    padding: var(--space-3xs) var(--space-m);
+    border: var(--border-width) solid var(--color-text);
+    border-radius: 999px;
+    background-color: transparent;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .demo__button[hidden] {
+    display: none;
+  }
+  /* The played version: only when motion is allowed. Space stays reserved, so nothing jumps. */
+  :global(:root:not([data-anim])) .demo__controls {
+    display: none;
+  }
+  :global(:root.js[data-anim]) .demo__step:not(.is-on) {
+    visibility: hidden;
+    opacity: 0;
+  }
+  :global(:root[data-anim]) .demo__step {
+    transition: opacity 0.3s ease-out;
+  }
+</style>

@@ -9,23 +9,18 @@
  *   [data-flip-done] message ("You're a great learner!").
  * - Daily fact: picks today's "Did you know?" by the date. It never changes while you look.
  */
+import { kids } from '../../config/strings';
 import { dayNumber } from '../../lib/day-number';
 import { announce } from '../announce';
 import { celebrate } from './celebrate';
 import { play } from './sound';
-import { motionAllowed } from './state';
 
 export function initMascot(): void {
-  document.querySelectorAll<HTMLButtonElement>('[data-mascot]').forEach((button) => {
-    button.disabled = false;
+  // Pholo's wave itself is in src/scripts/pholo.ts; here, the sound and the words
+  document.querySelectorAll<HTMLButtonElement>('[data-pholo-tap]').forEach((button) => {
     button.addEventListener('click', () => {
       play('tap');
-      announce(`${button.dataset.mascot ?? 'The mascot'} waves hello!`);
-      if (!motionAllowed()) return;
-      button.classList.remove('is-waving');
-      void button.offsetWidth; // restart the wave if tapped again
-      button.classList.add('is-waving');
-      window.setTimeout(() => button.classList.remove('is-waving'), 900);
+      announce(`${kids.mascotName} waves hello!`);
     });
   });
 }

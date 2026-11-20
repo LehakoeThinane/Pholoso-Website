@@ -2,21 +2,21 @@
 /**
  * BreathingGuide: the Calm corner breathing exercise.
  *
- * The only continuous animation on the site, and only after a child presses Start:
- * a soft shape grows for 4 seconds (breathe in) and shrinks for 4 seconds (breathe out),
- * five times, then stops by itself. Stop works at any time. With reduced motion or Calm
- * colours there is no movement: the words and a big number count instead (4, 3, 2, 1).
+ * The only continuous animation on the site, and only after a child presses Start: Pholo
+ * breathes (body rising and settling inside a growing and shrinking circle, 8 seconds per
+ * breath: 4 in, 4 out), five times, then stops by itself. Stop works at any time. With reduced
+ * motion or Calm colours, Pholo stays still and the words and a big number count instead.
  *
  * Without JavaScript, the written steps below are the exercise.
  * Behaviour: src/scripts/kids/breathing.ts. No props.
  */
+import Pholo from './Pholo.astro';
 ---
 
 <div class="breathe" data-breathe>
   <div class="breathe__stage" data-breathe-stage data-js-only>
-    <div class="breathe__shape" data-breathe-shape aria-hidden="true">
-      <span class="breathe__count" data-breathe-count></span>
-    </div>
+    <Pholo pose="calm" class="breathe__pholo" />
+    <span class="breathe__count" data-breathe-count aria-hidden="true"></span>
     <p class="breathe__status" data-breathe-status aria-live="polite">
       Press Start when you are ready.
     </p>
@@ -50,17 +50,11 @@
   .breathe__stage[hidden] {
     display: none;
   }
-  .breathe__shape {
-    display: grid;
-    place-items: center;
-    width: min(16rem, 70vw);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 4px solid var(--color-text);
-    background-color: var(--kids-sky);
-    transform: scale(0.6);
+  .breathe__stage :global(.breathe__pholo) {
+    width: min(18rem, 72vw);
   }
   .breathe__count {
+    min-height: 1em;
     font-size: clamp(3rem, 2rem + 6vw, 5rem);
     font-weight: 700;
     line-height: 1;

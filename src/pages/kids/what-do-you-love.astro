@@ -7,6 +7,7 @@
  * Content: src/content/kids/interests.yaml.
  */
 import Art from '../../components/kids/Art.astro';
+import Pholo from '../../components/kids/Pholo.astro';
 import FlipCard from '../../components/kids/FlipCard.astro';
 import KidsHero from '../../components/kids/KidsHero.astro';
 import type { KidsColour } from '../../config/strings';
@@ -34,7 +35,11 @@ const areas = Object.entries(kidsIdeaAreas) as [
   />
 
   <div class="container kids-section">
-    <ul class="kids-grid kids-grid--small picker" data-picker="love-prompt" data-js-only>
+    <ul
+      class="kids-grid kids-grid--small kids-grid--wide-3 picker"
+      data-picker="love-prompt"
+      data-js-only
+    >
       {interests.map((i) => (
         <li>
           <button
@@ -78,7 +83,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
           ))}
         </ul>
         <p class="love-panel__done" data-flip-done data-js-hide>
-          <Art name="mascot/celebrating" class="love-panel__mascot" />
+          <Pholo pose="celebrate" class="love-panel__mascot" />
           <span>You’re a great learner!</span>
         </p>
       </section>

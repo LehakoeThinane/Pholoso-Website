@@ -21,18 +21,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: No forbidden vendor terms in files or history
+      - name: No tool credited as an author or co-author
         run: |
-          # Built from parts so this file never contains the words it searches for.
-          a=cla; b=ude; c=anthr; d=opic
-          pattern="${a}${b}|${c}${d}"
-          if git grep -n -i -E "$pattern"; then
-            echo "::error::Forbidden word found in tracked files"; exit 1
+          # The project rule: commits are authored by people. No AI tool may appear as an
+          # author, committer, co-author or "generated with" line. (The words themselves may
+          # appear in files where the product needs them, e.g. naming a data processor.)
+          a=cla; b=ude
+          tool="${a}${b}|noreply@anthr"
+          # Authors, committers and trailers (Co-Authored-By and similar) must not name a tool
+          if git log --all --format="%H %an <%ae> %cn <%ce>%n%(trailers)" | grep -n -i -E "$tool"; then
+            echo "::error::A tool is credited as an author or co-author"; exit 1
           fi
-          if git log --all --format="%H %an %ae%n%B" | grep -n -i -E "$pattern"; then
-            echo "::error::Forbidden vendor term found in history"; exit 1
+          # A "Generated with <tool>" line in a message. ("Regenerated with pnpm" is fine.)
+          if git log --all --format="%B" | grep -n -i -E "(^|[^a-z])generated (with|by) .*(${tool})"; then
+            echo "::error::Tool attribution found in a commit message"; exit 1
           fi
-          echo "clean: files and history"
+          echo "clean: authors, committers and trailers"
 
   site:
     name: Lint, type-check, build and built-output checks
@@ -118,7 +122,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl, mbstring
+          extensions: curl, mbstring, pdo_sqlite
           coverage: none
       - uses: actions/setup-node@v4
         with:
@@ -129,3 +133,28 @@ jobs:
         run: php tests/php/contact-test.php
       - name: .htaccess rules (private paths, IfModule wrapping, CSP)
         run: php tests/php/htaccess-test.php
+      - name: Parent Coach API (SQLite, mock AI; never the real API)
+        run: php tests/php/coach-test.php
+
+  coach-live:
+    name: Parent Coach in live mode (PHP API + mock AI, Playwright)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, mbstring, pdo_sqlite
+          coverage: none
+      - run: pnpm install --frozen-lockfile
+      - name: Build with the coach in live mode
+        run: pnpm build:live
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Live-mode journeys (with and without JavaScript)
+        run: pnpm test:e2e:live

@@ -1,7 +1,7 @@
 /**
  * Header menu (components/SiteHeader.astro).
  *
- * - Below 62rem the navigation becomes a disclosure (Menu button + list). Without JavaScript
+ * - Below 66rem the navigation becomes a disclosure (Menu button + list). Without JavaScript
  *   the full navigation is simply shown.
  * - Menu groups are native <details>, which already open and close by click, Enter and Space,
  *   and work without JavaScript. This adds what people expect from a menu: only one group

@@ -27,6 +27,8 @@ export const strings = {
   footerNavLabel: 'Footer',
   menuButton: 'Menu',
   donate: 'Donate',
+  /** Second header button (wide screens), next to Donate. */
+  seeHowWeWork: { href: '/approach/', label: 'See how we work' },
   externalLink: '(opens another website)',
   toBeConfirmed: 'To be confirmed',
   footer: {
@@ -72,6 +74,7 @@ export const footerExplore: NavItem[] = [
   { href: '/kids/', label: 'Kids’ World' },
   { href: '/about/', label: 'About us' },
   { href: '/approach/', label: 'Our approach' },
+  { href: '/parent-guide/', label: 'Parent Guide' },
   { href: '/stories/', label: 'Stories' },
   { href: '/resources/', label: 'Resources' },
 ];

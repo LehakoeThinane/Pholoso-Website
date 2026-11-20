@@ -1,0 +1,267 @@
+---
+/**
+ * Parent Coach onboarding (brief v4 §7b). One question per screen; behaviour in
+ * src/scripts/coach/onboarding.ts. Without JavaScript (Stage 1) the page says the coach needs
+ * it for now; Stage 2 makes these plain forms posted to the server.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Notice from '../../components/Notice.astro';
+import Art from '../../components/kids/Art.astro';
+import { coach } from '../../config/coach';
+import coachCss from '../../styles/coach.css?url';
+
+const open = coach.mode !== 'off';
+---
+
+<BaseLayout
+  title={`Get started | ${coach.name}`}
+  description={`A few short questions before your first ${coach.name} session.`}
+  noindex
+>
+  <link slot="head" rel="stylesheet" href={coachCss} />
+  <div class="container onboard-page">
+    <h1 class="visually-hidden">Get started with {coach.name}</h1>
+    {open ? (
+      <>
+        <div class="onboard" data-onboard data-mode={coach.mode} data-js-only>
+          <div class="onboard__top">
+            <button type="button" class="onboard__back" data-ob-back>
+              <span aria-hidden="true">←</span> Back
+            </button>
+            <div class="onboard__progress" data-ob-progress aria-hidden="true" />
+            <p class="onboard__steptext" data-ob-steptext aria-live="polite">
+              Step 1
+            </p>
+          </div>
+
+          <form class="onboard__step" data-ob-step="name" novalidate>
+            <h2 tabindex="-1">What can I call you?</h2>
+            <label class="onboard__label" for="ob-name">
+              Your first name or nickname
+            </label>
+            <input
+              class="onboard__input"
+              id="ob-name"
+              type="text"
+              autocomplete="given-name"
+              maxlength="40"
+            />
+            <div class="onboard__actions">
+              <button type="button" class="onboard__skip" data-ob-skip>
+                Skip
+              </button>
+              <button type="submit" class="cbutton" data-ob-continue aria-disabled="true">
+                Continue
+              </button>
+            </div>
+          </form>
+
+          <form class="onboard__step" data-ob-step="kids" novalidate hidden>
+            <h2 tabindex="-1">Your children</h2>
+            <p>Tell me about your children. Nicknames are fine.</p>
+            <p class="onboard__hint">
+              The coach is designed for children aged {coach.topic.ages}, but you are welcome to
+              continue with any age.
+            </p>
+            <div class="onboard__rows" data-ob-rows />
+            <button type="button" class="onboard__add" data-ob-add>
+              <span aria-hidden="true">+</span> Add another child
+            </button>
+            <div class="onboard__actions">
+              <button type="button" class="onboard__skip" data-ob-skip>
+                Skip
+              </button>
+              <button type="submit" class="cbutton" data-ob-continue aria-disabled="true">
+                Continue
+              </button>
+            </div>
+          </form>
+          <template data-ob-row>
+            <div class="onboard__row" data-ob-row-item>
+              <div class="onboard__field onboard__field--name">
+                <label class="onboard__label" data-id="ob-child">
+                  First name or nickname
+                </label>
+                <input
+                  class="onboard__input"
+                  data-id="ob-child"
+                  data-ob-name
+                  type="text"
+                  autocomplete="off"
+                  maxlength="40"
+                />
+              </div>
+              <div class="onboard__field onboard__field--age">
+                <label class="onboard__label" data-id="ob-age">
+                  Age
+                </label>
+                <input
+                  class="onboard__input"
+                  data-id="ob-age"
+                  data-ob-age
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="2"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="onboard__remove" data-ob-remove>
+                <span aria-hidden="true">🗑</span>
+                <span class="visually-hidden">Remove child</span>
+              </button>
+            </div>
+          </template>
+
+          <form class="onboard__step" data-ob-step="child" novalidate hidden>
+            <h2 tabindex="-1">
+              Tell me about <span data-ob-child>your child</span>
+            </h2>
+            <p>We will never share this information.</p>
+            <fieldset class="onboard__options">
+              <legend>
+                Does <span data-ob-child>your child</span> have any learning and thinking
+                differences? Choose all that apply.
+              </legend>
+              <p class="onboard__hint">A difference you suspect counts too.</p>
+              {coach.differences.map((d) => (
+                <label class="onboard__option">
+                  <input type="checkbox" value={d.value} />
+                  <span>{d.label}</span>
+                </label>
+              ))}
+            </fieldset>
+            <div class="onboard__actions">
+              <button type="button" class="onboard__skip" data-ob-skip>
+                Skip
+              </button>
+              <button type="submit" class="cbutton" data-ob-continue aria-disabled="true">
+                Continue
+              </button>
+            </div>
+          </form>
+
+          <form class="onboard__step" data-ob-step="note" novalidate hidden>
+            <h2 tabindex="-1">An important note before you begin</h2>
+            <ul class="onboard__note">
+              <li>This coach uses AI, not a person. AI can make mistakes or leave things out.</li>
+              <li>Check anything important with a doctor or another professional.</li>
+              <li>It does not replace therapy, or clinical or medical support.</li>
+              <li>
+                Your messages are sent to an AI provider outside South Africa to write the replies.
+                Please do not include surnames, ID numbers, school names or addresses.
+              </li>
+            </ul>
+            <p>
+              Read our <a href="/privacy/">privacy notice</a>. By choosing Start, you agree to this.
+            </p>
+            {coach.mode === 'mock' && (
+              <p class="onboard__hint">{coach.practiceNote} Nothing is sent anywhere.</p>
+            )}
+            <p class="onboard__error" role="alert" data-ob-error hidden />
+            <div class="onboard__actions">
+              <button type="submit" class="cbutton cbutton--gold">
+                Start
+              </button>
+            </div>
+          </form>
+
+          <div class="onboard__step onboard__loading" data-ob-step="loading" hidden>
+            <Art name="mascot/thinking" class="onboard__mascot" />
+            <p role="status">Getting things ready…</p>
+          </div>
+        </div>
+        {coach.mode === 'live' ? (
+          <form
+            class="onboard onboard--plain"
+            method="post"
+            action="/api/coach/start.php"
+            data-js-hide
+          >
+            <h2>A few questions before you begin</h2>
+            <label class="onboard__label" for="nj-parent">
+              Your first name or nickname <span class="onboard__hint">(optional)</span>
+            </label>
+            <input
+              class="onboard__input"
+              id="nj-parent"
+              name="parent"
+              type="text"
+              autocomplete="given-name"
+              maxlength="40"
+            />
+            <label class="onboard__label" for="nj-child">
+              Your child’s first name or nickname <span class="onboard__hint">(optional)</span>
+            </label>
+            <input
+              class="onboard__input"
+              id="nj-child"
+              name="child_name"
+              type="text"
+              autocomplete="off"
+              maxlength="40"
+            />
+            <label class="onboard__label" for="nj-age">
+              Age <span class="onboard__hint">(optional)</span>
+            </label>
+            <input
+              class="onboard__input onboard__input--age"
+              id="nj-age"
+              name="child_age"
+              type="text"
+              inputmode="numeric"
+              maxlength="2"
+              autocomplete="off"
+            />
+            <fieldset class="onboard__options">
+              <legend>
+                Does your child have any learning and thinking differences? Choose all that apply.
+              </legend>
+              {coach.differences.map((d) => (
+                <label class="onboard__option">
+                  <input type="checkbox" name="differences[]" value={d.value} />
+                  <span>{d.label}</span>
+                </label>
+              ))}
+            </fieldset>
+            <h2>An important note before you begin</h2>
+            <ul class="onboard__note">
+              <li>This coach uses AI, not a person. AI can make mistakes or leave things out.</li>
+              <li>Check anything important with a doctor or another professional.</li>
+              <li>It does not replace therapy, or clinical or medical support.</li>
+              <li>
+                Your messages are sent to an AI provider outside South Africa to write the replies.
+                Please do not include surnames, ID numbers, school names or addresses.
+              </li>
+            </ul>
+            <p>
+              Read our <a href="/privacy/">privacy notice</a>. By choosing Start, you agree to this.
+            </p>
+            <div class="onboard__actions">
+              <button type="submit" class="cbutton cbutton--gold">
+                Start
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div data-js-hide>
+            <Notice title="The coach needs JavaScript for now">
+              <p>
+                In the meantime, the written <a href="/parent-guide/">Parent Guide</a> works in any
+                browser.
+              </p>
+            </Notice>
+          </div>
+        )}
+      </>
+    ) : (
+      <Notice title="The coach is not open yet">
+        <p>
+          Try the written <a href="/parent-guide/">Parent Guide</a> in the meantime.
+        </p>
+      </Notice>
+    )}
+  </div>
+  {open && <script>
+    import '../../scripts/coach/onboarding';
+  </script>}
+</BaseLayout>

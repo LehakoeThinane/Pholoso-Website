@@ -1,0 +1,53 @@
+---
+/**
+ * Pholo: the approved mascot (brief §10b), inline (no image request). Shows the still pose;
+ * plays its movement only on its trigger, and only when motion is allowed.
+ * Behaviour: src/scripts/pholo.ts. Artwork and rules: src/lib/pholo.ts.
+ *
+ * Props:
+ * - pose: 'hello' | 'thinking' | 'celebrate' | 'calm' | 'talk'
+ * - play: when the movement plays by itself
+ *     'arrive'  once per visit to the page (the Kids' World greeting)
+ *     undefined only when something asks (a tap, finishing an activity, Start, read-aloud)
+ * - tap: a button around Pholo; tapping makes Pholo wave (the hello movement)
+ * - label: what Pholo is doing, for screen readers, when Pholo carries meaning on its own
+ *   ("Pholo waving hello"). Leave it out when the words nearby already say it (usual case).
+ * - class: sizing
+ */
+import { kids } from '../../config/strings';
+import { PHOLO_LENGTH, pholoSvg, type PholoPose } from '../../lib/pholo';
+
+interface Props {
+  pose?: PholoPose;
+  play?: 'arrive' | undefined;
+  tap?: boolean;
+  label?: string | undefined;
+  class?: string | undefined;
+}
+
+const { pose = 'hello', play, tap = false, label, class: className } = Astro.props;
+// A tap always waves, whatever the pose shown
+const { uid, still, move } = pholoSvg(tap ? 'hello' : pose);
+const figure = still + move;
+const attrs = {
+  class: ['pholo', tap && 'pholo--tap', className].filter(Boolean).join(' '),
+  'data-pholo': tap ? 'hello' : pose,
+  'data-pholo-uid': uid,
+  'data-pholo-length': String(PHOLO_LENGTH[tap ? 'hello' : pose]),
+  'data-pholo-play': play,
+};
+---
+
+{tap ? (
+  <button
+    type="button"
+    {...attrs}
+    data-pholo-tap
+    aria-label={`Wave to ${kids.mascotName}`}
+    set:html={figure}
+  />
+) : label ? (
+  <span {...attrs} role="img" aria-label={label} set:html={figure} />
+) : (
+  <span {...attrs} aria-hidden="true" set:html={figure} />
+)}
