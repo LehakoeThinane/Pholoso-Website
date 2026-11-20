@@ -8,6 +8,21 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Fix: Kids' World layout shift; separate stylesheet budget
+
+**Why:** CI's Lighthouse found two problems on Kids' World after part 1.
+
+**What changed**
+
+- **Layout shift on /kids/ (0.049, budget 0.02):** when Pholo's greeting started, his still
+  drawing was swapped for the moving one, which counted as a shift. Both drawings now sit in the
+  same place and only their visibility changes. Measured locally: 0.
+- **Stylesheet size on Kids' World (17.9 KB, budget 16 KB):** removed a font weight Kids' World
+  does not use and shortened the font character ranges; and, as the owner decided, Kids' World
+  pages now have their own budget of 20 KB (other pages keep 16 KB). DECISIONS §22.
+
+---
+
 ## 2026-11-20 · `dev` · Brief v5, part 1: Pholo, the kids' fonts and colours
 
 **Why:** the Foundation sent brief v5 and a reference pack: the approved mascot Pholo (five

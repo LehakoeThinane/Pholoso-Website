@@ -12,7 +12,7 @@
 
 /*
  * Kids' World fonts (brief v5 §5), self-hosted from @fontsource (SIL Open Font License):
- * - Fredoka 600 and 700: headings, buttons and the Kids' World title (--font-kids-display)
+ * - Fredoka 700: headings, buttons and the Kids' World title (--font-kids-display)
  * - Andika 400 and 700: reading text, designed for beginning readers (--font-kids-text)
  * Latin and Latin Extended, so South African languages render. Fredoka has no glyphs for the
  * Tshivenda letters ḓ ḽ ṅ ṋ ṱ, so the font stack falls back to Andika for those letters only.
@@ -21,27 +21,6 @@
  * not move when the real font arrives (layout shift). Measured against Arial on a sample
  * sentence (20 November 2026); re-measure if the fonts change.
  */
-@font-face {
-  font-family: 'Fredoka';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('@fontsource/fredoka/files/fredoka-latin-600-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Fredoka';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('@fontsource/fredoka/files/fredoka-latin-ext-600-normal.woff2') format('woff2');
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
-}
 @font-face {
   font-family: 'Fredoka';
   font-style: normal;
@@ -104,15 +83,6 @@
     U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
     U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
     U+A720-A7FF;
-}
-@font-face {
-  font-family: 'Fredoka Fallback';
-  font-weight: 600;
-  src: local('Arial'), local('ArialMT'), local('Liberation Sans');
-  size-adjust: 101.09%;
-  ascent-override: 95.95%;
-  descent-override: 23.74%;
-  line-gap-override: 0%;
 }
 @font-face {
   font-family: 'Fredoka Fallback';

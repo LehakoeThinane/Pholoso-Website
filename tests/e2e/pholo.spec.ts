@@ -117,15 +117,21 @@ test('the movements really move: the arm waves and the breathing circle grows', 
 }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/kids/');
-  await page.waitForTimeout(400);
-  const angle = await page.evaluate(() => {
-    const move = document.querySelector('.kids-hero [data-pholo] .pholo__move')!;
-    const arm = [...move.querySelectorAll('g')].find((g) =>
-      g.querySelector(':scope > animateTransform[type="rotate"]'),
-    ) as SVGGElement;
-    return [...arm.transform.animVal].map((t) => t.angle)[0] ?? 0;
-  });
-  expect(Math.abs(angle)).toBeGreaterThan(2);
+  // Sample the waving arm several times: any single moment could fall where it crosses zero
+  const angles: number[] = [];
+  for (let i = 0; i < 6; i++) {
+    await page.waitForTimeout(150);
+    angles.push(
+      await page.evaluate(() => {
+        const move = document.querySelector('.kids-hero [data-pholo] .pholo__move')!;
+        const arm = [...move.querySelectorAll('g')].find((g) =>
+          g.querySelector(':scope > animateTransform[type="rotate"]'),
+        ) as SVGGElement;
+        return [...arm.transform.animVal].map((t) => t.angle)[0] ?? 0;
+      }),
+    );
+  }
+  expect(Math.max(...angles.map(Math.abs)), angles.join(', ')).toBeGreaterThan(5);
 
   await page.goto('/kids/calm-corner/');
   const radius = () =>

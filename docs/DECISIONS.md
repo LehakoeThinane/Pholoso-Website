@@ -318,3 +318,14 @@ line height), so text does not jump when the real font arrives. Fredoka has no g
 Tshivenda letters ḓ ḽ ṅ ṋ ṱ; the font stack falls back to Andika for those letters only, as the
 brief asks. The font token `--font-kids-display` is the one place to change if the Foundation
 chooses Baloo 2 or Grandstander instead.
+
+## 22. A separate stylesheet budget for Kids' World
+
+**Decision:** Kids' World pages may load up to 20 KB of stylesheets; every other page keeps the
+16 KB budget. Owner decision, 20 November 2026.
+
+**Why:** Kids' World pages load the shared stylesheet plus their own (the kids' fonts, colours
+and, next, the graphics kit). The brief's own limit for a whole Kids' World page is 250 KB on
+first visit, so 4 KB more styling is small. The alternative (splitting the grown-ups' header,
+footer and hero styles into their own file) stays available if the kids' styles grow further.
+
