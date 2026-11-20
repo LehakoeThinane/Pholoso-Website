@@ -8,6 +8,14 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Fix: the "Did you know?" read-aloud button in the Dim theme
+
+**Why:** CI’s accessibility check failed on /kids/ in the Dim theme: the fact’s "Read it to me" button showed light text on the browser’s default grey (4.34:1; at least 4.5:1 is needed).
+
+**What changed:** that button was written into the page by hand, with the class name but without the real button’s styles. It now uses the ReadToMe component, which can take a recording chosen by the page. Correction to the part 3 notes: the local failure of this same check was not a slow-run timeout, as I first said; it was this problem.
+
+---
+
 ## 2026-11-20 · `dev` · Brief v5, part 3: Read it to me from recordings
 
 **Why:** brief v5 §10c: the browser's own voice sounds robotic and is not good enough for

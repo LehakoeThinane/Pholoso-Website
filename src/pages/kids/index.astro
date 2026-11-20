@@ -84,28 +84,13 @@ const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
         </ul>
         <p class="fact__more">Come back tomorrow for a new one!</p>
         {factAudio && (
-          <span class="read-group" data-read-group>
-            <button
-              type="button"
-              class="read-to-me read-to-me--small"
-              data-listen="fact-title"
-              data-fact-read
-              data-audio={`/audio/en/fact-${buildFact}.mp3`}
-              aria-pressed="false"
-            >
-              <Art name="icons/speaker" class="read-to-me__art" />
-              <span>
-                {kids.readToMe}
-                <span class="visually-hidden">: today’s fact</span>
-              </span>
-            </button>
-            <button type="button" class="read-control" data-read-control="pause" hidden>
-              Pause
-            </button>
-            <button type="button" class="read-control" data-read-control="stop" hidden>
-              Stop
-            </button>
-          </span>
+          <ReadToMe
+            target="fact-title"
+            label="today’s fact"
+            size="small"
+            audio={`/audio/en/fact-${buildFact}.mp3`}
+            fact
+          />
         )}
       </div>
     </div>

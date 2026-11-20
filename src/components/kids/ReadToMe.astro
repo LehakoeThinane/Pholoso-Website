@@ -14,6 +14,9 @@
  * - target: id of the element to read (default "main": the whole page content)
  * - label: what will be read, for screen readers (default "this page")
  * - size: 'large' (default, page level) or 'small' (one story)
+ * - audio: a recording chosen by the page instead (e.g. today's fact; the page script may
+ *   change it). Such a button has no text file of its own.
+ * - fact: marks the "Did you know?" button (src/scripts/kids/games.ts points it at today's fact)
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -24,14 +27,24 @@ interface Props {
   target?: string;
   label?: string;
   size?: 'large' | 'small';
+  audio?: string | undefined;
+  fact?: boolean;
 }
 
-const { target = 'main', label = 'this page', size = 'large' } = Astro.props;
+const {
+  target = 'main',
+  label = 'this page',
+  size = 'large',
+  audio: chosen,
+  fact = false,
+} = Astro.props;
 const page = Astro.url.pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home';
 const id = target === 'main' ? page : `${page}--${target}`;
-const audio = existsSync(join(process.cwd(), 'public', 'audio', 'en', `${id}.mp3`))
-  ? `/audio/en/${id}.mp3`
-  : undefined;
+const audio =
+  chosen ??
+  (existsSync(join(process.cwd(), 'public', 'audio', 'en', `${id}.mp3`))
+    ? `/audio/en/${id}.mp3`
+    : undefined);
 ---
 
 <span class="read-group" data-read-group>
@@ -39,7 +52,8 @@ const audio = existsSync(join(process.cwd(), 'public', 'audio', 'en', `${id}.mp3
     type="button"
     class:list={['read-to-me', `read-to-me--${size}`]}
     data-listen={target}
-    data-audio-id={id}
+    data-audio-id={chosen ? undefined : id}
+    data-fact-read={fact ? '' : undefined}
     data-audio={audio}
     aria-pressed="false"
     data-speech-only={audio ? undefined : ''}
