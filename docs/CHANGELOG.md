@@ -8,6 +8,41 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Brief v5, part 3: Read it to me from recordings
+
+**Why:** brief v5 §10c: the browser's own voice sounds robotic and is not good enough for
+children. Owner approved installing Python and the Kokoro voice model on the development
+computer.
+
+**What changed**
+
+- **Every Kids' World page plays a recording** when a child presses "Read it to me": 26 in all
+  (each page, each "Kids like me" story, each "Did you know?" fact, and the Calm corner's
+  breathing words). Made with Kokoro, an open-source voice (Apache 2.0), voices bf_emma (Pholo
+  and stories) and af_nicole (Calm corner).
+- **Pause and Stop** appear while it plays; **Pholo talks** (and stays still with motion off).
+- **Downloads only when pressed** (1.8 MB for all, 20–40 KB a sentence).
+- **Calm corner:** a soft voice says "Breathe in…" and "and breathe out" when Sounds are on.
+- **Sentences:** the voice pauses between headings, paragraphs and list items; PDF sizes and
+  grown-ups' notes are left out; "Kids like me" reads its intro, and each story has its own.
+- **A real voice always wins:** recordings dropped into `content/audio/recorded/` replace the
+  computer ones file by file (docs/AUDIO.md).
+- **The browser's voice** is only a fallback where a recording does not exist.
+- **Accessibility page:** says some read-aloud audio is computer-generated.
+- **CI:** checks the recordings' words still match the pages.
+- **Docs:** new docs/AUDIO.md; DECISIONS §24; CREDITS; HANDOVER.
+
+**Found and fixed while testing:** pressing Pause before a recording had loaded stopped
+playback altogether; it now pauses as expected. Also gave the guide's long "reach every step"
+test a 90-second limit (it timed out on a slow run).
+
+**Checks:** new read-aloud tests (every page has a recording that exists; nothing downloads
+until pressed; it plays, Pholo talks, Pause, Carry on and Stop work; reduced motion; today's
+fact; breathing voice only with Sounds on). Full suite: 292 passed (2 timeouts on a slow run
+passed on rerun).
+
+---
+
 ## 2026-11-20 · `dev` · Brief v5, part 2: the Kids' World redesign
 
 **Why:** owner direction: carry on with brief v5. This part builds the mood board's Kids' World.

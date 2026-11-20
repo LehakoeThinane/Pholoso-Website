@@ -1,15 +1,22 @@
 ---
 /**
- * ReadToMe: the big "Read it to me" button on every Kids' World page. Reads the page (or one
- * block) aloud with the browser's own voice, in South African English where available.
- * Hidden unless the browser can speak; never starts by itself; press again to stop.
- * Behaviour: src/scripts/listen.ts (shared with the grown-ups' "Listen" buttons).
+ * ReadToMe: the big gold "Read it to me" button on every Kids' World page (brief v5 §10c).
+ *
+ * Plays a recording of the page (or one block): public/audio/en/<id>.mp3, where <id> comes
+ * from the page address ("/kids/calm-corner/" -> "kids-calm-corner"; a block adds "--<target>").
+ * The file downloads only when pressed. While it plays, Pause and Stop appear and Pholo talks.
+ * If there is no recording yet, the browser's own voice reads instead (shown only where the
+ * browser can speak). Never starts by itself. Behaviour: src/scripts/listen.ts.
+ *
+ * Making the recordings: docs/AUDIO.md (scripts/audio-texts.mjs, scripts/generate-audio.py).
  *
  * Props:
  * - target: id of the element to read (default "main": the whole page content)
  * - label: what will be read, for screen readers (default "this page")
  * - size: 'large' (default, page level) or 'small' (one story)
  */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { kids } from '../../config/strings';
 import Art from './Art.astro';
 
@@ -20,23 +27,62 @@ interface Props {
 }
 
 const { target = 'main', label = 'this page', size = 'large' } = Astro.props;
+const page = Astro.url.pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home';
+const id = target === 'main' ? page : `${page}--${target}`;
+const audio = existsSync(join(process.cwd(), 'public', 'audio', 'en', `${id}.mp3`))
+  ? `/audio/en/${id}.mp3`
+  : undefined;
 ---
 
-<button
-  type="button"
-  class:list={['read-to-me', `read-to-me--${size}`]}
-  data-listen={target}
-  aria-pressed="false"
-  data-speech-only
->
-  <Art name="icons/speaker" class="read-to-me__art" />
-  <span>
-    {kids.readToMe}
-    <span class="visually-hidden">: {label}</span>
-  </span>
-</button>
+<span class="read-group" data-read-group>
+  <button
+    type="button"
+    class:list={['read-to-me', `read-to-me--${size}`]}
+    data-listen={target}
+    data-audio-id={id}
+    data-audio={audio}
+    aria-pressed="false"
+    data-speech-only={audio ? undefined : ''}
+  >
+    <Art name="icons/speaker" class="read-to-me__art" />
+    <span>
+      {kids.readToMe}
+      <span class="visually-hidden">: {label}</span>
+    </span>
+  </button>
+  {audio && (
+    <>
+      <button type="button" class="read-control" data-read-control="pause" hidden>
+        Pause
+      </button>
+      <button type="button" class="read-control" data-read-control="stop" hidden>
+        Stop
+      </button>
+    </>
+  )}
+</span>
 
 <style>
+  .read-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .read-control {
+    min-height: var(--target-min);
+    padding: var(--space-3xs) var(--space-m);
+    border: 3px solid var(--color-text);
+    border-radius: 999px;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .read-control[hidden] {
+    display: none;
+  }
   .read-to-me {
     display: inline-flex;
     align-items: center;

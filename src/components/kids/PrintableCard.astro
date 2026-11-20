@@ -44,7 +44,9 @@ if (kb > MAX_KB) throw new Error(`Printable ${file} is ${kb} KB (limit ${MAX_KB}
   <p class="printable__about">{about}</p>
   <a class="printable__link" href={file} download>
     Print it<span class="visually-hidden">: {title}</span>
-    <span class="printable__size">(PDF, {kb} KB)</span>
+    <span class="printable__size" data-read-skip>
+      (PDF, {kb} KB)
+    </span>
   </a>
 </article>
 

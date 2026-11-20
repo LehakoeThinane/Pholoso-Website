@@ -351,3 +351,27 @@ the soft wave, and bunting made of the logo's triangle. 20 November 2026.
 - All the new pieces' styles live in the Kids' World stylesheet, so grown-ups' pages do not load
   them.
 
+## 24. Read-aloud from recordings, made with an open-source voice for now
+
+**Decision:** "Read it to me" plays recordings, not the browser's voice (brief v5 §10c). Until a
+real South African voice is recorded, the recordings are made at build time on a computer with
+Kokoro (Apache 2.0), never in the browser. Real recordings in `content/audio/recorded/` always
+win. The browser's own voice is only a fallback where no recording exists. 20 November 2026.
+
+**How:** each button's words are saved from the built page (`scripts/audio-texts.mjs`, the
+same rules as the speech fallback), then turned into MP3s (`scripts/generate-audio.py`,
+mono 48 kbps, skipping unchanged ones). A page links a recording only if the file exists. CI
+checks the saved words still match the pages. Guide: docs/AUDIO.md.
+
+**Notes:**
+
+- Recordings download only when pressed (about 20–40 KB a sentence; 1.8 MB for all 26).
+- Blocks become separate sentences, so the voice pauses between headings, paragraphs and list
+  items. Parts that are not for children are left out (`data-read-skip`: PDF sizes, the
+  grown-ups' note), and on "Kids like me" each story has its own recording.
+- "Did you know?" changes daily, so each fact has its own recording; the page recording skips
+  it.
+- Pholo talks while a recording plays (still, with motion off), and stops on Pause, Stop or the
+  end. A race was fixed: Pause pressed before the file had loaded used to stop playback.
+- The Accessibility page says some read-aloud audio is computer-generated (docs/CREDITS.md).
+

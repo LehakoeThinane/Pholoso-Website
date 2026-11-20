@@ -7,6 +7,7 @@ export default [
       'dist/',
       'dist-live/',
       'reference/',
+      '.venv-audio/',
       '.astro/',
       'node_modules/',
       'test-results/',

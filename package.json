@@ -26,6 +26,8 @@
     "test:e2e:live": "playwright test -c playwright.live.config.ts",
     "test:lighthouse": "lhci autorun",
     "make:printables": "node scripts/make-printables.mjs",
+    "audio:texts": "node scripts/audio-texts.mjs",
+    "audio:make": ".venv-audio/Scripts/python scripts/generate-audio.py",
     "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {

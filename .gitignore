@@ -40,3 +40,6 @@ dist-live/
 
 # Source material from the Foundation (old site, moodboard, mascot originals): not site code
 reference/
+
+# Read-aloud audio generator (Python, Kokoro): local only
+.venv-audio/

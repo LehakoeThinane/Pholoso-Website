@@ -6,6 +6,7 @@
  * Screen readers hear "Breathe in…" / "Breathe out…" once per phase, not every number.
  */
 import { playPholo, stopPholo } from '../pholo';
+import { soundOn } from './state';
 
 const ROUNDS = 5;
 const PHASE_SECONDS = 4;
@@ -21,6 +22,7 @@ export function initBreathing(): void {
   const start = q<HTMLButtonElement>('[data-breathe-start]');
   const stop = q<HTMLButtonElement>('[data-breathe-stop]');
 
+  const voice = root.hasAttribute('data-breathe-voice');
   let timer: number | undefined;
   let tick = 0;
   stage.hidden = false;
@@ -45,7 +47,14 @@ export function initBreathing(): void {
       return;
     }
     const second = tick % PHASE_SECONDS;
-    if (second === 0) status.textContent = phase % 2 === 0 ? 'Breathe in…' : 'Breathe out…';
+    if (second === 0) {
+      status.textContent = phase % 2 === 0 ? 'Breathe in…' : 'Breathe out…';
+      // A soft voice, only when Sounds are on (and the recordings exist)
+      if (voice && soundOn())
+        new Audio(`/audio/en/${phase % 2 === 0 ? 'breathe-in' : 'breathe-out'}.mp3`)
+          .play()
+          .catch(() => {});
+    }
     count.textContent = String(PHASE_SECONDS - second);
     tick++;
   };

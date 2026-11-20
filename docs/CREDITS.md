@@ -25,5 +25,8 @@ Freesound with the CC0 filter), each listed here with its source.
 
 ## Read-aloud audio
 
-None yet. Generated audio will be listed here with the voice model and its licence, and marked
-as computer-generated on the Accessibility page.
+| What | Made with | Licence |
+| ---- | --------- | ------- |
+| Kids’ World recordings (`public/audio/en/`) | Kokoro text-to-speech (hexgrad/Kokoro-82M), voices bf_emma and af_nicole, made at build time | Apache 2.0 |
+
+Computer-generated, as the Accessibility page says. Real recordings (`content/audio/recorded/`) replace them file by file: list the speaker here when they arrive (docs/AUDIO.md).

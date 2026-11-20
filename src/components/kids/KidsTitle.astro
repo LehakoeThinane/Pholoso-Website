@@ -21,7 +21,9 @@ const words = text.split(' ').map((w) => [...w].map((ch) => ({ ch, k: n++ % 6 })
 ---
 
 <Heading class="kids-title" id={id}>
-  <span class="visually-hidden">{text}</span>
+  <span class="visually-hidden" data-read>
+    {text}
+  </span>
   {words.map((letters) => (
     <span class="kids-title__word" aria-hidden="true">
       {letters.map(({ ch, k }) => (

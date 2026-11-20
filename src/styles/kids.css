@@ -776,3 +776,22 @@
     box-shadow: 0 11px 0 rgb(14 58 51 / 0.25);
   }
 }
+
+/* ---------- Talking Pholo (while "Read it to me" plays) ---------- */
+.talk-slot {
+  position: relative;
+  display: grid;
+}
+.talk-slot > .pholo {
+  grid-area: 1 / 1;
+}
+.pholo--talker {
+  visibility: hidden;
+  pointer-events: none;
+}
+.talk-slot.is-talking > .pholo--talker {
+  visibility: visible;
+}
+.talk-slot.is-talking > .pholo:not(.pholo--talker) {
+  visibility: hidden;
+}

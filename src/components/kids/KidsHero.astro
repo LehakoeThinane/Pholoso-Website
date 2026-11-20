@@ -30,7 +30,7 @@ const { title, says, pose = 'hello', colour = 'sunshine', wave = false } = Astro
 
 <div class:list={['kids-hero', `kids-bg--${colour}`]}>
   <div class="container kids-hero__inner">
-    <div class="kids-hero__mascot">
+    <div class="kids-hero__mascot talk-slot" data-talk-slot>
       {wave ? (
         <Pholo tap play="arrive" class="mascot" />
       ) : (
@@ -40,6 +40,7 @@ const { title, says, pose = 'hello', colour = 'sunshine', wave = false } = Astro
           class="mascot"
         />
       )}
+      <Pholo pose="talk" class="mascot pholo--talker" />
     </div>
     <div class="kids-hero__text">
       <h1 class="kids-hero__title">{title}</h1>

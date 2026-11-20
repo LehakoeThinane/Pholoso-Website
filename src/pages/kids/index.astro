@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { getCollection } from 'astro:content';
 import Art from '../../components/kids/Art.astro';
 import Bunting from '../../components/kids/Bunting.astro';
@@ -15,6 +17,10 @@ import { dayNumber } from '../../lib/day-number';
 const facts = await getCollection('kidsFacts');
 // Without JavaScript the fact for the build date shows; with it, today's (same formula).
 const buildFact = dayNumber(new Date()) % facts.length;
+// Each fact has its own recording (fact-0.mp3, fact-1.mp3, …) when they have been made
+const factAudio = facts.every((_, i) =>
+  existsSync(join(process.cwd(), 'public', 'audio', 'en', `fact-${i}.mp3`)),
+);
 
 // The six doors' colours, as on the mood board
 const doorColour: CardColour[] = ['coral-strong', 'ocean', 'grape', 'brand', 'berry', 'amber'];
@@ -38,7 +44,10 @@ const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
           <span class="visually-hidden">{kids.mascotName} says: </span>
           Hi! I’m {kids.mascotName}. I’m so glad you’re here!
         </p>
-        <Pholo tap play="arrive" class="welcome__mascot" />
+        <div class="talk-slot" data-talk-slot>
+          <Pholo tap play="arrive" class="welcome__mascot" />
+          <Pholo pose="talk" class="welcome__mascot pholo--talker" />
+        </div>
       </div>
     </div>
     <nav class="container welcome__doors" aria-label="Kids’ World activities">
@@ -60,7 +69,7 @@ const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
   </div>
 
   <section class="container kids-section" aria-labelledby="fact-title">
-    <div class="fact kids-bg--lilac">
+    <div class="fact kids-bg--lilac" data-read-skip>
       <Art name="mascot/thinking" class="fact__mascot" />
       <div>
         <h2 id="fact-title" class="fact__title">
@@ -74,6 +83,30 @@ const cast = ['lerato', 'sipho', 'zanele', 'thabo', 'kayla'];
           ))}
         </ul>
         <p class="fact__more">Come back tomorrow for a new one!</p>
+        {factAudio && (
+          <span class="read-group" data-read-group>
+            <button
+              type="button"
+              class="read-to-me read-to-me--small"
+              data-listen="fact-title"
+              data-fact-read
+              data-audio={`/audio/en/fact-${buildFact}.mp3`}
+              aria-pressed="false"
+            >
+              <Art name="icons/speaker" class="read-to-me__art" />
+              <span>
+                {kids.readToMe}
+                <span class="visually-hidden">: today’s fact</span>
+              </span>
+            </button>
+            <button type="button" class="read-control" data-read-control="pause" hidden>
+              Pause
+            </button>
+            <button type="button" class="read-control" data-read-control="stop" hidden>
+              Stop
+            </button>
+          </span>
+        )}
       </div>
     </div>
   </section>
