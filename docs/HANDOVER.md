@@ -117,6 +117,9 @@ Before going live:
     outside South Africa, and that children's learning and thinking differences can be health
     information, processed with the parent's agreement. Also confirm 30 days is the right
     retention period.
+10b. **Read-aloud voice:** the Kids' World recordings are computer-generated for now (Kokoro,
+    voices bf_emma and af_nicole). The goal is a real, warm South African voice: record the
+    words in `content/audio/en/` and follow docs/AUDIO.md. Also decide on other languages.
 10a. **Parent Coach (brief v4):** confirm the name ("Pholoso Parent Coach" is a working name)
     and the first topic (screen time); choose a professional to review the strategy library
     (`src/content/coach-strategies/`); and, before it opens, approve the privacy notice wording

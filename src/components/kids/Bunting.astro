@@ -1,0 +1,17 @@
+---
+/**
+ * Bunting: little flags made of the logo's triangle, strung across the top of a section
+ * (brief v5 §10). Decorative: hidden from screen readers, and hidden in Calm colours and
+ * Simplified page like the other doodles. Styles: src/styles/kids.css (.bunting).
+ */
+import { bunting } from '../../lib/kids-art';
+
+const { string, flags } = bunting();
+---
+
+<svg class="bunting doodle" viewBox="0 0 1200 110" aria-hidden="true" focusable="false">
+  <path class="bunting__string" d={string} />
+  {flags.map((f) => (
+    <path class={`bunting__flag bunting__flag--${f.i % 6}`} d={f.d} />
+  ))}
+</svg>

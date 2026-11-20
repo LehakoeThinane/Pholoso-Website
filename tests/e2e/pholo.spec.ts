@@ -30,7 +30,7 @@ test('the still poses are the approved artwork, unchanged', async ({ page }) => 
 test('arriving: Pholo waves once per visit, then holds still', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/kids/');
-  const pholo = page.locator('.kids-hero [data-pholo]');
+  const pholo = page.locator('[data-pholo-tap]');
   await expect(pholo).toHaveAttribute('data-playing', '');
   await expect(pholo).not.toHaveAttribute('data-playing', { timeout: 8000 }); // about 6 s
   await page.reload();
@@ -55,7 +55,7 @@ for (const [label, setup] of [
   test(`no movement when ${label}`, async ({ page }) => {
     await setup(page);
     await page.goto('/kids/');
-    const pholo = page.locator('.kids-hero [data-pholo]');
+    const pholo = page.locator('[data-pholo-tap]');
     await page.waitForTimeout(400);
     await expect(pholo).not.toHaveAttribute('data-playing');
     await pholo.click();
@@ -123,7 +123,7 @@ test('the movements really move: the arm waves and the breathing circle grows', 
     await page.waitForTimeout(150);
     angles.push(
       await page.evaluate(() => {
-        const move = document.querySelector('.kids-hero [data-pholo] .pholo__move')!;
+        const move = document.querySelector('[data-pholo-tap] .pholo__move')!;
         const arm = [...move.querySelectorAll('g')].find((g) =>
           g.querySelector(':scope > animateTransform[type="rotate"]'),
         ) as SVGGElement;

@@ -1,0 +1,32 @@
+---
+/**
+ * TornEdge: a torn-paper edge between sections, instead of a straight line (brief v5 §10).
+ * Decorative and hidden from screen readers. Styles: src/styles/kids.css (.torn).
+ *
+ * Props:
+ * - layers: fill colours from back to front, each a kids' colour name ('leaf', 'brand') or
+ *   'page' (the page background). Two layers make torn-paper grass.
+ * - seed: changes the tear (use a different one where two edges are close together)
+ */
+import { tornPath } from '../../lib/kids-art';
+
+interface Props {
+  layers?: ('page' | 'leaf' | 'brand' | 'sky' | 'sunshine' | 'lilac' | 'coral')[];
+  seed?: number;
+}
+
+const { layers = ['page'], seed = 7 } = Astro.props;
+const height = 22 + layers.length * 26;
+---
+
+<svg
+  class="torn"
+  viewBox={`0 0 1440 ${height}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  {layers.map((fill, i) => (
+    <path class={`torn--${fill}`} d={tornPath(seed + i * 11, height, i * 26, 12)} />
+  ))}
+</svg>

@@ -139,3 +139,44 @@ test('Pholo waves when tapped', async ({ page }) => {
   await pholo.click();
   await expect(pholo).toHaveAttribute('data-playing', '');
 });
+
+test('Kids’ World home: the multicolour title reads as plain words, and six colour doors', async ({
+  page,
+}) => {
+  await page.goto('/kids/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Kids’ World' })).toBeVisible();
+  const doors = page.getByRole('navigation', { name: 'Kids’ World activities' }).getByRole('link');
+  await expect(doors).toHaveCount(6);
+  for (const name of [
+    'What I love',
+    'Calm corner',
+    'Make and do',
+    'Kids like me',
+    'Our gallery',
+    'My feelings',
+  ])
+    await expect(doors.filter({ hasText: name })).toHaveCount(1);
+  // The header's picture-button row is for the other pages
+  await expect(page.getByRole('navigation', { name: 'Kids’ World', exact: true })).toHaveCount(0);
+  await page.goto('/kids/calm-corner/');
+  await expect(page.locator('.kids-header nav')).toBeVisible();
+});
+
+test('Kids’ World home: no doodle sits behind text', async ({ page }) => {
+  await page.goto('/kids/');
+  const overlaps = await page.evaluate(() => {
+    const boxes = (sel: string) =>
+      [...document.querySelectorAll(sel)]
+        .filter((e) => (e as HTMLElement).offsetParent !== null || e instanceof SVGElement)
+        .map((e) => e.getBoundingClientRect())
+        .filter((r) => r.width > 0);
+    const text = boxes('.welcome h1, .welcome__lead, .welcome .read-to-me, .welcome .bubble');
+    const doodles = boxes('.sky__star, .sky__path');
+    return doodles.filter((d) =>
+      text.some(
+        (t) => d.left < t.right && d.right > t.left && d.top < t.bottom && d.bottom > t.top,
+      ),
+    ).length;
+  });
+  expect(overlaps).toBe(0);
+});

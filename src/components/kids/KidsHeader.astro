@@ -7,7 +7,8 @@
  *   "Calm colours" (one tap to the Calm theme: softer colours, no celebrations or sounds)
  *   and "Sounds" (off until a child turns them on).
  * - A small "For grown-ups" link back to the main site.
- * - KidsNav: the row of picture buttons.
+ * - KidsNav: the row of picture buttons (not on the Kids' World home page, which has the six
+ *   big colour doors instead).
  *
  * No Donate button, ever. Props: currentPath.
  */
@@ -60,21 +61,23 @@ const isHome = currentPath === kids.home.href;
     </div>
   </div>
 
-  <nav class="container kids-nav" aria-label={kids.navLabel}>
-    <ul class="kids-nav__list">
-      {kidsNav.map((item) => (
-        <li>
-          <PictureButton
-            href={item.href}
-            icon={item.icon}
-            label={item.label}
-            colour={item.colour}
-            current={currentPath.startsWith(item.href)}
-          />
-        </li>
-      ))}
-    </ul>
-  </nav>
+  {!isHome && (
+    <nav class="container kids-nav" aria-label={kids.navLabel}>
+      <ul class="kids-nav__list">
+        {kidsNav.map((item) => (
+          <li>
+            <PictureButton
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              colour={item.colour}
+              current={currentPath.startsWith(item.href)}
+            />
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )}
 </header>
 
 <style>

@@ -8,6 +8,76 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Fix: the "Did you know?" read-aloud button in the Dim theme
+
+**Why:** CI’s accessibility check failed on /kids/ in the Dim theme: the fact’s "Read it to me" button showed light text on the browser’s default grey (4.34:1; at least 4.5:1 is needed).
+
+**What changed:** that button was written into the page by hand, with the class name but without the real button’s styles. It now uses the ReadToMe component, which can take a recording chosen by the page. Correction to the part 3 notes: the local failure of this same check was not a slow-run timeout, as I first said; it was this problem.
+
+---
+
+## 2026-11-20 · `dev` · Brief v5, part 3: Read it to me from recordings
+
+**Why:** brief v5 §10c: the browser's own voice sounds robotic and is not good enough for
+children. Owner approved installing Python and the Kokoro voice model on the development
+computer.
+
+**What changed**
+
+- **Every Kids' World page plays a recording** when a child presses "Read it to me": 26 in all
+  (each page, each "Kids like me" story, each "Did you know?" fact, and the Calm corner's
+  breathing words). Made with Kokoro, an open-source voice (Apache 2.0), voices bf_emma (Pholo
+  and stories) and af_nicole (Calm corner).
+- **Pause and Stop** appear while it plays; **Pholo talks** (and stays still with motion off).
+- **Downloads only when pressed** (1.8 MB for all, 20–40 KB a sentence).
+- **Calm corner:** a soft voice says "Breathe in…" and "and breathe out" when Sounds are on.
+- **Sentences:** the voice pauses between headings, paragraphs and list items; PDF sizes and
+  grown-ups' notes are left out; "Kids like me" reads its intro, and each story has its own.
+- **A real voice always wins:** recordings dropped into `content/audio/recorded/` replace the
+  computer ones file by file (docs/AUDIO.md).
+- **The browser's voice** is only a fallback where a recording does not exist.
+- **Accessibility page:** says some read-aloud audio is computer-generated.
+- **CI:** checks the recordings' words still match the pages.
+- **Docs:** new docs/AUDIO.md; DECISIONS §24; CREDITS; HANDOVER.
+
+**Found and fixed while testing:** pressing Pause before a recording had loaded stopped
+playback altogether; it now pauses as expected. Also gave the guide's long "reach every step"
+test a 90-second limit (it timed out on a slow run).
+
+**Checks:** new read-aloud tests (every page has a recording that exists; nothing downloads
+until pressed; it plays, Pholo talks, Pause, Carry on and Stop work; reduced motion; today's
+fact; breathing voice only with Sounds on). Full suite: 292 passed (2 timeouts on a slow run
+passed on rerun).
+
+---
+
+## 2026-11-20 · `dev` · Brief v5, part 2: the Kids' World redesign
+
+**Why:** owner direction: carry on with brief v5. This part builds the mood board's Kids' World.
+
+**What changed**
+
+- **Kids' World home, as on the mood board:** a flat sky with a crayon sun, clouds and stars;
+  the multicolour "Kids' World" title (each letter a different colour, white outline, a small
+  tilt; screen readers hear the plain words); "Hello! This is your place to play, learn and feel
+  calm."; a big gold "Read it to me" button; Pholo with "Hi! I'm Pholo. I'm so glad you're
+  here!"; six bold colour doors (coral, ocean, grape, green, berry, amber), each tilted a little
+  with a white frame and a solid shadow; torn-paper grass.
+- **Graphics kit, drawn in code (almost no data):** torn-paper edges, the crayon sun and stars
+  (a small SVG "crayon" filter), clouds, a dashed doodle path, and bunting made of the logo's
+  triangle.
+- **Every Kids' World page:** torn-paper edges instead of the soft wave (top band and footer);
+  the "Read it to me" button is now gold.
+- **Calm colours, High contrast and Dim** have their own versions: no sun, clouds or doodles in
+  Calm; muted doors; light title letters with a dark outline in Dim.
+- **Docs:** DECISIONS §23 (including where the site differs from the mood board, and why).
+
+**Checks:** all 284 browser tests pass, including new ones: the title reads as plain words; the
+six doors; no doodle sits behind text. Lighthouse on /kids/ (local): performance 100,
+accessibility 100, no layout shift, 18.1 KB of styles (Kids' World budget 20 KB).
+
+---
+
 ## 2026-11-20 · `dev` · Fix: Kids' World layout shift; separate stylesheet budget
 
 **Why:** CI's Lighthouse found two problems on Kids' World after part 1.

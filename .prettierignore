@@ -10,3 +10,5 @@ docs/
 tests/php/fixtures/
 dist-live/
 reference/
+.venv-audio/
+content/audio/**/.made.json

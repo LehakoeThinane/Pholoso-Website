@@ -63,6 +63,16 @@ export function initPholo(): void {
   document.querySelectorAll<HTMLElement>('[data-pholo-tap]').forEach((el) => {
     el.addEventListener('click', () => playPholo(el));
   });
+  // Read it to me: the talking Pholo takes the greeting Pholo's place while the audio plays
+  document.addEventListener('pholoso:reading', (e) => {
+    const on = (e as CustomEvent<{ on: boolean }>).detail.on;
+    document.querySelectorAll<HTMLElement>('[data-talk-slot]').forEach((slot) => {
+      const talker = slot.querySelector<HTMLElement>('.pholo--talker');
+      slot.classList.toggle('is-talking', on);
+      if (on) playPholo(talker);
+      else stopPholo(talker);
+    });
+  });
   // Motion switched off mid-way: stop everything
   document.addEventListener('pholoso:prefs', () => {
     if (!allowed())

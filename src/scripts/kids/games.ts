@@ -86,4 +86,6 @@ export function initFacts(): void {
   if (!facts.length) return;
   const today = dayNumber(new Date()) % facts.length;
   facts.forEach((fact, i) => (fact.hidden = i !== today));
+  const read = document.querySelector<HTMLElement>('[data-fact-read]');
+  if (read) read.dataset.audio = `/audio/en/fact-${today}.mp3`;
 }

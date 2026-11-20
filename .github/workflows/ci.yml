@@ -96,6 +96,8 @@ jobs:
           path: dist/
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
+      - name: Read-aloud recordings match the pages (docs/AUDIO.md)
+        run: node scripts/audio-texts.mjs --check
       - name: Playwright + axe (phone 390×844 and desktop 1280×900)
         run: pnpm test:e2e
       - name: Lighthouse budgets (brief §12)

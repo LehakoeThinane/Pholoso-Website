@@ -55,6 +55,15 @@
   --kids-berry: var(--berry);
   --kids-grape: var(--grape);
   --kids-coral-strong: var(--coral-strong);
+  --kids-amber: #a3600a; /* the sixth door, and the gold letters of the title (gold is too pale on sky) */
+  /* The multicolour Kids’ World title: six letter colours and the outline */
+  --kids-title-1: var(--kids-coral-strong);
+  --kids-title-2: var(--kids-amber);
+  --kids-title-3: var(--kids-brand);
+  --kids-title-4: var(--kids-ocean);
+  --kids-title-5: var(--kids-berry);
+  --kids-title-6: var(--kids-grape);
+  --kids-title-stroke: #ffffff;
   --kids-brand: var(--green);
   --kids-on-strong: #ffffff;
   /* Kids' World fonts (brief v5 §5): Fredoka for headings and buttons (the owner may choose
@@ -244,6 +253,7 @@
   --kids-berry: #7a4558;
   --kids-grape: #5a4d78;
   --kids-coral-strong: #8a4a3c;
+  --kids-amber: #7a5a30;
   --kids-brand: #3d5a52;
   --illustration-filter: saturate(0.55);
 }
@@ -281,6 +291,7 @@
   --kids-berry: #000000;
   --kids-grape: #000000;
   --kids-coral-strong: #000000;
+  --kids-amber: #000000;
   --kids-brand: #000000;
   --border-width: 2px;
   --focus-width: 4px;
@@ -321,6 +332,14 @@
   --kids-berry: #6e2a45;
   --kids-grape: #46336b;
   --kids-coral-strong: #7a3528;
+  --kids-amber: #6e4a14;
+  --kids-title-1: #f7b3a1;
+  --kids-title-2: #fce7b8;
+  --kids-title-3: #cde8b5;
+  --kids-title-4: #bfe3f2;
+  --kids-title-5: #f5c2d4;
+  --kids-title-6: #d9ccf0;
+  --kids-title-stroke: #0e1a1f;
   --kids-brand: #1f3d36;
   --kids-on-strong: #f2efe8;
   --illustration-filter: brightness(0.85) saturate(0.8);

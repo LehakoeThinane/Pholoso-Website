@@ -10,10 +10,17 @@
  * Without JavaScript, the written steps below are the exercise.
  * Behaviour: src/scripts/kids/breathing.ts. No props.
  */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Pholo from './Pholo.astro';
+
+// A soft voice says “Breathe in…” and “and breathe out” when Sounds are on (docs/AUDIO.md)
+const voice = ['breathe-in', 'breathe-out'].every((id) =>
+  existsSync(join(process.cwd(), 'public', 'audio', 'en', `${id}.mp3`)),
+);
 ---
 
-<div class="breathe" data-breathe>
+<div class="breathe" data-breathe data-breathe-voice={voice ? '' : undefined}>
   <div class="breathe__stage" data-breathe-stage data-js-only>
     <Pholo pose="calm" class="breathe__pholo" />
     <span class="breathe__count" data-breathe-count aria-hidden="true"></span>

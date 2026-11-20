@@ -29,7 +29,7 @@ const colours = ['sunshine', 'sky', 'leaf', 'lilac', 'coral'] as const;
     </p>
   </KidsHero>
 
-  <nav class="container kids-section" aria-labelledby="story-list-title">
+  <nav class="container kids-section" aria-labelledby="story-list-title" data-read-skip>
     <h2 id="story-list-title" class="visually-hidden">
       The stories
     </h2>
@@ -54,7 +54,7 @@ const colours = ['sunshine', 'sky', 'leaf', 'lilac', 'coral'] as const;
         <h2 id={`${s.id}-title`}>{s.data.title}</h2>
         <ReadToMe target={`${s.id}-panels`} label={`the story ${s.data.title}`} size="small" />
       </div>
-      <ol class="story__panels" id={`${s.id}-panels`}>
+      <ol class="story__panels" id={`${s.id}-panels`} data-read-skip>
         {s.data.panels.map((p, n) => (
           <li class:list={['panel', `kids-bg--${colours[(i + n) % colours.length]}`]}>
             <Art

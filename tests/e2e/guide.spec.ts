@@ -29,6 +29,7 @@ test.describe('without JavaScript', () => {
   test.use({ javaScriptEnabled: false });
 
   test('every step can be reached from the opening page by following answers', async ({ page }) => {
+    test.setTimeout(90_000); // visits every step page (34 and growing)
     const seen = new Set<string>();
     const queue = ['/parent-guide/'];
     while (queue.length) {

@@ -94,11 +94,18 @@ const pairs: Pair[] = [
     ['--color-focus', `--kids-${c}`, UI, `focus ring on ${c}`],
   ]),
   // Kids' World bold cards and title letters: white text on strong colours
-  ...(['ocean', 'berry', 'grape', 'coral-strong', 'brand'] as const).map((c): Pair => [
+  ...(['ocean', 'berry', 'grape', 'coral-strong', 'brand', 'amber'] as const).map((c): Pair => [
     '--kids-on-strong',
     `--kids-${c}`,
     TEXT,
     `white text on ${c}`,
+  ]),
+  // The Kids' World title: coloured letters (white outline) on the sky; large text, 3:1
+  ...([1, 2, 3, 4, 5, 6] as const).map((n): Pair => [
+    `--kids-title-${n}`,
+    '--kids-sky',
+    UI,
+    `title letter colour ${n} on sky`,
   ]),
 ];
 
