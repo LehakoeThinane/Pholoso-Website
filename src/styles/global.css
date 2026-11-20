@@ -417,3 +417,29 @@ main:focus {
 :root.terms-pending .term {
   visibility: hidden;
 }
+
+/* Pholo (components/kids/Pholo.astro): the still pose, or the movement while it plays */
+.pholo {
+  display: inline-block;
+  line-height: 0;
+  filter: var(--illustration-filter);
+}
+.pholo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pholo__move,
+.pholo[data-playing] .pholo__still {
+  display: none;
+}
+.pholo[data-playing] .pholo__move {
+  display: block;
+}
+button.pholo {
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: transparent;
+  cursor: pointer;
+}

@@ -17,6 +17,7 @@
 import { guide } from '../../config/guide';
 import { announce } from '../announce';
 import { toggleSpeech } from '../listen';
+import { playPholo } from '../pholo';
 import { h, renderBlock } from './blocks';
 import type { Block, Message, Profile, Session, Strategy } from './types';
 
@@ -380,6 +381,7 @@ export async function initCoach(): Promise<void> {
     drawParent(text);
     send.setAttribute('aria-busy', 'true');
     thinking.hidden = false;
+    playPholo(thinking.querySelector<HTMLElement>('[data-pholo]'));
     const r = await b.answer(text);
     thinking.hidden = true;
     send.removeAttribute('aria-busy');

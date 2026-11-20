@@ -13,7 +13,7 @@
  * Slot: optional extra content under the button (e.g. a notice).
  */
 import { kids, type KidsColour } from '../../config/strings';
-import Art from './Art.astro';
+import Pholo from './Pholo.astro';
 import ReadToMe from './ReadToMe.astro';
 import Wave from './Wave.astro';
 
@@ -32,17 +32,13 @@ const { title, says, pose = 'hello', colour = 'sunshine', wave = false } = Astro
   <div class="container kids-hero__inner">
     <div class="kids-hero__mascot">
       {wave ? (
-        <button
-          type="button"
-          class="mascot-button"
-          data-mascot={kids.mascotName}
-          disabled
-          aria-label={`Wave to ${kids.mascotName}`}
-        >
-          <Art name={`mascot/${pose}`} class="mascot" />
-        </button>
+        <Pholo tap play="arrive" class="mascot" />
       ) : (
-        <Art name={`mascot/${pose}`} class="mascot" />
+        <Pholo
+          pose={pose === 'celebrating' ? 'celebrate' : pose}
+          play={pose === 'hello' ? 'arrive' : undefined}
+          class="mascot"
+        />
       )}
     </div>
     <div class="kids-hero__text">

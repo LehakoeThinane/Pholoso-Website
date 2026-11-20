@@ -2,10 +2,10 @@
  * Calm corner breathing exercise (components/kids/BreathingGuide.astro).
  * Starts only when a child presses Start. Five rounds of 4 seconds in, 4 seconds out, then it
  * stops by itself; Stop works at any time, and it stops if the child leaves the page.
- * The shape only moves when motion is allowed; otherwise the words and numbers count alone.
+ * Pholo breathes only when motion is allowed; otherwise the words and numbers count alone.
  * Screen readers hear "Breathe in…" / "Breathe out…" once per phase, not every number.
  */
-import { motionAllowed } from './state';
+import { playPholo, stopPholo } from '../pholo';
 
 const ROUNDS = 5;
 const PHASE_SECONDS = 4;
@@ -15,7 +15,7 @@ export function initBreathing(): void {
   if (!root) return;
   const q = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
   const stage = q<HTMLElement>('[data-breathe-stage]');
-  const shape = q<HTMLElement>('[data-breathe-shape]');
+  const pholo = root.querySelector<HTMLElement>('[data-pholo="calm"]');
   const count = q<HTMLElement>('[data-breathe-count]');
   const status = q<HTMLElement>('[data-breathe-status]');
   const start = q<HTMLButtonElement>('[data-breathe-start]');
@@ -28,7 +28,7 @@ export function initBreathing(): void {
   const end = (message: string) => {
     if (timer !== undefined) window.clearInterval(timer);
     timer = undefined;
-    shape.classList.remove('is-breathing');
+    stopPholo(pholo);
     count.textContent = '';
     const hadFocus = document.activeElement === stop;
     stop.hidden = true;
@@ -55,19 +55,12 @@ export function initBreathing(): void {
     start.hidden = true;
     stop.hidden = false;
     stop.focus();
-    shape.classList.remove('is-breathing');
-    if (motionAllowed()) {
-      void shape.offsetWidth; // restart the animation in step with the count
-      shape.classList.add('is-breathing');
-    }
+    playPholo(pholo); // starts in step with the count; does nothing when motion is off
     step();
     timer = window.setInterval(step, 1000);
   });
 
   stop.addEventListener('click', () => end('Stopped. You can start again any time.'));
   window.addEventListener('pagehide', () => end(''));
-  // If Calm colours or Reduce motion is switched on mid-way, stop the movement at once.
-  document.addEventListener('pholoso:prefs', () => {
-    if (!motionAllowed()) shape.classList.remove('is-breathing');
-  });
+  // (Switching motion off mid-way stops Pholo at once: src/scripts/pholo.ts.)
 }

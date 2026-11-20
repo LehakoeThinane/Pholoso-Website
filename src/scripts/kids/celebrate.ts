@@ -4,6 +4,7 @@
  * Skipped entirely when motion is not allowed (see state.ts). Plays the "yay" sound if
  * Sounds are on.
  */
+import { playPholo } from '../pholo';
 import { play } from './sound';
 import { motionAllowed } from './state';
 
@@ -13,6 +14,11 @@ const STAR =
 export function celebrate(from?: Element | null): void {
   play('yay');
   if (!motionAllowed()) return;
+  // A celebrating Pholo near the child's activity (or anywhere visible) jumps for joy
+  const pholo = [...document.querySelectorAll<HTMLElement>('[data-pholo="celebrate"]')].find(
+    (p) => p.offsetParent !== null,
+  );
+  playPholo(pholo);
   const layer = document.querySelector<HTMLElement>('[data-celebrate]');
   if (!layer) return;
 

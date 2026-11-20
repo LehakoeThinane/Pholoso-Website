@@ -46,6 +46,21 @@
   --kids-sunshine: var(--sunshine);
   --kids-gold: var(--gold);
   --kids-target: 4rem; /* kids' buttons: at least 64px tall (brief §7) */
+  /* Kids' strong colours (brief v5 §10): bold cards and title letters, always with white text */
+  --ocean: #1d5fa8;
+  --berry: #b4235e;
+  --grape: #5b3a9e;
+  --coral-strong: #c8462f;
+  --kids-ocean: var(--ocean);
+  --kids-berry: var(--berry);
+  --kids-grape: var(--grape);
+  --kids-coral-strong: var(--coral-strong);
+  --kids-brand: var(--green);
+  --kids-on-strong: #ffffff;
+  /* Kids' World fonts (brief v5 §5): Fredoka for headings and buttons (the owner may choose
+     Baloo 2 or Grandstander: change it here), Andika for reading. Kids' World only. */
+  --font-kids-display: 'Fredoka', 'Andika', 'Fredoka Fallback', system-ui, sans-serif;
+  --font-kids-text: 'Andika', 'Andika Fallback', system-ui, sans-serif;
   --radius-l: 1.25rem;
   --radius-xl: 1.75rem;
   /* How bright illustrations are. Calm and Dim turn it down. */
@@ -225,6 +240,11 @@
   --kids-lilac: #e4dfeb;
   --kids-sunshine: #f1ead9;
   --kids-gold: #e9dfc8;
+  --kids-ocean: #3f5f78;
+  --kids-berry: #7a4558;
+  --kids-grape: #5a4d78;
+  --kids-coral-strong: #8a4a3c;
+  --kids-brand: #3d5a52;
   --illustration-filter: saturate(0.55);
 }
 
@@ -257,6 +277,11 @@
   --kids-lilac: #ffffff;
   --kids-sunshine: #ffffff;
   --kids-gold: #ffffff;
+  --kids-ocean: #000000;
+  --kids-berry: #000000;
+  --kids-grape: #000000;
+  --kids-coral-strong: #000000;
+  --kids-brand: #000000;
   --border-width: 2px;
   --focus-width: 4px;
 }
@@ -292,6 +317,12 @@
   --kids-lilac: #2e2a3b;
   --kids-sunshine: #3a331f;
   --kids-gold: #3a331f;
+  --kids-ocean: #24496e;
+  --kids-berry: #6e2a45;
+  --kids-grape: #46336b;
+  --kids-coral-strong: #7a3528;
+  --kids-brand: #1f3d36;
+  --kids-on-strong: #f2efe8;
   --illustration-filter: brightness(0.85) saturate(0.8);
   color-scheme: dark;
 }

@@ -8,6 +8,41 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-20 · `dev` · Brief v5, part 1: Pholo, the kids' fonts and colours
+
+**Why:** the Foundation sent brief v5 and a reference pack: the approved mascot Pholo (five
+poses, still and moving), a mood board, and new Kids' World fonts and colours. This is the first
+part; the Kids' World redesign, read-aloud audio and the grown-ups' additions follow.
+
+**What changed**
+
+- **Pholo, the approved mascot, replaces the starter mascot everywhere**, drawn from the
+  approved files without changes, in five poses: hello, thinking, celebrate, calm and talk.
+- **Pholo moves only on a trigger:** he waves once when a child arrives on a Kids' World page,
+  and again when tapped; jumps for joy when a child finishes "What do you love?"; breathes in
+  the Calm corner after Start (8 seconds a breath, inside his growing and shrinking circle) until
+  Stop; and thinks while the Parent Coach writes a reply. With reduced motion, Reduce motion,
+  Calm colours or Simplified page he stays still, and switching motion off stops him at once.
+- **Calm corner:** Pholo replaces the plain breathing circle; the big number countdown stays.
+- **Kids' World fonts:** Fredoka for headings and buttons, Andika for reading (at least 22px),
+  with Latin Extended so South African letters render. Kids' World preloads only these;
+  grown-ups' pages only Atkinson.
+- **Kids' strong colours:** ocean, berry, grape and coral-strong (white text), with versions for
+  Calm, High contrast and Dim. All pass the contrast check.
+- **Kids' World styles are now a separate stylesheet**, so grown-ups' pages load less.
+- **`reference/`** (the Foundation's source pack) is kept out of git and out of lint.
+- **Docs:** DECISIONS §20 (Pholo) and §21 (fonts); new `docs/CREDITS.md`.
+
+**Checks:** new Pholo tests: the still poses are the approved artwork; each movement starts only
+on its trigger and ends; the arm really rotates and the breathing circle really grows; nothing
+moves when motion is off; no movement can flash; nothing waits on a timer.
+
+**Found and fixed while building:** Pholo's movements did not start at first (a hyphen in the
+trigger name means "minus" in SVG timing). The first tests only checked a flag, so they passed;
+the new test checks real movement.
+
+---
+
 ## 2026-11-19 · `dev` · Fix: two Parent Coach tests failed on GitHub (Linux)
 
 **Why:** the PHP jobs failed on GitHub while passing on the development computer. Both causes were in the tests, not the coach.

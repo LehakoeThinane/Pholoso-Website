@@ -37,3 +37,6 @@ desktop.ini
 .astro/
 .lighthouseci/
 dist-live/
+
+# Source material from the Foundation (old site, moodboard, mascot originals): not site code
+reference/

@@ -281,3 +281,40 @@ AI can also flag an emergency. Conversations are deleted 30 days after they star
 - The production build keeps the coach off (`COACH_MODE` unset). `pnpm build:live` builds the
   live version once the Foundation approves it, and `enabled` in the private config is a second
   switch that can turn it off without a new upload.
+
+## 20. Pholo: the approved files, moving only on a trigger
+
+**Decision:** Pholo (brief v5 §10b) is drawn from the Foundation's approved SVG files without
+changes. The still poses are shown whenever Pholo is not moving; while a movement plays, the
+approved movement file is shown in the same place and size. 20 November 2026.
+
+**How the movements stay under control:** the approved movement files use SVG's own animation
+(SMIL). At build time every animation is changed to wait for a hidden trigger that belongs to
+that Pholo (`src/lib/pholo.ts`), so nothing can start by itself. `src/scripts/pholo.ts` fires
+the trigger only on its event (arriving on a Kids' World page once per visit, a tap, finishing
+an activity, Start in the Calm corner, read-aloud) and only when motion is allowed. Switching
+motion off mid-way, or leaving the page, stops every movement and shows the still pose.
+
+**Why SMIL and not CSS keyframes (the brief's preference):** the approved movements were made
+in SMIL; converting them to CSS would mean redrawing the timing and pivot points by hand, and
+any difference would change approved artwork. With the trigger approach the motion rules the
+brief cares about hold anyway: one switch (`data-anim`) decides, and nothing loops by itself.
+Trigger IDs use underscores: in SMIL timing a hyphen means "minus", so `a-go.begin` would never
+start (found and fixed while building; a test now checks that the arm really rotates).
+
+**Later upgrade path:** if a professional animator joins, Pholo can be rebuilt in Rive (state
+machines suit a character that reacts to events), keeping the same pose names (`hello`,
+`thinking`, `celebrate`, `calm`, `talk`) and triggers, so pages do not change. Not added now.
+
+## 21. Kids' World fonts and stylesheet
+
+**Decision:** Kids' World uses Fredoka (headings, buttons) and Andika (reading text, at least
+22px); grown-ups' pages keep Atkinson Hyperlegible. Each world preloads only its own fonts. The
+Kids' World styles and fonts are a separate stylesheet linked by KidsLayout only, so grown-ups'
+pages never download them (the shared stylesheet shrank from 14.7 KB to 14.0 KB).
+
+**Notes:** both fonts have metric-matched fallback faces (Arial adjusted to each font's size and
+line height), so text does not jump when the real font arrives. Fredoka has no glyphs for the
+Tshivenda letters ḓ ḽ ṅ ṋ ṱ; the font stack falls back to Andika for those letters only, as the
+brief asks. The font token `--font-kids-display` is the one place to change if the Foundation
+chooses Baloo 2 or Grandstander instead.

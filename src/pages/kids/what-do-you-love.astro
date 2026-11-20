@@ -7,6 +7,7 @@
  * Content: src/content/kids/interests.yaml.
  */
 import Art from '../../components/kids/Art.astro';
+import Pholo from '../../components/kids/Pholo.astro';
 import FlipCard from '../../components/kids/FlipCard.astro';
 import KidsHero from '../../components/kids/KidsHero.astro';
 import type { KidsColour } from '../../config/strings';
@@ -82,7 +83,7 @@ const areas = Object.entries(kidsIdeaAreas) as [
           ))}
         </ul>
         <p class="love-panel__done" data-flip-done data-js-hide>
-          <Art name="mascot/celebrating" class="love-panel__mascot" />
+          <Pholo pose="celebrate" class="love-panel__mascot" />
           <span>You’re a great learner!</span>
         </p>
       </section>

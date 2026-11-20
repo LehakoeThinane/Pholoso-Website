@@ -9,6 +9,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Notice from '../../components/Notice.astro';
 import GetHelpCard from '../../components/guide/GetHelpCard.astro';
 import Art from '../../components/kids/Art.astro';
+import Pholo from '../../components/kids/Pholo.astro';
 import { coach } from '../../config/coach';
 import coachCss from '../../styles/coach.css?url';
 
@@ -59,7 +60,7 @@ const strategies = (await getCollection('coachStrategies')).filter((e) =>
           data-coach-log
         />
         <p class="coach__thinking" data-coach-thinking hidden>
-          <Art name="mascot/thinking" class="coach__thinking-art" />
+          <Pholo pose="thinking" class="coach__thinking-art" />
           <span role="status">The coach is thinking…</span>
         </p>
         <div class="coach__dock" data-coach-dock data-js-only>
