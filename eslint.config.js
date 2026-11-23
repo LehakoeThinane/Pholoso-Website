@@ -6,6 +6,7 @@ export default [
     ignores: [
       'dist/',
       'dist-live/',
+      'dist-app/',
       'reference/',
       '.venv-audio/',
       '.astro/',

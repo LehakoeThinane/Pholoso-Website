@@ -1,0 +1,49 @@
+---
+/**
+ * DashedPath: a hand-drawn dashed line with a small triangle arrowhead (the logo's triangle),
+ * leading the eye down to the next section (brief v5 §10, mood board "Grown-ups' pages").
+ * Decorative: hidden from screen readers, and hidden in Calm colours and Simplified page.
+ *
+ * Props: flip (curve the other way).
+ */
+interface Props {
+  flip?: boolean;
+}
+const { flip = false } = Astro.props;
+---
+
+<div class:list={['dashed-path doodle', { 'dashed-path--flip': flip }]} aria-hidden="true">
+  <svg viewBox="0 0 220 90" focusable="false">
+    <path class="dashed-path__line" d="M10 10 C 70 0 60 70 120 60 S 190 40 196 72" />
+    <path class="dashed-path__head" d="M188 70 L204 70 L196 84 Z" />
+  </svg>
+</div>
+
+<style>
+  .dashed-path {
+    display: flex;
+    justify-content: center;
+    margin-block: calc(-1 * var(--space-m)) calc(-1 * var(--space-xs));
+    pointer-events: none;
+  }
+  .dashed-path svg {
+    width: clamp(8rem, 18vw, 12rem);
+    height: auto;
+  }
+  .dashed-path--flip svg {
+    scale: -1 1;
+  }
+  .dashed-path__line {
+    fill: none;
+    stroke: var(--color-link);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 2 10;
+  }
+  .dashed-path__head {
+    fill: var(--gold);
+    stroke: var(--green-deep);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+</style>

@@ -6,6 +6,8 @@ import CardGrid from '../components/CardGrid.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import GuideDemo from '../components/guide/GuideDemo.astro';
 import { coach } from '../config/coach';
+import DashedPath from '../components/DashedPath.astro';
+import HelpRouter from '../components/HelpRouter.astro';
 import Hero from '../components/Hero.astro';
 import Photo from '../components/Photo.astro';
 import Quote from '../components/Quote.astro';
@@ -83,7 +85,7 @@ const ngo = {
       </li>
       <li>
         <DoorCard
-          href="#our-work"
+          href="#help"
           who="I’m a grown-up"
           action="Find out about our work"
           variant="grown-up"
@@ -91,6 +93,11 @@ const ngo = {
       </li>
     </ul>
   </nav>
+
+  <Section id="help" labelledby="help-router-title">
+    <HelpRouter />
+  </Section>
+  <DashedPath />
 
   <Section id="our-work" labelledby="problem-title">
     <SectionHeading

@@ -44,8 +44,12 @@ test('home page: the two doors sit under the hero and lead the right way', async
   const doors = page.getByRole('navigation', { name: 'Choose your way in' });
   await expect(doors.getByRole('link', { name: /I’m a kid/ })).toHaveAttribute('href', '/kids/');
   await doors.getByRole('link', { name: /I’m a grown-up/ }).click();
-  await expect(page).toHaveURL(/#our-work$/);
-  await expect(page.locator('#our-work')).toBeInViewport();
+  await expect(page).toHaveURL(/#help$/);
+  await expect(page.getByRole('heading', { name: 'How can we help?' })).toBeInViewport();
+  // Four rows that start from the visitor's situation
+  const rows = page.locator('#help').getByRole('link');
+  await expect(rows).toHaveCount(4);
+  await expect(rows.first()).toHaveAttribute('href', '/parent-guide/');
   // The doors come straight after the hero
   const order = await page.evaluate(() => {
     const hero = document.querySelector('.hero');

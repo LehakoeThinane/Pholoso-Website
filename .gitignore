@@ -43,3 +43,4 @@ reference/
 
 # Read-aloud audio generator (Python, Kokoro): local only
 .venv-audio/
+dist-app/

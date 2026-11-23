@@ -8,6 +8,21 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Brief v5, part 4: "How can we help?" for grown-ups
+
+**Why:** brief v5 §10 and the mood board's grown-ups' page.
+
+**What changed**
+
+- **"How can we help?"** on the home page, straight after the two doors: four large rows with two-tone green-and-gold icons and an arrow, leading to the Parent Guide, Get involved (schools), Get involved (donors) and Stories. On phones the rows are a little more compact.
+- **"I'm a grown-up"** now leads to "How can we help?".
+- **A dashed doodle path** with a triangle arrowhead leads on to the next section.
+- **Not done yet:** the cut-out photos on coloured blobs, which need real photos used with consent (DECISIONS §25).
+
+**Checks:** all 294 browser tests pass; HTML, links, contrast and audio texts clean. Shared stylesheet 14.6 KB (budget 16 KB).
+
+---
+
 ## 2026-11-20 · `dev` · Fix: the "Did you know?" read-aloud button in the Dim theme
 
 **Why:** CI’s accessibility check failed on /kids/ in the Dim theme: the fact’s "Read it to me" button showed light text on the browser’s default grey (4.34:1; at least 4.5:1 is needed).

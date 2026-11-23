@@ -4,6 +4,7 @@
   "exclude": [
     "dist",
     "dist-live",
+    "dist-app",
     "reference",
     "node_modules",
     "test-results",
