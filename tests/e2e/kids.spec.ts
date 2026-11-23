@@ -60,8 +60,19 @@ async function finishTrains(page: import('@playwright/test').Page) {
 test('finishing a game celebrates with a short star burst when motion is allowed', async ({
   page,
 }) => {
+  // The burst lasts under a second, so record it as it happens instead of trying to catch it
+  // (on a busy machine a check could otherwise come just after it has gone)
+  await page.addInitScript(() => {
+    const w = window as unknown as { maxStars: number };
+    w.maxStars = 0;
+    new MutationObserver(() => {
+      w.maxStars = Math.max(w.maxStars, document.querySelectorAll('.celebrate__star').length);
+    }).observe(document, { childList: true, subtree: true });
+  });
   await finishTrains(page);
-  await expect(page.locator('.celebrate__star')).toHaveCount(8);
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { maxStars: number }).maxStars))
+    .toBe(8);
   await expect(page.locator('.celebrate__star')).toHaveCount(0, { timeout: 1500 });
 });
 

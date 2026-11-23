@@ -82,3 +82,28 @@ test('home page: FAQs before the footer, matched by FAQ structured data for sear
   await expect(footer.getByText('Phone:')).toBeVisible();
   await expect(footer.getByText(/PBO 930090077/)).toBeVisible();
 });
+
+test('home page: the cookie note appears after 3 seconds, never takes focus, and stays closed', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/');
+  const note = page.getByRole('complementary', { name: 'Cookies' });
+  await page.waitForTimeout(1500);
+  await expect(note).toBeHidden(); // not straight away
+  await expect(note).toBeVisible({ timeout: 4000 });
+  await expect(note.getByRole('link', { name: 'Read our privacy notice' })).toHaveAttribute(
+    'href',
+    '/privacy/#cookies',
+  );
+  expect(
+    await page.evaluate(() => document.activeElement?.closest('[data-cookie-notice]')),
+  ).toBeNull();
+  await expectNoAxeViolations(page, 'cookie note');
+  expect(await context.cookies()).toEqual([]); // it sets no cookies itself
+  await note.getByRole('button', { name: 'OK, got it' }).click();
+  await expect(note).toBeHidden();
+  await page.reload();
+  await page.waitForTimeout(3500);
+  await expect(note).toBeHidden(); // closed is remembered
+});

@@ -516,3 +516,20 @@ small issue. All ten are fixed, each with a test, while the coach is still off.
 
 **Database:** `001_coach.sql` gains `busy_until` (the reply in progress); `002_coach_accounts.sql`
 keeps several unsubscribe codes per parent. Both changed before any deployment.
+
+## 31. A cookie note on the home page; no loading screen
+
+**Decision (owner, 23 November 2026):** a small cookie note appears on the home page 3 seconds
+after it opens.
+
+**How:** the website uses no tracking or advertising cookies, so the law asks for no consent and
+there is nothing to accept or reject. The note is honest instead: it says what the site keeps
+(Comfort & access settings in the browser; when the Parent Coach is live, a sign-in cookie if
+you choose to sign in), links to the privacy notice, and has one "OK, got it" button. It sits at
+the bottom, never covers the page or takes the keyboard focus (WCAG 2.2.4 Interruptions), closes
+with Esc, and stays closed once dismissed (remembered in the browser only). It does not appear
+in Kids' World, or without JavaScript.
+
+**Not done, on purpose:** a loading page with the logo. The site loads almost instantly
+(Lighthouse performance 100), so a splash screen would only make every visitor wait, hurt search
+ranking, and put something between people and the content.
