@@ -73,6 +73,10 @@ const Heading = `h${headingLevel}` as 'h3' | 'h4';
   .trust__item p {
     margin: 0;
   }
+  /* Each item is the card itself: keep the text right under its heading */
+  .trust .trust__item > :global(*) {
+    flex: none;
+  }
   .trust__policies {
     margin: var(--space-m) auto 0;
     text-align: center;

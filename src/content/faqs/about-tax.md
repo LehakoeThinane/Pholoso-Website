@@ -1,6 +1,7 @@
 ---
 order: 2
 page: about
+home: 4
 question: Are donations tax-deductible?
 ---
 

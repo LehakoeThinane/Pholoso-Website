@@ -445,3 +445,8 @@ button.pholo {
   background: transparent;
   cursor: pointer;
 }
+
+/* The last band on a page: less space before the footer */
+#main > .section:last-child {
+  padding-block-end: var(--space-xl);
+}

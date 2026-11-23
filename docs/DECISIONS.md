@@ -463,3 +463,26 @@ panel.
 conduct; "the platform" (2to.iQ) built to POPIA and EU standards for children's privacy, with
 pseudonyms and avatars; the four policies "available to partners and funders"; B-BBEE value.
 Please confirm these are still accurate before launch (open questions 18 and 19).
+
+## 29. The home page, built to be found (SEO and answer engines)
+
+**Decision (owner, 23 November 2026):** the home page is made as easy as possible for search
+engines and AI answer engines (ChatGPT, Gemini, Perplexity, Copilot) to understand and quote.
+
+- **Title and description** name what the Foundation is and where: "Pholoso Afrika Foundation:
+  inclusive, neurodiversity-first education" (69 characters, under the 70 limit), with a 157-character
+  description that mentions Section 18A, autism and ADHD.
+- **Answer first:** the hero says what the Foundation does in one sentence, and seven FAQs sit
+  right before the footer (who it supports, is it registered, tax-deductible donations, 2to.iQ,
+  how to help, protecting children). Answers come from the site's own wording and facts.
+- **Structured data:** one linked schema.org graph: NGO (legal name, registration numbers,
+  country, contact point, topics it knows about), WebSite, WebPage and FAQPage. The FAQ data is
+  built from the same questions as the page, so they cannot drift apart (a test checks this).
+  Phone and address join it once they are confirmed.
+- **Robots:** indexable pages allow full snippets and large image previews. robots.txt already
+  allows every crawler, including AI crawlers; the owner can block any of them later.
+- **llms.txt** at the site root: a short, plain summary with the key facts and page links, for
+  AI tools that read it.
+
+**Not done (needs the Foundation):** official social profiles for `sameAs`, and verifying the
+site in Google Search Console and Bing Webmaster Tools (open question A4, A5).

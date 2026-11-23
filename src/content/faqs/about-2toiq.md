@@ -1,6 +1,7 @@
 ---
 order: 3
 page: about
+home: 5
 question: How do PAF and 2to.iQ relate?
 ---
 

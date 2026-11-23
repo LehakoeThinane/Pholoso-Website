@@ -1,6 +1,7 @@
 ---
 order: 4
 page: about
+home: 7
 question: How do you protect children and their stories?
 ---
 

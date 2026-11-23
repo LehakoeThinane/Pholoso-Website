@@ -8,6 +8,31 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Fix: home page title too long
+
+**Why:** CI’s HTML check failed: the new home page title was 89 characters (the limit is 70, and search engines cut long titles).
+
+**What changed:** the title is now "Pholoso Afrika Foundation: inclusive, neurodiversity-first education" (69 characters). "South Africa", autism and ADHD stay in the description and the structured data. I also now run every CI check locally before pushing (HTML, links, contrast).
+
+---
+
+## 2026-11-23 · `dev` · Footer contact line, home FAQs, and SEO for the home page
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Registration numbers centred** in the trust block and in the footer; the footer's bottom line is centred.
+- **Footer contact line:** Address, Phone and Email. Address and phone show "To be confirmed" until the Foundation sends them (open question A20); nothing is made up.
+- **Less empty space** before the footer (the last section on every page) and at the bottom of the footer.
+- **FAQs right before the footer** on the home page: seven questions, with a link to the giving questions on Donate.
+- **SEO and answer engines** (DECISIONS §29): clearer title and description, one linked structured-data graph (NGO, WebSite, WebPage, FAQPage), a robots meta for full snippets, and `/llms.txt`.
+- **Fix:** in the trust cards, the text now sits right under its heading.
+
+**Checks:** all browser tests pass, plus a new test that the FAQ structured data matches the questions on the page.
+
+---
+
 ## 2026-11-23 · `dev` · A simpler, shorter footer
 
 **Why:** owner's request: the footer had too much in it and took too much space.

@@ -6,6 +6,7 @@ import CardGrid from '../components/CardGrid.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import DashedPath from '../components/DashedPath.astro';
 import HelpRouter from '../components/HelpRouter.astro';
+import Disclosure from '../components/Disclosure.astro';
 import Hero from '../components/Hero.astro';
 import Photo from '../components/Photo.astro';
 import Quote from '../components/Quote.astro';
@@ -16,6 +17,7 @@ import Term from '../components/Term.astro';
 import { site } from '../config/site';
 import { stats } from '../config/sources';
 import { ordered } from '../lib/content';
+import { render } from 'astro:content';
 import { isTodo } from '../lib/todo';
 import hero from '../assets/images/hero.jpg';
 import classroom from '../assets/images/classroom.jpg';
@@ -25,20 +27,64 @@ const storyNote = isTodo(site.stories.notice)
   ? 'The source of this story is being confirmed.'
   : site.stories.notice;
 
-// Structured data for search engines (schema.org NGO). A data block, not a script, so the
+// FAQs right before the footer: the home questions, plus About questions marked "home"
+const homeFaqs = (await ordered('faqs', (f) => f.data.page === 'home' || f.data.home !== undefined))
+  .sort(
+    (a, b) =>
+      (a.data.page === 'home' ? a.data.order : (a.data.home ?? 0)) -
+      (b.data.page === 'home' ? b.data.order : (b.data.home ?? 0)),
+  )
+  .map((f) => ({ id: f.id, question: f.data.question, body: f.body ?? '', f }));
+const faqs = await Promise.all(
+  homeFaqs.map(async (q) => ({ ...q, Content: (await render(q.f)).Content })),
+);
+/** Markdown answer as plain text, for the FAQ structured data */
+const plain = (md: string) =>
+  md
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[*_`#>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const description =
+  'Pholoso Afrika Foundation: a South African non-profit (Section 18A PBO) advancing inclusive education for neurodivergent children, including autism and ADHD.';
+
+// Structured data for search engines and AI answer engines (schema.org): the organisation, the
+// website, this page and its FAQs, linked by @id. A data block, not a script, so the
 // Content-Security-Policy allows it.
+const orgId = `${site.url}/#organization`;
 const ngo = {
-  '@context': 'https://schema.org',
   '@type': 'NGO',
+  '@id': orgId,
   name: site.name,
+  legalName: site.name,
   alternateName: site.shortName,
   url: `${site.url}/`,
   logo: `${site.url}/logo.png`,
   image: `${site.url}/og-image.png`,
   email: site.email,
-  description: site.mission,
+  description: `${site.name} advances inclusive, adaptive, learner-centred education for neurodivergent children across South Africa and the African continent, through advocacy, educational innovation with its edtech strategic partner 2to.iQ, and by connecting the schools, families and specialists around each child.`,
   slogan: site.tagline,
   foundingDate: String(site.founded),
+  address: { '@type': 'PostalAddress', addressCountry: 'ZA' },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'general enquiries',
+    email: site.email,
+    url: `${site.url}/contact/`,
+    availableLanguage: ['English'],
+  },
+  knowsAbout: [
+    'Inclusive education',
+    'Neurodiversity',
+    'Autism',
+    'ADHD',
+    'Adaptive learning',
+    'Learner-centred education',
+    'Education White Paper 6',
+  ],
+  ...(site.phone.startsWith('TODO:') ? {} : { telephone: site.phone }),
+  ...(site.address.startsWith('TODO:') ? {} : { location: site.address }),
   areaServed: [
     { '@type': 'Country', name: 'South Africa' },
     { '@type': 'Continent', name: 'Africa' },
@@ -57,13 +103,48 @@ const ngo = {
     },
   ],
 };
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    ngo,
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#website`,
+      url: `${site.url}/`,
+      name: site.name,
+      alternateName: [site.shortName, 'Pholoso'],
+      inLanguage: 'en-ZA',
+      publisher: { '@id': orgId },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${site.url}/#webpage`,
+      url: `${site.url}/`,
+      name: `${site.name}: inclusive education for neurodivergent children in South Africa`,
+      description,
+      inLanguage: 'en-ZA',
+      isPartOf: { '@id': `${site.url}/#website` },
+      about: { '@id': orgId },
+      primaryImageOfPage: `${site.url}/og-image.png`,
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${site.url}/#faq`,
+      mainEntity: faqs.map((q) => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: { '@type': 'Answer', text: plain(q.body) },
+      })),
+    },
+  ],
+};
 ---
 
 <BaseLayout
-  fullTitle={`${site.name}: education for neurodivergent children`}
-  description="The Pholoso Afrika Foundation works for inclusive, adaptive education for neurodivergent children in South Africa and Africa. Donate, partner or get involved."
+  fullTitle={`${site.name}: inclusive, neurodiversity-first education`}
+  description={description}
 >
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ngo)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(graph)} />
   <Hero
     title={site.tagline}
     image={hero}
@@ -202,7 +283,7 @@ const ngo = {
     */}
 
   {featured && (
-    <Section labelledby="voice-title" narrow>
+    <Section variant="alt" labelledby="voice-title" narrow>
       <SectionHeading id="voice-title" title="In their words" />
       <Quote cite={featured.data.who} note={storyNote} large>
         {featured.data.quote}
@@ -212,6 +293,22 @@ const ngo = {
       </p>
     </Section>
   )}
+
+  <Section id="faq" labelledby="home-faq-title" narrow>
+    <SectionHeading
+      id="home-faq-title"
+      title="Questions families and funders ask"
+      lead="Clear answers, in plain language."
+    />
+    {faqs.map(({ id, question, Content }) => (
+      <Disclosure summary={question} level={3} id={`faq-${id}`}>
+        <Content />
+      </Disclosure>
+    ))}
+    <p class="after-quote">
+      <a href="/donate/#giving-faq-title">Questions about giving and tax receipts</a>
+    </p>
+  </Section>
 </BaseLayout>
 
 <style>
