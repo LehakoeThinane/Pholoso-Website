@@ -8,6 +8,16 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Security: two warnings in a developer tool fixed
+
+**Why:** a dependency audit found two moderate warnings (glob, and minimatch under it). Both came from linkinator, the tool behind CI’s external-link report. Nothing that ships to the website was affected (the production audit was already clean).
+
+**What changed:** linkinator now uses the patched glob 14.0.6 (a pnpm override in `package.json`; the newest linkinator still asks for the affected version). The audit now reports no known vulnerabilities, and linkinator still works.
+
+**Follow-up:** remove the override once linkinator updates its own glob.
+
+---
+
 ## 2026-11-23 · `dev` · Docs: README, handover, and the Parent Coach walkthrough
 
 **Why:** brief §18 (milestones 4c and 9) and §20 (definition of done).
