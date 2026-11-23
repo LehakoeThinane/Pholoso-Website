@@ -8,6 +8,28 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Security: two warnings in a developer tool fixed
+
+**Why:** a dependency audit found two moderate warnings (glob, and minimatch under it). Both came from linkinator, the tool behind CI’s external-link report. Nothing that ships to the website was affected (the production audit was already clean).
+
+**What changed:** linkinator now uses the patched glob 14.0.6 (a pnpm override in `package.json`; the newest linkinator still asks for the affected version). The audit now reports no known vulnerabilities, and linkinator still works.
+
+**Follow-up:** remove the override once linkinator updates its own glob.
+
+---
+
+## 2026-11-23 · `dev` · Docs: README, handover, and the Parent Coach walkthrough
+
+**Why:** brief §18 (milestones 4c and 9) and §20 (definition of done).
+
+**What changed**
+
+- **README:** the Parent Coach (modes, how to try live mode on your own computer with the mock AI), the new commands (`build:live`, `test:e2e:live`, `audio:texts`, `audio:make`), the new folders, how to add a home FAQ, a coach strategy or a read-aloud text, the updated motion rule, and new troubleshooting rows.
+- **HANDOVER:** status as of 23 November (Stage 3 and brief v5 done), current test results, CI green, and the definition of done with Pholo, recordings and the Parent Coach journey.
+- **Walkthrough recording** of the Parent Coach against the mock AI, for the owner: landing, onboarding, the coaching arc, the plan, saving with an email link, My coaching, a reminder and a follow-up. Kept out of the repository (8 MB video).
+
+---
+
 ## 2026-11-23 · `dev` · Fix: home page title too long
 
 **Why:** CI’s HTML check failed: the new home page title was 89 characters (the limit is 70, and search engines cut long titles).

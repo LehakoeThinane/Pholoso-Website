@@ -4,8 +4,10 @@ Website of the **Pholoso Afrika Foundation**: inclusive, adaptive education for 
 children in South Africa and Africa. A happy, child-centred site: **Kids' World** for children,
 and calm, trustworthy pages for parents, donors, companies and schools.
 
-Static pages built with [Astro](https://astro.build/), plus one PHP form handler, hosted on
-GoDaddy shared hosting. No database, no tracking, no third-party requests.
+Static pages built with [Astro](https://astro.build/), plus a PHP form handler, hosted on
+GoDaddy shared hosting. No tracking and no third-party requests. The **Parent Coach** (a short
+AI coaching conversation for parents) adds a PHP API and a MySQL database, and stays **off in
+production** until the Foundation approves it (see "The Parent Coach" below).
 
 **Start here:** this README (developers) · [docs/DEPLOY.md](docs/DEPLOY.md) (putting it online,
 no programming) · [docs/CONTENT-GUIDE.md](docs/CONTENT-GUIDE.md) (writing and editing) ·
@@ -18,7 +20,9 @@ no programming) · [docs/CONTENT-GUIDE.md](docs/CONTENT-GUIDE.md) (writing and e
 ## Requirements
 
 - Node.js 22.23.4 or later (CI uses 24) and pnpm 9 (`corepack enable`, or `npx pnpm@9.15.9`)
-- PHP 7.4 or later, only for the form handler tests (set `PHP_BIN` if `php` is not on your PATH)
+- PHP 7.4 or later with pdo_sqlite, curl and mbstring, for the form handler and Parent Coach
+  tests (set `PHP_BIN` if `php` is not on your PATH)
+- Python 3.12, only to regenerate the Kids' World recordings (docs/AUDIO.md)
 - For browser tests: Playwright's Chromium (`pnpm exec playwright install chromium`), or an
   installed Chrome or Edge (`PW_CHANNEL=msedge`)
 
@@ -38,6 +42,7 @@ pnpm preview           # serve dist/
 | `pnpm dev`             | Development server                                                                                    |
 | `pnpm build`           | **Production** build. Stops while any `TODO:` placeholder remains in `src/config/site.ts`.            |
 | `pnpm build:preview`   | Build that allows placeholders (shown as "To be confirmed"). Used by CI and the tests.                |
+| `pnpm build:live`      | Preview build with the Parent Coach in live mode, into `dist-live/` (for the live-mode tests)         |
 | `pnpm preview`         | Serve `dist/`                                                                                         |
 | `pnpm lint`            | ESLint and Prettier (`pnpm format` fixes formatting)                                                  |
 | `pnpm check`           | `astro check` (TypeScript, strict)                                                                    |
@@ -47,11 +52,14 @@ pnpm preview           # serve dist/
 | `pnpm check:links`     | Every internal link and `#anchor` resolves (offline)                                                  |
 | `pnpm test:e2e`        | Playwright + axe at 390×844 and 1280×900 (needs a build in `dist/`)                                   |
 | `pnpm test:lighthouse` | Lighthouse CI with the performance budgets (needs a build; `CHROME_PATH` for another browser)         |
-| `pnpm test:php`        | PHP syntax, form handler tests, `.htaccess` tests                                                     |
+| `pnpm test:e2e:live`   | Parent Coach in live mode: real PHP API, mock AI, throwaway SQLite (needs `pnpm build:live`)          |
+| `pnpm test:php`        | PHP syntax, form handler, `.htaccess` and Parent Coach tests                                          |
+| `pnpm audio:texts`     | Write the read-aloud texts from the built Kids' World pages (`--check` in CI)                         |
+| `pnpm audio:make`      | Make the recordings for new or changed texts (docs/AUDIO.md)                                          |
 | `pnpm make:printables` | Regenerate the Kids' World PDFs in `public/printables/`                                               |
 | `pnpm smoke [url]`     | Post-deploy check of the live site (sends no email)                                                   |
 
-Everything CI runs, in order: `pnpm lint && pnpm check && pnpm check:contrast && pnpm build:preview && pnpm check:dist && pnpm check:html && pnpm check:links && pnpm test:e2e && pnpm test:lighthouse && pnpm test:php`
+Everything CI runs, in order: `pnpm lint && pnpm check && pnpm check:contrast && pnpm build:preview && pnpm check:dist && pnpm check:html && pnpm check:links && pnpm audio:texts --check && pnpm test:e2e && pnpm test:lighthouse && pnpm test:php`, and separately `pnpm build:live && pnpm test:e2e:live`. Run all of it before pushing.
 
 ## How it fits together
 
@@ -61,21 +69,29 @@ src/
                  (interface words, menus, mascot name), sources.ts (statistics), terms.ts
                  (person-first / identity-first pairs), kids-links.ts (allowed external links)
   content/       Markdown and YAML content, checked against schemas in content.config.ts
+                 (coach-strategies/ is the Parent Coach's strategy library)
   pages/         One file per page. kids/ is Kids' World.
   layouts/       BaseLayout (every page), KidsLayout (Kids' World)
   components/    Components, each documented at the top. kids/ for Kids' World.
   scripts/       Small browser scripts, bundled as external files. kids/ for Kids' World.
   styles/        tokens.css (design tokens and themes), global.css, kids.css, print.css
-  assets/        Photos, logo, illustrations (see assets/illustrations/README.md)
+  assets/        Photos, logo, illustrations (see assets/illustrations/README.md); pholo/ holds
+                 the approved moving mascot drawings
   integrations/  todo-guard.ts: stops production builds while placeholders remain
 public/
   contact.php    The form handler (logic in lib/, which is never served)
+  api/coach/     Parent Coach endpoints (logic in lib/coach/)
+  audio/en/      Kids' World read-aloud recordings (made from content/audio/)
+  llms.txt       Plain summary of the Foundation for AI answer engines
   .htaccess      HTTPS, redirects, security headers, caching, compression
   prefs.js       Applies Comfort & access settings before the page draws
   printables/    Kids' World PDFs
 scripts/         Build-output checks, contrast, printables, smoke test
+server/migrations/  Parent Coach database tables (run in phpMyAdmin; DEPLOY.md)
+content/audio/   Read-aloud texts and voice settings
 tests/e2e/       Playwright + axe browser tests
-tests/php/       Form handler and .htaccess tests
+tests/e2e-live/  Parent Coach in live mode (PHP API, mock AI)
+tests/php/       Form handler, .htaccess and Parent Coach tests (mock AI in mock-ai.php)
 ```
 
 **Pages** are static HTML. **Scripts** only enhance: every page, link and form works without
@@ -98,12 +114,16 @@ The `/styleguide/` page (not indexed) shows every component and state. Start the
   `<GrownUpLink>` only (it goes through the "Ask a grown-up" page).
 - **JavaScript-only controls** use `data-js-only` (or `data-js-hide`, `data-speech-only`,
   `data-copy-only`) instead of `hidden`, so they never make the page jump. See DECISIONS §8.
-- **Motion:** only after a person's action, under one second, never flashing, and off under
-  reduced motion, Calm colours or Simplified page.
+- **Motion:** short and never flashing, and always off under reduced motion, Reduce motion,
+  Calm colours or Simplified page (`[data-anim]` on `<html>` means motion is allowed). The
+  only things that move on their own are Pholo's greeting waves and the Kids' World sun
+  (DECISIONS §27).
+- **Pholo** is the approved artwork: never redraw it. Its movements are SMIL inside the SVGs in
+  `src/assets/pholo/`, held until a trigger (`src/lib/pholo.ts`, `src/scripts/pholo.ts`).
 - **Illustrations in a component:** size them with `:global(.your-class)`. Astro's scoping
   does not reach inside inlined SVGs.
-- **Commits:** conventional style (`feat:`, `fix:`, `docs:` …) with a body explaining why.
-  No tool or vendor names anywhere in the repository (CI checks files and history).
+- **Commits:** conventional style (`feat:`, `fix:`, `docs:` …) with a "Changes made:" list in
+  the body. No tool names as authors or co-authors (CI checks the history).
 
 ## How to …
 
@@ -137,9 +157,38 @@ and edit it. See the content guide, section 4.
 **Add a statistic.** Add the source and the figure to `src/config/sources.ts`, then use
 `<Stat {...stats.myFigure} />`. See the content guide, section 5.
 
-**Change a fact** (bank details, address, Information Officer): edit `src/config/site.ts`.
+**Change a fact** (bank details, address, phone, Information Officer): edit `src/config/site.ts`.
+
+**Add a home page FAQ.** Add `home: <position>` to an About FAQ, or create a file with
+`page: home` in `src/content/faqs/`. The FAQ structured data for search engines follows
+automatically.
+
+**Add a Parent Coach strategy.** Copy a file in `src/content/coach-strategies/screen-time/`. It
+stays `status: draft` (never sent to the AI) until a named professional approves it
+(`status: approved`, `reviewedBy`, `reviewedOn`).
+
+**Change a Kids' World text that is read aloud.** Rebuild, run `pnpm audio:texts`, then
+`pnpm audio:make` (docs/AUDIO.md). CI fails if a text changed without its recording.
 
 **Replace an illustration:** see `src/assets/illustrations/README.md`.
+
+## The Parent Coach
+
+Three modes, set at build time with `COACH_MODE`:
+
+- **off** (production default): the coach pages say "not open yet" and point to the Parent Guide.
+- **mock** (preview builds): a fixed practice script in the browser. Nothing is stored or sent.
+- **live**: the PHP API in `public/api/coach/` keeps conversations in MySQL and asks the AI
+  provider for each reply. It also needs `enabled: true` in the private `config.php`, so it can
+  be switched off on the server without a rebuild.
+
+Try live mode on your computer with the mock AI (no key, no real AI, a throwaway SQLite
+database): `pnpm build:live`, then `php tests/php/live-server.php dist-live 4398` and open
+<http://127.0.0.1:4398/parent-coach/>. Sign-in emails go to `pholoso-live-mail.log` in your temp
+folder instead of being sent.
+
+Going live (database tables, private settings, the daily reminders job, the health check) is in
+[docs/DEPLOY.md](docs/DEPLOY.md); the design decisions are DECISIONS §17–19 and §26.
 
 ## Branches and releases
 
@@ -150,17 +199,20 @@ and edit it. See the content guide, section 4.
 
 ## Troubleshooting
 
-| Problem                                                    | Fix                                                                                                                           |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `Production build blocked: … placeholder(s)`               | Fill the `TODO:` values in `src/config/site.ts`, or use `pnpm build:preview` for a preview.                                   |
-| The site returns **500** after deploy                      | Rename `.htaccess` on the server and re-enable its blocks one at a time (DEPLOY.md, "If something goes wrong").               |
-| CI: `ERR_PNPM_OUTDATED_LOCKFILE`                           | You changed `package.json` without `pnpm install`. Run it and commit `pnpm-lock.yaml`.                                        |
-| Browser tests fail on things that look correct             | Rebuild first (`pnpm build:preview`): tests use `dist/`. They serve it on port 4399, so a running dev server is not used.     |
-| Playwright: "Executable doesn't exist"                     | `pnpm exec playwright install chromium`, or `PW_CHANNEL=msedge pnpm test:e2e`.                                                |
-| `check:dist` reports `style="" attribute` or inline script | Move the style into a component `<style>` or the script into a `<script>` block; never loosen the CSP.                        |
-| An illustration is huge                                    | Size it with `:global(.class)` in the component's styles.                                                                     |
-| Content jumps when a page loads                            | A script is revealing a `hidden` element. Use `data-js-only` instead.                                                         |
-| Lighthouse fails a size budget                             | Check what grew (`.lighthouseci/` reports). Budgets are in `lighthouserc.json`; change them only by decision (DECISIONS §11). |
+| Problem                                                      | Fix                                                                                                                           |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `Production build blocked: … placeholder(s)`                 | Fill the `TODO:` values in `src/config/site.ts`, or use `pnpm build:preview` for a preview.                                   |
+| The site returns **500** after deploy                        | Rename `.htaccess` on the server and re-enable its blocks one at a time (DEPLOY.md, "If something goes wrong").               |
+| CI: `ERR_PNPM_OUTDATED_LOCKFILE`                             | You changed `package.json` without `pnpm install`. Run it and commit `pnpm-lock.yaml`.                                        |
+| Browser tests fail on things that look correct               | Rebuild first (`pnpm build:preview`): tests use `dist/`. They serve it on port 4399, so a running dev server is not used.     |
+| Playwright: "Executable doesn't exist"                       | `pnpm exec playwright install chromium`, or `PW_CHANNEL=msedge pnpm test:e2e`.                                                |
+| `check:dist` reports `style="" attribute` or inline script   | Move the style into a component `<style>` or the script into a `<script>` block; never loosen the CSP.                        |
+| An illustration is huge                                      | Size it with `:global(.class)` in the component's styles.                                                                     |
+| `check:html`: title text cannot be longer than 70 characters | Shorten the page's `title` or `fullTitle` (search engines cut long titles too).                                               |
+| CI: `audio texts … new or changed`                           | A read-aloud text changed: run `pnpm audio:texts` and `pnpm audio:make`, and commit the files.                                |
+| A CI run shows "The operation was canceled"                  | A newer push replaced it (`cancel-in-progress`). Look at the newest run instead.                                              |
+| Content jumps when a page loads                              | A script is revealing a `hidden` element. Use `data-js-only` instead.                                                         |
+| Lighthouse fails a size budget                               | Check what grew (`.lighthouseci/` reports). Budgets are in `lighthouserc.json`; change them only by decision (DECISIONS §11). |
 
 ## Accessibility standards
 

@@ -1,7 +1,7 @@
 # Handover report
 
 **For:** the Pholoso Afrika Foundation, and the next developer.
-**As of:** 18 November 2026, branch `dev`.
+**As of:** 23 November 2026, branch `dev` (merged into `main` by pull request).
 
 The new website is built and tested, but **not yet live**. Going live needs the Foundation's
 facts filled in (section 3) and the actions in section 4. Nothing here has been guessed: every
@@ -24,13 +24,15 @@ unknown is a visible placeholder.
 | 4c. Parent Guide, Phase 1 (scripted) | Done (19 November): 7 draft topics, a page per step, chat on top. **Needs professional review** (section 4). Phase 2 (AI) not built. |
 | 4c. Parent Coach (brief v4), Stage 1 of 3 | Done (19 November): landing, onboarding, chat and all message cards, against a practice script; 2 draft strategies. Off in production. Stage 2: database, sessions, API. Stage 3: accounts, reminders, deletion. |
 | 4c. Parent Coach, Stage 2 of 3 | Done (19 November): MySQL tables, PHP API, AI behind two switches (live build + `enabled`), no-JavaScript forms, health check. Tested against a mock AI only. |
+| 4c. Parent Coach, Stage 3 of 3 | Done (23 November): save with an email sign-in link (no passwords), My coaching, reminders by a daily job with unsubscribe, follow-up sessions, deleting a conversation or the whole account. **Walkthrough recording** against the mock AI made for the owner (not in the repository: `parent-coach-walkthrough.webm`, 1280×800). |
+| Brief v5 | Done (20–23 November): Pholo, the approved mascot, moving only as specified; Kids' World redesign (mood board); read-aloud from recordings on every Kids' World page; "How can we help?"; the original website's wording reused (91.4%, DECISIONS §28); simpler footer; home FAQs and SEO for search and answer engines (DECISIONS §29). |
 
-**Test results (local, 18 November 2026):** 150 browser tests passed, 0 failed (axe: no
-accessibility violations on any page, at phone and desktop size). HTML, links, contrast,
-type checks and lint all clean. Lighthouse (mobile): 100 for Performance, Accessibility, Best
-Practices and SEO on every sampled page, no layout shift, CSS 14.6 KB (budget 16 KB). CI on
-GitHub runs the same checks; confirm the latest run is green in the repository's **Actions**
-tab (the developer could not see it: the GitHub command-line tool was not logged in).
+**Test results (23 November 2026):** 297 browser tests passed, 0 failed (axe: no accessibility
+violations on any page, at phone and desktop size); 8 Parent Coach live-mode tests; PHP tests
+(forms 49 checks, Parent Coach 92 checks, `.htaccess`) on PHP 7.4, 8.1 and 8.3. HTML, links,
+contrast, audio texts, type checks and lint all clean. Lighthouse budgets met (grown-ups'
+pages CSS within 16 KB, Kids' World within 20 KB). **CI on GitHub is green** for the latest
+commit on `dev` and for the pull request into `main`.
 
 **Design changes after milestone 9 (owner decisions, 18 November 2026; see DECISIONS.md §11–§14):**
 
@@ -55,6 +57,9 @@ tab (the developer could not see it: the GitHub command-line tool was not logged
 
 | Item                                                                         | Status                                                                                |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Pholo matches the approved artwork in all five poses; still under every motion-off setting | Yes (tested). Movement: by owner decision Pholo now also waves five times on arrival (DECISIONS §27). |
+| Every Kids' World page reads aloud from recordings, not the browser voice     | Yes: 26 recordings. Computer-generated for now; a real South African voice is wanted (section 4, 10b). |
+| Parent Coach: onboarding → coaching arc → plan → rating → optional account → return to follow up, by keyboard, screen reader and touch | Yes, against the mock AI (tested, and in the walkthrough recording). **Off in production until the Foundation approves it.** |
 | A child can use Kids' World without help; Calm mode in one tap               | Built and tested. Not yet tried by children; worth a short session with a few families. |
 | All pages exist, read well at 390 px and 1280 px, accurate and sourced       | Yes                                                                                   |
 | Everything works without JavaScript                                          | Yes (tested)                                                                          |
@@ -62,7 +67,7 @@ tab (the developer could not see it: the GitHub command-line tool was not logged
 | No inline scripts or styles; CSP blocks nothing needed                       | Yes in the build. **Confirm on the live server** with the smoke test.                 |
 | No third-party requests                                                      | Yes (tested)                                                                          |
 | Forms deliver correctly formatted email; no-JS and JS paths tested; anti-spam | Tested with mock mail. **Real delivery needs Microsoft 365 setup**, then a live test. |
-| Production build passes only when all `TODO:` are filled                     | Yes. It is currently blocked by the 9 placeholders below, as intended.                |
+| Production build passes only when all `TODO:` are filled                     | Yes. It is currently blocked by the placeholders in section 3, as intended.            |
 | README, DEPLOY, CONTENT-GUIDE, DECISIONS written                             | Yes                                                                                   |
 
 ## 3. Facts still to fill in (`src/config/site.ts`)
