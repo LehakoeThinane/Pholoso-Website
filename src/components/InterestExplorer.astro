@@ -13,6 +13,7 @@
 interface Interest {
   slug: string;
   name: string;
+  title: string;
   cards: { area: string; text: string }[];
 }
 interface Props {
@@ -55,7 +56,7 @@ const CardHeading = `h${level + 1}` as 'h4' | 'h5';
       data-js-hide={i === 0 ? undefined : true}
     >
       <Heading class="explorer__title" id={`${id}-${interest.slug}-title`}>
-        If a child loves {interest.name.toLowerCase()}
+        {interest.title}
       </Heading>
       <ul class="explorer__cards">
         {interest.cards.map((card) => (

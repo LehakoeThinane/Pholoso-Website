@@ -18,8 +18,8 @@ import family from '../assets/images/family.jpg';
   description="Ways to support the Pholoso Afrika Foundation: give as a donor, partner as a company or funder, or work with us as a school or educator."
 >
   <PageHero
-    title="Help change the systems where children learn"
-    lead="Inclusive education affects children's development, fairness in schools and people's work later in life. There is a way for everyone to help."
+    title="Partners do not simply give. They help redesign the system."
+    lead="Inclusive, neurodivergent education is tied to human development, educational equity and long-term economic inclusion. There is a way in for everyone."
   />
 
   <Section labelledby="ways-title">
@@ -27,27 +27,35 @@ import family from '../assets/images/family.jpg';
       Ways to get involved
     </h2>
     <CardGrid>
-      <Card id="donors" title="Donors" level={2} href="/donate/" linkText="How to donate">
+      <Card
+        id="donors"
+        tag="Donors and funders"
+        title="Fund infrastructure, not just a programme"
+        level={2}
+        href="/donate/"
+        linkText="See the donor case"
+      >
         <TickList
           items={[
-            'Give by bank transfer (EFT).',
-            'South African taxpayers can ask for a Section 18A tax receipt.',
-            'Early support helps us build systems that last.',
+            'Section 18A tax-deductible giving under PBO 930090077',
+            'Catalytic support for early, adaptive systems',
+            'A legacy in a national model of inclusion',
           ]}
         />
       </Card>
       <Card
         id="partners"
-        title="Companies and funders"
+        tag="Corporates and partners"
+        title="Co-build inclusive education"
         level={2}
         href="/contact/?topic=partner"
-        linkText="Talk to us about partnering"
+        linkText="Start a conversation"
       >
         <TickList
           items={[
-            'May count towards B-BBEE socio-economic development, because most of the children we serve are Black children with disabilities.',
-            'Funding educator training may count towards B-BBEE skills development.',
-            'Fits corporate social investment (CSI) and ESG goals.',
+            'B-BBEE Socio-Economic Development value, because our beneficiaries are predominantly Black children with disabilities',
+            'Skills Development value when you fund educator training',
+            'CSI and ESG aligned, credible and brand-safe',
           ]}
         />
         <p class="caveat">
@@ -57,16 +65,17 @@ import family from '../assets/images/family.jpg';
       </Card>
       <Card
         id="schools"
-        title="Schools and educators"
+        tag="Schools and educators"
+        title="Partner on inclusive practice"
         level={2}
         href="/contact/?topic=school"
-        linkText="Talk to us as a school"
+        linkText="Partner on a pilot"
       >
         <TickList
           items={[
-            'Ask about piloting 2to.iQ with support from us.',
-            'Get support for inclusive, learner-centred teaching.',
-            'Join a network of specialists who work together.',
+            'Pilot 2to.iQ in controlled, supported settings',
+            'Affirming, learner-centred teaching support',
+            'Join a connected ecosystem of specialists',
           ]}
         />
       </Card>
@@ -84,7 +93,11 @@ import family from '../assets/images/family.jpg';
   </div>
 
   <Section labelledby="trust-title">
-    <SectionHeading id="trust-title" title="Why you can trust us" />
+    <SectionHeading
+      id="trust-title"
+      title="Why you can trust this"
+      lead="When the work carries this much responsibility, trust cannot be decorative. It is built into the model."
+    />
     <TrustBlock />
   </Section>
 
@@ -92,7 +105,7 @@ import family from '../assets/images/family.jpg';
     <SectionHeading
       id="registration-title"
       title="Our registration details"
-      lead="You can check these details before you give or partner with us."
+      lead="A registered Public Benefit Organisation. You can check these details before you give or partner with us."
     />
     <DefinitionList
       items={[

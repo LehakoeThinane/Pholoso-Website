@@ -38,8 +38,8 @@ export interface Statistic {
 export const stats = {
   /** The article's abstract: "previous studies on South Africa have shown that up to 70%…" */
   outOfSchool: {
-    figure: 'Up to 70%',
-    text: 'of children with disabilities in South Africa are out of school.',
+    figure: '70%',
+    text: 'Up to seven in ten school-aged children with disabilities in South Africa are out of school.',
     source: {
       ...sources.ajod,
       label: 'Chirowamhangu (2024), African Journal of Disability',
@@ -57,5 +57,11 @@ export const stats = {
     figure: 'About half a million',
     text: 'children with disabilities were shut out of South African schools, Human Rights Watch estimated in 2015.',
     source: { ...sources.hrw, label: 'Human Rights Watch (2015)' },
+  },
+  /** White Paper 6 was published in 2001. "The promise…" is the Foundation's own assessment. */
+  policySince: {
+    figure: 'Since 2001',
+    text: 'South Africa has held an inclusive-education policy. The promise still outpaces the delivery.',
+    source: { ...sources.whitePaper6, label: 'Education White Paper 6' },
   },
 } satisfies Record<string, Statistic>;

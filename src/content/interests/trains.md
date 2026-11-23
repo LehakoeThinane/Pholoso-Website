@@ -1,13 +1,14 @@
 ---
 order: 1
 name: Trains
+title: Trains as the curriculum
 cards:
-  - area: Numbers
-    text: Timetables, platform numbers and journey times become counting, telling the time and putting things in order.
-  - area: Reading and language
-    text: Station names, route maps and train stories build vocabulary, reading and storytelling.
-  - area: Science and the world
-    text: How engines move, electricity and momentum open up physics, engineering and geography.
-  - area: Social and emotional
-    text: Sharing the interest with a friend or teacher builds turn-taking, shared attention and trust.
+  - area: Numeracy
+    text: Timetables, platform numbers and journey times become counting, telling time and sequencing.
+  - area: Language & literacy
+    text: Station names, route maps and train stories build vocabulary, reading and narrative.
+  - area: Science & the world
+    text: How engines move, electricity and momentum open physics, engineering and geography.
+  - area: Social & emotional
+    text: Sharing the interest with a friend or teacher builds turn-taking, joint attention and trust.
 ---

@@ -45,6 +45,8 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 15. **Who will edit the website** after launch: a developer, a staff member, a volunteer?
 16. **How often:** weekly news and stories, or a few changes a year?
 17. **Should partners update their own directory listings** soon, or can the Foundation do it for them at first? (If "staff or volunteer, occasionally, Foundation-managed", a static site with a simple editor on the current hosting is likely the best fit; see the architecture decision when written.)
+18. **Original wording, still true?** The site now reuses the original website's wording (DECISIONS §28). Please confirm: the safeguarding policy and code of conduct are signed; 2to.iQ is built to POPIA and EU standards for children's privacy, with pseudonyms and avatars; and the Safeguarding Policy, Data Protection and Privacy Policy, Code of Conduct and Governance framework can be sent to partners and funders.
+19. **Contact form consent:** the original's wording ("I understand my message is handled in line with POPIA, and I can ask to edit or withdraw it.") is back; the POPIA reviewer should confirm it is enough as consent to reply.
 
 ## Kids' World (v2 brief)
 

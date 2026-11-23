@@ -81,7 +81,7 @@ test('menu groups open by keyboard, one at a time; Esc closes and returns focus'
   await about.locator('summary').focus();
   await page.keyboard.press('Enter');
   await expect(about).toHaveAttribute('open', '');
-  await expect(about.getByRole('link', { name: 'About us' })).toBeVisible();
+  await expect(about.getByRole('link', { name: 'Who we are' })).toBeVisible();
   // Opening another group closes the first
   await involved.locator('summary').click();
   await expect(involved).toHaveAttribute('open', '');

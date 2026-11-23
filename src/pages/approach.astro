@@ -15,6 +15,7 @@ import { ordered } from '../lib/content';
 const interests = (await ordered('interests')).map((i) => ({
   slug: i.id,
   name: i.data.name,
+  title: i.data.title,
   cards: i.data.cards,
 }));
 ---
@@ -25,27 +26,28 @@ const interests = (await ordered('interests')).map((i) => ({
 >
   <PageHero
     title={site.coreIdea}
-    lead="We work in three areas at the same time. Each one makes the others stronger."
+    lead={`${site.name} works on three fronts at once. Each one strengthens the others.`}
   />
 
   <Section labelledby="areas-title">
-    <SectionHeading id="areas-title" title="Our three areas of work" />
+    <SectionHeading id="areas-title" title="Three fronts, working at once." />
     <Steps
       steps={[
         {
           title: 'Advocacy and awareness',
-          text: 'We bring neurodivergent children into the national conversation about inclusion, education and community support. When people understand, attitudes change. When attitudes change, systems change.',
+          text: 'We help place neurodivergent children inside the national conversation on inclusion, education and community support. Visibility shifts attitudes. Attitudes shift systems.',
         },
         {
-          title: 'Learning technology',
-          text: 'With our edtech partner 2to.iQ, we help build adaptive learning technology designed around how learners think, communicate and take part.',
+          title: 'Educational innovation',
+          text: 'Through 2to.iQ, our edtech strategic partner, we build adaptive learning technology designed around how learners actually think, communicate and engage.',
         },
         {
-          title: 'Connecting the support',
-          text: 'We connect the people around a child: schools, parents, teachers, therapists, researchers and funders. Support that is split up helps no one. Connected support changes outcomes.',
+          title: 'Ecosystem building',
+          text: 'We connect the people around the child. Schools, parents, teachers, therapists, researchers and funders. Fragmented support helps no one. Connected support changes outcomes.',
         },
       ]}
     />
+    <p class="sustain">{site.coreIdea} Sustain the change.</p>
   </Section>
 
   <Section id="for-parents" labelledby="parents-2toiq-title" class="partner-section">
@@ -57,19 +59,17 @@ const interests = (await ordered('interests')).map((i) => ({
 
   <Section variant="dark" labelledby="hlompho-title" narrow>
     <div id="hlompho-text">
-      <SectionHeading id="hlompho-title" title="Hlompho" />
-      <p>
-        <i lang="st">Hlompho</i> means respect, honour and reverence. For us, it means starting with
-        what a child loves.
-      </p>
+      <SectionHeading id="hlompho-title" title="The Hlompho principle" />
       <Quote cite={`The Hlompho principle, ${site.name}`}>
-        A child's passion is not a side interest. It is something to honour, because it may be the
-        clearest doorway into how they learn.
+        A child's passion is not a side interest. It is something to be honoured, because it may be
+        the clearest doorway into how they learn.
       </Quote>
       <p>
-        Every child has something worth seeing before they are assessed, corrected or asked to
-        adapt. Interests often show how a child thinks, communicates and makes sense of the world.
-        Starting there makes learning more personal and more humane.
+        <i lang="st">Hlompho</i> means respect, honour, and reverence. For us, it begins with the
+        belief that every child carries something worthy of being seen before they are assessed,
+        corrected, or asked to adapt. We begin with what the child loves, because interests often
+        reveal how they think, communicate, engage and make sense of the world. Learning becomes
+        more personal, more humane, and more capable of unlocking meaningful participation.
       </p>
     </div>
     <ListenButton target="hlompho-text" label="the Hlompho principle" />
@@ -78,29 +78,37 @@ const interests = (await ordered('interests')).map((i) => ({
   <Section labelledby="explorer-title">
     <SectionHeading
       id="explorer-title"
-      title="One interest, four areas of learning"
-      lead="A child's interest is not a distraction from learning. Used well, it leads into every subject. Here are six examples."
+      title="Start with how a child learns, and the curriculum opens up."
+      lead="Learner-centred, in action: a child's interest is not a distraction from learning. Used well, it is a doorway to all of it. Choose one, and see."
     />
     <InterestExplorer id="interests" interests={interests} />
   </Section>
 
   <Section variant="cta" labelledby="cta-title">
     <h2 id="cta-title" class="cta__title">
-      Help build education that fits every mind
+      Help build inclusive education that fits every mind.
     </h2>
-    <p>Partners do more than give. They help change the systems where children learn.</p>
+    <p>
+      Partners do not simply give. They help redesign the systems where neurodivergent children
+      learn and belong.
+    </p>
     <div class="cta__actions">
       <Button variant="green" href="/get-involved/">
-        Ways to get involved
+        Get involved
       </Button>
-      <Button variant="outline" href="/donate/">
-        Donate
+      <Button variant="outline" href="/stories/">
+        Hear the voices
       </Button>
     </div>
   </Section>
 </BaseLayout>
 
 <style>
+  .sustain {
+    margin: var(--space-l) auto 0;
+    text-align: center;
+    font-weight: 700;
+  }
   .cta__title {
     font-size: var(--step-3);
   }

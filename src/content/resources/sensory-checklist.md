@@ -1,7 +1,8 @@
 ---
-order: 3
+order: 4
 title: Sensory-friendly checklist
-audience: For schools, clinics and homes
-summary: A practical check anyone can use to make a classroom, clinic or home calmer and easier for different minds.
+audience: Sensory and environment
+summary: Redesign a classroom, a clinic or a home for different minds. A practical audit anyone can run.
 status: planned
+soon: Checklist in development
 ---

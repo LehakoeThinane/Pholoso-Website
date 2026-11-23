@@ -436,3 +436,30 @@ draft for the POPIA review.
 **Safeguards kept:** none of this moves when the device asks for reduced motion or when Reduce
 motion, Calm colours or Simplified page is on (the Comfort & access panel is the way to stop
 it, WCAG 2.2.2), and switching motion off stops it at once. Nothing is fast enough to flash.
+
+## 28. The original website's wording, reused
+
+**Decision (owner, 23 November 2026):** the new pages reuse at least 90% of the copy on the
+Foundation's original website (pholoso.africa, the one-page prototype; the same text is in the
+repository as commit 2277b31 "snapshot of live site"). This replaces the brief's "Rewrite the
+reference copy freely". Measured on the built site: 91.4% of the original's words appear word
+for word (322 of 360 sentences), across the home page, About, Our approach, Stories, Get
+involved, Resources, Contact, the trust block, the footer, the menu and the Comfort & access
+panel.
+
+**Kept from the new site, on purpose:**
+
+- **Statistics** keep their checked sources. "1 in 100 children are neurodivergent on the
+  autism spectrum alone (WHO, 2023)" is not used: the WHO's current fact sheet says about 1 in
+  127 people, which the site shows with its link.
+- **Layout rules:** no eyebrow labels above headings (where the original had one, it became
+  the heading, the lead or a card tag), and headings stay centred.
+- **The contact form** keeps "What is your message about?" (it routes the message). The
+  original's "I am a…" list is not used.
+- **"Children with autism"** in the home hero stays switchable, so the identity-first wording
+  setting still has something to change.
+
+**The owner's own statements, now shown again:** a signed safeguarding policy and code of
+conduct; "the platform" (2to.iQ) built to POPIA and EU standards for children's privacy, with
+pseudonyms and avatars; the four policies "available to partners and funders"; B-BBEE value.
+Please confirm these are still accurate before launch (open questions 18 and 19).

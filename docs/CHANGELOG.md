@@ -8,6 +8,26 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · The original website's wording, reused (91.4%)
+
+**Why:** owner's request: reuse at least 90% of the copy on pholoso.africa.
+
+**What changed**
+
+- **Wording restored word for word** from the original website on the home page, About, Our approach, Stories, Get involved, Resources and Contact, and in the trust block, FAQs, footer, menu ("Who we are", "How we work") and the Comfort & access panel.
+- **Interest explorer:** "Trains as the curriculum" and the original four areas (Numeracy, Language & literacy, Science & the world, Social & emotional) with the original card text.
+- **Stories:** the original quotes and answers, "Parent voice" style tags, an "All voices" filter, and the original headings ("What the world often misunderstands", "What helps me take part", "The shift this asks for").
+- **Resources:** the original six cards, each with its own status ("Guide in development", "Publishing soon").
+- **Contact:** "Let us continue the conversation.", "Email so we can reply", the original consent wording and "Send with care".
+- **Statistics:** "70%: up to seven in ten school-aged children with disabilities…", and "Since 2001", both with their sources. The original's out-of-date "1 in 100" WHO figure is not used.
+- **Measured:** 91.4% of the original's words appear word for word (DECISIONS §28).
+
+**Checks:** all browser tests pass (menu and wording tests updated); PHP form tests pass.
+
+**Follow-ups:** the owner to confirm the original's statements about policies and privacy, and the consent wording (open questions 18 and 19).
+
+---
+
 ## 2026-11-23 · `dev` · Home page trimmed; Pholo waves and the sun breathes
 
 **Why:** owner's requests.

@@ -21,8 +21,8 @@ const sourceList = [sources.ajod, sources.hrw, sources.who, sources.whitePaper6]
   description="Plain-language guides for families, educators and anyone building inclusion, and the sources behind our work."
 >
   <PageHero
-    title="Guides for families, educators and everyone building inclusion"
-    lead="Practical, plain-language and respectful. We are writing these guides now."
+    title="A growing hub for families, educators and anyone building inclusion."
+    lead="Practical, plain-language and dignity-led. Built to be found when someone types their worry into a search bar at midnight."
   >
     {anyPlanned && (
       <p class="now">
@@ -36,7 +36,7 @@ const sourceList = [sources.ajod, sources.hrw, sources.who, sources.whitePaper6]
   </Section>
 
   <Section labelledby="guides-title">
-    <h2 id="guides-title">Guides</h2>
+    <h2 id="guides-title">Resources and insights</h2>
     <CardGrid as="ul">
       {resources.map((r) => (
         <li>
@@ -52,7 +52,7 @@ const sourceList = [sources.ajod, sources.hrw, sources.who, sources.whitePaper6]
           ) : (
             <Card title={r.data.title} tag={r.data.audience}>
               <p>{r.data.summary}</p>
-              <p class="soon">Coming soon</p>
+              <p class="soon">{r.data.soon}</p>
             </Card>
           )}
         </li>

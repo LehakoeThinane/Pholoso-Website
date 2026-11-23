@@ -6,7 +6,6 @@ import DataTable from '../components/DataTable.astro';
 import Disclosure from '../components/Disclosure.astro';
 import ListenButton from '../components/ListenButton.astro';
 import PageHero from '../components/PageHero.astro';
-import Panel from '../components/Panel.astro';
 import Section from '../components/Section.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Stat from '../components/Stat.astro';
@@ -32,23 +31,23 @@ const values = [
   },
   {
     title: 'Inclusion by design',
-    text: 'We plan for diversity from the start, never as an afterthought.',
+    text: 'We build for diversity from the start, never as an afterthought.',
   },
   {
     title: 'Adaptive, not standardised',
-    text: 'Systems should change to fit the learner, not the other way round.',
+    text: 'Systems should flex around the learner, not the other way around.',
   },
   {
-    title: 'Guided by evidence',
-    text: 'We learn from research and from the experience of families and educators.',
+    title: 'Evidence informed',
+    text: 'We learn from data, research and the lived experience of families and educators.',
   },
   {
-    title: 'Working together',
+    title: 'Collaboration over silos',
     text: 'Lasting change needs schools, families, therapists and communities working together.',
   },
   {
-    title: 'African-led',
-    text: 'We build solutions rooted in African realities, held to high standards.',
+    title: 'African led',
+    text: 'We build locally grounded solutions, measured against the best standards in the world.',
   },
 ];
 ---
@@ -58,63 +57,76 @@ const values = [
   description="Who the Pholoso Afrika Foundation is: our belief, mission, vision and values, the gap in inclusive education, and how we are governed."
 >
   <PageHero
-    title="Every child should learn in a way that fits how their mind works"
-    lead={`${site.name} is a South African registered non-profit company. We work for inclusive, adaptive education for neurodivergent children, in schools, communities and families.`}
+    title="Every child deserves to learn in a way that fits how their mind actually works."
+    lead={`${site.name} is a South African registered non-profit company. We advance inclusive, adaptive, learner-centred support for neurodivergent children and learners, across schools, communities and families.`}
   />
 
   <Section labelledby="belief-title" narrow>
     <div id="belief-text">
-      <SectionHeading id="belief-title" title="Difference is not a deficit" />
+      <SectionHeading id="belief-title" title="Difference is not deficit." />
       <p>
-        Neurodivergent learners are not defined by limits. They think, communicate, process
-        information and take part in the world in different ways.
+        Neurodivergent learners are not defined by limitation. They are defined by different ways of
+        thinking, communicating, processing information and engaging with the world.
       </p>
       <p>
-        Education should respond to that. Learners should not have to bend to fit rigid systems. The
-        systems should change to fit the learner.
+        Education systems should respond to that diversity. Learners should not have to bend
+        themselves to fit rigid, standardised structures. The structures should learn to fit the
+        learner.
       </p>
     </div>
     <ListenButton target="belief-text" label="what we believe" />
   </Section>
 
   <Section variant="alt" labelledby="entities-title">
-    <SectionHeading id="entities-title" title="The Foundation and 2to.iQ" />
+    <SectionHeading
+      id="entities-title"
+      title="Two entities. One mission."
+      lead="A conviction, turned into a working system. Both entities were structured on purpose, to combine social-impact delivery with long-term educational innovation."
+    />
     <CardGrid columns={2}>
-      <Panel title={site.name}>
-        <p>A registered non-profit company and Public Benefit Organisation.</p>
-        <p>It leads advocacy and awareness, and connects the support around each child.</p>
-      </Panel>
-      <Panel title={site.partner.name}>
-        <p>A separate company and our edtech partner.</p>
+      <Card title={site.name} tag="The social-impact engine">
         <p>
-          It builds an adaptive learning platform designed first for neurodivergent learners.{' '}
-          <ExternalLink href={site.partner.url}>Visit the 2to.iQ website</ExternalLink>
+          Drives advocacy, awareness, and community-rooted impact. Places neurodivergent children
+          inside the national conversation on inclusion and education.
         </p>
-      </Panel>
+      </Card>
+      <Card title="2to.iQ (Pty) Ltd" tag="Edtech strategic partner">
+        <p>
+          Adaptive, neurodiversity-first learning systems built for African educational realities.{' '}
+          <ExternalLink href={site.partner.url}>Explore 2to.iQ</ExternalLink>
+        </p>
+      </Card>
     </CardGrid>
+    <p class="core-idea">{site.coreIdea}</p>
   </Section>
 
   <Section labelledby="mission-title" class="statements">
     <CardGrid columns={2}>
       <div>
-        <h2 id="mission-title">Our mission</h2>
+        <h2 id="mission-title">Our mission: what we are here to do</h2>
         <p>
-          To advance inclusive, adaptive, learner-centred education for neurodivergent children,
-          through advocacy, innovation and working together with communities.
+          To advance inclusive, adaptive, learner-centred educational support systems for
+          neurodivergent children. We pursue this through advocacy, innovation, collaboration and
+          community-driven engagement.
         </p>
       </div>
       <div>
-        <h2>Our vision</h2>
+        <h2>Our vision: the future we are building</h2>
         <p>
-          A future where neurodivergent children across South Africa and Africa are understood,
-          supported and able to thrive, because education is designed for different minds.
+          A future in which neurodivergent children across South Africa and Africa are genuinely
+          understood, supported and empowered. Built on education designed to recognise cognitive
+          diversity rather than suppress it.
         </p>
       </div>
     </CardGrid>
   </Section>
 
   <Section variant="alt" labelledby="values-title">
-    <SectionHeading id="values-title" title="Our six values" />
+    <SectionHeading
+      id="values-title"
+      title="What we stand for"
+      lead="Six values, held in practice."
+    />
     <CardGrid as="ul">
       {values.map((v) => (
         <li>
@@ -129,29 +141,21 @@ const values = [
   <Section id="the-gap" labelledby="gap-title">
     <SectionHeading
       id="gap-title"
-      title="The commitments exist. Delivery has not caught up."
-      lead="South Africa has had an inclusive education policy since 2001, and it has signed the main international commitments. For many children, daily reality still falls short."
+      title="The gap is not in the vision. It is in the implementation."
+      lead="South Africa adopted its inclusive-education policy, White Paper 6, in 2001. Its intent aligns with the global standards that shaped the movement toward inclusion. For too many learners, daily reality still falls short."
     />
     <DataTable
       caption="Commitments to inclusive education"
       columns={['Year', 'Commitment', 'What it says']}
       rows={[
-        ['1994', 'UNESCO Salamanca Statement', 'Set the global benchmark for inclusive education.'],
-        [
-          '2001',
-          'Education White Paper 6',
-          "South Africa's policy for building an inclusive education and training system.",
-        ],
+        ['1994', 'UNESCO Salamanca', 'The global benchmark for inclusive education.'],
+        ['2001', 'SA White Paper 6', "South Africa's inclusive-education policy."],
         [
           '2006',
-          'UN Convention on the Rights of Persons with Disabilities (CRPD)',
+          'UN CRPD',
           'Affirms the right to inclusive education. South Africa ratified it in 2007.',
         ],
-        [
-          '2015',
-          'Sustainable Development Goal 4',
-          'Inclusive, fair, good-quality education and lifelong learning for everyone.',
-        ],
+        ['2015', 'SDG 4', 'Inclusive, equitable quality education for all.'],
       ]}
     />
     <p>
@@ -160,25 +164,25 @@ const values = [
     </p>
     <CardGrid columns={2}>
       <Stat {...stats.outOfSchool} />
-      <Stat {...stats.shutOut} />
+      <Stat {...stats.policySince} />
     </CardGrid>
   </Section>
 
   <Section variant="alt" labelledby="trust-title">
-    <SectionHeading id="trust-title" title="How we work responsibly" />
+    <SectionHeading
+      id="trust-title"
+      title="Why you can trust this"
+      lead="When the work carries this much responsibility, trust cannot be decorative. It is built into the model."
+    />
     <TrustBlock />
-    <Panel title="About the words we use" level={3}>
-      <p>
-        By default we use person-first language, such as "child with autism". Some people prefer
-        identity-first language, such as "autistic child". We respect each person's choice. You can
-        switch the wording on this website in the Comfort & access settings.{' '}
-        <a href="/accessibility/#wording">Read more about wording</a>.
-      </p>
-    </Panel>
   </Section>
 
   <Section labelledby="faq-title" narrow>
-    <SectionHeading id="faq-title" title="Questions people ask" />
+    <SectionHeading
+      id="faq-title"
+      title="Questions families and funders ask"
+      lead="Clear answers, in plain language."
+    />
     {faqs.map(({ question, id, Content }) => (
       <Disclosure summary={question} level={3} id={`faq-${id}`}>
         <Content />
@@ -194,7 +198,9 @@ const values = [
     text-align: center;
     margin-inline: auto;
   }
-  :global(.trust) + :global(.panel) {
-    margin-top: var(--space-l);
+  .core-idea {
+    margin: var(--space-l) auto 0;
+    text-align: center;
+    font-weight: 700;
   }
 </style>

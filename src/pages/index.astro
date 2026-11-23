@@ -70,8 +70,10 @@ const ngo = {
     imageAlt="A teacher helps a boy use a tablet at a classroom table, while other children draw. One child wears headphones."
   >
     <p>
-      We work for education that fits neurodivergent children in South Africa, including{' '}
-      <Term t="children-with-autism" /> and children with ADHD.
+      {site.name} advances inclusive, adaptive, learner-centred education for neurodivergent
+      children, including <Term t="children-with-autism" /> and children with ADHD, across South
+      Africa and the African continent. Learners should not have to bend to fit rigid systems. The
+      systems should learn to fit the learner.
     </p>
   </Hero>
 
@@ -99,8 +101,8 @@ const ngo = {
   <Section id="our-work" labelledby="problem-title">
     <SectionHeading
       id="problem-title"
-      title="Too many children are left out of learning"
-      lead="School systems are often built for one way of learning. Children who learn differently are left behind or left out."
+      title="Why this matters"
+      lead="Neurodivergent learners sit within this underserved group, and many who do attend are placed in separate settings rather than supported within inclusive ones."
     />
     <CardGrid columns={2}>
       <Stat {...stats.outOfSchool} />
@@ -119,51 +121,54 @@ const ngo = {
   </div>
 
   <Section variant="alt" labelledby="what-title">
-    <SectionHeading id="what-title" title="Three areas of work" lead={site.coreIdea} />
+    <SectionHeading id="what-title" title="Three fronts, working at once." lead={site.coreIdea} />
     <CardGrid>
       <Card title="Advocacy and awareness">
         <p>
-          We bring neurodivergent children into the national conversation about education. When
-          people understand, attitudes change, and then systems change.
+          We place neurodivergent children inside the national conversation. Visibility shifts
+          attitudes. Attitudes shift systems.
         </p>
       </Card>
-      <Card title="Learning technology">
+      <Card title="Educational innovation">
         <p>
-          With our partner 2to.iQ, we help build learning technology that adapts to how each child
-          thinks, communicates and takes part.
+          Through 2to.iQ, our edtech strategic partner, we build adaptive learning technology
+          designed around how learners actually think, communicate, and engage.
         </p>
       </Card>
-      <Card title="Connecting the support">
+      <Card title="Ecosystem building">
         <p>
-          We connect the people around a child: families, teachers, therapists, researchers and
-          funders. Connected support works better than separate efforts.
+          We connect the people around the child. Schools, parents, teachers, therapists,
+          researchers and funders.
         </p>
       </Card>
     </CardGrid>
     <p class="after-cards">
-      <a href="/approach/">Read about our approach</a>
+      <a href="/approach/">See how we work</a>
     </p>
   </Section>
 
   <Section variant="dark" labelledby="partner-title">
     <SectionHeading
       id="partner-title"
-      title="2to.iQ: learning that adapts to the child"
-      lead={`${site.partner.name} builds an adaptive learning platform designed first for neurodivergent learners. It adapts to how each learner thinks, communicates and engages, instead of asking the child to fit the system.`}
+      title="A neurodivergent-first platform that adapts to the child."
+      lead="2to.iQ is the Foundation's edtech strategic partner. It is a wholly educational, neurodivergent-first platform offering adaptive learning that adapts to the child, not the child to the system. It personalises around how each learner thinks, communicates and engages."
     />
     <p class="partner__name">
-      The name comes from the Sesotho word <i lang="st">thuto</i>, which means learning.
+      The name draws from the Sesotho word <i lang="st">Thuto</i>, meaning learning. Adaptive
+      learning, built for African realities.
     </p>
     <div class="partner">
       <div class="partner__panel">
         <h3 class="partner__heading">Who does what</h3>
         <ul>
           <li>
-            <strong>The Foundation</strong> leads advocacy and awareness and connects the support
-            around each child.
+            <strong>{site.name}</strong>, the social-impact engine, drives advocacy, awareness, and
+            community-rooted impact.
           </li>
           <li>
-            <strong>2to.iQ</strong>, a separate company, builds the learning technology.
+            <strong>2to.iQ</strong>, our edtech strategic partner, builds the adaptive learning
+            systems that make inclusive education practical, personalised, and scalable for African
+            realities.
           </li>
         </ul>
       </div>
@@ -174,7 +179,7 @@ const ngo = {
           that families, teachers and therapists use together.
         </p>
         <p class="partner__link">
-          <ExternalLink href={site.partner.url}>See what 2to.iQ offers families</ExternalLink>
+          <ExternalLink href={site.partner.url}>Explore 2to.iQ →</ExternalLink>
         </p>
       </div>
     </div>

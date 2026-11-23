@@ -50,8 +50,8 @@ export const primaryNav: NavEntry[] = [
   {
     label: 'About',
     children: [
-      { href: '/about/', label: 'About us' },
-      { href: '/approach/', label: 'Our approach' },
+      { href: '/about/', label: 'Who we are' },
+      { href: '/approach/', label: 'How we work' },
     ],
   },
   {
@@ -80,10 +80,11 @@ export const footerExplore: NavItem[] = [
 ];
 
 export const footerGetInvolved: NavItem[] = [
-  { href: '/donate/', label: 'Donate' },
-  { href: '/get-involved/#donors', label: 'Give as an individual' },
-  { href: '/get-involved/#partners', label: 'Partner as a company or funder' },
-  { href: '/get-involved/#schools', label: 'Schools and educators' },
+  { href: '/donate/', label: 'Donate (Section 18A)' },
+  { href: '/get-involved/#partners', label: 'Partner with us' },
+  { href: '/get-involved/#schools', label: 'For schools' },
+  { href: '/stories/#share-title', label: 'Share your story' },
+  { href: '/contact/', label: 'Contact' },
 ];
 
 /* ---------- Kids' World ---------- */

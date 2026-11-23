@@ -1,13 +1,12 @@
 ---
 /**
- * TrustBlock: why donors, families and partners can trust the Foundation:
- * safeguarding, privacy by design, governance, tax-deductible giving, and the
- * registration line. Facts come from src/config/site.ts.
+ * TrustBlock: why donors, families and partners can trust the Foundation: safeguarding,
+ * privacy, accessibility, respectful language, the policies, and the registration line.
+ * Wording from the Foundation's original website (the owner's own statements).
  *
  * Props:
  * - headingLevel: level of each item heading (default 3)
  */
-import { site } from '../config/site';
 import CardGrid from './CardGrid.astro';
 import RegistrationLine from './RegistrationLine.astro';
 
@@ -24,34 +23,38 @@ const Heading = `h${headingLevel}` as 'h3' | 'h4';
     <li class="trust__item">
       <Heading>Child safeguarding</Heading>
       <p>
-        Please do not include a child's full name or medical details in a message. Contact us to
-        discuss safeguarding before sharing a child's story or taking part in an activity.
+        A signed safeguarding policy and code of conduct govern every interaction with children.
+        Guardian consent and dignity come first.
       </p>
     </li>
     <li class="trust__item">
-      <Heading>Privacy by design</Heading>
+      <Heading>Privacy, by design</Heading>
       <p>
-        We ask only for what we need, and this website uses no tracking. Read our{' '}
-        <a href="/privacy/">privacy notice</a> to see how we handle information and how to ask us to
-        see, correct or delete it.
+        The platform is built to strict POPIA and EU standards for children's privacy. No child is
+        identifiable. Children choose their own pseudonyms and avatars to represent them. Read our{' '}
+        <a href="/privacy/">privacy notice</a>.
       </p>
     </li>
     <li class="trust__item">
-      <Heading>Governance</Heading>
+      <Heading>Accessibility, built in</Heading>
       <p>
-        {site.name} is a {site.legalForm.charAt(0).toLowerCase() + site.legalForm.slice(1)}. Our
-        policies are available on request.
+        This site targets WCAG 2.2 AA. The Comfort and Access controls let you shape it to your own
+        needs.
       </p>
     </li>
     <li class="trust__item">
-      <Heading>Tax-deductible giving</Heading>
+      <Heading>Respectful language</Heading>
       <p>
-        We are approved under Section 18A. South African taxpayers may be able to deduct donations
-        with a valid Section 18A receipt, within SARS limits.{' '}
-        <a href="/donate/">How to request a receipt</a>.
+        We use person-first language, child with autism, as our default. We also respect each
+        person's own preference, and you can switch to identity-first at any time.{' '}
+        <a href="/accessibility/#wording">Read more about wording</a>.
       </p>
     </li>
   </CardGrid>
+  <p class="trust__policies">
+    Our Safeguarding Policy, Data Protection and Privacy Policy, Code of Conduct and Governance
+    framework guide this work and are available to partners and funders.
+  </p>
   <RegistrationLine class="trust__registration" />
 </div>
 
@@ -69,6 +72,10 @@ const Heading = `h${headingLevel}` as 'h3' | 'h4';
   }
   .trust__item p {
     margin: 0;
+  }
+  .trust__policies {
+    margin: var(--space-m) auto 0;
+    text-align: center;
   }
   .trust :global(.trust__registration) {
     margin-top: var(--space-m);

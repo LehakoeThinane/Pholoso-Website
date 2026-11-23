@@ -11,8 +11,8 @@
  */
 const themes = [
   { value: 'standard', label: 'Standard', hint: 'The Foundation’s usual colours.' },
-  { value: 'calm', label: 'Calm', hint: 'Softer, muted colours with less to look at.' },
-  { value: 'contrast', label: 'High contrast', hint: 'Black on white, strong borders.' },
+  { value: 'calm', label: 'Calm', hint: 'Softer colour, less stimulation.' },
+  { value: 'contrast', label: 'High contrast', hint: 'Stronger text and edges.' },
   { value: 'dim', label: 'Dim', hint: 'Darker colours for light sensitivity.' },
 ];
 const sizes = ['100', '115', '130', '150'];
@@ -21,7 +21,7 @@ const switches = {
     {
       key: 'spacing',
       label: 'Reading spacing',
-      hint: 'More space between lines, letters and words.',
+      hint: 'More space between letters and lines.',
     },
     { key: 'guide', label: 'Reading guide', hint: 'A band that helps you keep your place.' },
     {
@@ -31,7 +31,7 @@ const switches = {
     },
   ],
   calm: [
-    { key: 'motion', label: 'Reduce motion', hint: 'Stops animations and moving parts.' },
+    { key: 'motion', label: 'Reduce motion', hint: 'Stops animation and movement.' },
     {
       key: 'simple',
       label: 'Simplified page',
@@ -67,7 +67,7 @@ const sw = (key: string) => `cp-${key}`;
       <span class="visually-hidden">Close</span>
     </button>
   </div>
-  <p class="comfort__intro">Changes apply straight away. Choose what feels right for you.</p>
+  <p class="comfort__intro">Make this yours. This site adapts to you. Change it any time.</p>
 
   <section class="comfort__group" aria-labelledby="cp-quick">
     <h3 id="cp-quick">Quick start</h3>
@@ -202,15 +202,14 @@ const sw = (key: string) => `cp-${key}`;
       />
       <label for="cp-identityFirst">Identity-first wording</label>
       <p class="comfort__hint" id="cp-identityFirst-hint">
-        Uses “autistic child” instead of “child with autism”.{' '}
-        <a href="/accessibility/#wording">Why?</a>
+        Switch to “autistic child” wording. <a href="/accessibility/#wording">Why?</a>
       </p>
     </div>
   </section>
 
   <div class="comfort__footer">
     <button type="button" class="comfort__action" data-comfort-reset>
-      Reset all settings
+      Reset to default
     </button>
     <button type="button" class="comfort__done" data-comfort-close>
       Done

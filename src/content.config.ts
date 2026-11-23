@@ -10,18 +10,18 @@ import { z } from 'astro/zod';
 
 /** Story categories, in the order the filter buttons appear. */
 export const storyCategories = {
-  parents: { label: 'Parent', filter: 'Parents' },
-  'young-people': { label: 'Young person', filter: 'Young people' },
-  educators: { label: 'Educator', filter: 'Educators' },
-  professionals: { label: 'Professional', filter: 'Professionals' },
+  parents: { label: 'Parent voice', filter: 'Parent' },
+  'young-people': { label: 'Young voice', filter: 'Young person' },
+  educators: { label: 'Educator voice', filter: 'Educator' },
+  professionals: { label: 'Professional voice', filter: 'Professional' },
 } as const;
 
 /** The four areas every interest maps to, in display order. */
 export const learningAreas = [
-  'Numbers',
-  'Reading and language',
-  'Science and the world',
-  'Social and emotional',
+  'Numeracy',
+  'Language & literacy',
+  'Science & the world',
+  'Social & emotional',
 ] as const;
 
 const stories = defineCollection({
@@ -47,6 +47,8 @@ const interests = defineCollection({
   schema: z.object({
     order: z.number().int(),
     name: z.string(),
+    /** Heading shown when the interest is chosen ("Trains as the curriculum") */
+    title: z.string(),
     cards: z
       .array(z.object({ area: z.enum(learningAreas), text: z.string() }))
       .length(4)
@@ -65,6 +67,8 @@ const resources = defineCollection({
     summary: z.string(),
     /** 'planned' shows a "Coming soon" card; 'published' also gets its own page. */
     status: z.enum(['planned', 'published']),
+    /** What a planned card says instead of a link ("Guide in development") */
+    soon: z.string().default('Coming soon'),
     /** Required once published: the date the content was last checked. */
     lastChecked: z.coerce.date().optional(),
   }),
