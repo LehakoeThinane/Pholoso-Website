@@ -1,0 +1,121 @@
+---
+/**
+ * CookieNotice: a small, honest note about cookies on the home page (owner's request,
+ * 23 November 2026; DECISIONS §31). It appears 3 seconds after the page opens, at the bottom,
+ * and never blocks the page or takes the keyboard focus.
+ *
+ * The website uses no tracking or advertising cookies, so there is nothing to accept or reject:
+ * the notice says what the site does keep, links to the privacy notice, and has one button to
+ * close it. Closing it is remembered in this browser (localStorage, never sent to us). Without
+ * JavaScript it does not appear; the privacy notice says the same.
+ */
+import { coach } from '../config/coach';
+---
+
+<aside class="cookie-notice" aria-labelledby="cookie-notice-title" hidden data-cookie-notice>
+  <h2 id="cookie-notice-title" class="cookie-notice__title">
+    Cookies
+  </h2>
+  <p class="cookie-notice__text">
+    We do not use tracking or advertising cookies. Your Comfort &amp; access settings are saved only
+    in your browser.
+    {coach.mode === 'live' &&
+      ' If you sign in to the Parent Coach, a cookie keeps you signed in.'}{' '}
+    <a href="/privacy/#cookies">Read our privacy notice</a>.
+  </p>
+  <button type="button" class="cookie-notice__ok" data-cookie-ok>
+    OK, got it
+  </button>
+</aside>
+
+<script>
+  const KEY = 'pholoso-cookie-notice';
+  const DELAY_MS = 3000;
+  const box = document.querySelector<HTMLElement>('[data-cookie-notice]');
+  const seen = (): boolean => {
+    try {
+      return localStorage.getItem(KEY) === 'closed';
+    } catch {
+      return false; // storage blocked: show it, it simply comes back next time
+    }
+  };
+  if (box && !seen()) {
+    const close = () => {
+      box.hidden = true;
+      try {
+        localStorage.setItem(KEY, 'closed');
+      } catch {
+        /* storage blocked: nothing to remember */
+      }
+    };
+    window.setTimeout(() => {
+      box.hidden = false; // shown without moving the focus, so nothing is interrupted
+    }, DELAY_MS);
+    box.querySelector('[data-cookie-ok]')?.addEventListener('click', close);
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  }
+</script>
+
+<style>
+  .cookie-notice {
+    position: fixed;
+    z-index: 40; /* under the Comfort & access button and panel */
+    left: var(--space-s);
+    /* Above the floating Comfort & access button on phones */
+    bottom: calc(var(--space-s) * 2 + var(--button-min));
+    right: var(--space-s);
+    max-width: 26rem;
+    padding: var(--space-s) var(--space-m);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    background-color: var(--color-bg);
+    box-shadow: var(--elevation);
+    font-size: var(--step--1);
+  }
+  @media (min-width: 48rem) {
+    .cookie-notice {
+      right: auto;
+      bottom: var(--space-s); /* beside the button on wider screens */
+    }
+  }
+  .cookie-notice[hidden] {
+    display: none;
+  }
+  .cookie-notice__title {
+    margin: 0 0 var(--space-3xs);
+    font-size: var(--step-0);
+    text-align: left;
+  }
+  .cookie-notice__text {
+    margin: 0 0 var(--space-xs);
+  }
+  .cookie-notice__ok {
+    min-height: var(--target-min);
+    padding: var(--space-3xs) var(--space-m);
+    border: 2px solid var(--color-btn-text);
+    border-radius: 999px;
+    background-color: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global([data-anim]) .cookie-notice:not([hidden]) {
+      animation: cookie-in 0.3s ease-out 1;
+    }
+  }
+  @keyframes cookie-in {
+    from {
+      opacity: 0;
+      translate: 0 0.75rem;
+    }
+  }
+  @media print {
+    .cookie-notice {
+      display: none !important;
+    }
+  }
+</style>

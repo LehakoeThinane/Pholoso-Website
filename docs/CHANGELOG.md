@@ -8,6 +8,21 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · A cookie note on the home page
+
+**Why:** owner's request.
+
+**What changed**
+
+- **Cookie note** on the home page, 3 seconds after it opens: no tracking or advertising cookies, what the site keeps, a link to the privacy notice, and "OK, got it". At the bottom, never blocks the page or takes focus, closes with Esc, stays closed once dismissed. Not in Kids' World. (DECISIONS §31)
+- **Privacy notice:** the cookies section has an anchor (`#cookies`) and mentions that closing the note is remembered in the browser.
+- **No loading page:** not built, on purpose (DECISIONS §31).
+- **Test fix:** the Kids' World star-burst test sometimes missed the under-a-second burst on a busy machine; it now records the burst as it happens.
+
+**Checks:** all browser tests pass, plus a new test for the cookie note (timing, focus, accessibility, no cookies set, stays closed).
+
+---
+
 ## 2026-11-23 · `dev` · Parent Coach: ten fixes from the code review
 
 **Why:** the owner asked for a review of the coach's PHP code before it goes live, then for
