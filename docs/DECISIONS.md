@@ -386,7 +386,7 @@ Simplified page). 23 November 2026.
 
 **Where the rows go:** the Parent Guide (it works today; the Parent Coach stays off until
 approved), Get involved for schools, Get involved for donors, and Stories. Easy to change in
-.
+`src/components/HelpRouter.astro`.
 
 **Not done yet:** the mood board's cut-out photos on coloured blobs need real photos of South
 African families and teachers, used with consent. The brief does not allow stand-ins that look
