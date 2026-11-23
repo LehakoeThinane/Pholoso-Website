@@ -103,8 +103,24 @@ export function renderBlock(block: Block, art: (id: string) => Node | null): HTM
         h('p', { class: 'cblock__title' }, 'Save your progress'),
         h(
           'p',
-          {},
-          'Soon you will be able to create an account, save this plan and come back to adjust it with me.',
+          { 'data-coach-save-text': '' },
+          'Save this plan and come back to adjust it with me. We will email you a link to sign in: no password.',
+        ),
+        h(
+          'form',
+          { class: 'cblock__save', 'data-coach-save': '', novalidate: '' },
+          h('label', { class: 'onboard__label', for: 'save-email' }, 'Your email address'),
+          h('input', {
+            class: 'onboard__input',
+            id: 'save-email',
+            name: 'email',
+            type: 'email',
+            autocomplete: 'email',
+            inputmode: 'email',
+            required: '',
+            maxlength: '254',
+          }),
+          h('button', { type: 'submit', class: 'cbutton' }, 'Save: email me a link'),
         ),
         h(
           'button',

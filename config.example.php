@@ -63,5 +63,9 @@ return [
         // model above; check the provider's pricing page when changing the model.
         'daily_budget_usd' => 5.0,
         'price_per_mtok'   => ['input' => 4.0, 'output' => 20.0, 'cache_write' => 5.0, 'cache_read' => 0.2],
+        // Saving and follow-ups (Stage 3). Sign-in links and reminders are sent with the same
+        // mail settings as the forms above.
+        'site_url'         => 'https://pholoso.africa',   // start of every link in coach emails
+        'reminder_days'    => 3,                          // "Remind me" sends one email after this many days
     ],
 ];

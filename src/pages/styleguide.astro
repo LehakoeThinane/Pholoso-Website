@@ -51,10 +51,10 @@ const themes = [
 ];
 
 const exampleCards = [
-  { area: 'Numbers', text: 'Example card text for the first area.' },
-  { area: 'Reading and language', text: 'Example card text for the second area.' },
+  { area: 'Numeracy', text: 'Example card text for the first area.' },
+  { area: 'Language & literacy', text: 'Example card text for the second area.' },
   { area: 'Science and the world', text: 'Example card text for the third area.' },
-  { area: 'Social and emotional', text: 'Example card text for the fourth area.' },
+  { area: 'Social & emotional', text: 'Example card text for the fourth area.' },
 ];
 ---
 
@@ -420,8 +420,18 @@ const exampleCards = [
       id="sg-explorer"
       level={4}
       interests={[
-        { slug: 'example-one', name: 'Example one', cards: exampleCards },
-        { slug: 'example-two', name: 'Example two', cards: exampleCards },
+        {
+          slug: 'example-one',
+          name: 'Example one',
+          title: 'Example one as the curriculum',
+          cards: exampleCards,
+        },
+        {
+          slug: 'example-two',
+          name: 'Example two',
+          title: 'Example two as the curriculum',
+          cards: exampleCards,
+        },
       ]}
     />
   </Section>

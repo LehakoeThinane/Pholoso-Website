@@ -19,7 +19,7 @@ const contactTopics = [
 ];
 ---
 
-<Form id="contact-form" type="contact" label="Contact form" submit="Send message">
+<Form id="contact-form" type="contact" label="Contact form" submit="Send with care">
   <Field
     name="topic"
     label="What is your message about?"
@@ -30,7 +30,7 @@ const contactTopics = [
   <Field name="name" label="Your name" autocomplete="name" maxlength={100} />
   <Field
     name="email"
-    label="Your email address"
+    label="Email so we can reply"
     type="email"
     required
     autocomplete="email"
@@ -48,15 +48,16 @@ const contactTopics = [
   />
   <Checkbox
     name="consent"
-    label="I agree that the Foundation may use my details to reply to this message."
+    label="I understand my message is handled in line with POPIA, and I can ask to edit or withdraw it."
     required
   >
-    I agree that the Foundation may use my details to reply to this message, as explained in the{' '}
+    I understand my message is handled in line with POPIA, and I can ask to edit or withdraw it. The
+    Foundation uses my details only to reply, as explained in the{' '}
     <a href="/privacy/">privacy notice</a>.
   </Checkbox>
   <Checkbox
     name="guardian"
-    label="I am the child's parent or legal guardian and I agree to share this information."
+    label="If this involves a child, I am their parent or legal guardian and I give consent."
     hint="Only tick this if your message is about a child."
   />
 </Form>

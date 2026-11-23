@@ -124,7 +124,10 @@ Before going live:
     and the first topic (screen time); choose a professional to review the strategy library
     (`src/content/coach-strategies/`); and, before it opens, approve the privacy notice wording
     for the AI provider and the cross-border transfer, and a monthly budget. Stage 1 runs only
-    in practice mode (preview builds); production keeps the coach off.
+    in practice mode (preview builds); production keeps the coach off. Stage 3 (saving with an
+    email link, My coaching, reminders, follow-ups) also needs: the POPIA reviewer to approve
+    the "Saving your coaching" paragraph and keeping saved conversations until the parent
+    deletes them; and the daily cron job in DEPLOY.md.
 11. **Merge `dev` into `main`** by pull request once the above is agreed.
 
 Going live and after:

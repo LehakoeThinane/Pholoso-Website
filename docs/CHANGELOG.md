@@ -8,6 +8,79 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · A simpler, shorter footer
+
+**Why:** owner's request: the footer had too much in it and took too much space.
+
+**What changed**
+
+- **Two slim rows** instead of a sign-up card and four columns: the logo and tagline with one line of links (Kids’ World, Who we are, How we work, Stories, Resources, Parent Guide, Get involved, Donate, Contact, the email address), then a thin line with the registration numbers, copyright, Privacy notice, Accessibility and Comfort & access.
+- **The updates sign-up** is no longer in the footer. It stays on the Resources page.
+- About a third of the old height on wide screens.
+
+**Checks:** all browser tests pass (the sign-up form tests now use the Resources page).
+
+---
+
+## 2026-11-23 · `dev` · The original website's wording, reused (91.4%)
+
+**Why:** owner's request: reuse at least 90% of the copy on pholoso.africa.
+
+**What changed**
+
+- **Wording restored word for word** from the original website on the home page, About, Our approach, Stories, Get involved, Resources and Contact, and in the trust block, FAQs, footer, menu ("Who we are", "How we work") and the Comfort & access panel.
+- **Interest explorer:** "Trains as the curriculum" and the original four areas (Numeracy, Language & literacy, Science & the world, Social & emotional) with the original card text.
+- **Stories:** the original quotes and answers, "Parent voice" style tags, an "All voices" filter, and the original headings ("What the world often misunderstands", "What helps me take part", "The shift this asks for").
+- **Resources:** the original six cards, each with its own status ("Guide in development", "Publishing soon").
+- **Contact:** "Let us continue the conversation.", "Email so we can reply", the original consent wording and "Send with care".
+- **Statistics:** "70%: up to seven in ten school-aged children with disabilities…", and "Since 2001", both with their sources. The original's out-of-date "1 in 100" WHO figure is not used.
+- **Measured:** 91.4% of the original's words appear word for word (DECISIONS §28).
+
+**Checks:** all browser tests pass (menu and wording tests updated); PHP form tests pass.
+
+**Follow-ups:** the owner to confirm the original's statements about policies and privacy, and the consent wording (open questions 18 and 19).
+
+---
+
+## 2026-11-23 · `dev` · Home page trimmed; Pholo waves and the sun breathes
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Home page:** "How you can help" and "Why you can trust us" removed; "Help for parents, right now" commented out (hidden for now, easy to bring back).
+- **Get involved > Ways to help:** now has "Why you can trust us" (safeguarding, privacy, governance, tax-deductible giving), before the registration details. The ways to help were already there.
+- **Pholo** on Kids' World waves on arrival, then every 12 seconds, five waves in all, then holds still.
+- **The sun** has a slow breathing glow, and its rays turn slowly.
+- Both stop with reduced motion, Reduce motion, Calm colours or Simplified page (DECISIONS §27).
+- **Tests:** the demo tests moved to the Parent Guide page; new tests for Pholo's repeat waves (and stopping when motion is switched off) and for the sun.
+
+**Checks:** all browser tests pass; Kids' World stylesheet 12.3 KB (budget 20 KB).
+
+---
+
+## 2026-11-23 · `dev` · Brief v5, part 5: Parent Coach Stage 3 (save, My coaching, reminders, follow-ups)
+
+**Why:** brief v4 §7b Stage 3, continued in brief v5. The coach stays off in production until
+the Foundation approves it.
+
+**What changed**
+
+- **Save at the end:** "Save: email me a link". No passwords; the link works once, for 20 minutes.
+- **My coaching** page: saved conversations with their plans; follow-up, remind me in 3 days, delete, delete my account (each delete asks for a tick first); works without JavaScript.
+- **Follow-ups:** "Welcome back! Last time we planned…", then one small change to the plan.
+- **Reminders** by a daily cron job, each with an unsubscribe link. The job also deletes expired conversations and links.
+- **Database:** `server/migrations/002_coach_accounts.sql` (four tables; only hashes of links and codes are kept).
+- **coach-health.php** checks the new tables, the My coaching page and `site_url`.
+- **Privacy notice** (coach section, live only): a paragraph on saving, reminders and deleting.
+- **Docs:** DEPLOY (migration 002, the daily job), DECISIONS §26, HANDOVER 10a.
+
+**Checks:** PHP coach tests 92 (new: sign-in, single use, expiry, cookies, other-site refusal, reminders, unsubscribe, follow-up, deleting); live browser tests 8 (new: save → email link → My coaching → reminder → follow-up → delete account, with axe); all 294 browser tests pass.
+
+**Follow-ups:** POPIA review of the saving paragraph; the daily cron job when the coach goes live.
+
+---
+
 ## 2026-11-23 · `dev` · Brief v5, part 4: "How can we help?" for grown-ups
 
 **Why:** brief v5 §10 and the mood board's grown-ups' page.

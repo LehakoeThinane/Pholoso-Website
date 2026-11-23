@@ -1,9 +1,11 @@
 /**
  * Pholo's movements (components/kids/Pholo.astro, brief §10b).
  *
- * - Pholo never moves on a timer or a loop by itself. A movement plays on its trigger only:
- *   arriving on a Kids' World page (once per visit), a tap, finishing an activity, Start in
- *   the Calm corner, or read-aloud. Then Pholo holds still again.
+ * - A movement plays on its trigger: arriving on a Kids' World page, a tap, finishing an
+ *   activity, Start in the Calm corner, or read-aloud. Then Pholo holds still again.
+ * - The greeting Pholo waves on arrival, then again every 12 seconds, five waves in all
+ *   (about a minute), then stays still (owner's request, 23 November 2026; this replaces the
+ *   brief's "never on a timer" rule). The waves stop at once when motion is switched off.
  * - Nothing plays when motion is not allowed (reduced motion on the device, "Reduce motion",
  *   Calm colours or Simplified page): the still pose shows. Switching motion off mid-way stops
  *   every movement at once.
@@ -11,6 +13,8 @@
 
 type Trigger = SVGElement & { beginElement(): void };
 
+const WAVES = 5;
+const GAP_MS = 12_000;
 const allowed = () => document.documentElement.hasAttribute('data-anim');
 const timers = new WeakMap<HTMLElement, number>();
 
@@ -47,17 +51,18 @@ export const findPholo = (pose: string, root: ParentNode = document) =>
   root.querySelector<HTMLElement>(`[data-pholo="${pose}"]`);
 
 export function initPholo(): void {
-  // Arriving: once per visit to this page
+  // Arriving: wave hello, then a few more times, then hold still
   document.querySelectorAll<HTMLElement>('[data-pholo-play="arrive"]').forEach((el) => {
-    const key = `pholoso-pholo-${location.pathname}`;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(key) === '1';
-      sessionStorage.setItem(key, '1');
-    } catch {
-      /* storage blocked: wave anyway, once */
-    }
-    if (!seen) playPholo(el);
+    let waves = 0;
+    const wave = () => {
+      if (!allowed()) return; // motion off: no more waves
+      if (!document.hidden && !el.hasAttribute('data-playing')) {
+        playPholo(el);
+        waves += 1;
+      }
+      if (waves < WAVES) window.setTimeout(wave, GAP_MS);
+    };
+    wave();
   });
   // A tap waves
   document.querySelectorAll<HTMLElement>('[data-pholo-tap]').forEach((el) => {

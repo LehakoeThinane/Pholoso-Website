@@ -14,6 +14,8 @@ require_once __DIR__ . '/coach-ai.php';
 const COACH_NEXT = [
     'ask' => 'validate', 'validate' => 'offer', 'offer' => 'interests', 'interests' => 'logistics',
     'logistics' => 'plan', 'plan' => 'pushback', 'pushback' => 'close',
+    // A follow-up (Stage 3): from the saved plan, one adjustment, then close
+    'followup' => 'adjust', 'adjust' => 'close',
 ];
 
 /** What each reply must do. The AI receives the one for the stage it is writing. */
@@ -24,6 +26,7 @@ const COACH_STAGE_GUIDE = [
     'logistics' => "Ask where (or when) the chosen activity could be ready and waiting. Choices: four places in a home.",
     'plan' => "Build the plan from the chosen strategy, the child's activity and place: a short 'text' intro, a 'say_this' block (the exact short phrase, from the strategy, personalised), a 'how_to_introduce' block, a 'plan' block titled 'Your plan for {child}' with exactly three steps labelled 'When it’s calm', 'When screen time ends' and 'Right after', a 'text' block on why consistency matters, and a 'text' block asking what {child} will do the first time. Choices: four likely reactions.",
     'pushback' => "Normalise pushback with a 'validation' block (icon 'heart'). Then one 'tip' block for the most likely obstacle, taken from the strategy's obstacles. Then ask how it feels to try this even with some pushback. Choices: three short answers.",
+    'adjust' => "This is a follow-up: the parent tried the saved plan (see 'remembered') and has said how it went. Respond warmly to what they said. Then suggest ONE small adjustment, using the same strategy from the library (a 'tip' block from its obstacles, or a revised 'say_this'). Then ask how that sounds. Choices: three short answers.",
     'close' => "Affirm the step the parent took today in one or two short 'text' blocks, and encourage them to try the plan a few times and come back to adjust it. No choices.",
 ];
 
@@ -64,6 +67,18 @@ function coach_text(string $t): array
 
 function coach_opening(array $s): array
 {
+    if ($s['stage'] === 'followup') {
+        // Back after trying the plan: start from it
+        $child = coach_child_name($s);
+        $m = $s['memory'];
+        $plan = trim(($m['activity'] ?? '') !== '' ? 'screen time, then ' . lcfirst((string) $m['activity']) . (($m['place'] ?? '') !== '' ? ' in ' . lcfirst((string) $m['place']) : '') : '');
+        return coach_reply(
+            [coach_text('Welcome back! ' . ($plan !== '' ? "Last time we planned: $plan. " : '') . "How did it go with $child?")],
+            'followup',
+            ['It went well', 'It was hard', 'We haven’t tried it yet'],
+            'Tell me how it went…'
+        );
+    }
     $kids = $s['profile']['children'];
     if (count($kids) > 1 && $s['stage'] === 'pick_child') {
         return coach_reply([coach_text('Which child would you like to focus on today?')], 'pick_child', array_column($kids, 'name'), 'Type a name…');
@@ -106,7 +121,7 @@ function coach_schema(array $strategyIds): array
         'blocks'      => ['type' => 'array', 'items' => ['anyOf' => $blocks]],
         'choices'     => ['type' => 'array', 'items' => $str],
         'placeholder' => $str,
-        'next_stage'  => ['enum' => ['validate', 'offer', 'interests', 'logistics', 'plan', 'pushback', 'close', 'ask']],
+        'next_stage'  => ['enum' => ['validate', 'offer', 'interests', 'logistics', 'plan', 'pushback', 'close', 'ask', 'followup', 'adjust']],
         'safety_flag' => ['enum' => ['none', 'concern', 'emergency']],
     ]);
 }
@@ -299,4 +314,24 @@ function coach_turn(array $c, array &$s, string $text): array
     }
     $s['turns']++;
     return ['reply' => $reply, 'emergency' => false];
+}
+
+/** Starts a follow-up from a saved conversation's plan (Stage 3). Returns the new session's id. */
+function coach_start_followup(PDO $db, array $old, int $parentId): string
+{
+    $s = [
+        'uuid' => coach_uuid(),
+        'topic' => (string) $old['topic'],
+        'stage' => 'followup',
+        'profile' => $old['profile'],
+        'child_index' => (int) $old['child_index'],
+        'memory' => $old['memory'],
+    ];
+    $first = coach_opening($s);
+    $s['choices'] = $first['choices'];
+    $s['placeholder'] = $first['placeholder'];
+    coach_session_create($db, $s);
+    $db->prepare('UPDATE coach_sessions SET parent_id = ?, expires_at = ? WHERE uuid = ?')->execute([$parentId, 4102444800, $s['uuid']]);
+    coach_message_add($db, $s['uuid'], ['role' => 'coach', 'blocks' => $first['blocks']]);
+    return $s['uuid'];
 }

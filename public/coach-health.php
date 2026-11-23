@@ -35,19 +35,21 @@ if ($c !== null) {
         $add('Database connection', false, 'Check the database name, user and password in the private config.');
     }
     if ($db !== null) {
-        foreach (['coach_sessions', 'coach_messages', 'coach_feedback'] as $t) {
+        foreach (['coach_sessions', 'coach_messages', 'coach_feedback', 'coach_parents', 'coach_magic_links', 'coach_logins', 'coach_reminders', 'coach_unsubscribe'] as $t) {
             try {
                 $db->query('SELECT 1 FROM ' . $t . ' LIMIT 1');
                 $ok = true;
             } catch (Throwable $e) {
                 $ok = false;
             }
-            $add("Table $t", $ok, 'Run server/migrations/001_coach.sql in phpMyAdmin.');
+            $add("Table $t", $ok, 'Run server/migrations/001_coach.sql and 002_coach_accounts.sql in phpMyAdmin.');
         }
     }
     $n = count(coach_strategies($c));
     $add("Approved strategies ($n)", $n > 0, 'A professional must approve at least one strategy (status: approved), then rebuild.');
     $add('Chat page present', is_file($c['shell_file']), 'Upload the whole dist folder.');
+    $add('My coaching page present', is_file($c['my_shell_file']), 'Upload the whole dist folder.');
+    $add('Site address for email links (site_url)', strpos((string) $c['site_url'], 'https://') === 0, 'Set site_url to https://pholoso.africa in the private config.');
 }
 
 $all = true;

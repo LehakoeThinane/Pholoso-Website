@@ -52,6 +52,7 @@ $replies = [
         ['type' => 'plan', 'title' => 'Your plan', 'steps' => [['label' => 'When it’s calm', 'text' => 'Set it up.'], ['label' => 'When screen time ends', 'text' => 'Say it.'], ['label' => 'Right after', 'text' => 'Join in.']]],
         $t('What will happen the first time?')], ['Get upset']],
     'pushback' => [[['type' => 'validation', 'icon' => 'heart', 'text' => 'Pushback is normal.'], ['type' => 'tip', 'title' => 'Get them on board', 'text' => 'Offer a choice.'], $t('How does that feel?')], ['I’m ready to try']],
+    'adjust' => [[$t('Thank you for trying it.'), ['type' => 'tip', 'title' => 'One small change', 'text' => 'Give the warning a little earlier.'], $t('How does that sound?')], ['That sounds good']],
     'close' => [[$t('You took a real step today.')], []],
 ];
 list($blocks, $choices) = isset($replies[$next]) ? $replies[$next] : $replies['close'];

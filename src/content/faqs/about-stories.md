@@ -1,9 +1,9 @@
 ---
 order: 4
 page: about
-question: How do you protect children's stories?
+question: How do you protect children and their stories?
 ---
 
-Please do not send a child's full name or medical details through this website. If a message is about a child, we ask you to confirm that you are their parent or legal guardian.
+The platform meets strict POPIA and EU standards for children's privacy. No child is identifiable. Children create their own pseudonyms and choose avatars that represent them. Add a signed safeguarding policy, guardian consent, and full edit and withdrawal rights, and protection is built into the model, not bolted on.
 
-If you share a story with us, we use a pseudonym, and you can ask us to change or withdraw it at any time. We do not publish details that could identify a child. Read our [privacy notice](/privacy/) to see how we handle information.
+Read our [privacy notice](/privacy/) to see how we handle information.

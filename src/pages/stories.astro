@@ -20,8 +20,8 @@ const stories = await ordered('stories');
   description="Stories of lived experience from parents, young people, educators and professionals, and the changes they ask schools and systems to make."
 >
   <PageHero
-    title="Stories show us what needs to change"
-    lead="Each story points to something a school, a workplace or a system can do differently. Read a story, then open what it asks us to change."
+    title="Stories are not for sympathy. They are how we learn what to change."
+    lead="Every story here points to something a school, a workplace or a system can do differently. Read one, then look at what it asks us to redesign."
   >
     <Notice title="About these stories">
       <p>{isTodo(site.stories.notice) ? site.stories.interimNotice : site.stories.notice}</p>
@@ -37,6 +37,7 @@ const stories = await ordered('stories');
       label="Show stories from"
       filters={storyFilters}
       noun={['story', 'stories']}
+      allLabel="All voices"
     />
     <div id="story-list" class="story-list">
       {stories.map((s) => (
@@ -58,12 +59,12 @@ const stories = await ordered('stories');
   <Section variant="alt" labelledby="change-title">
     <SectionHeading
       id="change-title"
-      title="What the stories ask us to change"
-      lead="The problem is rarely the person. It is how things around them are designed."
+      title="Lived experience already tells us what to redesign."
+      lead="The friction is rarely the person. It is the design around them. Here is what the stories ask us to change."
     />
     <DataTable
-      caption="Where the system creates friction, and the change people ask for"
-      columns={['Story', 'Where the system creates friction', 'The change people ask for']}
+      caption="The systems change map"
+      columns={['Story', 'Where the system creates friction', 'The shift the voices ask for']}
       rows={stories.map((s) => [
         s.data.who.split(',')[0] ?? s.data.who,
         s.data.friction,

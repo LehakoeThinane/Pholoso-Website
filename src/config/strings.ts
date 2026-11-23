@@ -50,8 +50,8 @@ export const primaryNav: NavEntry[] = [
   {
     label: 'About',
     children: [
-      { href: '/about/', label: 'About us' },
-      { href: '/approach/', label: 'Our approach' },
+      { href: '/about/', label: 'Who we are' },
+      { href: '/approach/', label: 'How we work' },
     ],
   },
   {
@@ -70,20 +70,17 @@ export const primaryNav: NavEntry[] = [
   },
 ];
 
-export const footerExplore: NavItem[] = [
+/** The footer's one line of links: the main pages, kept short. */
+export const footerLinks: NavItem[] = [
   { href: '/kids/', label: 'Kids’ World' },
-  { href: '/about/', label: 'About us' },
-  { href: '/approach/', label: 'Our approach' },
-  { href: '/parent-guide/', label: 'Parent Guide' },
+  { href: '/about/', label: 'Who we are' },
+  { href: '/approach/', label: 'How we work' },
   { href: '/stories/', label: 'Stories' },
   { href: '/resources/', label: 'Resources' },
-];
-
-export const footerGetInvolved: NavItem[] = [
+  { href: '/parent-guide/', label: 'Parent Guide' },
+  { href: '/get-involved/', label: 'Get involved' },
   { href: '/donate/', label: 'Donate' },
-  { href: '/get-involved/#donors', label: 'Give as an individual' },
-  { href: '/get-involved/#partners', label: 'Partner as a company or funder' },
-  { href: '/get-involved/#schools', label: 'Schools and educators' },
+  { href: '/contact/', label: 'Contact' },
 ];
 
 /* ---------- Kids' World ---------- */

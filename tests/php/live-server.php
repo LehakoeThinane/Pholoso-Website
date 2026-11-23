@@ -19,7 +19,8 @@ mkdir($tmp, 0700, true);
 
 // Database
 $db = new PDO('sqlite:' . $tmp . '/coach.sqlite');
-$sql = (string) file_get_contents($root . '/server/migrations/001_coach.sql');
+$sql = (string) file_get_contents($root . '/server/migrations/001_coach.sql')
+    . (string) file_get_contents($root . '/server/migrations/002_coach_accounts.sql');
 $sql = preg_replace('/^--.*$/m', '', $sql);
 $sql = str_replace(['INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', ' UNSIGNED', 'MEDIUMTEXT'], ['INTEGER PRIMARY KEY AUTOINCREMENT', '', 'TEXT'], $sql);
 $sql = preg_replace('/,\s*INDEX \([^)]*\)/', '', $sql);
@@ -37,6 +38,8 @@ foreach ($library as &$s) {
 }
 unset($s);
 file_put_contents($tmp . '/strategies.json', json_encode(['strategies' => $library]));
+
+@unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pholoso-live-mail.log');
 
 // The mock AI
 $s = stream_socket_server('tcp://127.0.0.1:0');
@@ -58,6 +61,9 @@ file_put_contents($tmp . '/config.php', '<?php return ' . var_export([
         'api_url' => "http://127.0.0.1:$aiPort/v1/messages",
         'rate_limit' => ['max' => 5000, 'window' => 3600],
         'strategies_file' => $tmp . '/strategies.json',
+        // Emails go to a file the browser tests read (never sent)
+        'mail_capture' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'pholoso-live-mail.log',
+        'site_url' => "http://127.0.0.1:$port",
     ],
 ], true) . ';');
 

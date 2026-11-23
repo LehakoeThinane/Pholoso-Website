@@ -32,7 +32,7 @@ function coach_form(string $action, string $id, string $inner, string $class = '
         . '<input type="hidden" name="id" value="' . coach_e($id) . '">' . $inner . '</form>';
 }
 
-function coach_render_block(array $b, string $id, ?int $rating, callable $art): string
+function coach_render_block(array $b, string $id, ?int $rating, callable $art, bool $saved = false): string
 {
     $label = function ($t) {
         return '<p class="cblock__label">' . coach_e($t) . '</p>';
@@ -59,8 +59,14 @@ function coach_render_block(array $b, string $id, ?int $rating, callable $art): 
         case 'tip':
             return '<div class="cblock cblock--tip"><span class="cblock__icon" aria-hidden="true">★</span><div><p class="cblock__title">' . coach_e($b['title']) . '</p><p>' . coach_rich($b['text']) . '</p></div></div>';
         case 'account_prompt':
-            return '<div class="cblock cblock--card"><p class="cblock__title">Save your progress</p><p>Soon you will be able to create an account, save this plan and come back to adjust it with me.</p>'
-                . coach_form('turn', $id, '<button type="submit" name="action" value="skip" class="cbutton cbutton--plain">Skip: I’ll start over when I come back</button>') . '</div>';
+            $save = $saved
+                ? '<p>This conversation is saved. See it any time in <a href="/parent-coach/my-coaching/">My coaching</a>.</p>'
+                : '<p>Save this plan and come back to adjust it with me. We will email you a link to sign in: no password.</p>'
+                    . coach_form('magic-link', $id, '<label class="onboard__label" for="save-email">Your email address</label>'
+                        . '<input class="onboard__input" id="save-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254">'
+                        . '<button type="submit" class="cbutton">Save: email me a link</button>', 'cblock__save');
+            return '<div class="cblock cblock--card"><p class="cblock__title">Save your progress</p>' . $save
+                . coach_form('turn', $id, '<button type="submit" name="action" value="skip" class="cbutton cbutton--plain">' . ($saved ? 'Finish' : 'Skip: I’ll start over when I come back') . '</button>') . '</div>';
         case 'closing':
             $stars = '';
             for ($i = 1; $i <= 5; $i++) {
@@ -89,7 +95,7 @@ function coach_render_log(array $s, string $help, callable $art): string
             $n++;
             $inner = '';
             foreach ((array) ($m['blocks'] ?? []) as $b) {
-                $inner .= coach_render_block($b, $s['uuid'], $s['rating'], $art);
+                $inner .= coach_render_block($b, $s['uuid'], $s['rating'], $art, !empty($s['parent_id']));
             }
             $html .= '<div class="cmsg cmsg--coach" id="coach-msg-' . $n . '" data-msg><p class="visually-hidden">Coach:</p><div class="cmsg__body">' . $inner . '</div></div>';
         }

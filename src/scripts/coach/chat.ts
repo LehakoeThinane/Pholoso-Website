@@ -29,6 +29,8 @@ interface State {
   placeholder: string;
   ended: boolean;
   rating?: number | null;
+  /** Saved to a parent's account (Stage 3) */
+  saved?: boolean;
 }
 type Result = { ok: true; added: Message[] } | { ok: false; message: string };
 
@@ -39,6 +41,8 @@ interface Backend {
   rate(stars: number): Promise<void>;
   feedback(index: number, value: string, reason: string, note: string): Promise<void>;
   restart(): Promise<string>;
+  /** "Save your progress": asks for a sign-in link; returns what to tell the parent */
+  save(email: string): Promise<string>;
 }
 
 const PROFILE = 'pholoso-coach-profile';
@@ -162,6 +166,9 @@ async function practice(): Promise<Backend | null> {
     async feedback() {
       /* Practice mode: nothing is sent */
     },
+    async save() {
+      return 'Practice mode: no email is sent. In the real coach, you would now get a link to sign in and save this plan.';
+    },
     async restart() {
       store.remove(SESSION + session.id);
       return '/parent-coach/chat/';
@@ -215,6 +222,14 @@ async function live(root: HTMLElement): Promise<Backend | null> {
     },
     async feedback(index, value, reason, note) {
       await post('/api/coach/feedback.php', { id, message: index, value, reason, note });
+    },
+    async save(email) {
+      try {
+        const { json } = await post('/api/coach/magic-link.php', { email, id });
+        return (json.message as string) || 'Sorry, something went wrong. Please try again.';
+      } catch {
+        return 'Sorry, the email could not be sent just now. Please try again later.';
+      }
     },
     async restart() {
       const { json } = await post('/api/coach/start.php', { restart_from: id });
@@ -302,6 +317,20 @@ export async function initCoach(): Promise<void> {
         msg.scrollIntoView({ block: 'nearest' });
         await wait(250);
       }
+    }
+    if (st.saved) {
+      body.querySelector('[data-coach-save-text]')?.remove();
+      body
+        .querySelector('[data-coach-save]')
+        ?.replaceWith(
+          h(
+            'p',
+            {},
+            'This conversation is saved. See it any time in ',
+            h('a', { href: '/parent-coach/my-coaching/' }, 'My coaching'),
+            '.',
+          ),
+        );
     }
     if (!blocks.some((x) => x.type === 'closing' || x.type === 'account_prompt'))
       msg.append(actions());
@@ -493,6 +522,25 @@ export async function initCoach(): Promise<void> {
         ),
       );
     }
+  });
+
+  // "Save your progress": the email form
+  root.addEventListener('submit', (e) => {
+    const save = (e.target as Element).closest<HTMLFormElement>('[data-coach-save]');
+    if (!save) return;
+    e.preventDefault();
+    const email = save.querySelector('input');
+    if (!email?.value.trim() || !email.checkValidity()) {
+      email?.setAttribute('aria-invalid', 'true');
+      status('Please enter your email address, for example name@example.com.');
+      email?.focus();
+      return;
+    }
+    const button = save.querySelector('button');
+    if (button) button.disabled = true;
+    void b.save(email.value.trim()).then((message) => {
+      save.replaceWith(h('p', { class: 'cmsg__thanks', role: 'status' }, message));
+    });
   });
 
   root.addEventListener('change', (e) => {

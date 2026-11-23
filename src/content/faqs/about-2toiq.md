@@ -1,7 +1,7 @@
 ---
 order: 3
 page: about
-question: How are the Foundation and 2to.iQ related?
+question: How do PAF and 2to.iQ relate?
 ---
 
-They are two separate organisations with one mission. The Pholoso Afrika Foundation is a registered non-profit company. It leads advocacy and awareness and connects the support around each child. 2to.iQ (Pty) Ltd is a separate company and our edtech partner. It builds an adaptive learning platform designed for neurodivergent learners.
+Two entities, one mission. Pholoso Afrika Foundation is the social-impact engine. 2to.iQ is its edtech strategic partner, building the adaptive learning systems.

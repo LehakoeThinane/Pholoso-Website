@@ -1,7 +1,8 @@
 ---
 order: 6
-title: Short articles
-audience: Ideas and insights
-summary: Short pieces about neurodiversity, inclusion and how we design the world around us.
+title: Short articles on dignity and design
+audience: Insights
+summary: Ideas at the meeting point of neurodiversity, inclusion and how we build the world around us.
 status: planned
+soon: Publishing soon
 ---

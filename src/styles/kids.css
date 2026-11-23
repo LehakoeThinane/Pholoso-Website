@@ -458,6 +458,41 @@
   stroke-width: 12;
   stroke-linecap: round;
 }
+/* The sun breathes (a soft glow grows and fades) and its rays turn slowly. Only when motion
+   is allowed; slow enough never to flash. Owner's request, 23 November 2026. */
+.sky__sun-glow {
+  fill: var(--kids-sunshine);
+  opacity: 0.35;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.sky__rays {
+  transform-box: view-box;
+  transform-origin: 110px 110px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-anim] .sky__sun-glow {
+    animation: sun-breathe 4s ease-in-out infinite alternate;
+  }
+  [data-anim] .sky__rays {
+    animation: sun-turn 80s linear infinite;
+  }
+}
+@keyframes sun-breathe {
+  from {
+    opacity: 0.2;
+    scale: 0.9;
+  }
+  to {
+    opacity: 0.6;
+    scale: 1.12;
+  }
+}
+@keyframes sun-turn {
+  to {
+    rotate: 1turn;
+  }
+}
 .sky__sun-disc {
   fill: var(--kids-sunshine);
   stroke: var(--gold);

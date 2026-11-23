@@ -392,3 +392,74 @@ approved), Get involved for schools, Get involved for donors, and Stories. Easy 
 African families and teachers, used with consent. The brief does not allow stand-ins that look
 like real families, so these wait for the Foundation's photos.
 
+
+## 26. Parent Coach Stage 3: saving, My coaching, reminders and follow-ups
+
+**Decision:** saving is optional and comes at the end of a conversation ("Save: email me a
+link"). There are no passwords: a parent signs in with a link sent by email, which works once
+and for 20 minutes (no memory test, WCAG 2.2 3.3.8). Signing in sets one HttpOnly, Secure,
+SameSite=Lax cookie for 30 days. The database keeps only one-way hashes of links, sign-ins and
+unsubscribe codes. Asking for a link never says whether an account exists, and is limited to 3
+an hour per address. 23 November 2026.
+
+**My coaching** (`/parent-coach/my-coaching/`, not in search engines) lists saved
+conversations, each with its plan, and lets the parent: open it; start a follow-up ("Welcome
+back! Last time we planned…", then one small change to the plan); ask for one reminder email
+in 3 days, or cancel it; delete it; or delete the whole account. Deleting asks for a tick in a
+confirm box first. Every action is a plain form, so the page works without JavaScript; actions
+from another website are refused.
+
+**Reminders** are sent by a daily cron job (`lib/coach/cron-reminders.php`, command line only),
+which also deletes expired conversations and links. Every reminder has a one-click unsubscribe
+link.
+
+**Kept:** saved conversations stay until the parent deletes them; unsaved ones are still
+deleted after 30 days. The privacy notice (shown only when the coach is live) says this, as a
+draft for the POPIA review.
+
+## 27. Home page trimmed; Pholo and the sun move more
+
+**Decision (owner, 23 November 2026):**
+
+- "How you can help" and "Why you can trust us" leave the home page. The ways to help were
+  already on Get involved > Ways to help, in more detail; "Why you can trust us" now sits there
+  too, before the registration details (and stays on About as "How we work responsibly").
+- "Help for parents, right now" (the guide demo) is hidden on the home page for now. It is
+  commented out in `src/pages/index.astro`, so it can come back; the same demo is on the Parent
+  Guide page.
+- On Kids' World pages Pholo waves on arrival, then again every 12 seconds, five waves in all
+  (about a minute), then holds still. This replaces the brief's "Pholo never moves on a timer
+  or loop by itself" (§10b). The limit keeps it from distracting a child for long.
+- The sun has a slow "breathing" glow (4 seconds each way) and its rays turn slowly (one turn
+  in 80 seconds).
+
+**Safeguards kept:** none of this moves when the device asks for reduced motion or when Reduce
+motion, Calm colours or Simplified page is on (the Comfort & access panel is the way to stop
+it, WCAG 2.2.2), and switching motion off stops it at once. Nothing is fast enough to flash.
+
+## 28. The original website's wording, reused
+
+**Decision (owner, 23 November 2026):** the new pages reuse at least 90% of the copy on the
+Foundation's original website (pholoso.africa, the one-page prototype; the same text is in the
+repository as commit 2277b31 "snapshot of live site"). This replaces the brief's "Rewrite the
+reference copy freely". Measured on the built site: 91.4% of the original's words appear word
+for word (322 of 360 sentences), across the home page, About, Our approach, Stories, Get
+involved, Resources, Contact, the trust block, the footer, the menu and the Comfort & access
+panel.
+
+**Kept from the new site, on purpose:**
+
+- **Statistics** keep their checked sources. "1 in 100 children are neurodivergent on the
+  autism spectrum alone (WHO, 2023)" is not used: the WHO's current fact sheet says about 1 in
+  127 people, which the site shows with its link.
+- **Layout rules:** no eyebrow labels above headings (where the original had one, it became
+  the heading, the lead or a card tag), and headings stay centred.
+- **The contact form** keeps "What is your message about?" (it routes the message). The
+  original's "I am a…" list is not used.
+- **"Children with autism"** in the home hero stays switchable, so the identity-first wording
+  setting still has something to change.
+
+**The owner's own statements, now shown again:** a signed safeguarding policy and code of
+conduct; "the platform" (2to.iQ) built to POPIA and EU standards for children's privacy, with
+pseudonyms and avatars; the four policies "available to partners and funders"; B-BBEE value.
+Please confirm these are still accurate before launch (open questions 18 and 19).

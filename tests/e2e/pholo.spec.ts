@@ -27,15 +27,37 @@ test('the still poses are the approved artwork, unchanged', async ({ page }) => 
   for (const d of approved('calm').match(/ d="[^"]+"/g) ?? []) expect(calm).toContain(d);
 });
 
-test('arriving: Pholo waves once per visit, then holds still', async ({ page }) => {
+test('arriving: Pholo waves hello, rests, waves again, and stops when motion is switched off', async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/kids/');
   const pholo = page.locator('[data-pholo-tap]');
   await expect(pholo).toHaveAttribute('data-playing', '');
   await expect(pholo).not.toHaveAttribute('data-playing', { timeout: 8000 }); // about 6 s
+  await expect(pholo).toHaveAttribute('data-playing', '', { timeout: 14_000 }); // the next wave
+  // Reduce motion mid-way: no more waves
+  await page.evaluate(() => {
+    document.documentElement.removeAttribute('data-anim');
+    document.dispatchEvent(new CustomEvent('pholoso:prefs'));
+  });
+  await expect(pholo).not.toHaveAttribute('data-playing');
+  await page.waitForTimeout(14_000);
+  await expect(pholo).not.toHaveAttribute('data-playing');
+});
+
+test('the sun breathes and turns only when motion is allowed', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/kids/');
+  const anim = (sel: string) =>
+    page.locator(sel).evaluate((el) => getComputedStyle(el).animationName);
+  expect(await anim('.sky__sun-glow')).toBe('sun-breathe');
+  expect(await anim('.sky__rays')).toBe('sun-turn');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();
-  await page.waitForTimeout(500);
-  await expect(pholo).not.toHaveAttribute('data-playing'); // same visit: no second greeting
+  expect(await anim('.sky__sun-glow')).toBe('none');
+  expect(await anim('.sky__rays')).toBe('none');
 });
 
 for (const [label, setup] of [

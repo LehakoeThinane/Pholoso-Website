@@ -1,13 +1,14 @@
 ---
 order: 4
 name: Numbers
+title: Numbers as the curriculum
 cards:
-  - area: Numbers
-    text: A love of numbers is already mathematics. It can grow into algebra, data and logic.
-  - area: Reading and language
+  - area: Numeracy
+    text: A love of numbers is mathematics already. Extend it into algebra, data and logic.
+  - area: Language & literacy
     text: Explaining how a sum works builds reasoning and clear, precise language.
-  - area: Science and the world
-    text: Measuring, coding and patterns connect numbers to the real world.
-  - area: Social and emotional
+  - area: Science & the world
+    text: Measurement, coding and patterns connect numbers to the real world.
+  - area: Social & emotional
     text: Number games with others build patience, turn-taking and shared joy.
 ---

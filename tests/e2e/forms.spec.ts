@@ -8,7 +8,7 @@ import { expect, test, type Page } from '@playwright/test';
 const FORMS = [
   { path: '/contact/', form: '#contact-form' },
   { path: '/donate/', form: 'form[data-form="receipt"]' },
-  { path: '/', form: 'form[data-form="newsletter"]' },
+  { path: '/resources/', form: 'form[data-form="newsletter"]' }, // the footer no longer has one
 ];
 
 for (const { path, form } of FORMS) {

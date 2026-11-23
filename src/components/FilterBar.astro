@@ -9,15 +9,17 @@
  * - label: group label ("Show stories from")
  * - filters: [{ value, label }]. An "All" button is added first.
  * - noun: what is being counted, singular and plural (["story", "stories"])
+ * - allLabel: the first button's label (default "All")
  */
 interface Props {
   target: string;
   label: string;
   filters: { value: string; label: string }[];
   noun: [string, string];
+  allLabel?: string;
 }
 
-const { target, label, filters, noun } = Astro.props;
+const { target, label, filters, noun, allLabel = 'All' } = Astro.props;
 const labelId = `${target}-filter-label`;
 ---
 
@@ -33,7 +35,7 @@ const labelId = `${target}-filter-label`;
   </p>
   <div class="filter-bar__buttons" role="group" aria-labelledby={labelId}>
     <button type="button" class="filter-bar__button" data-filter="all" aria-pressed="true">
-      All
+      {allLabel}
     </button>
     {filters.map((f) => (
       <button type="button" class="filter-bar__button" data-filter={f.value} aria-pressed="false">

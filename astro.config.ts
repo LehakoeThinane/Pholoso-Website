@@ -10,6 +10,7 @@ const notInSitemap = [
   '/kids/ask-a-grown-up/',
   '/parent-coach/start/',
   '/parent-coach/chat/',
+  '/parent-coach/my-coaching/',
 ];
 
 // https://docs.astro.build/en/reference/configuration-reference/

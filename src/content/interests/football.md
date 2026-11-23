@@ -1,13 +1,14 @@
 ---
 order: 6
 name: Football
+title: Football as the curriculum
 cards:
-  - area: Numbers
+  - area: Numeracy
     text: Scores, league tables and angles become arithmetic, data and geometry.
-  - area: Reading and language
+  - area: Language & literacy
     text: Match reports and player stories build reading and writing.
-  - area: Science and the world
-    text: How the body moves and how the ball flies open up biology and physics.
-  - area: Social and emotional
-    text: Team play is turn-taking, rules and friendship in action.
+  - area: Science & the world
+    text: How the body moves and the ball flies opens biology and physics.
+  - area: Social & emotional
+    text: Team play is turn-taking, rules and friendship in motion.
 ---

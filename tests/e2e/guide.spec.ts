@@ -198,7 +198,7 @@ test.describe('the demo', () => {
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await page.goto('/');
+    await page.goto('/parent-guide/'); // the home page's demo is hidden for now
     const demo = page.locator('[data-demo]');
     const steps = demo.locator('[data-demo-step]');
     // Still at first: every step shown, nothing moving
@@ -211,19 +211,13 @@ test.describe('the demo', () => {
     await demo.getByRole('button', { name: 'Turn off motion' }).click();
     for (const s of await steps.all()) await expect(s).toBeVisible();
     await expect(demo.getByRole('button', { name: 'Replay' })).toBeFocused();
-    // Preview builds point to the Parent Coach (practice mode); production, with the coach
-    // off, points to the Parent Guide
-    await expect(demo.getByRole('link', { name: 'Try Pholoso Parent Coach' })).toHaveAttribute(
-      'href',
-      '/parent-coach/',
-    );
   });
 
   test('with reduced motion, every step is shown and there is nothing to play', async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
+    await page.goto('/parent-guide/'); // the home page's demo is hidden for now
     const demo = page.locator('[data-demo]');
     for (const s of await demo.locator('[data-demo-step]').all()) await expect(s).toBeVisible();
     await expect(demo.getByRole('button', { name: 'Play demo' })).toBeHidden();

@@ -1,7 +1,7 @@
 ---
 order: 1
 page: about
-question: What do you do?
+question: What does the Foundation actually do?
 ---
 
-We work for inclusive, adaptive education for neurodivergent children in South Africa and Africa. We do this in three ways: advocacy and awareness, learning technology with our partner 2to.iQ, and connecting the people around each child, such as families, teachers, therapists, researchers and funders.
+We advance inclusive, adaptive, learner-centred education for neurodivergent children, through advocacy, educational innovation with 2to.iQ, and by connecting the ecosystem of schools, families and specialists around each child.
