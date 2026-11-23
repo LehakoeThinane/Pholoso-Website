@@ -139,21 +139,26 @@ test('the movements really move: the arm waves and the breathing circle grows', 
 }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/kids/');
-  // Sample the waving arm several times: any single moment could fall where it crosses zero
-  const angles: number[] = [];
-  for (let i = 0; i < 6; i++) {
-    await page.waitForTimeout(150);
-    angles.push(
-      await page.evaluate(() => {
+  // Follow the waving arm frame by frame (up to 4 s) and keep its biggest swing: a few samples
+  // could all fall in a quiet moment of the wave, especially on a busy machine
+  const swing = await page.evaluate(
+    () =>
+      new Promise<number>((done) => {
         const move = document.querySelector('[data-pholo-tap] .pholo__move')!;
         const arm = [...move.querySelectorAll('g')].find((g) =>
           g.querySelector(':scope > animateTransform[type="rotate"]'),
         ) as SVGGElement;
-        return [...arm.transform.animVal].map((t) => t.angle)[0] ?? 0;
+        const t0 = performance.now();
+        let max = 0;
+        const tick = () => {
+          max = Math.max(max, Math.abs([...arm.transform.animVal].map((t) => t.angle)[0] ?? 0));
+          if (max > 5 || performance.now() - t0 > 4000) done(max);
+          else requestAnimationFrame(tick);
+        };
+        tick();
       }),
-    );
-  }
-  expect(Math.max(...angles.map(Math.abs)), angles.join(', ')).toBeGreaterThan(5);
+  );
+  expect(swing).toBeGreaterThan(5);
 
   await page.goto('/kids/calm-corner/');
   const radius = () =>
