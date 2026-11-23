@@ -375,3 +375,20 @@ checks the saved words still match the pages. Guide: docs/AUDIO.md.
   end. A race was fixed: Pause pressed before the file had loaded used to stop playback.
 - The Accessibility page says some read-aloud audio is computer-generated (docs/CREDITS.md).
 
+## 25. "How can we help?" on the home page
+
+**Decision:** the home page has the mood board's router straight after the two doors: four
+large rows that start from the visitor's situation ("My child learns differently.", "I'm a
+teacher or a school.", "I want to fund change.", "I'm neurodivergent myself."), each with a
+two-tone green-and-gold icon and an arrow. The "I'm a grown-up" door now leads here. A dashed
+doodle path with a triangle arrowhead leads on to the next section (hidden in Calm colours and
+Simplified page). 23 November 2026.
+
+**Where the rows go:** the Parent Guide (it works today; the Parent Coach stays off until
+approved), Get involved for schools, Get involved for donors, and Stories. Easy to change in
+.
+
+**Not done yet:** the mood board's cut-out photos on coloured blobs need real photos of South
+African families and teachers, used with consent. The brief does not allow stand-ins that look
+like real families, so these wait for the Foundation's photos.
+

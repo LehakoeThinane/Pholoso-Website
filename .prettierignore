@@ -12,3 +12,4 @@ dist-live/
 reference/
 .venv-audio/
 content/audio/**/.made.json
+dist-app/
