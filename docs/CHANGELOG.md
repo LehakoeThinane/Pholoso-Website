@@ -8,6 +8,20 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · A simpler, shorter footer
+
+**Why:** owner's request: the footer had too much in it and took too much space.
+
+**What changed**
+
+- **Two slim rows** instead of a sign-up card and four columns: the logo and tagline with one line of links (Kids’ World, Who we are, How we work, Stories, Resources, Parent Guide, Get involved, Donate, Contact, the email address), then a thin line with the registration numbers, copyright, Privacy notice, Accessibility and Comfort & access.
+- **The updates sign-up** is no longer in the footer. It stays on the Resources page.
+- About a third of the old height on wide screens.
+
+**Checks:** all browser tests pass (the sign-up form tests now use the Resources page).
+
+---
+
 ## 2026-11-23 · `dev` · The original website's wording, reused (91.4%)
 
 **Why:** owner's request: reuse at least 90% of the copy on pholoso.africa.
