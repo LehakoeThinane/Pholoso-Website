@@ -8,6 +8,23 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Home page trimmed; Pholo waves and the sun breathes
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Home page:** "How you can help" and "Why you can trust us" removed; "Help for parents, right now" commented out (hidden for now, easy to bring back).
+- **Get involved > Ways to help:** now has "Why you can trust us" (safeguarding, privacy, governance, tax-deductible giving), before the registration details. The ways to help were already there.
+- **Pholo** on Kids' World waves on arrival, then every 12 seconds, five waves in all, then holds still.
+- **The sun** has a slow breathing glow, and its rays turn slowly.
+- Both stop with reduced motion, Reduce motion, Calm colours or Simplified page (DECISIONS §27).
+- **Tests:** the demo tests moved to the Parent Guide page; new tests for Pholo's repeat waves (and stopping when motion is switched off) and for the sun.
+
+**Checks:** all browser tests pass; Kids' World stylesheet 12.3 KB (budget 20 KB).
+
+---
+
 ## 2026-11-23 · `dev` · Brief v5, part 5: Parent Coach Stage 3 (save, My coaching, reminders, follow-ups)
 
 **Why:** brief v4 §7b Stage 3, continued in brief v5. The coach stays off in production until

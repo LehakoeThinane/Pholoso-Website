@@ -30,10 +30,13 @@ const cloud =
     </filter>
   </svg>
   <svg class="sky__sun" viewBox="-4 -4 228 228" focusable="false">
+    <circle class="sky__sun-glow" cx="110" cy="110" r="90" />
     <g filter="url(#crayon)">
-      {rays.map((d) => (
-        <path class="sky__ray" d={d} />
-      ))}
+      <g class="sky__rays">
+        {rays.map((d) => (
+          <path class="sky__ray" d={d} />
+        ))}
+      </g>
       <circle class="sky__sun-disc" cx="110" cy="110" r="70" />
     </g>
   </svg>

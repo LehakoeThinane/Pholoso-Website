@@ -4,8 +4,6 @@ import Card from '../components/Card.astro';
 import DoorCard from '../components/DoorCard.astro';
 import CardGrid from '../components/CardGrid.astro';
 import ExternalLink from '../components/ExternalLink.astro';
-import GuideDemo from '../components/guide/GuideDemo.astro';
-import { coach } from '../config/coach';
 import DashedPath from '../components/DashedPath.astro';
 import HelpRouter from '../components/HelpRouter.astro';
 import Hero from '../components/Hero.astro';
@@ -15,7 +13,6 @@ import Section from '../components/Section.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Stat from '../components/Stat.astro';
 import Term from '../components/Term.astro';
-import TrustBlock from '../components/TrustBlock.astro';
 import { site } from '../config/site';
 import { stats } from '../config/sources';
 import { ordered } from '../lib/content';
@@ -183,18 +180,21 @@ const ngo = {
     </div>
   </Section>
 
-  <Section variant="alt" labelledby="guide-home-title">
-    <SectionHeading
-      id="guide-home-title"
-      title="Help for parents, right now"
-      lead="Tap the answer that fits, and get practical ideas to try at home. Our guides are drafts while professionals review them."
-    />
-    {coach.mode === 'off' ? (
-      <GuideDemo cta />
-    ) : (
-      <GuideDemo cta ctaHref="/parent-coach/" ctaLabel={`Try ${coach.name}`} />
-    )}
-  </Section>
+  {/* "Help for parents, right now" is hidden for now (owner's request, 23 November 2026).
+       To bring it back, remove this comment and restore the GuideDemo and coach imports.
+      <Section variant="alt" labelledby="guide-home-title">
+        <SectionHeading
+          id="guide-home-title"
+          title="Help for parents, right now"
+          lead="Tap the answer that fits, and get practical ideas to try at home. Our guides are drafts while professionals review them."
+        />
+        {coach.mode === 'off' ? (
+          <GuideDemo cta />
+        ) : (
+          <GuideDemo cta ctaHref="/parent-coach/" ctaLabel={`Try ${coach.name}`} />
+        )}
+      </Section>
+    */}
 
   {featured && (
     <Section labelledby="voice-title" narrow>
@@ -207,39 +207,6 @@ const ngo = {
       </p>
     </Section>
   )}
-
-  <Section variant="alt" labelledby="help-title">
-    <SectionHeading id="help-title" title="How you can help" lead="Choose the way that fits you." />
-    <CardGrid>
-      <Card title="Give" href="/donate/" linkText="How to donate">
-        <p>
-          Donate by bank transfer. South African taxpayers can ask for a Section 18A tax receipt.
-        </p>
-      </Card>
-      <Card
-        title="Partner with us"
-        href="/get-involved/#partners"
-        linkText="Ways for companies to partner"
-      >
-        <p>
-          Companies and funders can support our work as part of CSI or ESG goals. It may also count
-          towards B-BBEE.
-        </p>
-      </Card>
-      <Card
-        title="Schools and educators"
-        href="/get-involved/#schools"
-        linkText="Ways for schools to take part"
-      >
-        <p>Work with us on inclusive teaching, or ask about piloting 2to.iQ.</p>
-      </Card>
-    </CardGrid>
-  </Section>
-
-  <Section labelledby="trust-title">
-    <SectionHeading id="trust-title" title="Why you can trust us" />
-    <TrustBlock />
-  </Section>
 </BaseLayout>
 
 <style>

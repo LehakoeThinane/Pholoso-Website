@@ -8,6 +8,7 @@ import Photo from '../components/Photo.astro';
 import Section from '../components/Section.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import TickList from '../components/TickList.astro';
+import TrustBlock from '../components/TrustBlock.astro';
 import { site } from '../config/site';
 import family from '../assets/images/family.jpg';
 ---
@@ -81,6 +82,11 @@ import family from '../assets/images/family.jpg';
       />
     </div>
   </div>
+
+  <Section labelledby="trust-title">
+    <SectionHeading id="trust-title" title="Why you can trust us" />
+    <TrustBlock />
+  </Section>
 
   <Section variant="alt" labelledby="registration-title" narrow>
     <SectionHeading

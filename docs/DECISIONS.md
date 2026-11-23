@@ -416,3 +416,23 @@ link.
 **Kept:** saved conversations stay until the parent deletes them; unsaved ones are still
 deleted after 30 days. The privacy notice (shown only when the coach is live) says this, as a
 draft for the POPIA review.
+
+## 27. Home page trimmed; Pholo and the sun move more
+
+**Decision (owner, 23 November 2026):**
+
+- "How you can help" and "Why you can trust us" leave the home page. The ways to help were
+  already on Get involved > Ways to help, in more detail; "Why you can trust us" now sits there
+  too, before the registration details (and stays on About as "How we work responsibly").
+- "Help for parents, right now" (the guide demo) is hidden on the home page for now. It is
+  commented out in `src/pages/index.astro`, so it can come back; the same demo is on the Parent
+  Guide page.
+- On Kids' World pages Pholo waves on arrival, then again every 12 seconds, five waves in all
+  (about a minute), then holds still. This replaces the brief's "Pholo never moves on a timer
+  or loop by itself" (§10b). The limit keeps it from distracting a child for long.
+- The sun has a slow "breathing" glow (4 seconds each way) and its rays turn slowly (one turn
+  in 80 seconds).
+
+**Safeguards kept:** none of this moves when the device asks for reduced motion or when Reduce
+motion, Calm colours or Simplified page is on (the Comfort & access panel is the way to stop
+it, WCAG 2.2.2), and switching motion off stops it at once. Nothing is fast enough to flash.
