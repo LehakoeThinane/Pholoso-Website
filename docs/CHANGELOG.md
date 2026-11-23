@@ -8,6 +8,19 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Smaller photos between sections; three steadier tests
+
+**Why:** owner's request: the classroom photo on the home page was too big.
+
+**What changed**
+
+- **Photo banners:** the photos between sections (home: the classroom; Get involved: the family) are centred, at most 56rem wide, and on wider screens a little shorter (trimmed top and bottom, keeping the people and the poster in view). About 460 px tall on a 1440 px screen instead of about 1000. Phones keep the whole photo. (`<Photo banner>`)
+- **Steadier tests** (no change to the site): the cookie-note test uses a controlled clock, so the 3-second timing is exact on a slow machine; the Pholo wave test follows the arm frame by frame for up to 4 seconds instead of sampling it for under one.
+
+**Checks:** all browser tests pass; the two changed tests passed 10 and 88 times in a row.
+
+---
+
 ## 2026-11-23 · `dev` · A cookie note on the home page
 
 **Why:** owner's request.

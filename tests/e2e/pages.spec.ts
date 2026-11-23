@@ -87,11 +87,16 @@ test('home page: the cookie note appears after 3 seconds, never takes focus, and
   page,
   context,
 }) => {
+  // A controlled clock: the timing is exact however slow the machine is
+  const start = new Date('2026-01-05T08:00:00Z');
+  await page.clock.install({ time: start });
+  await page.clock.pauseAt(new Date(start.getTime() + 1000)); // time only moves when the test says
   await page.goto('/');
   const note = page.getByRole('complementary', { name: 'Cookies' });
-  await page.waitForTimeout(1500);
-  await expect(note).toBeHidden(); // not straight away
-  await expect(note).toBeVisible({ timeout: 4000 });
+  await page.clock.runFor(2500);
+  await expect(note).toBeHidden(); // not before 3 seconds
+  await page.clock.runFor(600);
+  await expect(note).toBeVisible();
   await expect(note.getByRole('link', { name: 'Read our privacy notice' })).toHaveAttribute(
     'href',
     '/privacy/#cookies',
@@ -99,11 +104,12 @@ test('home page: the cookie note appears after 3 seconds, never takes focus, and
   expect(
     await page.evaluate(() => document.activeElement?.closest('[data-cookie-notice]')),
   ).toBeNull();
+  await page.clock.resume(); // the accessibility checker needs time to run normally
   await expectNoAxeViolations(page, 'cookie note');
   expect(await context.cookies()).toEqual([]); // it sets no cookies itself
   await note.getByRole('button', { name: 'OK, got it' }).click();
   await expect(note).toBeHidden();
   await page.reload();
-  await page.waitForTimeout(3500);
+  await page.waitForTimeout(3500); // well past 3 seconds: it must not come back
   await expect(note).toBeHidden(); // closed is remembered
 });
