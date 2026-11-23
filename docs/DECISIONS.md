@@ -470,7 +470,7 @@ Please confirm these are still accurate before launch (open questions 18 and 19)
 engines and AI answer engines (ChatGPT, Gemini, Perplexity, Copilot) to understand and quote.
 
 - **Title and description** name what the Foundation is and where: "Pholoso Afrika Foundation:
-  inclusive education for neurodivergent children in South Africa", with a 157-character
+  inclusive, neurodiversity-first education" (69 characters, under the 70 limit), with a 157-character
   description that mentions Section 18A, autism and ADHD.
 - **Answer first:** the hero says what the Foundation does in one sentence, and seven FAQs sit
   right before the footer (who it supports, is it registered, tax-deductible donations, 2to.iQ,

@@ -8,6 +8,14 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Fix: home page title too long
+
+**Why:** CI’s HTML check failed: the new home page title was 89 characters (the limit is 70, and search engines cut long titles).
+
+**What changed:** the title is now "Pholoso Afrika Foundation: inclusive, neurodiversity-first education" (69 characters). "South Africa", autism and ADHD stay in the description and the structured data. I also now run every CI check locally before pushing (HTML, links, contrast).
+
+---
+
 ## 2026-11-23 · `dev` · Footer contact line, home FAQs, and SEO for the home page
 
 **Why:** owner's requests.
