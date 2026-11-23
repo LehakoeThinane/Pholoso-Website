@@ -7,6 +7,10 @@ require dirname(__DIR__, 2) . '/lib/coach/coach-engine.php';
 $c = coach_begin('POST');
 $in = coach_input();
 if (!coach_rate_ok($c)) {
+    if (!coach_wants_json()) {
+        header('Location: /parent-coach/start/', true, 303);
+        exit;
+    }
     coach_json(429, ['ok' => false, 'code' => 'rate_limited', 'message' => 'Please wait a little before starting another conversation.']);
 }
 $db = coach_db($c);
@@ -18,6 +22,10 @@ $restart = isset($in['restart_from']) ? (string) $in['restart_from'] : '';
 if ($restart !== '') {
     $old = coach_session_load($db, $restart);
     if ($old === null) {
+        if (!coach_wants_json()) {
+            header('Location: /parent-coach/start/', true, 303); // start again from the beginning
+            exit;
+        }
         coach_json(404, ['ok' => false, 'code' => 'not_found', 'message' => 'That conversation has ended or expired.']);
     }
     $profile = $old['profile'];
@@ -56,6 +64,7 @@ $s['choices'] = $first['choices'];
 $s['placeholder'] = $first['placeholder'];
 coach_session_create($db, $s);
 coach_message_add($db, $s['uuid'], ['role' => 'coach', 'blocks' => $first['blocks']]);
+coach_owner_set($c, $s['uuid']); // this browser may save the conversation to an account later
 
 $url = '/parent-coach/s/' . $s['uuid'] . '/';
 if (coach_wants_json()) {

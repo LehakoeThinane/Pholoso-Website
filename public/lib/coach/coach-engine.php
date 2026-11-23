@@ -284,8 +284,12 @@ function coach_turn(array $c, array &$s, string $text): array
     $reply = null;
     for ($attempt = 0; $attempt < 2 && $reply === null; $attempt++) {
         $r = coach_ai_call($c, $system, $messages, $schema);
-        if (!empty($r['usage'])) {
-            coach_budget_add($c, $r['usage']);
+        // Every call counts towards the daily cap: its real cost, or, when no token counts came
+        // back but the provider may still charge (a timeout), the most it could have cost
+        $cost = !empty($r['usage']) ? $r['usage']
+            : (!empty($r['maybe_charged']) ? coach_budget_worst_case($c, (string) json_encode([$system, $messages])) : 0.0);
+        if ($cost !== 0.0 && !coach_budget_add($c, $cost)) {
+            return ['error' => 'busy']; // spending could not be recorded: stop asking the AI
         }
         if (!$r['ok']) {
             if ($r['error'] === 'timeout' || $r['error'] === 'network' || $r['error'] === 'http') {

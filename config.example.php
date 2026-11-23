@@ -55,7 +55,7 @@ return [
         'model'            => 'claude-opus-5-5',
         'effort'           => 'medium',   // low | medium | high
         'fallbacks'        => true,       // retry declined requests on a suitable model
-        'timeout'          => 25,         // seconds before "please try again"
+        'timeout'          => 45,         // seconds before "please try again" (the AI thinks first)
         'max_turns'        => 15,         // per conversation
         'rate_limit'       => ['max' => 40, 'window' => 3600],   // per visitor per hour
         // Daily spending cap in US dollars. When reached, the coach "rests" until tomorrow

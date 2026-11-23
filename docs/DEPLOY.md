@@ -112,6 +112,8 @@ written Parent Guide.
 2. **Tables.** Open **phpMyAdmin**, choose the new database, open the **SQL** tab, paste the
    contents of `server/migrations/001_coach.sql` from the repository, and press **Go**. Then do
    the same with `server/migrations/002_coach_accounts.sql` (saving, sign-in links and reminders).
+   (Both files changed on 23 November 2026, before the coach was ever switched on. If tables were
+   created from an older copy, delete the `coach_` tables and run both files again.)
 3. **Settings.** In `pholoso-private/config.php` (Step 0), fill in the `coach` section (see
    `config.example.php`): the database names, the AI provider's API key, and the daily budget.
    Leave `enabled` as `false` for now.

@@ -36,6 +36,19 @@ if ($s['ended']) {
 if (!coach_rate_ok($c)) {
     $fail(429, 'rate_limited', 'You are sending messages very quickly. Please wait a few minutes and try again.');
 }
+// One reply at a time: a double click or a form sent twice does not ask the AI twice. The claim
+// lapses on its own a little after the AI's time limit, if a request dies before saving.
+if (!coach_session_claim($db, $s['uuid'], (int) $c['timeout'] * 2 + 30)) {
+    $fail(409, 'still_replying', 'The coach is still answering your last message. Please wait a moment.');
+}
+register_shutdown_function(function () use ($db, $s) {
+    // If this request stops early (an error reply), free the conversation again
+    try {
+        coach_session_release($db, $s['uuid']);
+    } catch (Throwable $e) {
+        error_log('pholoso coach: could not release a session');
+    }
+});
 
 $added = [];
 $action = isset($in['action']) ? (string) $in['action'] : '';
@@ -72,6 +85,11 @@ if ($action === 'skip') {
         $s['choices'] = $r['choices'];
         $s['placeholder'] = $r['placeholder'];
         $added[] = ['role' => 'coach', 'blocks' => $r['blocks']];
+        if ($r['next_stage'] === 'done') {
+            // The closing card: the conversation is finished, and takes no more messages
+            $s['ended'] = true;
+            $s['choices'] = [];
+        }
     }
 }
 

@@ -3,11 +3,14 @@
  *
  * - No passwords. A parent signs in with a link sent by email (WCAG 3.3.8). A link works once,
  *   for 20 minutes. Links and sign-ins are stored only as SHA-256 hashes.
+ * - Opening a link only shows a "Sign in" button; pressing it uses the link. Email scanners
+ *   (Outlook Safe Links, Gmail) open links on their own, and must not use them up.
+ * - Only the browser that started a conversation can save it to an account.
  * - Signing in keeps the parent signed in on that browser for 30 days (an HttpOnly cookie).
  * - A conversation saved to an account is kept until the parent deletes it; anonymous ones are
  *   still deleted after 30 days.
- * - Reminders are opt-in, sent by lib/coach/cron-reminders.php, each with a one-click
- *   unsubscribe link. */
+ * - Reminders are opt-in, sent by lib/coach/cron-reminders.php, each with an unsubscribe
+ *   link that keeps working (one code per email). */
 
 require_once __DIR__ . '/coach-lib.php';
 require_once dirname(__DIR__) . '/mailer.php';
@@ -74,13 +77,19 @@ function coach_magic_verify(PDO $db, string $token): ?int
     if (!preg_match('/^[0-9a-f]{64}$/', $token)) {
         return null;
     }
+    $now = time();
+    // Use the link up in one statement: of two requests arriving together, only one succeeds
+    $use = $db->prepare('UPDATE coach_magic_links SET used_at = ? WHERE token_hash = ? AND used_at IS NULL AND expires_at >= ?');
+    $use->execute([$now, coach_hash($token), $now]);
+    if ($use->rowCount() !== 1) {
+        return null;
+    }
     $q = $db->prepare('SELECT * FROM coach_magic_links WHERE token_hash = ?');
     $q->execute([coach_hash($token)]);
     $link = $q->fetch();
-    if (!$link || $link['used_at'] !== null || (int) $link['expires_at'] < time()) {
+    if (!$link) {
         return null;
     }
-    $db->prepare('UPDATE coach_magic_links SET used_at = ? WHERE token_hash = ?')->execute([time(), $link['token_hash']]);
     $p = $db->prepare('SELECT id FROM coach_parents WHERE email = ?');
     $p->execute([$link['email']]);
     $id = $p->fetchColumn();
@@ -101,11 +110,7 @@ function coach_magic_verify(PDO $db, string $token): ?int
 
 function coach_cookie(string $value, int $expires): void
 {
-    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
-    setcookie(COACH_COOKIE, $value, [
-        'expires' => $expires, 'path' => '/', 'secure' => $https, 'httponly' => true, 'samesite' => 'Lax',
-    ]);
+    coach_set_cookie(COACH_COOKIE, $value, $expires);
 }
 
 function coach_login(PDO $db, int $parentId): void
@@ -217,13 +222,18 @@ function coach_reminder_set(PDO $db, array $c, string $uuid, int $parentId, bool
     }
 }
 
-/** A fresh one-click unsubscribe secret for a parent (only its hash is kept). */
+/** A new unsubscribe secret for one email (only its hash is kept). Earlier ones keep working. */
 function coach_unsubscribe_token(PDO $db, int $parentId): string
 {
     $token = coach_token();
-    $db->prepare('DELETE FROM coach_unsubscribe WHERE parent_id = ?')->execute([$parentId]);
-    $db->prepare('INSERT INTO coach_unsubscribe (parent_id, token_hash) VALUES (?, ?)')->execute([$parentId, coach_hash($token)]);
+    $db->prepare('INSERT INTO coach_unsubscribe (token_hash, parent_id, created_at) VALUES (?, ?, ?)')
+        ->execute([coach_hash($token), $parentId, time()]);
     return $token;
+}
+
+function coach_unsubscribe_forget(PDO $db, string $token): void
+{
+    $db->prepare('DELETE FROM coach_unsubscribe WHERE token_hash = ?')->execute([coach_hash($token)]);
 }
 
 /** Stops every reminder for the parent this secret belongs to. Returns true if it matched. */
@@ -239,7 +249,6 @@ function coach_unsubscribe(PDO $db, string $token): bool
         return false;
     }
     $db->prepare('DELETE FROM coach_reminders WHERE parent_id = ? AND sent_at IS NULL')->execute([(int) $pid]);
-    $db->prepare('DELETE FROM coach_unsubscribe WHERE parent_id = ?')->execute([(int) $pid]);
     return true;
 }
 
@@ -260,8 +269,12 @@ function coach_cron(PDO $db, array $c): array
         if (coach_send_mail($c, (string) $r['email'], 'How did your plan go? (Pholoso Parent Coach)', $text)) {
             $db->prepare('UPDATE coach_reminders SET sent_at = ? WHERE id = ?')->execute([$now, $r['id']]);
             $sent++;
+        } else {
+            coach_unsubscribe_forget($db, $unsub); // never sent: its code is not needed
         }
     }
+    // Unsubscribe codes older than about a year and a month
+    $db->prepare('DELETE FROM coach_unsubscribe WHERE created_at < ?')->execute([$now - 400 * 86400]);
     $purged = coach_purge_expired($db);
     $db->prepare('DELETE FROM coach_magic_links WHERE expires_at < ?')->execute([$now - 86400]);
     $db->prepare('DELETE FROM coach_logins WHERE expires_at < ?')->execute([$now]);

@@ -27,6 +27,7 @@ $notices = [
     'rate_limited' => 'You are sending messages very quickly. Please wait a few minutes and try again.',
     'empty' => 'Please type a message or choose an answer.',
     'ended' => 'This conversation has finished. You can start a new one.',
+    'still_replying' => 'The coach is still answering your last message. Please wait a moment.',
     'unavailable' => 'The coach is not available just now. The written Parent Guide may help in the meantime.',
     'rated' => 'Thank you for rating this session.',
 ];

@@ -16,8 +16,8 @@ if ($s === null || $rating < 1 || $rating > 5) {
     header('Location: ' . ($s ? '/parent-coach/s/' . $id . '/#latest' : '/parent-coach/'), true, 303);
     exit;
 }
-$s['rating'] = $rating;
-coach_session_save($db, $s);
+// Only the rating is written, so it cannot overwrite (or be overwritten by) a reply in progress
+coach_session_rate($db, $s['uuid'], $rating);
 if (coach_wants_json()) {
     coach_json(200, ['ok' => true]);
 }
