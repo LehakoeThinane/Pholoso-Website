@@ -58,6 +58,13 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     {/* noindex pages (404, thank-you) are not canonical anywhere: the 404 page is served at any wrong address */}
     {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex" />}
+    {/* Indexable pages: let search and answer engines show full snippets and large previews */}
+    {!noindex && (
+      <meta
+        name="robots"
+        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+      />
+    )}
     <meta name="theme-color" content="#134B42" />
     <script is:inline src="/prefs.js"></script>
     {/* Both weights: headings are bold, and a late bold swap can rewrap them (layout shift) */}

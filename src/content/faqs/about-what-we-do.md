@@ -1,6 +1,7 @@
 ---
 order: 1
 page: about
+home: 1
 question: What does the Foundation actually do?
 ---
 

@@ -80,7 +80,9 @@ const faqs = defineCollection({
     order: z.number().int(),
     question: z.string(),
     /** Which page shows this question. */
-    page: z.enum(['about', 'donate']),
+    page: z.enum(['about', 'donate', 'home']),
+    /** Also show it on the home page, in this position (questions with page: home use order). */
+    home: z.number().int().optional(),
   }),
 });
 

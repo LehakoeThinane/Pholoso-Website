@@ -1,8 +1,10 @@
 ---
 /**
- * SiteFooter: simple and short (owner's request, 23 November 2026). Two rows:
- * 1. The logo and tagline, then one line of links (the main pages, Donate and the email address).
- * 2. A thin bottom line: the registration numbers, copyright, Privacy, Accessibility and
+ * SiteFooter: simple and short (owner's requests, 23 November 2026). Three rows:
+ * 1. The logo and tagline, then one line of links to the main pages.
+ * 2. How to reach us: address, phone and email (address and phone show "To be confirmed"
+ *    until the Foundation sends them).
+ * 3. Centred: the registration numbers, then copyright, Privacy, Accessibility and
  *    Comfort & access.
  * The updates sign-up lives on the Resources page. Leaves room at the bottom for the floating
  * Comfort & access button. No props.
@@ -11,6 +13,7 @@ import { Image } from 'astro:assets';
 import logo from '../assets/logo/logo.png';
 import { registrationLine, site } from '../config/site';
 import { footerLinks, strings } from '../config/strings';
+import Value from './Value.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -28,15 +31,24 @@ const year = new Date().getFullYear();
             <a href={item.href}>{item.label}</a>
           </li>
         ))}
-        <li>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-        </li>
       </ul>
     </nav>
   </div>
 
+  <address class="container site-footer__contact">
+    <span>
+      <strong>Address:</strong> <Value value={site.address} />
+    </span>
+    <span>
+      <strong>Phone:</strong> <Value value={site.phone} />
+    </span>
+    <span>
+      <strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a>
+    </span>
+  </address>
+
   <div class="container site-footer__legal">
-    <p>{registrationLine}</p>
+    <p class="site-footer__registration">{registrationLine}</p>
     <ul class="site-footer__links">
       <li>{`© ${year} ${site.name}. All rights reserved.`}</li>
       <li>
@@ -60,7 +72,7 @@ const year = new Date().getFullYear();
     border-top: var(--border-width) solid var(--color-line);
     padding-top: var(--space-l);
     /* Room for the floating Comfort & access button */
-    padding-bottom: calc(var(--space-m) + var(--button-min));
+    padding-bottom: calc(var(--space-s) + var(--button-min));
     font-size: var(--step--1);
   }
   .site-footer__main {
@@ -110,18 +122,39 @@ const year = new Date().getFullYear();
     align-items: center;
     min-height: var(--target-min);
   }
-  .site-footer__legal {
+  .site-footer__contact {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0 var(--space-l);
+    justify-content: center;
+    gap: var(--space-3xs) var(--space-l);
     margin-top: var(--space-s);
-    padding-top: var(--space-2xs);
+    font-style: normal;
+  }
+  .site-footer__contact a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+  }
+  .site-footer__contact span {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 0.35em;
+  }
+  /* Centred bottom line */
+  .site-footer__legal {
+    margin-top: var(--space-2xs);
+    padding-top: var(--space-xs);
     border-top: var(--border-width) solid var(--color-line);
     color: var(--color-text-muted);
+    text-align: center;
   }
-  .site-footer__legal p {
-    margin: 0;
+  .site-footer__registration {
+    margin: 0 auto;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  .site-footer__legal .site-footer__links {
+    justify-content: center;
   }
 </style>
