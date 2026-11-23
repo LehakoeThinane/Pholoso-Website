@@ -46,7 +46,7 @@ function coach_config(): ?array
         'effort'           => 'medium',
         'fallbacks'        => true,
         'max_tokens'       => 16000,
-        'timeout'          => 25,
+        'timeout'          => 45,
         'max_turns'        => 15,
         'rate_limit'       => ['max' => 40, 'window' => 3600],
         'daily_budget_usd' => 5.0,
@@ -151,7 +151,8 @@ function coach_begin(string $method): array
     $c = coach_config();
     $why = coach_unavailable($c);
     if ($why !== '') {
-        if (!coach_wants_json() && $method === 'POST') {
+        if (!coach_wants_json()) {
+            // A form, or a link in an email: the landing page says the coach is not open
             header('Location: /parent-coach/', true, 303);
             exit;
         }
@@ -172,6 +173,40 @@ function coach_uuid(): string
     $b[8] = chr((ord($b[8]) & 0x3f) | 0x80);
     $h = bin2hex($b);
     return substr($h, 0, 8) . '-' . substr($h, 8, 4) . '-' . substr($h, 12, 4) . '-' . substr($h, 16, 4) . '-' . substr($h, 20);
+}
+
+/* ---------- Cookies ---------- */
+
+function coach_set_cookie(string $name, string $value, int $expires): void
+{
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+    setcookie($name, $value, [
+        'expires' => $expires, 'path' => '/', 'secure' => $https, 'httponly' => true, 'samesite' => 'Lax',
+    ]);
+}
+
+const COACH_OWNER_COOKIE = 'pholoso_own';
+
+/** A keyed code for a conversation, known only to the server and the browser that started it. */
+function coach_owner_code(array $c, string $uuid): string
+{
+    return hash_hmac('sha256', 'owner|' . $uuid, (string) $c['salt']);
+}
+
+/** Marks this browser as the one that started the conversation (for saving it later). */
+function coach_owner_set(array $c, string $uuid): void
+{
+    coach_set_cookie(COACH_OWNER_COOKIE, $uuid . '.' . coach_owner_code($c, $uuid), time() + COACH_SESSION_DAYS * 86400);
+}
+
+/** True if this browser started the conversation. */
+function coach_owner_ok(array $c, string $uuid): bool
+{
+    $raw = isset($_COOKIE[COACH_OWNER_COOKIE]) ? (string) $_COOKIE[COACH_OWNER_COOKIE] : '';
+    $parts = explode('.', $raw, 2);
+    return count($parts) === 2 && coach_valid_id($uuid) && hash_equals($parts[0], $uuid)
+        && hash_equals(coach_owner_code($c, $uuid), $parts[1]);
 }
 
 function coach_rate_ok(array $c): bool
@@ -200,15 +235,30 @@ function coach_strip_personal(string $s): string
     return (string) $s;
 }
 
+/** Used only if crisis-words.json is missing or empty: the most important words from it. */
+const COACH_CRISIS_FALLBACK = [
+    'suicide', 'suicidal', 'kill myself', 'want to die', 'end my life', 'hurt myself', 'self harm', 'self-harm',
+    'abuse', 'abused', 'rape', 'raped', 'not breathing', 'unconscious', 'overdose', 'poisoned', 'seizure', 'emergency',
+];
+
 /** True if the text contains a word that suggests danger or an emergency. */
 function coach_is_crisis(string $text): bool
 {
     static $pattern = null;
     if ($pattern === null) {
-        $data = json_decode((string) file_get_contents(__DIR__ . '/crisis-words.json'), true);
+        $file = __DIR__ . '/crisis-words.json';
+        $data = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
         $words = isset($data['words']) && is_array($data['words']) ? $data['words'] : [];
+        // Never an empty word: an empty alternative would match every message
+        $words = array_values(array_filter(array_map(function ($w) {
+            return trim((string) $w);
+        }, $words), 'strlen'));
+        if (!$words) {
+            error_log('pholoso coach: crisis-words.json missing or empty; using the built-in list');
+            $words = COACH_CRISIS_FALLBACK;
+        }
         $parts = array_map(function ($w) {
-            return str_replace('\-', '[- ]?', preg_quote((string) $w, '/'));
+            return str_replace('\-', '[- ]?', preg_quote($w, '/'));
         }, $words);
         $pattern = '/(^|[^\p{L}])(' . implode('|', $parts) . ')([^\p{L}]|$)/iu';
     }
@@ -266,11 +316,36 @@ function coach_session_create(PDO $db, array $s): void
             json_encode((object) $s['memory']), json_encode($s['choices']), $s['placeholder'], $now, $now + COACH_SESSION_DAYS * 86400]);
 }
 
+/** Saves the conversation's state after a turn, and frees it for the next one. (The rating is
+ * saved on its own, by coach_session_rate, so neither can overwrite the other.) */
 function coach_session_save(PDO $db, array $s): void
 {
-    $db->prepare('UPDATE coach_sessions SET stage = ?, child_index = ?, memory = ?, choices = ?, placeholder = ?, ended = ?, rating = ?, turns = ? WHERE uuid = ?')
+    $db->prepare('UPDATE coach_sessions SET stage = ?, child_index = ?, memory = ?, choices = ?, placeholder = ?, ended = ?, turns = ?, busy_until = NULL WHERE uuid = ?')
         ->execute([$s['stage'], $s['child_index'], json_encode((object) $s['memory']), json_encode($s['choices']), $s['placeholder'],
-            $s['ended'] ? 1 : 0, $s['rating'], $s['turns'], $s['uuid']]);
+            $s['ended'] ? 1 : 0, $s['turns'], $s['uuid']]);
+}
+
+/**
+ * Claims the conversation while a reply is written. False if another request is already
+ * writing one (a double click, or a form sent twice). The claim lapses after $seconds, in case
+ * a request dies before saving.
+ */
+function coach_session_claim(PDO $db, string $id, int $seconds): bool
+{
+    $now = time();
+    $q = $db->prepare('UPDATE coach_sessions SET busy_until = ? WHERE uuid = ? AND (busy_until IS NULL OR busy_until < ?)');
+    $q->execute([$now + $seconds, $id, $now]);
+    return $q->rowCount() === 1;
+}
+
+function coach_session_release(PDO $db, string $id): void
+{
+    $db->prepare('UPDATE coach_sessions SET busy_until = NULL WHERE uuid = ?')->execute([$id]);
+}
+
+function coach_session_rate(PDO $db, string $id, int $rating): void
+{
+    $db->prepare('UPDATE coach_sessions SET rating = ? WHERE uuid = ?')->execute([$rating, $id]);
 }
 
 /** Adds a message: ['role' => 'coach', 'blocks' => [...]] or ['role' => 'parent', 'text' => '...'] or help. */

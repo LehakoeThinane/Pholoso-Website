@@ -33,8 +33,11 @@ CREATE TABLE IF NOT EXISTS coach_reminders (
   INDEX (parent_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Each parent can stop all reminders with one click: a secret only they receive by email
+-- One-click "stop all reminders": a secret in each reminder email. A parent can have several
+-- (one per email), so the link in an older email keeps working.
 CREATE TABLE IF NOT EXISTS coach_unsubscribe (
-  parent_id INT UNSIGNED NOT NULL PRIMARY KEY,
-  token_hash CHAR(64) NOT NULL UNIQUE
+  token_hash CHAR(64) NOT NULL PRIMARY KEY,
+  parent_id INT UNSIGNED NOT NULL,
+  created_at INT UNSIGNED NOT NULL,
+  INDEX (parent_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

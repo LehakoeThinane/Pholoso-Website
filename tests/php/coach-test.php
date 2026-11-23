@@ -44,6 +44,16 @@ check('ID numbers, phone numbers and emails are removed',
     coach_strip_personal('Call 082 555 1234 or +27 82 555 1234, mail me@example.com, ID 8001015009087'));
 check('danger words are found', coach_is_crisis('I think he is NOT breathing') && coach_is_crisis('she wants to self harm') && coach_is_crisis('self-harm'));
 check('ordinary words are not', !coach_is_crisis('He refuses to stop the game and shouts') && !coach_is_crisis('my child is not fitting in'));
+// Without crisis-words.json (for example left out of an upload): a built-in list, never "every message"
+$bare = sys_get_temp_dir() . '/pholoso-crisis-' . bin2hex(random_bytes(4));
+mkdir($bare . '/lib/coach', 0700, true);
+copy($public . '/lib/coach/coach-lib.php', $bare . '/lib/coach/coach-lib.php');
+copy($public . '/lib/rate-limiter.php', $bare . '/lib/rate-limiter.php');
+$probe = $bare . '/probe.php';
+file_put_contents($probe, '<?php ini_set("log_errors", "0"); require __DIR__ . "/lib/coach/coach-lib.php"; echo json_encode([coach_is_crisis("He has a meltdown"), coach_is_crisis("he is unconscious")]);');
+$ini0 = php_ini_loaded_file();
+$out = shell_exec(escapeshellarg(PHP_BINARY) . ($ini0 ? ' -c ' . escapeshellarg($ini0) : '') . ' ' . escapeshellarg($probe));
+check('a missing crisis word list falls back to a built-in list, not "everything is an emergency"', trim((string) $out) === '[false,true]', (string) $out);
 $lib = ['next-up-activity' => ['id' => 'next-up-activity', 'title' => 'Next-up activity']];
 $good = ['blocks' => [['type' => 'strategy', 'id' => 'next-up-activity', 'title' => 'Changed', 'text' => 'Try this.']], 'choices' => ['Yes'], 'placeholder' => 'x', 'next_stage' => 'offer', 'safety_flag' => 'none'];
 $v = coach_validate_reply($good, 'validate', 'offer', $lib);
@@ -160,15 +170,19 @@ function call(string $method, string $url, array $data = [], bool $json = true, 
     $status = isset($http_response_header[0]) && preg_match('#\s(\d{3})#', $http_response_header[0], $mm) ? (int) $mm[1] : 0;
     $location = '';
     $cookie = '';
+    $jar = [];
     foreach ($http_response_header ?? [] as $line) {
         if (stripos($line, 'Location:') === 0) {
             $location = trim(substr($line, 9));
         }
         if (stripos($line, 'Set-Cookie:') === 0) {
             $cookie = trim(substr($line, 11));
+            $jar[] = explode(';', $cookie)[0];
         }
     }
-    return ['status' => $status, 'location' => $location, 'cookie' => $cookie, 'body' => $body, 'json' => json_decode($body, true)];
+    // 'cookie': the last Set-Cookie line; 'jar': a ready "Cookie:" header with all of them
+    return ['status' => $status, 'location' => $location, 'cookie' => $cookie, 'jar' => $jar ? 'Cookie: ' . implode('; ', $jar) : '',
+        'body' => $body, 'json' => json_decode($body, true)];
 }
 
 $procs = [];
@@ -210,6 +224,15 @@ try {
     $mem = json_decode((string) $sqlite->query("SELECT memory FROM coach_sessions WHERE uuid = '$id'")->fetchColumn(), true);
     check('the child’s activity, place and strategy are remembered', ($mem['activity'] ?? '') === 'Building with blocks' && ($mem['place'] ?? '') === 'The lounge' && ($mem['strategy'] ?? '') === 'next-up-activity');
 
+    $r = call('POST', '/api/coach/rating.php', ['id' => $id, 'rating' => 3]);
+    $sqlite->exec("UPDATE coach_sessions SET busy_until = NULL WHERE uuid = '$id'");
+    $r = call('POST', '/api/coach/turn.php', ['id' => $id, 'text' => 'thanks so much']);
+    check('after the plan, a typed message gets the closing card and ends the conversation', $r['status'] === 200 && $r['json']['ended'] === true
+        && ($r['json']['added'][1]['blocks'][0]['type'] ?? '') === 'closing', $r['body']);
+    check('a rating is kept when a turn is saved later (saved on its own)', (int) $sqlite->query("SELECT rating FROM coach_sessions WHERE uuid = '$id'")->fetchColumn() === 3);
+    $r = call('POST', '/api/coach/turn.php', ['id' => $id, 'text' => 'one more thing']);
+    check('…and then takes no more messages, so no second closing card (409)', $r['status'] === 409, $r['body']);
+    $sqlite->exec("UPDATE coach_sessions SET ended = 0, stage = 'close' WHERE uuid = '$id'");
     $r = call('POST', '/api/coach/turn.php', ['id' => $id, 'action' => 'skip']);
     check('Skip shows the closing card and ends the session', $r['json']['ended'] === true && ($r['json']['added'][0]['blocks'][0]['type'] ?? '') === 'closing');
     $r = call('POST', '/api/coach/turn.php', ['id' => $id, 'text' => 'hello again']);
@@ -284,6 +307,26 @@ try {
     }
     $mode('normal');
 
+    echo "One reply at a time\n";
+    $r = call('POST', '/api/coach/start.php', ['children' => [['name' => 'Ben']]]);
+    $idb = $r['json']['id'];
+    $sqlite->exec("UPDATE coach_sessions SET busy_until = " . (time() + 100) . " WHERE uuid = '$idb'");
+    $before = count($aiCalls());
+    $r = call('POST', '/api/coach/turn.php', ['id' => $idb, 'choice' => 'Ben has a meltdown']);
+    check('while a reply is being written, a second one is refused (409), without asking the AI', $r['status'] === 409 && ($r['json']['code'] ?? '') === 'still_replying'
+        && count($aiCalls()) === $before, $r['body']);
+    check('…and nothing is added to the conversation', (int) $sqlite->query("SELECT COUNT(*) FROM coach_messages WHERE session_uuid = '$idb'")->fetchColumn() === 1);
+    $r = call('POST', '/api/coach/turn.php', ['id' => $idb, 'choice' => 'Ben has a meltdown'], false);
+    check('without JavaScript, it says the coach is still answering', $r['location'] === "/parent-coach/s/$idb/?notice=still_replying#latest", $r['location']);
+    $sqlite->exec("UPDATE coach_sessions SET busy_until = " . (time() - 1) . " WHERE uuid = '$idb'");
+    $r = call('POST', '/api/coach/turn.php', ['id' => $idb, 'choice' => 'Ben has a meltdown']);
+    check('a claim that has lapsed (a request that died) does not block the conversation', $r['status'] === 200, $r['body']);
+    check('after a reply, the conversation is free again', $sqlite->query("SELECT busy_until FROM coach_sessions WHERE uuid = '$idb'")->fetchColumn() === null);
+    $mode('error');
+    call('POST', '/api/coach/turn.php', ['id' => $idb, 'choice' => 'Yes, show me']);
+    $mode('normal');
+    check('after an error reply too', $sqlite->query("SELECT busy_until FROM coach_sessions WHERE uuid = '$idb'")->fetchColumn() === null);
+
     echo "Limits\n";
     $r = call('POST', '/api/coach/start.php', ['children' => [['name' => 'Ben']]]);
     $id6 = $r['json']['id'];
@@ -307,6 +350,22 @@ try {
     $r = call('POST', '/api/coach/turn.php', ['id' => $id7, 'text' => 'hello']);
     check('the rate limit asks the parent to wait (429)', $r['status'] === 429 && strpos($r['body'], 'wait') !== false, $r['body']);
     unlink($rateFile);
+
+    $budget = $tmp . '/storage/coach-budget-' . gmdate('Y-m-d') . '.json';
+    @unlink($budget);
+    $mode('slow');
+    call('POST', '/api/coach/turn.php', ['id' => $id7, 'text' => 'meltdown']);
+    $mode('normal');
+    $spent = json_decode((string) @file_get_contents($budget), true);
+    check('a timed-out request is counted at the most it could cost', ($spent['usd'] ?? 0) >= 16000 * 20 / 1e6, json_encode($spent));
+    file_put_contents($budget, '{damaged');
+    $before = count($aiCalls());
+    $r = call('POST', '/api/coach/turn.php', ['id' => $id7, 'text' => 'meltdown']);
+    check('a damaged spending file: the coach rests (fails closed), no AI request', strpos($r['body'], 'resting for today') !== false && count($aiCalls()) === $before, $r['body']);
+    unlink($budget);
+    $notDir = $tmp . '/not-a-folder';
+    file_put_contents($notDir, 'x');
+    check('a storage folder that cannot be written: the cap says no', coach_budget_ok(['storage_dir' => $notDir . '/inside', 'daily_budget_usd' => 5.0]) === false);
 
     echo "Without JavaScript\n";
     $r = call('POST', '/api/coach/start.php', ['parent' => 'Sam', 'child_name' => 'Luna', 'child_age' => '7', 'differences' => ['autism']], false);
@@ -350,8 +409,11 @@ try {
     require_once $public . '/lib/coach/coach-accounts.php';
     $r = call('POST', '/api/coach/start.php', ['parent' => 'Sam', 'children' => [['name' => 'Luna']]]);
     $sid = $r['json']['id'];
+    $owner = $r['jar'];
+    check('starting a conversation marks this browser as its owner (HttpOnly cookie)', strpos($owner, 'pholoso_own=' . $sid . '.') !== false
+        && stripos($r['cookie'], 'httponly') !== false, $r['cookie']);
     $before = count($mails());
-    $r = call('POST', '/api/coach/magic-link.php', ['email' => 'Sam@Example.com', 'id' => $sid]);
+    $r = call('POST', '/api/coach/magic-link.php', ['email' => 'Sam@Example.com', 'id' => $sid], true, [$owner]);
     $mail = $mails()[$before] ?? [];
     check('Save: a sign-in link is emailed', $r['status'] === 200 && ($mail['to'] ?? '') === 'sam@example.com'
         && preg_match('#/api/coach/magic-link\.php\?token=([0-9a-f]{64})#', $mail['text'] ?? '', $m) === 1, $r['body']);
@@ -369,17 +431,36 @@ try {
     check('at most 3 links an hour per address', $r4['status'] === 429);
 
     $r = call('GET', '/api/coach/magic-link.php?token=' . $token, [], false);
-    check('the link signs in and goes to My coaching', $r['status'] === 303 && $r['location'] === '/parent-coach/my-coaching/?notice=signed-in', $r['location']);
+    check('opening the link (as an email scanner would) only leads to a Sign in button', $r['status'] === 303 && $r['location'] === "/parent-coach/my-coaching/?signin=$token"
+        && $sqlite->query("SELECT used_at FROM coach_magic_links WHERE token_hash = '" . hash('sha256', $token) . "'")->fetchColumn() === null && $r['cookie'] === '', $r['location']);
+    $page = call('GET', $r['location'], [], false);
+    check('…a page with one Sign in button that carries the link', strpos($page['body'], 'name="token" value="' . $token . '"') !== false && strpos($page['body'], '>Sign in</button>') !== false);
+    $r = call('POST', '/api/coach/magic-link.php', ['token' => $token], false, ["Origin: $base"]);
+    check('pressing it signs in and goes to My coaching', $r['status'] === 303 && $r['location'] === '/parent-coach/my-coaching/?notice=signed-in', $r['location']);
     check('the sign-in cookie is HttpOnly and SameSite=Lax', stripos($r['cookie'], 'pholoso_coach=') === 0 && stripos($r['cookie'], 'httponly') !== false && stripos($r['cookie'], 'samesite=lax') !== false, $r['cookie']);
     $cookie = 'Cookie: ' . explode(';', $r['cookie'])[0];
     $row = $sqlite->query("SELECT parent_id, expires_at FROM coach_sessions WHERE uuid = '$sid'")->fetch(PDO::FETCH_ASSOC);
     check('the conversation is saved to the account, and no longer expires after 30 days', (int) $row['parent_id'] > 0 && (int) $row['expires_at'] === COACH_KEEP);
-    $r = call('GET', '/api/coach/magic-link.php?token=' . $token, [], false);
+    $r = call('POST', '/api/coach/magic-link.php', ['token' => $token], false, ["Origin: $base"]);
     check('a link works only once', $r['location'] === '/parent-coach/my-coaching/?notice=link');
+    $twice = coach_token();
+    $sqlite->exec("INSERT INTO coach_magic_links (token_hash, email, session_uuid, created_at, expires_at, used_at) VALUES ('" . hash('sha256', $twice) . "', 'twice@example.com', NULL, " . time() . ", " . (time() + 600) . ", NULL)");
+    $p1 = coach_magic_verify($sqlite, $twice);
+    check('using a link and checking it happen in one step: a second use finds nothing', $p1 !== null && coach_magic_verify($sqlite, $twice) === null);
     $old = coach_token();
     $sqlite->exec("INSERT INTO coach_magic_links (token_hash, email, session_uuid, created_at, expires_at, used_at) VALUES ('" . hash('sha256', $old) . "', 'old@example.com', NULL, 1, 2, NULL)");
-    $r = call('GET', '/api/coach/magic-link.php?token=' . $old, [], false);
+    $r = call('POST', '/api/coach/magic-link.php', ['token' => $old], false, ["Origin: $base"]);
     check('an expired link does not work', $r['location'] === '/parent-coach/my-coaching/?notice=link');
+    $r = call('POST', '/api/coach/magic-link.php', ['token' => $old], false, ['Origin: https://evil.example']);
+    check('the Sign in button only works from this website', $r['status'] === 403);
+    // Someone with only the conversation's address cannot save it to their own account
+    $r = call('POST', '/api/coach/start.php', ['parent' => 'Thandi', 'children' => [['name' => 'Sipho']]]);
+    $theirs = $r['json']['id'];
+    $before = count($mails());
+    call('POST', '/api/coach/magic-link.php', ['email' => 'stranger@example.com', 'id' => $theirs]);
+    preg_match('#token=([0-9a-f]{64})#', $mails()[$before]['text'] ?? '', $sm);
+    call('POST', '/api/coach/magic-link.php', ['token' => $sm[1] ?? ''], false, ["Origin: $base"]);
+    check('without the starting browser’s cookie, a conversation cannot be claimed', $sqlite->query("SELECT parent_id FROM coach_sessions WHERE uuid = '$theirs'")->fetchColumn() === null);
 
     $page = call('GET', '/parent-coach/my-coaching/', [], false, [$cookie]);
     check('My coaching shows the account and the saved conversation', strpos($page['body'], 'sam@example.com') !== false
@@ -406,9 +487,22 @@ try {
     $mail = $mails()[$before] ?? [];
     check('the daily job sends the reminder, with a one-click unsubscribe link', $done['reminders'] === 1 && ($mail['to'] ?? '') === 'sam@example.com'
         && preg_match('#/api/coach/unsubscribe\.php\?token=([0-9a-f]{64})#', $mail['text'] ?? '', $um) === 1);
+    $first = $um[1];
+    // A second reminder email, with its own code
     $form(['action' => 'remind', 'id' => $sid]);
-    $r = call('GET', '/api/coach/unsubscribe.php?token=' . $um[1], [], false);
-    check('unsubscribe stops every pending reminder, no sign-in needed', $r['location'] === '/parent-coach/my-coaching/?notice=unsubscribed'
+    $sqlite->exec("UPDATE coach_reminders SET send_at = 1 WHERE session_uuid = '$sid' AND sent_at IS NULL");
+    $before = count($mails());
+    coach_cron(new PDO('sqlite:' . $dbFile), coach_config());
+    preg_match('#unsubscribe\.php\?token=([0-9a-f]{64})#', $mails()[$before]['text'] ?? '', $um2);
+    check('each reminder email has its own unsubscribe code', ($um2[1] ?? '') !== '' && $um2[1] !== $first);
+    $form(['action' => 'remind', 'id' => $sid]);
+    $r = call('GET', '/api/coach/unsubscribe.php?token=' . $first, [], false);
+    check('opening an unsubscribe link (as a scanner would) only leads to a Stop reminders button', $r['location'] === "/parent-coach/my-coaching/?stop=$first"
+        && (int) $sqlite->query('SELECT COUNT(*) FROM coach_reminders WHERE sent_at IS NULL')->fetchColumn() === 1);
+    $page = call('GET', $r['location'], [], false);
+    check('…with one button that carries the code', strpos($page['body'], 'action="/api/coach/unsubscribe.php"') !== false && strpos($page['body'], 'value="' . $first . '"') !== false);
+    $r = call('POST', '/api/coach/unsubscribe.php', ['token' => $first], false, ["Origin: $base"]);
+    check('the link in the OLDER email still stops every pending reminder, no sign-in needed', $r['location'] === '/parent-coach/my-coaching/?notice=unsubscribed'
         && (int) $sqlite->query('SELECT COUNT(*) FROM coach_reminders WHERE sent_at IS NULL')->fetchColumn() === 0);
 
     $sqlite->exec("UPDATE coach_sessions SET memory = '" . json_encode(['activity' => 'Building with blocks', 'place' => 'The lounge', 'strategy' => 'next-up-activity']) . "' WHERE uuid = '$sid'");
@@ -437,6 +531,8 @@ try {
         && (int) $sqlite->query("SELECT COUNT(*) FROM coach_magic_links WHERE email = 'sam@example.com'")->fetchColumn() === 0);
     $page = call('GET', '/parent-coach/my-coaching/', [], false, [$cookie]);
     check('…and the old sign-in no longer works', strpos($page['body'], 'Send me a sign-in link') !== false);
+    $r = call('POST', '/api/coach/start.php', ['restart_from' => '00000000-0000-4000-8000-000000000000'], false);
+    check('without JavaScript, "Start a new conversation" from an expired one goes to a page, not code', $r['status'] === 303 && $r['location'] === '/parent-coach/start/', $r['location']);
     $r = call('POST', '/api/coach/magic-link.php', ['email' => 'nojs@example.com', 'id' => ''], false);
     check('without JavaScript, the save form goes to My coaching', $r['status'] === 303 && $r['location'] === '/parent-coach/my-coaching/?notice=sent');
     check('the daily job cannot be reached from the web', !is_file($public . '/api/coach/cron-reminders.php')
@@ -452,6 +548,8 @@ try {
     $base = "http://127.0.0.1:$offPort";
     $r = call('POST', '/api/coach/start.php', ['children' => [['name' => 'Ben']]]);
     check('while switched off, the coach says it is not open (503)', $r['status'] === 503 && ($r['json']['code'] ?? '') === 'unavailable');
+    $r = call('GET', '/api/coach/magic-link.php?token=' . str_repeat('a', 64), [], false);
+    check('while switched off, a link from an email goes to the coach page, not code', $r['status'] === 303 && $r['location'] === '/parent-coach/', $r['status'] . ' ' . $r['location']);
     $r = call('GET', '/coach-health.php', [], false);
     check('the health check lists what is missing, without secrets', strpos($r['body'], 'NOT OK  Coach switched on') !== false && strpos($r['body'], 'test-secret') === false
         && strpos($r['body'], 'OK      Database connection') !== false, $r['body']);

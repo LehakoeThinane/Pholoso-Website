@@ -143,7 +143,11 @@ test('save with an email link, then My coaching: follow-up, reminder, delete', a
     mails.at(-1).text,
   )![1]!;
 
+  // Opening the link (as an email scanner would) uses nothing up: it shows a Sign in button
   await page.goto(link);
+  await expect(page).toHaveURL(/\/parent-coach\/my-coaching\/\?signin=[0-9a-f]{64}$/);
+  await expectNoAxeViolations(page, 'Sign in button');
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).toHaveURL(/\/parent-coach\/my-coaching\/\?notice=signed-in$/);
   await expect(page.getByText('You are signed in.')).toBeVisible();
   await expect(page.getByText('sam@example.com')).toBeVisible();

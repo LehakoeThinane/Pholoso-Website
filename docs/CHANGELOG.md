@@ -8,6 +8,27 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Parent Coach: ten fixes from the code review
+
+**Why:** the owner asked for a review of the coach's PHP code before it goes live, then for
+every finding to be fixed. The coach is still off in production; nothing live was affected.
+
+**What changed** (details in DECISIONS §30)
+
+- Sign-in and unsubscribe links from emails now show a button first, so email scanners cannot use them up.
+- A sign-in link cannot be used twice, even by two requests at once.
+- Unsubscribe links in older reminder emails keep working.
+- Only the browser that started a conversation can save it to an account.
+- The daily spending cap fails closed, and timed-out AI calls count against it at their highest possible cost; the AI time limit is 45 seconds.
+- A double click no longer asks the AI twice; ratings are saved on their own.
+- A finished conversation closes after its closing card.
+- A missing crisis word list falls back to a built-in list.
+- Without JavaScript, two rare error cases show a page instead of code.
+
+**Checks:** PHP coach tests 116 (24 new, one per fix or more), forms 49, `.htaccess`; the 8 live-mode browser tests (the save journey now presses "Sign in"), with axe on the new Sign in page.
+
+---
+
 ## 2026-11-23 · `dev` · Security: two warnings in a developer tool fixed
 
 **Why:** a dependency audit found two moderate warnings (glob, and minimatch under it). Both came from linkinator, the tool behind CI’s external-link report. Nothing that ships to the website was affected (the production audit was already clean).

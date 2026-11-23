@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS coach_sessions (
   ended TINYINT UNSIGNED NOT NULL DEFAULT 0,
   rating TINYINT UNSIGNED NULL,
   turns SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  -- While a reply is being written: a second request for the same conversation is refused
+  busy_until INT UNSIGNED NULL,
   created_at INT UNSIGNED NOT NULL,
   expires_at INT UNSIGNED NOT NULL,
   INDEX (expires_at),

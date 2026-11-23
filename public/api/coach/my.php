@@ -2,6 +2,8 @@
 /* Pholoso Parent Coach - "My coaching" (/parent-coach/my-coaching/, rewritten here by
  * .htaccess). Drawn by the server from the built page, so it works without JavaScript.
  *
+ * From an email link: only a "Sign in" or "Stop reminders" button (?signin= / ?stop=), so an
+ * email scanner opening the link changes nothing; pressing the button does.
  * Signed out: a form to get a sign-in link. Signed in: saved conversations with their plans;
  * start a follow-up; a reminder in a few days; delete a conversation; delete the account;
  * sign out. Every action is a plain form (POST, then back here). */
@@ -86,7 +88,7 @@ $notices = [
     'reminder' => 'We will email you a reminder in ' . (int) $c['reminder_days'] . ' days.',
     'no-reminder' => 'The reminder is cancelled.',
     'unsubscribed' => 'You will not get any more reminders.',
-    'unsubscribe-link' => 'That link has already been used. You will not get reminders unless you ask for one again.',
+    'unsubscribe-link' => 'That link does not work. To stop reminders, sign in and cancel them on this page.',
     'not-found' => 'That conversation could not be found.',
 ];
 $notice = isset($_GET['notice'], $notices[$_GET['notice']]) ? $notices[$_GET['notice']] : '';
@@ -103,7 +105,22 @@ $confirm = function (string $id, string $label) use ($e) {
 };
 
 $html = $notice !== '' ? '<p class="my__notice" role="status">' . $e($notice) . '</p>' : '';
-if ($parent === null) {
+$signin = isset($_GET['signin']) && preg_match('/^[0-9a-f]{64}$/', (string) $_GET['signin']) ? (string) $_GET['signin'] : '';
+$stop = isset($_GET['stop']) && preg_match('/^[0-9a-f]{64}$/', (string) $_GET['stop']) ? (string) $_GET['stop'] : '';
+if ($signin !== '') {
+    // The link from the email: one button, which uses the link
+    $html .= '<h2>Sign in to the Parent Coach</h2>'
+        . '<p>Press the button to sign in on this device. Your conversation will be saved here.</p>'
+        . '<form method="post" action="/api/coach/magic-link.php" class="my__signin">'
+        . '<input type="hidden" name="token" value="' . $e($signin) . '">'
+        . '<button type="submit" class="cbutton">Sign in</button></form>';
+} elseif ($stop !== '') {
+    $html .= '<h2>Stop reminders</h2>'
+        . '<p>Press the button and we will not send you any more reminder emails. Your saved coaching stays here.</p>'
+        . '<form method="post" action="/api/coach/unsubscribe.php" class="my__signin">'
+        . '<input type="hidden" name="token" value="' . $e($stop) . '">'
+        . '<button type="submit" class="cbutton">Stop reminders</button></form>';
+} elseif ($parent === null) {
     $html .= '<h2>Sign in to see your coaching</h2>'
         . '<p>We will email you a link. There is no password. The link works once, for 20 minutes.</p>'
         . '<form method="post" action="/api/coach/magic-link.php" class="my__signin">'

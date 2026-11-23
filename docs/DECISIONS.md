@@ -486,3 +486,33 @@ engines and AI answer engines (ChatGPT, Gemini, Perplexity, Copilot) to understa
 
 **Not done (needs the Foundation):** official social profiles for `sameAs`, and verifying the
 site in Google Search Console and Bing Webmaster Tools (open question A4, A5).
+
+## 30. Parent Coach: fixes from the code review, before it ever goes live
+
+**Decision (owner, 23 November 2026):** a review of the coach's PHP code found nine bugs and one
+small issue. All ten are fixed, each with a test, while the coach is still off.
+
+- **Email scanners** (Outlook Safe Links, Gmail) open links on their own. Opening a sign-in or
+  unsubscribe link now only shows a "Sign in" or "Stop reminders" button; pressing it does the
+  work. Before, a scanner used up the sign-in link, or stopped someone's reminders.
+- **A sign-in link is used up in the same database statement that checks it**, so two requests
+  arriving together cannot both sign in.
+- **Every reminder email has its own unsubscribe code**, and older ones keep working.
+- **Only the browser that started a conversation can save it** to an account (an HttpOnly
+  cookie with a keyed code). Someone with only the web address can no longer claim it.
+- **The daily spending cap fails closed:** if spending cannot be read or recorded, the coach
+  rests instead of running without a limit.
+- **Timed-out AI calls count against the cap** at the most they could cost (their input plus
+  every output token allowed), since the provider may still charge for them. The time limit
+  is now 45 seconds (was 25), because the model thinks before it answers.
+- **One reply at a time per conversation:** a double click or a form sent twice is refused
+  ("still answering"), without a second AI call. A rating is saved on its own, so it cannot
+  overwrite a reply in progress, or be overwritten by one.
+- **A finished conversation closes** after its closing card, and takes no more messages.
+- **If the crisis word list is missing**, a built-in list is used; before, every message would
+  have counted as an emergency.
+- **Without JavaScript**, an expired conversation's "Start a new conversation", and email links
+  opened while the coach is off, lead to a page instead of raw code.
+
+**Database:** `001_coach.sql` gains `busy_until` (the reply in progress); `002_coach_accounts.sql`
+keeps several unsubscribe codes per parent. Both changed before any deployment.
