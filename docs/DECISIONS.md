@@ -392,3 +392,27 @@ approved), Get involved for schools, Get involved for donors, and Stories. Easy 
 African families and teachers, used with consent. The brief does not allow stand-ins that look
 like real families, so these wait for the Foundation's photos.
 
+
+## 26. Parent Coach Stage 3: saving, My coaching, reminders and follow-ups
+
+**Decision:** saving is optional and comes at the end of a conversation ("Save: email me a
+link"). There are no passwords: a parent signs in with a link sent by email, which works once
+and for 20 minutes (no memory test, WCAG 2.2 3.3.8). Signing in sets one HttpOnly, Secure,
+SameSite=Lax cookie for 30 days. The database keeps only one-way hashes of links, sign-ins and
+unsubscribe codes. Asking for a link never says whether an account exists, and is limited to 3
+an hour per address. 23 November 2026.
+
+**My coaching** (`/parent-coach/my-coaching/`, not in search engines) lists saved
+conversations, each with its plan, and lets the parent: open it; start a follow-up ("Welcome
+back! Last time we planned…", then one small change to the plan); ask for one reminder email
+in 3 days, or cancel it; delete it; or delete the whole account. Deleting asks for a tick in a
+confirm box first. Every action is a plain form, so the page works without JavaScript; actions
+from another website are refused.
+
+**Reminders** are sent by a daily cron job (`lib/coach/cron-reminders.php`, command line only),
+which also deletes expired conversations and links. Every reminder has a one-click unsubscribe
+link.
+
+**Kept:** saved conversations stay until the parent deletes them; unsaved ones are still
+deleted after 30 days. The privacy notice (shown only when the coach is live) says this, as a
+draft for the POPIA review.

@@ -677,3 +677,76 @@
 .onboard__error[hidden] {
   display: none;
 }
+
+/* ---------- Save your progress (Stage 3) ---------- */
+.cblock__save {
+  display: grid;
+  gap: var(--space-2xs);
+  margin-top: var(--space-xs);
+}
+.cblock__save .cbutton {
+  justify-self: start;
+}
+
+/* ---------- My coaching ---------- */
+.my-page {
+  max-width: 44rem;
+  padding-block: var(--space-l) var(--space-2xl);
+}
+.my__notice {
+  padding: var(--space-s) var(--space-m);
+  border-left: 6px solid var(--color-link);
+  border-radius: var(--radius-s);
+  background-color: var(--color-surface);
+  font-weight: 700;
+}
+.my__signin {
+  display: grid;
+  gap: var(--space-2xs);
+  max-width: 28rem;
+  margin-bottom: var(--space-m);
+}
+.my__signin .cbutton {
+  justify-self: start;
+}
+.my__card {
+  margin-bottom: var(--space-m);
+  padding: var(--space-m);
+  border: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-l);
+  background-color: var(--color-bg);
+  box-shadow: var(--card-glow);
+}
+.my__card h3 {
+  font-size: var(--step-1);
+}
+.my__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-s);
+}
+.my__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0 0 var(--space-s);
+}
+.my__confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: var(--target-min);
+}
+.my__confirm input {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.my__danger {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+.clanding__back {
+  text-align: center;
+}

@@ -110,7 +110,8 @@ written Parent Guide.
    `ACCOUNT_coach`), a user with a long random password, and add the user to the database with
    **All privileges**. Write the three names down somewhere safe.
 2. **Tables.** Open **phpMyAdmin**, choose the new database, open the **SQL** tab, paste the
-   contents of `server/migrations/001_coach.sql` from the repository, and press **Go**.
+   contents of `server/migrations/001_coach.sql` from the repository, and press **Go**. Then do
+   the same with `server/migrations/002_coach_accounts.sql` (saving, sign-in links and reminders).
 3. **Settings.** In `pholoso-private/config.php` (Step 0), fill in the `coach` section (see
    `config.example.php`): the database names, the AI provider's API key, and the daily budget.
    Leave `enabled` as `false` for now.
@@ -118,15 +119,22 @@ written Parent Guide.
    instead of `pnpm build`, then uploads `dist-live/` the usual way (Parts 1 and 2).
 5. **Check.** Open `https://pholoso.africa/coach-health.php`. Every line except "Coach switched
    on" should say OK. Fix anything marked NOT OK (each line says how).
-6. **Switch on.** Set `enabled` to `true` in `config.php`, then try one full conversation on the
-   live site, and once without JavaScript if possible.
+6. **Daily job.** In cPanel, open **Cron Jobs** and add one that runs once a day (for example
+   at 06:00) with this command, using your cPanel account name:
+   `php /home/ACCOUNT/public_html/lib/coach/cron-reminders.php`
+   It sends the reminders parents asked for and deletes expired conversations and sign-in links.
+   It only runs from cron: opening it in a browser shows "not found".
+7. **Switch on.** Set `enabled` to `true` in `config.php`, then try one full conversation on the
+   live site, and once without JavaScript if possible. Save it with your own email address,
+   open the link in the email, and check that My coaching lists the conversation.
 
 **To switch it off again quickly:** set `enabled` back to `false`. The coach pages then say the
 coach is not open, and nothing is sent to the AI provider. The server may keep using the old
 setting for a few seconds (on some hosting, up to a minute) before it notices the change.
 
-**Old conversations** are deleted 30 days after they start. This happens on its own as people
-use the coach. (Stage 3 adds a nightly cron job, so it also happens on quiet days.)
+**Old conversations** are deleted 30 days after they start, unless the parent saved them. This
+happens as people use the coach, and every day through the daily job (step 6). Saved
+conversations stay until the parent deletes them, or deletes their account, on My coaching.
 
 ---
 

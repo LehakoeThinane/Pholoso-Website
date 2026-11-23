@@ -9,6 +9,10 @@ if (preg_match('#^/parent-coach/s/([0-9a-f-]{36})/?$#', (string) $path, $m)) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/coach/session.php';
     return true;
 }
+if (preg_match('#^/parent-coach/my-coaching/?$#', (string) $path)) {
+    require $_SERVER['DOCUMENT_ROOT'] . '/api/coach/my.php';
+    return true;
+}
 $file = $_SERVER['DOCUMENT_ROOT'] . $path;
 if (substr((string) $path, -1) === '/' && is_file($file . 'index.html')) {
     header('Content-Type: text/html; charset=UTF-8');

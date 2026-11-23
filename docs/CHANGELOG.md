@@ -8,6 +8,28 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-23 · `dev` · Brief v5, part 5: Parent Coach Stage 3 (save, My coaching, reminders, follow-ups)
+
+**Why:** brief v4 §7b Stage 3, continued in brief v5. The coach stays off in production until
+the Foundation approves it.
+
+**What changed**
+
+- **Save at the end:** "Save: email me a link". No passwords; the link works once, for 20 minutes.
+- **My coaching** page: saved conversations with their plans; follow-up, remind me in 3 days, delete, delete my account (each delete asks for a tick first); works without JavaScript.
+- **Follow-ups:** "Welcome back! Last time we planned…", then one small change to the plan.
+- **Reminders** by a daily cron job, each with an unsubscribe link. The job also deletes expired conversations and links.
+- **Database:** `server/migrations/002_coach_accounts.sql` (four tables; only hashes of links and codes are kept).
+- **coach-health.php** checks the new tables, the My coaching page and `site_url`.
+- **Privacy notice** (coach section, live only): a paragraph on saving, reminders and deleting.
+- **Docs:** DEPLOY (migration 002, the daily job), DECISIONS §26, HANDOVER 10a.
+
+**Checks:** PHP coach tests 92 (new: sign-in, single use, expiry, cookies, other-site refusal, reminders, unsubscribe, follow-up, deleting); live browser tests 8 (new: save → email link → My coaching → reminder → follow-up → delete account, with axe); all 294 browser tests pass.
+
+**Follow-ups:** POPIA review of the saving paragraph; the daily cron job when the coach goes live.
+
+---
+
 ## 2026-11-23 · `dev` · Brief v5, part 4: "How can we help?" for grown-ups
 
 **Why:** brief v5 §10 and the mood board's grown-ups' page.

@@ -4,6 +4,9 @@
  * reload, and work without JavaScript as plain forms.
  */
 import { expect, test, type Page } from '@playwright/test';
+import { existsSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { expectNoAxeViolations } from '../e2e/helpers';
 
 const log = (page: Page) => page.getByRole('log', { name: 'Conversation' });
@@ -101,4 +104,69 @@ test.describe('without JavaScript', () => {
     await page.getByRole('button', { name: 'Send' }).click();
     await expect(log(page).getByText('A strategy to try')).toBeVisible();
   });
+});
+
+test('save with an email link, then My coaching: follow-up, reminder, delete', async ({ page }) => {
+  const mailLog = join(tmpdir(), 'pholoso-live-mail.log');
+  await page.goto('/parent-coach/start/');
+  const ob = page.locator('[data-onboard]');
+  await ob.getByLabel('Your first name or nickname').fill('Sam');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await ob.getByLabel('First name or nickname', { exact: true }).fill('Luna');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Skip' }).click();
+  await page.getByRole('button', { name: 'Start' }).click();
+  await page.waitForURL(/\/parent-coach\/s\//);
+  for (const a of [
+    'Luna has a meltdown',
+    'Yes, show me',
+    'Yes, let’s try it',
+    'Building with blocks',
+    'The lounge',
+    'Get upset',
+    'I’m ready to try',
+  ])
+    await choose(page, a);
+
+  const before = existsSync(mailLog)
+    ? readFileSync(mailLog, 'utf8').split('\n').filter(Boolean).length
+    : 0;
+  await page.getByLabel('Your email address').fill('sam@example.com');
+  await page.getByRole('button', { name: 'Save: email me a link' }).click();
+  await expect(page.getByText(/Check your email/)).toBeVisible();
+  const mails = readFileSync(mailLog, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map((l) => JSON.parse(l));
+  expect(mails.length).toBe(before + 1);
+  const link = /http:\/\/127\.0\.0\.1:4398(\/api\/coach\/magic-link\.php\?token=[0-9a-f]{64})/.exec(
+    mails.at(-1).text,
+  )![1]!;
+
+  await page.goto(link);
+  await expect(page).toHaveURL(/\/parent-coach\/my-coaching\/\?notice=signed-in$/);
+  await expect(page.getByText('You are signed in.')).toBeVisible();
+  await expect(page.getByText('sam@example.com')).toBeVisible();
+  await expect(page.getByText(/building with blocks, in the lounge/)).toBeVisible();
+  await expectNoAxeViolations(page, 'My coaching');
+
+  await page.getByRole('button', { name: /Remind me in 3 days/ }).click();
+  await expect(page.getByText('We will email you a reminder in 3 days.')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Cancel the reminder' })).toBeVisible();
+
+  await page.getByRole('button', { name: /Tell me how it went/ }).click();
+  await page.waitForURL(/\/parent-coach\/s\//);
+  await expect(log(page).getByText(/Welcome back! Last time we planned/)).toBeVisible();
+  await choose(page, 'It was hard');
+  await expect(log(page).getByText('One small change')).toBeVisible();
+
+  await page.goto('/parent-coach/my-coaching/');
+  await page.getByRole('button', { name: 'Delete my account' }).click();
+  await expect(page.getByText('Please tick the box to confirm')).toBeVisible();
+  await page.getByLabel('Yes, delete my account and everything in it').check();
+  await page.getByRole('button', { name: 'Delete my account' }).click();
+  await expect(
+    page.getByText('Your account and everything in it have been deleted.'),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Send me a sign-in link' })).toBeVisible();
 });

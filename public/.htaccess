@@ -35,6 +35,7 @@ Options -Indexes
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
   # Parent Coach: a saved session's own address, drawn by the server (works without JavaScript)
   RewriteRule ^parent-coach/s/([0-9a-f-]{36})/?$ /api/coach/session.php?id=$1 [L,QSA]
+  RewriteRule ^parent-coach/my-coaching/?$ /api/coach/my.php [L,QSA]
 </IfModule>
 
 # --- Security headers ----------------------------------------------------------

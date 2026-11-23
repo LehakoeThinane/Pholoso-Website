@@ -1,0 +1,34 @@
+---
+/**
+ * My coaching: a signed-in parent's saved conversations, follow-ups, reminders and deletion
+ * (brief v5 §7b, Stage 3). In live mode the server fills this page in
+ * (public/api/coach/my.php, through a rewrite in .htaccess); otherwise it says the coach is not
+ * open yet.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Notice from '../../components/Notice.astro';
+import { coach } from '../../config/coach';
+import coachCss from '../../styles/coach.css?url';
+---
+
+<BaseLayout
+  title={`My coaching | ${coach.name}`}
+  description={`Your saved ${coach.name} conversations.`}
+  noindex
+>
+  <link slot="head" rel="stylesheet" href={coachCss} />
+  <div class="container my-page">
+    <h1>My coaching</h1>
+    {coach.mode === 'live' ? (
+      <div class="my" data-coach-my />
+    ) : (
+      <div class="my">
+        <Notice title="The coach is not open yet">
+          <p>
+            Try the written <a href="/parent-guide/">Parent Guide</a> in the meantime.
+          </p>
+        </Notice>
+      </div>
+    )}
+  </div>
+</BaseLayout>

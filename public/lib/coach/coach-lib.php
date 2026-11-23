@@ -8,7 +8,7 @@
 
 require_once dirname(__DIR__) . '/rate-limiter.php';
 
-const COACH_STAGES = ['pick_child', 'ask', 'validate', 'offer', 'interests', 'logistics', 'plan', 'pushback', 'close', 'done'];
+const COACH_STAGES = ['pick_child', 'followup', 'adjust', 'ask', 'validate', 'offer', 'interests', 'logistics', 'plan', 'pushback', 'close', 'done'];
 const COACH_DIFFERENCES = ['autism', 'adhd', 'dyslexia', 'dyscalculia', 'dysgraphia', 'other', 'suspected', 'none'];
 const COACH_SESSION_DAYS = 30;
 
@@ -54,8 +54,15 @@ function coach_config(): ?array
         'strategies_file'  => $public . '/parent-coach/strategies.json',
         'shell_file'       => $public . '/parent-coach/chat/index.html',
         'prompt_file'      => __DIR__ . '/system-prompt.md',
+        'my_shell_file'    => $public . '/parent-coach/my-coaching/index.html',
+        // Where links in emails point (sign-in links, reminders)
+        'site_url'         => 'https://pholoso.africa',
+        // Tests only: write emails to this file instead of sending them
+        'mail_capture'     => '',
+        'reminder_days'    => 3,
     ], $file['coach']);
     $c['salt'] = isset($file['salt']) ? (string) $file['salt'] : '';
+    $c['_file'] = $file; // the form mailer settings (transport, sender) are reused for coach emails
     $c['storage_dir'] = isset($file['storage_dir']) ? (string) $file['storage_dir'] : sys_get_temp_dir() . '/pholoso';
     return $cached = $c;
 }
@@ -302,5 +309,6 @@ function coach_public_state(array $s): array
         'placeholder' => (string) $s['placeholder'],
         'ended'       => (bool) $s['ended'],
         'rating'      => $s['rating'],
+        'saved'       => !empty($s['parent_id']),
     ];
 }
