@@ -27,6 +27,7 @@ import font700 from '@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegib
 import kidsDisplay from '@fontsource/fredoka/files/fredoka-latin-700-normal.woff2?url';
 import kidsText from '@fontsource/andika/files/andika-latin-400-normal.woff2?url';
 import ComfortPanel from '../components/ComfortPanel.astro';
+import KidsWorldFloat from '../components/KidsWorldFloat.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SkipLink from '../components/SkipLink.astro';
@@ -110,6 +111,7 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
       <slot />
     </main>
     {isKids ? <KidsFooter /> : <SiteFooter />}
+    {!isKids && <KidsWorldFloat />}
     <ComfortPanel />
     <div id="announcer" class="visually-hidden" aria-live="polite"></div>
     <script>

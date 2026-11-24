@@ -8,6 +8,21 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Floating Kids' World; three-item menu; "See how we work" in the hero
+
+**Why:** owner's requests.
+
+**What changed** (DECISIONS §33)
+
+- **Kids' World** is a floating button at the bottom left of every grown-ups' page (Pholo only on phones), and left the menu.
+- **Menu:** three entries (About, Stories & resources, Get involved); "How we work" removed.
+- **"See how we work"** moved from the header to the home hero as a gold button; the link under the home page's three cards is now a button.
+- **Cookie note** sits above both floating buttons.
+
+**Checks:** all browser tests pass (menu test updated to three entries; a new test for the floating button: shown on grown-ups' pages, not in the menu, never on Kids' World pages).
+
+---
+
 ## 2026-11-24 · `dev` · Approach gap; centred Share your story
 
 **Why:** owner's requests.

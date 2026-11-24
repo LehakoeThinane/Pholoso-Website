@@ -46,14 +46,9 @@ export const strings = {
  * Every page is also listed in the footer.
  */
 export const primaryNav: NavEntry[] = [
-  { href: '/kids/', label: 'Kids’ World', icon: 'mascot/hello' },
-  {
-    label: 'About',
-    children: [
-      { href: '/about/', label: 'Who we are' },
-      { href: '/approach/', label: 'How we work' },
-    ],
-  },
+  // Kids' World is a floating button now (KidsWorldFloat); "How we work" is the header's
+  // "See how we work" button (owner's requests, 24 November 2026)
+  { href: '/about/', label: 'About' },
   {
     label: 'Stories & resources',
     children: [

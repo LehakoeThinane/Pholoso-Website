@@ -551,3 +551,18 @@ less finished. Checked on desktop (1280 px) and phone (390 px).
   2to.iQ panel is at most 56rem wide, so its text no longer leaves an empty right half.
 
 Long text (paragraphs, lists, forms, tables) stays left-aligned, as before (§13).
+
+## 33. A floating Kids' World button; a lighter header
+
+**Decision (owner, 24 November 2026):** this replaces parts of §15 and §16.
+
+- **Kids' World floats** at the bottom left of every grown-ups' page, like Comfort & access at
+  the bottom right: Pholo and the words on a sunshine pill (Pholo only on phones, where the two
+  would otherwise meet; the words stay for screen readers). It is a plain link in a small
+  labelled navigation area, so it works without JavaScript. Not shown inside Kids' World.
+- **The menu has three entries:** About, Stories & resources, Get involved. "How we work" left
+  the menu, and "Kids' World" became the floating button.
+- **"See how we work" moved** from the header to the home page hero, as a gold button under the
+  text. The header keeps only Donate. The link under the home page's "Three fronts" is now a
+  button too.
+- The cookie note sits above both floating buttons.

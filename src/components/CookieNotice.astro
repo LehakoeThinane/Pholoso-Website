@@ -63,7 +63,7 @@ import { coach } from '../config/coach';
     position: fixed;
     z-index: 40; /* under the Comfort & access button and panel */
     left: var(--space-s);
-    /* Above the floating Comfort & access button on phones */
+    /* Above the floating Kids' World and Comfort & access buttons */
     bottom: calc(var(--space-s) * 2 + var(--button-min));
     right: var(--space-s);
     max-width: 26rem;
@@ -76,8 +76,7 @@ import { coach } from '../config/coach';
   }
   @media (min-width: 48rem) {
     .cookie-notice {
-      right: auto;
-      bottom: var(--space-s); /* beside the button on wider screens */
+      right: auto; /* above the Kids' World button, bottom left */
     }
   }
   .cookie-notice[hidden] {

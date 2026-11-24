@@ -114,3 +114,17 @@ test('home page: the cookie note appears after 3 seconds, never takes focus, and
   await page.waitForTimeout(3500); // well past 3 seconds: it must not come back
   await expect(note).toBeHidden(); // closed is remembered
 });
+
+test('Kids’ World floats on the grown-ups’ pages (not in the menu), never on Kids’ World pages', async ({
+  page,
+}) => {
+  await page.goto('/about/');
+  const float = page.locator('a.kids-float');
+  await expect(float).toBeVisible();
+  await expect(float).toHaveAccessibleName('Kids’ World');
+  await expect(float).toHaveCSS('position', 'fixed');
+  await expect(page.locator('#site-nav').getByRole('link', { name: 'Kids’ World' })).toHaveCount(0);
+  await expect(page.locator('#site-nav').getByRole('link', { name: 'How we work' })).toHaveCount(0);
+  await page.goto('/kids/');
+  await expect(page.locator('a.kids-float')).toHaveCount(0);
+});
