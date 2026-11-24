@@ -57,11 +57,7 @@
     return {
       theme:
         s.theme ||
-        (mq('(prefers-contrast: more)')
-          ? 'contrast'
-          : mq('(prefers-color-scheme: dark)')
-            ? 'dim'
-            : 'standard'),
+        'standard',
       text: s.text === 115 || s.text === 130 || s.text === 150 ? s.text : 100,
       motion: s.motion ? s.motion : mq('(prefers-reduced-motion: reduce)') ? 'reduced' : 'full',
       spacing: !!s.spacing,

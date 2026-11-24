@@ -50,6 +50,19 @@ test('panel: opens, works by keyboard, Esc closes and returns focus', async ({ p
   await expect(opener).toBeFocused();
 });
 
+test('Standard colours are the default and reset returns to Standard', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark', contrast: 'more' });
+  await page.goto('/');
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', /./);
+
+  await page.locator('[data-comfort-open]').click();
+  await page.locator('#cp-theme-calm').check();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'calm');
+  await page.locator('[data-comfort-reset]').click();
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', /./);
+  await expect(page.locator('#cp-theme-standard')).toBeChecked();
+});
+
 test('settings persist across pages and reloads, and reset clears them', async ({ page }) => {
   await page.goto('/');
   await page.locator('[data-comfort-open]').click();
