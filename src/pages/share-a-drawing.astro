@@ -23,7 +23,7 @@ import { site } from '../config/site';
     lead="Children love seeing their work on the wall. If you are a child's parent or guardian, you can send us a drawing for the Kids’ World gallery."
   />
 
-  <Section labelledby="how-title" narrow>
+  <Section labelledby="how-title">
     <h2 id="how-title">How to send a drawing</h2>
     <Steps
       steps={[
@@ -42,7 +42,7 @@ import { site } from '../config/site';
         },
       ]}
     />
-    <p>
+    <p class="after-group">
       <a href={`mailto:${site.email}?subject=Gallery%20drawing`}>Email a drawing to {site.email}</a>
     </p>
   </Section>

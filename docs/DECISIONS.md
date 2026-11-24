@@ -533,3 +533,36 @@ in Kids' World, or without JavaScript.
 **Not done, on purpose:** a loading page with the logo. The site loads almost instantly
 (Lighthouse performance 100), so a splash screen would only make every visitor wait, hurt search
 ranking, and put something between people and the content.
+
+## 32. A design pass over the whole site
+
+**Decision (owner, 24 November 2026):** review every page's design and fix what makes it look
+less finished. Checked on desktop (1280 px) and phone (390 px).
+
+- **No lonely last words:** headings balance their lines and paragraphs avoid a single word on
+  the last line (`text-wrap: balance` / `pretty`), everywhere.
+- **Centred, like the rest of the site:** numbered steps (Donate, Share a drawing) are now
+  centred cards with the number on top; the interest explorer's buttons, heading and cards; the
+  story filter's label; the trust cards; the Kids' World footer; single lines after a group
+  of cards (`.after-group`).
+- **One card style:** the interest explorer's cards and the steps use the site's card (rounded,
+  soft glow) instead of their own.
+- **Sizes:** About's mission and vision headings are statement-sized, not page-title-sized; the
+  2to.iQ panel is at most 56rem wide, so its text no longer leaves an empty right half.
+
+Long text (paragraphs, lists, forms, tables) stays left-aligned, as before (§13).
+
+## 33. A floating Kids' World button; a lighter header
+
+**Decision (owner, 24 November 2026):** this replaces parts of §15 and §16.
+
+- **Kids' World floats** at the bottom left of every grown-ups' page, like Comfort & access at
+  the bottom right: Pholo and the words on a sunshine pill (Pholo only on phones, where the two
+  would otherwise meet; the words stay for screen readers). It is a plain link in a small
+  labelled navigation area, so it works without JavaScript. Not shown inside Kids' World.
+- **The menu has three entries:** About, Stories & resources, Get involved. "How we work" left
+  the menu, and "Kids' World" became the floating button.
+- **"See how we work" moved** from the header to the home page hero, as a gold button under the
+  text. The header keeps only Donate. The link under the home page's "Three fronts" is now a
+  button too.
+- The cookie note sits above both floating buttons.

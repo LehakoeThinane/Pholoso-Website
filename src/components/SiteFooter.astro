@@ -1,9 +1,9 @@
 ---
 /**
- * SiteFooter: simple and short (owner's requests, 23 November 2026). Three rows:
+ * SiteFooter: simple, short and centred in one column (owner's requests, 23–24 November 2026):
  * 1. The logo and tagline, then one line of links to the main pages.
- * 2. How to reach us: address, phone and email (address and phone show "To be confirmed"
- *    until the Foundation sends them).
+ * 2. How to reach us: the email address (owner's decision, 24 November 2026: no postal
+ *    address or phone number in the footer).
  * 3. Centred: the registration numbers, then copyright, Privacy, Accessibility and
  *    Comfort & access.
  * The updates sign-up lives on the Resources page. Leaves room at the bottom for the floating
@@ -13,7 +13,6 @@ import { Image } from 'astro:assets';
 import logo from '../assets/logo/logo.png';
 import { registrationLine, site } from '../config/site';
 import { footerLinks, strings } from '../config/strings';
-import Value from './Value.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -36,15 +35,7 @@ const year = new Date().getFullYear();
   </div>
 
   <address class="container site-footer__contact">
-    <span>
-      <strong>Address:</strong> <Value value={site.address} />
-    </span>
-    <span>
-      <strong>Phone:</strong> <Value value={site.phone} />
-    </span>
-    <span>
-      <strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a>
-    </span>
+    <strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a>
   </address>
 
   <div class="container site-footer__legal">
@@ -75,21 +66,19 @@ const year = new Date().getFullYear();
     padding-bottom: calc(var(--space-s) + var(--button-min));
     font-size: var(--step--1);
   }
+  /* One centred column: logo, tagline, links, then email and the legal lines */
   .site-footer__main {
-    display: grid;
-    gap: var(--space-s) var(--space-xl);
+    display: flex;
+    flex-direction: column;
     align-items: center;
-  }
-  @media (min-width: 62rem) {
-    .site-footer__main {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
+    gap: var(--space-s);
+    text-align: center;
   }
   .site-footer__brand {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    gap: var(--space-2xs) var(--space-m);
+    gap: var(--space-2xs);
   }
   .site-footer__logo {
     width: 8rem;
@@ -97,22 +86,17 @@ const year = new Date().getFullYear();
   }
   .site-footer__tagline {
     margin: 0;
-    max-width: 19rem;
     color: var(--color-text-muted);
   }
   .site-footer__links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 0 var(--space-m);
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  @media (min-width: 62rem) {
-    .site-footer__main .site-footer__links {
-      justify-content: flex-end;
-    }
   }
   .site-footer li {
     margin: 0;
@@ -122,24 +106,12 @@ const year = new Date().getFullYear();
     align-items: center;
     min-height: var(--target-min);
   }
+  /* The email line: one line of text, centred (tall enough to tap comfortably) */
   .site-footer__contact {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3xs) var(--space-l);
     margin-top: var(--space-s);
+    text-align: center;
     font-style: normal;
-  }
-  .site-footer__contact a {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--target-min);
-  }
-  .site-footer__contact span {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0 0.35em;
+    line-height: var(--target-min);
   }
   /* Centred bottom line */
   .site-footer__legal {

@@ -24,7 +24,6 @@ const siteSchema = z.object({
   founded: z.number().int(),
   location: text,
   address: text,
-  phone: text,
   informationOfficer: z.object({
     name: text,
     email,
@@ -80,7 +79,6 @@ export const site: SiteConfig = siteSchema.parse({
   founded: 2025,
   location: 'South Africa (we work remotely)',
   address: 'TODO: physical or postal address',
-  phone: 'TODO: phone number for the footer (for example +27 …)',
   informationOfficer: {
     name: 'TODO: name of the POPIA Information Officer',
     email: 'know@pholoso.africa',

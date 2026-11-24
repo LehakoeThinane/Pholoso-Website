@@ -21,7 +21,6 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/logo/logo.png';
 import { primaryNav, strings } from '../config/strings';
-import Art from './kids/Art.astro';
 
 interface Props {
   currentPath: string;
@@ -42,14 +41,6 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
         loading="eager"
         class="site-header__logo"
       />
-    </a>
-
-    <a
-      class="site-header__secondary"
-      href={strings.seeHowWeWork.href}
-      aria-current={isCurrent(strings.seeHowWeWork.href) ? 'page' : undefined}
-    >
-      {strings.seeHowWeWork.label}
     </a>
 
     <a
@@ -108,12 +99,7 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
             </li>
           ) : (
             <li>
-              <a
-                href={item.href}
-                aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class:list={{ 'site-nav__kids': item.icon }}
-              >
-                {item.icon && <Art name={item.icon} class="site-nav__icon" />}
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
             </li>
@@ -148,28 +134,6 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     width: 12rem;
     max-width: 55vw;
     height: auto;
-  }
-
-  /* Calls to action, top right: pill buttons like the rest of the site */
-  .site-header__secondary {
-    display: none; /* wide screens only (see below) */
-    order: 2;
-    align-items: center;
-    justify-content: center;
-    min-height: var(--button-min);
-    padding-inline: var(--space-m);
-    border: 2px solid var(--color-text);
-    border-radius: 999px;
-    background-color: var(--color-bg);
-    background-image: var(--gloss-surface);
-    color: var(--color-text);
-    font-weight: 700;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .site-header__secondary:hover,
-  .site-header__secondary[aria-current='page'] {
-    text-decoration: underline;
   }
 
   /* Donate: gold button, always visible */
@@ -279,20 +243,6 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     rotate: 180deg;
   }
 
-  /* Kids' World: always first, with the mascot, on a sunshine pill so children spot it */
-  .site-nav .site-nav__kids {
-    gap: var(--space-2xs);
-    padding-inline: var(--space-2xs) var(--space-s);
-    border-radius: 999px;
-    background-color: var(--kids-sunshine);
-    color: var(--color-text);
-  }
-  :global(.site-nav__icon) {
-    width: 2rem;
-    height: 2rem;
-    flex: none;
-  }
-
   /* Small screens: logo on top; Donate and Menu centred below; the opened menu centred, with
      groups opening in place under their heading */
   @media (max-width: 65.99rem) {
@@ -378,13 +328,6 @@ const isCurrent = (href: string) => currentPath === href || currentPath.startsWi
     }
     .site-nav__sub a:hover {
       background-color: var(--color-surface);
-    }
-  }
-  /* Room for the second button from 1280px wide (80rem; media queries count 16px per rem).
-     Narrower: Donate only; the same page is in the menu under About. */
-  @media (min-width: 80rem) {
-    .site-header__secondary {
-      display: inline-flex;
     }
   }
   @media (forced-colors: active) {

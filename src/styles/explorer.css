@@ -1,0 +1,74 @@
+/* The interest explorer (components/InterestExplorer.astro). Loaded only by the pages that show
+   it, so the shared stylesheet stays within its budget (DECISIONS §11). */
+/* Centred like the rest of the site (owner's request, 24 November 2026) */
+.explorer__picker {
+  margin-bottom: var(--space-l);
+  text-align: center;
+}
+.explorer__picker[hidden] {
+  display: none;
+}
+.explorer__picker-label {
+  font-weight: 700;
+  margin: 0 auto var(--space-2xs);
+}
+.explorer__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2xs);
+}
+.explorer__button {
+  min-height: var(--button-min);
+  padding-inline: var(--space-m);
+  border: 2px solid var(--color-text);
+  border-radius: 999px;
+  background-color: var(--color-bg);
+  font-weight: 700;
+  cursor: pointer;
+}
+.explorer__button[aria-pressed='true'] {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+.explorer__panel + .explorer__panel {
+  margin-top: var(--space-xl);
+}
+.explorer__panel[hidden] {
+  display: none;
+}
+.explorer__title {
+  font-size: var(--step-2);
+  text-align: center;
+}
+.explorer__cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-s);
+}
+@media (min-width: 40rem) {
+  .explorer__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* The same look as the site's cards */
+.explorer__card {
+  margin: 0;
+  padding: var(--space-m);
+  text-align: center;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-m);
+  background-color: var(--color-bg);
+  box-shadow: var(--card-glow);
+}
+.explorer__card + .explorer__card {
+  margin-top: 0;
+}
+.explorer__area {
+  font-size: var(--step-1);
+}
+.explorer__card p {
+  margin: 0 auto;
+}

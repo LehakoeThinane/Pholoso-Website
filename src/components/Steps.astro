@@ -1,6 +1,8 @@
 ---
 /**
- * Steps: a numbered list of steps (for example the three donation steps).
+ * Steps: a numbered list of steps (for example the three donation steps), shown as centred
+ * cards side by side on wider screens, each with its number on top (owner's request,
+ * 24 November 2026: centred like the rest of the site). On phones they stack.
  *
  * Props:
  * - steps: [{ title, text? }], in order. Keep each step to one action.
@@ -12,16 +14,14 @@ interface Props {
 const { steps } = Astro.props;
 ---
 
-<ol class="steps">
+<ol class:list={['steps', `steps--${Math.min(steps.length, 4)}`]}>
   {steps.map((step, i) => (
     <li class="steps__item">
       <span class="steps__number" aria-hidden="true">
         {i + 1}
       </span>
-      <div>
-        <p class="steps__title">{step.title}</p>
-        {step.text && <p class="steps__text">{step.text}</p>}
-      </div>
+      <p class="steps__title">{step.title}</p>
+      {step.text && <p class="steps__text">{step.text}</p>}
     </li>
   ))}
 </ol>
@@ -30,24 +30,45 @@ const { steps } = Astro.props;
   .steps {
     list-style: none;
     padding: 0;
-    /* Centred as a block under a centred heading; the text inside stays left-aligned */
-    max-width: calc(var(--measure) + 4rem);
     margin-inline: auto;
     display: grid;
     gap: var(--space-m);
   }
+  @media (min-width: 48rem) {
+    .steps--2,
+    .steps--4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .steps--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 62rem) {
+    .steps--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
   .steps__item {
     display: flex;
-    gap: var(--space-s);
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
     margin: 0;
+    padding: var(--space-m);
+    text-align: center;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    background-color: var(--color-bg);
+    box-shadow: var(--card-glow);
+  }
+  .steps__item + .steps__item {
+    margin-top: 0;
   }
   .steps__number {
-    flex: none;
     display: grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: var(--space-xs);
     border-radius: 50%;
     background-color: var(--color-btn-bg);
     background-image: var(--gloss);
@@ -58,9 +79,9 @@ const { steps } = Astro.props;
   .steps__title {
     font-weight: 700;
     font-size: var(--step-1);
-    margin-bottom: var(--space-3xs);
+    margin: 0 auto var(--space-3xs);
   }
   .steps__text {
-    margin: 0;
+    margin: 0 auto;
   }
 </style>

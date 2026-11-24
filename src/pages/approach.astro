@@ -1,14 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
 import InterestExplorer from '../components/InterestExplorer.astro';
+import explorerCss from '../styles/explorer.css?url';
 import ListenButton from '../components/ListenButton.astro';
 import PageHero from '../components/PageHero.astro';
 import PartnerForParents from '../components/PartnerForParents.astro';
 import Quote from '../components/Quote.astro';
 import Section from '../components/Section.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import Steps from '../components/Steps.astro';
 import { site } from '../config/site';
 import { ordered } from '../lib/content';
 
@@ -24,6 +26,7 @@ const interests = (await ordered('interests')).map((i) => ({
   title="Our approach"
   description="How the Pholoso Afrika Foundation works: advocacy and awareness, learning technology with 2to.iQ, connecting the support around a child, and the Hlompho principle."
 >
+  <link slot="head" rel="stylesheet" href={explorerCss} />
   <PageHero
     title={site.coreIdea}
     lead={`${site.name} works on three fronts at once. Each one strengthens the others.`}
@@ -31,22 +34,28 @@ const interests = (await ordered('interests')).map((i) => ({
 
   <Section labelledby="areas-title">
     <SectionHeading id="areas-title" title="Three fronts, working at once." />
-    <Steps
-      steps={[
-        {
-          title: 'Advocacy and awareness',
-          text: 'We help place neurodivergent children inside the national conversation on inclusion, education and community support. Visibility shifts attitudes. Attitudes shift systems.',
-        },
-        {
-          title: 'Educational innovation',
-          text: 'Through 2to.iQ, our edtech strategic partner, we build adaptive learning technology designed around how learners actually think, communicate and engage.',
-        },
-        {
-          title: 'Ecosystem building',
-          text: 'We connect the people around the child. Schools, parents, teachers, therapists, researchers and funders. Fragmented support helps no one. Connected support changes outcomes.',
-        },
-      ]}
-    />
+    {/* The same cards as the home page's "Three fronts" (owner's request, 24 November 2026) */}
+    <CardGrid>
+      <Card title="Advocacy and awareness">
+        <p>
+          We help place neurodivergent children inside the national conversation on inclusion,
+          education and community support. Visibility shifts attitudes. Attitudes shift systems.
+        </p>
+      </Card>
+      <Card title="Educational innovation">
+        <p>
+          Through 2to.iQ, our edtech strategic partner, we build adaptive learning technology
+          designed around how learners actually think, communicate and engage.
+        </p>
+      </Card>
+      <Card title="Ecosystem building">
+        <p>
+          We connect the people around the child. Schools, parents, teachers, therapists,
+          researchers and funders. Fragmented support helps no one. Connected support changes
+          outcomes.
+        </p>
+      </Card>
+    </CardGrid>
     <p class="sustain">{site.coreIdea} Sustain the change.</p>
   </Section>
 
@@ -104,6 +113,10 @@ const interests = (await ordered('interests')).map((i) => ({
 </BaseLayout>
 
 <style>
+  /* Same background as the band above: no double gap between them */
+  :global(#for-parents) {
+    padding-top: 0;
+  }
   .sustain {
     margin: var(--space-l) auto 0;
     text-align: center;
@@ -115,6 +128,7 @@ const interests = (await ordered('interests')).map((i) => ({
   .cta__actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-s);
   }
 </style>

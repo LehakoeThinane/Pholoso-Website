@@ -1,0 +1,62 @@
+---
+/**
+ * KidsWorldFloat: a "Kids' World" button that stays on screen at the bottom left, like the
+ * Comfort & access button at the bottom right (owner's request, 24 November 2026). Shown on
+ * the grown-ups' pages only (Kids' World pages have their own header). A plain link: it works
+ * without JavaScript. With the mascot, on a sunshine pill, so children spot it.
+ */
+import Art from './kids/Art.astro';
+---
+
+<nav aria-label="For children">
+  <a href="/kids/" class="kids-float">
+    <Art name="mascot/hello" class="kids-float__icon" />
+    <span class="kids-float__label">Kids’ World</span>
+  </a>
+</nav>
+
+<style>
+  .kids-float {
+    position: fixed;
+    left: var(--space-s);
+    bottom: var(--space-s);
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: var(--button-min);
+    padding: var(--space-3xs) var(--space-m) var(--space-3xs) var(--space-2xs);
+    border: 2px solid var(--color-text);
+    border-radius: 999px;
+    background-color: var(--kids-sunshine);
+    box-shadow: var(--elevation);
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: var(--step--1);
+    text-decoration: none;
+  }
+  :global(.kids-float__icon) {
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+  }
+  /* Phones: just Pholo, so it never runs into the Comfort & access button. The words stay for
+     screen readers (visually hidden, still read out). */
+  @media (max-width: 29.99rem) {
+    .kids-float {
+      padding: var(--space-3xs);
+    }
+    .kids-float__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    :global(.kids-float__icon) {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+</style>

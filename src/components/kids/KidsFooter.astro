@@ -63,8 +63,13 @@ import TornEdge from './TornEdge.astro';
     background-color: var(--kids-leaf);
     padding-block: var(--space-m) calc(var(--space-2xl) + var(--button-min));
   }
+  .kids-footer__band {
+    text-align: center;
+  }
   .kids-footer__help {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     gap: var(--space-s);
     font-size: var(--step-2);
@@ -78,6 +83,7 @@ import TornEdge from './TornEdge.astro';
   }
   .kids-footer__safe {
     font-size: var(--step-0);
+    margin-inline: auto;
   }
   .kids-footer__grown-ups {
     margin-top: var(--space-l);
@@ -95,6 +101,7 @@ import TornEdge from './TornEdge.astro';
     padding: 0;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0 var(--space-m);
   }
   .kids-footer li {

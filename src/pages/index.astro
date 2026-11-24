@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import DoorCard from '../components/DoorCard.astro';
 import CardGrid from '../components/CardGrid.astro';
@@ -16,6 +17,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import Stat from '../components/Stat.astro';
 import Term from '../components/Term.astro';
 import { site } from '../config/site';
+import { strings } from '../config/strings';
 import { stats } from '../config/sources';
 import { ordered } from '../lib/content';
 import { render } from 'astro:content';
@@ -84,7 +86,6 @@ const ngo = {
     'Learner-centred education',
     'Education White Paper 6',
   ],
-  ...(site.phone.startsWith('TODO:') ? {} : { telephone: site.phone }),
   ...(site.address.startsWith('TODO:') ? {} : { location: site.address }),
   areaServed: [
     { '@type': 'Country', name: 'South Africa' },
@@ -157,6 +158,11 @@ const graph = {
       Africa and the African continent. Learners should not have to bend to fit rigid systems. The
       systems should learn to fit the learner.
     </p>
+    <Fragment slot="actions">
+      <Button variant="gold" href={strings.seeHowWeWork.href}>
+        {strings.seeHowWeWork.label}
+      </Button>
+    </Fragment>
   </Hero>
 
   <nav class="doors" aria-label="Choose your way in">
@@ -226,7 +232,9 @@ const graph = {
       </Card>
     </CardGrid>
     <p class="after-cards">
-      <a href="/approach/">See how we work</a>
+      <Button variant="green" href="/approach/">
+        See how we work
+      </Button>
     </p>
   </Section>
 

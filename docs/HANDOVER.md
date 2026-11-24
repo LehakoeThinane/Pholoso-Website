@@ -85,8 +85,7 @@ The production build will not run until these are replaced with confirmed values
 | `bank.branchCode`            | Branch code                                                             |
 | `bank.accountType`           | Account type                                                            |
 | `bank.swift`                 | SWIFT code (for international donors)                                   |
-| `address`                    | Physical or postal address (required in the privacy notice; shown in the footer) |
-| `phone`                      | Phone number to show in the footer (and in the search engines' structured data) |
+| `address`                    | Physical or postal address (required in the privacy notice) |
 | `informationOfficer.name`    | Name of the POPIA Information Officer                                   |
 | `stories.notice`             | Confirm whether the stories are composites, pseudonymised or real, and approve the notice wording |
 | `accessibility.responseTime` | How quickly accessibility problems will be answered (e.g. "within 5 working days") |

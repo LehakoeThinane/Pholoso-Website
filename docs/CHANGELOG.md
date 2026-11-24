@@ -8,6 +8,102 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Fix: shared stylesheet back within its 16 KB budget
+
+**Why:** CI's Lighthouse check failed: after the floating Kids' World button, the shared stylesheet was 16,475 bytes (budget 16,384).
+
+**What changed**
+
+- The interest explorer's styles moved to their own stylesheet (`src/styles/explorer.css`), loaded only by Our approach and the style guide, like Kids' World, the Parent Guide and the coach. Every other page downloads less.
+- Removed styles nothing uses any more: the old Kids' World menu item and an unused breathing-shape style; the floating button shares the site's gloss and hover rules; print hiding for the floating button and cookie note moved to the print stylesheet; the footer's email line is simpler.
+
+**Checks:** Lighthouse passes every budget locally (including performance); all 302 browser tests pass.
+
+---
+
+## 2026-11-24 · `dev` · Floating Kids' World; three-item menu; "See how we work" in the hero
+
+**Why:** owner's requests.
+
+**What changed** (DECISIONS §33)
+
+- **Kids' World** is a floating button at the bottom left of every grown-ups' page (Pholo only on phones), and left the menu.
+- **Menu:** three entries (About, Stories & resources, Get involved); "How we work" removed.
+- **"See how we work"** moved from the header to the home hero as a gold button; the link under the home page's three cards is now a button.
+- **Cookie note** sits above both floating buttons.
+
+**Checks:** all browser tests pass (menu test updated to three entries; a new test for the floating button: shown on grown-ups' pages, not in the menu, never on Kids' World pages).
+
+---
+
+## 2026-11-24 · `dev` · Approach gap; centred Share your story
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Our approach:** the gap between "Three fronts" and the 2to.iQ panel is halved (the two bands share a background, so their spacing doubled).
+- **Stories:** the "Share your story" text and button are centred under the heading.
+
+**Checks:** all browser tests pass.
+
+---
+
+## 2026-11-24 · `dev` · Fix: space below a centred line
+
+**Why:** owner's request: on About, "Read the policy" sat right on top of the statistics cards.
+
+**What changed:** a centred line after a group (`.after-group`) now has the same space below it as above, whenever something follows it.
+
+**Checks:** all browser tests pass.
+
+---
+
+## 2026-11-24 · `dev` · Centred footer; centred buttons on Our approach
+
+**Why:** owner's request: the top of the footer looked off, and the Our approach buttons sat to the left.
+
+**What changed**
+
+- **Footer:** one centred column: logo, tagline, the links (one line on wider screens), the email address, then the registration numbers and legal links.
+- **Our approach:** "Get involved" and "Hear the voices" are centred under the heading.
+
+**Checks:** all 300 browser tests pass; HTML and built-output checks clean.
+
+---
+
+## 2026-11-24 · `dev` · A design pass over the whole site
+
+**Why:** owner's request to check the whole site's design and make it better.
+
+**What changed** (DECISIONS §32)
+
+- No single word left alone on the last line of a heading or paragraph, site-wide.
+- Numbered steps (Donate "How to give", Share a drawing) are centred cards with the number on top, side by side on wider screens.
+- Our approach: the interest explorer is centred (buttons, heading) and uses the site's cards.
+- Stories: the "Show stories from" label is centred above its buttons.
+- Trust cards (About, Get involved) are centred like every other card.
+- About: mission and vision headings are a calmer size; the policy link is centred.
+- The 2to.iQ panel is narrower, so its text fills it.
+- Kids' World footer: "Need help now?", the safety note and the grown-ups' links are centred.
+
+**Checks:** all 300 browser tests pass; HTML, links, contrast and built-output checks clean.
+
+---
+
+## 2026-11-24 · `dev` · Footer without address or phone; Approach fronts as cards
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Footer:** the address and phone lines are removed; the email address stays, centred. The phone setting is removed from `site.ts` and the structured data. The address is still needed for the privacy notice (POPIA), so it stays a fact to fill in. Open question A20 withdrawn.
+- **Our approach:** "Three fronts, working at once." now uses the same centred cards as the home page, instead of a numbered list.
+
+**Checks:** all 300 browser tests pass; HTML, links, contrast and built-output checks clean.
+
+---
+
 ## 2026-11-23 · `dev` · Smaller photos between sections; three steadier tests
 
 **Why:** owner's request: the classroom photo on the home page was too big.

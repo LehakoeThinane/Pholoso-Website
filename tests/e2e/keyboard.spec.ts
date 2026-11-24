@@ -53,13 +53,13 @@ test('interest explorer shows one interest at a time, by keyboard', async ({ pag
   await expect(page.locator(`[data-interest-panel="${slug}"]`)).toBeVisible();
 });
 
-test('wide screens: four menu entries in one row, between the logo and Donate', async ({
+test('wide screens: three menu entries in one row, between the logo and Donate', async ({
   page,
   viewport,
 }) => {
   test.skip((viewport?.width ?? 0) < 1116, 'one-row header is for wide screens');
   await page.goto('/about/');
-  await expect(page.locator('.site-nav__list > li')).toHaveCount(4);
+  await expect(page.locator('.site-nav__list > li')).toHaveCount(3); // About, Stories & resources, Get involved
   const top = (sel: string) =>
     page
       .locator(sel)
@@ -76,12 +76,12 @@ test('menu groups open by keyboard, one at a time; Esc closes and returns focus'
 }) => {
   await page.goto('/');
   if ((viewport?.width ?? 0) < 1116) await page.locator('.site-header__menu-button').click();
-  const about = page.locator('[data-nav-group]', { hasText: 'About' }).first();
+  const about = page.locator('[data-nav-group]', { hasText: 'Stories & resources' }).first();
   const involved = page.locator('[data-nav-group]', { hasText: 'Get involved' });
   await about.locator('summary').focus();
   await page.keyboard.press('Enter');
   await expect(about).toHaveAttribute('open', '');
-  await expect(about.getByRole('link', { name: 'Who we are' })).toBeVisible();
+  await expect(about.getByRole('link', { name: 'Stories', exact: true })).toBeVisible();
   // Opening another group closes the first
   await involved.locator('summary').click();
   await expect(involved).toHaveAttribute('open', '');
