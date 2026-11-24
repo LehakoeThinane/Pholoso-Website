@@ -472,3 +472,7 @@ button.pholo {
   text-align: center;
   font-weight: 700;
 }
+/* …and the same space below when something follows it (not only above) */
+.after-group:not(:last-child) {
+  margin-bottom: var(--space-l);
+}

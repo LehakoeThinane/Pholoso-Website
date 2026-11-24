@@ -8,6 +8,16 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Fix: space below a centred line
+
+**Why:** owner's request: on About, "Read the policy" sat right on top of the statistics cards.
+
+**What changed:** a centred line after a group (`.after-group`) now has the same space below it as above, whenever something follows it.
+
+**Checks:** all browser tests pass.
+
+---
+
 ## 2026-11-24 · `dev` · Centred footer; centred buttons on Our approach
 
 **Why:** owner's request: the top of the footer looked off, and the Our approach buttons sat to the left.
