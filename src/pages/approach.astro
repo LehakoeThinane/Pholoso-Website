@@ -111,6 +111,10 @@ const interests = (await ordered('interests')).map((i) => ({
 </BaseLayout>
 
 <style>
+  /* Same background as the band above: no double gap between them */
+  :global(#for-parents) {
+    padding-top: 0;
+  }
   .sustain {
     margin: var(--space-l) auto 0;
     text-align: center;

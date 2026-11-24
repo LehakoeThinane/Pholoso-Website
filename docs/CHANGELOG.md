@@ -8,6 +8,19 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Approach gap; centred Share your story
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Our approach:** the gap between "Three fronts" and the 2to.iQ panel is halved (the two bands share a background, so their spacing doubled).
+- **Stories:** the "Share your story" text and button are centred under the heading.
+
+**Checks:** all browser tests pass.
+
+---
+
 ## 2026-11-24 · `dev` · Fix: space below a centred line
 
 **Why:** owner's request: on About, "Read the policy" sat right on top of the statistics cards.

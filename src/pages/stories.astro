@@ -79,17 +79,25 @@ const stories = await ordered('stories');
       title="Share your story"
       lead="Your experience can help schools and systems change."
     />
-    <p>
+    <p class="share__text">
       If you share a story with us, we use a pseudonym, and you can ask us to change or withdraw it
       at any time. Please do not include a child's full name or medical details.
     </p>
-    <Button variant="green" href="/contact/?topic=story">
-      Share your story
-    </Button>
+    <p class="share__action">
+      <Button variant="green" href="/contact/?topic=story">
+        Share your story
+      </Button>
+    </p>
   </Section>
 </BaseLayout>
 
 <style>
+  /* Short text and its button, centred like the heading */
+  .share__text,
+  .share__action {
+    margin-inline: auto;
+    text-align: center;
+  }
   .story-list {
     display: grid;
     gap: var(--space-m);
