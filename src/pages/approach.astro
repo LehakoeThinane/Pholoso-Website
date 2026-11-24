@@ -4,6 +4,7 @@ import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import CardGrid from '../components/CardGrid.astro';
 import InterestExplorer from '../components/InterestExplorer.astro';
+import explorerCss from '../styles/explorer.css?url';
 import ListenButton from '../components/ListenButton.astro';
 import PageHero from '../components/PageHero.astro';
 import PartnerForParents from '../components/PartnerForParents.astro';
@@ -25,6 +26,7 @@ const interests = (await ordered('interests')).map((i) => ({
   title="Our approach"
   description="How the Pholoso Afrika Foundation works: advocacy and awareness, learning technology with 2to.iQ, connecting the support around a child, and the Hlompho principle."
 >
+  <link slot="head" rel="stylesheet" href={explorerCss} />
   <PageHero
     title={site.coreIdea}
     lead={`${site.name} works on three fronts at once. Each one strengthens the others.`}

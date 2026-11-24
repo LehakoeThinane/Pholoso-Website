@@ -253,7 +253,7 @@ main:focus {
   .listen,
   .kids-toggle,
   .kids-header__home,
-  .site-nav__kids,
+  .kids-float,
   .picker__button,
   .face-button,
   .feeling,
@@ -268,7 +268,6 @@ main:focus {
   .love-panel__done,
   .partner-parents,
   .breathe__button,
-  .breathe__shape,
   .explorer__button,
   .filter-bar__button,
   .comfort__preset
@@ -298,7 +297,7 @@ main:focus {
   :is(
     .button,
     .site-header__donate,
-    .site-nav__kids,
+    .kids-float,
     .door,
     .pic-btn,
     .story-link,
@@ -322,7 +321,7 @@ main:focus {
     :is(
       .button,
       .site-header__donate,
-      .site-nav__kids,
+      .kids-float,
       .door,
       .pic-btn,
       .story-link,

@@ -35,9 +35,7 @@ const year = new Date().getFullYear();
   </div>
 
   <address class="container site-footer__contact">
-    <span>
-      <strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a>
-    </span>
+    <strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a>
   </address>
 
   <div class="container site-footer__legal">
@@ -108,24 +106,12 @@ const year = new Date().getFullYear();
     align-items: center;
     min-height: var(--target-min);
   }
+  /* The email line: one line of text, centred (tall enough to tap comfortably) */
   .site-footer__contact {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3xs) var(--space-l);
     margin-top: var(--space-s);
+    text-align: center;
     font-style: normal;
-  }
-  .site-footer__contact a {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--target-min);
-  }
-  .site-footer__contact span {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0 0.35em;
+    line-height: var(--target-min);
   }
   /* Centred bottom line */
   .site-footer__legal {

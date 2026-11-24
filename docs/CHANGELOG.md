@@ -8,6 +8,19 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Fix: shared stylesheet back within its 16 KB budget
+
+**Why:** CI's Lighthouse check failed: after the floating Kids' World button, the shared stylesheet was 16,475 bytes (budget 16,384).
+
+**What changed**
+
+- The interest explorer's styles moved to their own stylesheet (`src/styles/explorer.css`), loaded only by Our approach and the style guide, like Kids' World, the Parent Guide and the coach. Every other page downloads less.
+- Removed styles nothing uses any more: the old Kids' World menu item and an unused breathing-shape style; the floating button shares the site's gloss and hover rules; print hiding for the floating button and cookie note moved to the print stylesheet; the footer's email line is simpler.
+
+**Checks:** Lighthouse passes every budget locally (including performance); all 302 browser tests pass.
+
+---
+
 ## 2026-11-24 · `dev` · Floating Kids' World; three-item menu; "See how we work" in the hero
 
 **Why:** owner's requests.

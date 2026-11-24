@@ -22,6 +22,7 @@ import FilterBar from '../components/FilterBar.astro';
 import FormStatus from '../components/FormStatus.astro';
 import Hero from '../components/Hero.astro';
 import InterestExplorer from '../components/InterestExplorer.astro';
+import explorerCss from '../styles/explorer.css?url';
 import ListenButton from '../components/ListenButton.astro';
 import Notice from '../components/Notice.astro';
 import PageHero from '../components/PageHero.astro';
@@ -63,6 +64,7 @@ const exampleCards = [
   description="Every component of the Pholoso Afrika Foundation website, in every state and colour theme."
   noindex
 >
+  <link slot="head" rel="stylesheet" href={explorerCss} />
   <PageHero
     title="Component catalogue"
     lead="Every component and state on one page. All sample text here is an example, not real content."
