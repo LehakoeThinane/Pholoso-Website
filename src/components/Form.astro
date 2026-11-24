@@ -15,6 +15,11 @@
  * - submit: submit button text
  * - requiredNote: show "All questions are required unless marked optional" (default true)
  * - compact: smaller spacing, for the footer sign-up
+ *
+ * Email-only mode (FORMS=email at build time, used by `pnpm build:release` until Microsoft 365
+ * is set up; owner's decision, 24 November 2026): instead of a form that could not be sent, a
+ * short note asks people to email, with a ready-addressed email link and, for a receipt, the
+ * details to include. Nothing is filled in only to fail.
  */
 import { site } from '../config/site';
 import Button from './Button.astro';
@@ -32,36 +37,85 @@ interface Props {
 }
 
 const { id, type, label, submit, requiredNote = true, compact = false } = Astro.props;
+
+const emailOnly = process.env.FORMS === 'email';
+const mail = {
+  contact: {
+    subject: 'Message from the website',
+    text: 'Please email us your message. We will reply with care.',
+  },
+  newsletter: {
+    subject: 'Please add me to your updates',
+    text: 'To get our updates, email us and say you would like them.',
+  },
+  receipt: {
+    subject: 'Section 18A receipt request',
+    text: 'To request a Section 18A receipt, email us with these details:',
+  },
+}[type];
+const receiptDetails = [
+  'whether you gave as an individual, a company, a trust or other',
+  'your full name, or the registered name of the organisation',
+  'your ID, passport or registration number',
+  'your income tax number, if you have one',
+  'your address and phone number',
+  'the amount, the date you paid and the payment reference you used',
+];
 ---
 
-<form
-  id={id}
-  class:list={['form', { 'form--compact': compact }]}
-  action="/contact.php"
-  method="post"
-  aria-label={label}
-  data-form={type}
->
-  <Notice variant="error" id={`${id}-failed`} targetOnly title="Your form was not sent">
+{emailOnly ? (
+  <div class="form-email" id={id} data-form-email={type}>
+    <p>{mail.text}</p>
+    {type === 'receipt' && (
+      <ul>
+        {receiptDetails.map((d) => (
+          <li>{d}</li>
+        ))}
+      </ul>
+    )}
     <p>
-      Something went wrong, or a required answer was missing. Please check your answers and try
-      again, or email us at <a href={`mailto:${site.email}`}>{site.email}</a>.
+      <Button
+        variant="green"
+        href={`mailto:${site.email}?subject=${encodeURIComponent(mail.subject)}`}
+      >
+        Email {site.email}
+      </Button>
     </p>
-  </Notice>
-  <ErrorSummary id={`${id}-errors`} />
-  {requiredNote && <p class="form__note">All questions are required unless marked optional.</p>}
-  <input type="hidden" name="type" value={type} />
-  <input type="hidden" name="form" value={id} />
-  <div class="form__trap" aria-hidden="true">
-    <label for={`${id}-website`}>Leave this empty</label>
-    <input type="text" id={`${id}-website`} name="website" tabindex="-1" autocomplete="off" />
+    <p class="form__note">
+      Please do not include a child's full name or medical details. Read our{' '}
+      <a href="/privacy/">privacy notice</a>.
+    </p>
   </div>
-  <slot />
-  <Button variant="green" type="submit">
-    {submit}
-  </Button>
-  <FormStatus id={`${id}-status`} />
-</form>
+) : (
+  <form
+    id={id}
+    class:list={['form', { 'form--compact': compact }]}
+    action="/contact.php"
+    method="post"
+    aria-label={label}
+    data-form={type}
+  >
+    <Notice variant="error" id={`${id}-failed`} targetOnly title="Your form was not sent">
+      <p>
+        Something went wrong, or a required answer was missing. Please check your answers and try
+        again, or email us at <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </Notice>
+    <ErrorSummary id={`${id}-errors`} />
+    {requiredNote && <p class="form__note">All questions are required unless marked optional.</p>}
+    <input type="hidden" name="type" value={type} />
+    <input type="hidden" name="form" value={id} />
+    <div class="form__trap" aria-hidden="true">
+      <label for={`${id}-website`}>Leave this empty</label>
+      <input type="text" id={`${id}-website`} name="website" tabindex="-1" autocomplete="off" />
+    </div>
+    <slot />
+    <Button variant="green" type="submit">
+      {submit}
+    </Button>
+    <FormStatus id={`${id}-status`} />
+  </form>
+)}
 
 <style>
   .form {
@@ -69,6 +123,9 @@ const { id, type, label, submit, requiredNote = true, compact = false } = Astro.
   }
   .form__note {
     color: var(--color-text-muted);
+  }
+  .form-email {
+    max-width: 40rem;
   }
   .form--compact :global(.field) {
     margin-bottom: var(--space-s);

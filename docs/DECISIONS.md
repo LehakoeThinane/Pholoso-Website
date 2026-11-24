@@ -566,3 +566,19 @@ Long text (paragraphs, lists, forms, tables) stays left-aligned, as before (§13
   text. The header keeps only Donate. The link under the home page's "Three fronts" is now a
   button too.
 - The cookie note sits above both floating buttons.
+
+## 34. Going live before every fact is in
+
+**Decision (owner, 24 November 2026):** launch now and fill in the rest afterwards.
+
+- **The launch build** (`pnpm build:release`) allows the facts still missing: the address,
+  the Information Officer, the stories notice and the accessibility response time show "To be
+  confirmed". The Parent Coach stays off.
+- **Forms: "please email us" for now.** Until Microsoft 365 is set up, each form (contact,
+  updates, Section 18A receipt) is replaced by a short note and a ready-addressed email button;
+  for a receipt, the note lists the details to send. Nobody fills in a form only for it to fail.
+  Turned on by `FORMS=email` at build time; the normal build keeps the forms.
+- **Bank details** are in, from FNB's account confirmation letter (23 November 2026). Until they
+  were, the Donate page asked people to email for them instead of showing badges.
+- **Still owed after launch:** the four facts above; Microsoft 365, then `pnpm build`; the POPIA
+  review. The production guard (`pnpm build`) still refuses to run until the facts are in.

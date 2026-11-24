@@ -45,6 +45,11 @@ On a computer with Node.js 22 or later and pnpm 9 (see the README):
 
 1. Get the approved version: `git checkout main` and `git pull`.
 2. Run `pnpm install`, then `pnpm build`.
+   - **First launch (24 November 2026):** the owner chose to go live before every fact was in,
+     and before Microsoft 365 is set up. For that release use `pnpm build:release` instead: it
+     allows the missing facts (they show "To be confirmed"), keeps the Parent Coach off, and
+     shows "please email us" instead of the forms. Switch to `pnpm build` once the facts are
+     filled in and email works (DECISIONS §34).
    - If the build stops with **"Production build blocked: … placeholder(s)"**, some facts in
      `src/config/site.ts` still say `TODO:` (for example bank details). Fill them in first.
      The site must not go online with "To be confirmed" in it.

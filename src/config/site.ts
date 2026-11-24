@@ -90,12 +90,13 @@ export const site: SiteConfig = siteSchema.parse({
     section18A: true,
   },
   bank: {
-    accountName: 'Pholoso Afrika Foundation',
-    bank: 'TODO: bank name',
-    accountNumber: 'TODO: account number',
-    branchCode: 'TODO: branch code',
-    accountType: 'TODO: account type',
-    swift: 'TODO: SWIFT code',
+    // From FNB's account confirmation letter, 23 November 2026
+    accountName: 'Pholoso Afrika Foundation NPC',
+    bank: 'First National Bank (FNB)',
+    accountNumber: '63187633441',
+    branchCode: '255355',
+    accountType: 'Gold Business Account',
+    swift: 'FIRNZAJJ',
     referencePrefix: 'DONATE',
   },
   partner: {
