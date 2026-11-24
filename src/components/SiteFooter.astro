@@ -1,6 +1,6 @@
 ---
 /**
- * SiteFooter: simple and short (owner's requests, 23 November 2026). Three rows:
+ * SiteFooter: simple, short and centred in one column (owner's requests, 23–24 November 2026):
  * 1. The logo and tagline, then one line of links to the main pages.
  * 2. How to reach us: the email address (owner's decision, 24 November 2026: no postal
  *    address or phone number in the footer).
@@ -68,21 +68,19 @@ const year = new Date().getFullYear();
     padding-bottom: calc(var(--space-s) + var(--button-min));
     font-size: var(--step--1);
   }
+  /* One centred column: logo, tagline, links, then email and the legal lines */
   .site-footer__main {
-    display: grid;
-    gap: var(--space-s) var(--space-xl);
+    display: flex;
+    flex-direction: column;
     align-items: center;
-  }
-  @media (min-width: 62rem) {
-    .site-footer__main {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
+    gap: var(--space-s);
+    text-align: center;
   }
   .site-footer__brand {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    gap: var(--space-2xs) var(--space-m);
+    gap: var(--space-2xs);
   }
   .site-footer__logo {
     width: 8rem;
@@ -90,22 +88,17 @@ const year = new Date().getFullYear();
   }
   .site-footer__tagline {
     margin: 0;
-    max-width: 19rem;
     color: var(--color-text-muted);
   }
   .site-footer__links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 0 var(--space-m);
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  @media (min-width: 62rem) {
-    .site-footer__main .site-footer__links {
-      justify-content: flex-end;
-    }
   }
   .site-footer li {
     margin: 0;

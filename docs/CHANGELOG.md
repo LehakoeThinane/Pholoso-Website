@@ -8,6 +8,19 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Centred footer; centred buttons on Our approach
+
+**Why:** owner's request: the top of the footer looked off, and the Our approach buttons sat to the left.
+
+**What changed**
+
+- **Footer:** one centred column: logo, tagline, the links (one line on wider screens), the email address, then the registration numbers and legal links.
+- **Our approach:** "Get involved" and "Hear the voices" are centred under the heading.
+
+**Checks:** all 300 browser tests pass; HTML and built-output checks clean.
+
+---
+
 ## 2026-11-24 · `dev` · A design pass over the whole site
 
 **Why:** owner's request to check the whole site's design and make it better.
