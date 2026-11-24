@@ -140,7 +140,7 @@ export function initComfort(): void {
       return;
     }
     if (target.closest('[data-comfort-reset]')) {
-      prefs = { v: 1 };
+      prefs = { v: 1, theme: 'standard' };
       api.clear();
       update(false);
       say('Settings reset');
