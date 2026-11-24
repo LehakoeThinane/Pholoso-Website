@@ -84,7 +84,6 @@ const ngo = {
     'Learner-centred education',
     'Education White Paper 6',
   ],
-  ...(site.phone.startsWith('TODO:') ? {} : { telephone: site.phone }),
   ...(site.address.startsWith('TODO:') ? {} : { location: site.address }),
   areaServed: [
     { '@type': 'Country', name: 'South Africa' },

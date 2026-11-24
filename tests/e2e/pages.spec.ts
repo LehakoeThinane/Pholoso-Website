@@ -76,10 +76,11 @@ test('home page: FAQs before the footer, matched by FAQ structured data for sear
   const faq = data['@graph'][3].mainEntity as { name: string; acceptedAnswer: { text: string } }[];
   expect(faq.map((q) => q.name)).toEqual((await questions.allTextContents()).map((t) => t.trim()));
   for (const q of faq) expect(q.acceptedAnswer.text).not.toMatch(/\]\(|<|\*\*/); // plain text
-  // The footer shows how to reach us and the registration numbers
+  // The footer shows the email address and the registration numbers (no address or phone)
   const footer = page.locator('footer.site-footer');
-  await expect(footer.getByText('Address:')).toBeVisible();
-  await expect(footer.getByText('Phone:')).toBeVisible();
+  await expect(footer.getByText('Email:')).toBeVisible();
+  await expect(footer.getByText('Address:')).toHaveCount(0);
+  await expect(footer.getByText('Phone:')).toHaveCount(0);
   await expect(footer.getByText(/PBO 930090077/)).toBeVisible();
 });
 

@@ -2,8 +2,8 @@
 /**
  * SiteFooter: simple and short (owner's requests, 23 November 2026). Three rows:
  * 1. The logo and tagline, then one line of links to the main pages.
- * 2. How to reach us: address, phone and email (address and phone show "To be confirmed"
- *    until the Foundation sends them).
+ * 2. How to reach us: the email address (owner's decision, 24 November 2026: no postal
+ *    address or phone number in the footer).
  * 3. Centred: the registration numbers, then copyright, Privacy, Accessibility and
  *    Comfort & access.
  * The updates sign-up lives on the Resources page. Leaves room at the bottom for the floating
@@ -13,7 +13,6 @@ import { Image } from 'astro:assets';
 import logo from '../assets/logo/logo.png';
 import { registrationLine, site } from '../config/site';
 import { footerLinks, strings } from '../config/strings';
-import Value from './Value.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -36,12 +35,6 @@ const year = new Date().getFullYear();
   </div>
 
   <address class="container site-footer__contact">
-    <span>
-      <strong>Address:</strong> <Value value={site.address} />
-    </span>
-    <span>
-      <strong>Phone:</strong> <Value value={site.phone} />
-    </span>
     <span>
       <strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a>
     </span>

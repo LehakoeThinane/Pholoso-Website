@@ -8,6 +8,19 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Footer without address or phone; Approach fronts as cards
+
+**Why:** owner's requests.
+
+**What changed**
+
+- **Footer:** the address and phone lines are removed; the email address stays, centred. The phone setting is removed from `site.ts` and the structured data. The address is still needed for the privacy notice (POPIA), so it stays a fact to fill in. Open question A20 withdrawn.
+- **Our approach:** "Three fronts, working at once." now uses the same centred cards as the home page, instead of a numbered list.
+
+**Checks:** all 300 browser tests pass; HTML, links, contrast and built-output checks clean.
+
+---
+
 ## 2026-11-23 · `dev` · Smaller photos between sections; three steadier tests
 
 **Why:** owner's request: the classroom photo on the home page was too big.

@@ -24,7 +24,7 @@ Decisions and content the build is waiting on. Nothing here has been guessed: ea
 | A16 | Are the existing stories real accounts with publication permission, pseudonymised accounts, or composites? Review the account involving a minor first. | Interim provenance note on Stories |
 | A17 | Who monitors privacy requests and what retention periods actually apply to enquiries, updates and hosting logs? | Draft privacy notice |
 | A18 | Can the host disable its injected monitoring script, and what does it collect until disabled? | Interim tracking disclosure and CSP verification |
-| A20 | **Address and phone number for the footer.** The footer now shows Address and Phone ("To be confirmed" until sent). Neither has been published before, so please send the ones to use. | Footer, privacy notice, structured data |
+| A20 | ~~Address and phone number for the footer.~~ Withdrawn on 24 November 2026: the owner chose to show only the email address in the footer. The address is still needed for the privacy notice (Part B facts). | — |
 | A19 | Who owns the encrypted backup password, restore test and production release approval? | DEPLOY.md and release checklist |
 
 ## Needed before or during Part B
