@@ -45,9 +45,14 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
-      - name: Production build (stops if any TODO placeholder remains)
-        run: pnpm build
+      # The first launch (owner's decision, 24 November 2026; DECISIONS §34) allows the facts still
+      # missing and keeps the forms email-only. Change back to "pnpm build" once the facts are in
+      # and Microsoft 365 is set up: that build stops if any TODO placeholder remains.
+      - name: Launch build (missing facts show "To be confirmed"; forms email-only)
+        run: pnpm build:release
       - name: Built-output checks
+        env:
+          ALLOW_TODO: '1'
         run: pnpm check:dist && pnpm check:html && pnpm check:links
 
       - name: Upload over SFTP (adds and replaces files; deletes nothing)

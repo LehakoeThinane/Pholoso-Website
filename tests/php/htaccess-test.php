@@ -23,7 +23,7 @@ $blocked = [
     '/lib/coach/coach-lib.php', '/lib/coach/system-prompt.md', '/lib/coach/crisis-words.json', '/server/migrations/001_coach.sql',
 ];
 $public = [
-    '/', '/index.html', '/404.html', '/contact.php', '/robots.txt', '/sitemap-index.xml', '/sitemap-0.xml',
+    '/', '/index.html', '/404.html', '/404.php', '/contact.php', '/robots.txt', '/sitemap-index.xml', '/sitemap-0.xml',
     '/favicon.ico', '/logo.png', '/og-image.png', '/prefs.js', '/_astro/main.abc123.js', '/_astro/x.css',
     '/_astro/font.woff2', '/_astro/hero.avif', '/about/', '/resources/a-guide/', '/thank-you/',
     '/.well-known/acme-challenge/token', '/documents.html', '/library.jpg', '/branding.png',

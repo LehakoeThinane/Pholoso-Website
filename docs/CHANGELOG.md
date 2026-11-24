@@ -8,6 +8,21 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Live: the site's own 404 page; deploy workflow uses the launch build
+
+**Why:** the post-deploy check on the live site found that GoDaddy ignores `ErrorDocument 404 /404.html` and answers missing pages with a bare "404 Not Found". Everything else passed (20 pages, redirects, security headers, HSTS, private folders blocked; forms in email mode).
+
+**What changed**
+
+- `public/404.php` answers with status 404 and the site's own 404 page; `.htaccess` sends every address that is not a file or folder there (the old sitemap address keeps its redirect).
+- The deploy workflow (`.github/workflows/deploy.yml`) builds with `pnpm build:release` for now, so it can run before every fact is in.
+
+**Deploy:** upload `pholoso-fix-404.zip` (`.htaccess` and `404.php`) to `public_html` and extract.
+
+**Checks:** `.htaccess` tests pass; `404.php` answers 404 with the right page.
+
+---
+
 ## 2026-11-24 · `dev` · Ready to go live: launch build, email-only forms, bank details
 
 **Why:** the owner is deploying to production on GoDaddy now, before every fact is in and before Microsoft 365 is set up (DECISIONS §34).

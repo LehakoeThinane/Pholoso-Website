@@ -36,6 +36,12 @@ Options -Indexes
   # Parent Coach: a saved session's own address, drawn by the server (works without JavaScript)
   RewriteRule ^parent-coach/s/([0-9a-f-]{36})/?$ /api/coach/session.php?id=$1 [L,QSA]
   RewriteRule ^parent-coach/my-coaching/?$ /api/coach/my.php [L,QSA]
+  # Anything that is not a file or folder: the site's own 404 page, with a 404 status.
+  # (Some hosting ignores ErrorDocument above and answers a bare "404 Not Found".)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
+  RewriteRule ^ /404.php [L]
 </IfModule>
 
 # --- Security headers ----------------------------------------------------------
