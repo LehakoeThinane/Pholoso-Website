@@ -158,7 +158,7 @@ const values = [
         ['2015', 'SDG 4', 'Inclusive, equitable quality education for all.'],
       ]}
     />
-    <p>
+    <p class="after-group">
       Read the policy:{' '}
       <ExternalLink href={sources.whitePaper6.href}>Education White Paper 6 on gov.za</ExternalLink>
     </p>
@@ -197,6 +197,9 @@ const values = [
   :global(.statements) p {
     text-align: center;
     margin-inline: auto;
+  }
+  :global(.statements) h2 {
+    font-size: var(--step-2);
   }
   .core-idea {
     margin: var(--space-l) auto 0;

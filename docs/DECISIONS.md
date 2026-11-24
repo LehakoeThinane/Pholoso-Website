@@ -533,3 +533,21 @@ in Kids' World, or without JavaScript.
 **Not done, on purpose:** a loading page with the logo. The site loads almost instantly
 (Lighthouse performance 100), so a splash screen would only make every visitor wait, hurt search
 ranking, and put something between people and the content.
+
+## 32. A design pass over the whole site
+
+**Decision (owner, 24 November 2026):** review every page's design and fix what makes it look
+less finished. Checked on desktop (1280 px) and phone (390 px).
+
+- **No lonely last words:** headings balance their lines and paragraphs avoid a single word on
+  the last line (`text-wrap: balance` / `pretty`), everywhere.
+- **Centred, like the rest of the site:** numbered steps (Donate, Share a drawing) are now
+  centred cards with the number on top; the interest explorer's buttons, heading and cards; the
+  story filter's label; the trust cards; the Kids' World footer; single lines after a group
+  of cards (`.after-group`).
+- **One card style:** the interest explorer's cards and the steps use the site's card (rounded,
+  soft glow) instead of their own.
+- **Sizes:** About's mission and vision headings are statement-sized, not page-title-sized; the
+  2to.iQ panel is at most 56rem wide, so its text no longer leaves an empty right half.
+
+Long text (paragraphs, lists, forms, tables) stays left-aligned, as before (§13).

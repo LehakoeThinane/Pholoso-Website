@@ -8,6 +8,25 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · A design pass over the whole site
+
+**Why:** owner's request to check the whole site's design and make it better.
+
+**What changed** (DECISIONS §32)
+
+- No single word left alone on the last line of a heading or paragraph, site-wide.
+- Numbered steps (Donate "How to give", Share a drawing) are centred cards with the number on top, side by side on wider screens.
+- Our approach: the interest explorer is centred (buttons, heading) and uses the site's cards.
+- Stories: the "Show stories from" label is centred above its buttons.
+- Trust cards (About, Get involved) are centred like every other card.
+- About: mission and vision headings are a calmer size; the policy link is centred.
+- The 2to.iQ panel is narrower, so its text fills it.
+- Kids' World footer: "Need help now?", the safety note and the grown-ups' links are centred.
+
+**Checks:** all 300 browser tests pass; HTML, links, contrast and built-output checks clean.
+
+---
+
 ## 2026-11-24 · `dev` · Footer without address or phone; Approach fronts as cards
 
 **Why:** owner's requests.

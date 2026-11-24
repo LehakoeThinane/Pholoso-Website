@@ -63,6 +63,21 @@ h4 {
   margin: 0 0 var(--space-s);
   font-weight: 700;
 }
+/* No single word left alone on the last line (headings evenly balanced; text tidied) */
+h1,
+h2,
+h3,
+h4,
+summary {
+  text-wrap: balance;
+}
+p,
+li,
+dd,
+blockquote,
+figcaption {
+  text-wrap: pretty;
+}
 h1 {
   font-size: var(--step-4);
 }
@@ -449,4 +464,11 @@ button.pholo {
 /* The last band on a page: less space before the footer */
 #main > .section:last-child {
   padding-block-end: var(--space-xl);
+}
+
+/* A single centred line after a group of cards or steps (a link, a short note) */
+.after-group {
+  margin: var(--space-l) auto 0;
+  text-align: center;
+  font-weight: 700;
 }
