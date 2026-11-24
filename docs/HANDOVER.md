@@ -80,11 +80,6 @@ The production build will not run until these are replaced with confirmed values
 
 | Setting                      | Needed                                                                  |
 | ---------------------------- | ----------------------------------------------------------------------- |
-| `bank.bank`                  | Bank name                                                               |
-| `bank.accountNumber`         | Account number                                                          |
-| `bank.branchCode`            | Branch code                                                             |
-| `bank.accountType`           | Account type                                                            |
-| `bank.swift`                 | SWIFT code (for international donors)                                   |
 | `address`                    | Physical or postal address (required in the privacy notice) |
 | `informationOfficer.name`    | Name of the POPIA Information Officer                                   |
 | `stories.notice`             | Confirm whether the stories are composites, pseudonymised or real, and approve the notice wording |

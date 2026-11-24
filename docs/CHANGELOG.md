@@ -8,6 +8,24 @@ Open questions for the Foundation live in [open-questions.md](open-questions.md)
 
 ---
 
+## 2026-11-24 · `dev` · Ready to go live: launch build, email-only forms, bank details
+
+**Why:** the owner is deploying to production on GoDaddy now, before every fact is in and before Microsoft 365 is set up (DECISIONS §34).
+
+**What changed**
+
+- **`pnpm build:release`:** the launch build. Missing facts show "To be confirmed", the Parent Coach is off, and the forms are email-only.
+- **Email-only forms:** contact, updates and the Section 18A receipt each show a short note and an "Email know@pholoso.africa" button with the subject filled in; the receipt note lists the details to send.
+- **Bank details** filled in from FNB's account confirmation letter: First National Bank (FNB), account 63187633441, branch code 255355, Gold Business Account, SWIFT FIRNZAJJ, account name Pholoso Afrika Foundation NPC.
+- **Donate page:** if bank details are ever missing, it asks people to email for them instead of showing badges.
+- **DEPLOY.md:** use `pnpm build:release` for the first launch.
+
+**Still to do after launch:** address, Information Officer, stories notice, accessibility response time; Microsoft 365, then the normal `pnpm build`; confirm the branch code (the letter gives 255355; FNB's universal code is 250655).
+
+**Checks:** all 302 browser tests pass on the normal build; the launch build passes the built-output, HTML and link checks.
+
+---
+
 ## 2026-11-24 · `dev` · Fix: shared stylesheet back within its 16 KB budget
 
 **Why:** CI's Lighthouse check failed: after the floating Kids' World button, the shared stylesheet was 16,475 bytes (budget 16,384).

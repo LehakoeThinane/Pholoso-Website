@@ -11,6 +11,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:preview": "cross-env ALLOW_TODO=1 astro build",
+    "build:release": "cross-env ALLOW_TODO=1 COACH_MODE=off FORMS=email astro build",
     "build:live": "cross-env ALLOW_TODO=1 COACH_MODE=live astro build --outDir dist-live",
     "preview": "astro preview",
     "check": "astro check",

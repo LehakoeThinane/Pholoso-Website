@@ -9,9 +9,13 @@ import Section from '../components/Section.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Steps from '../components/Steps.astro';
 import { site } from '../config/site';
+import { isTodo } from '../lib/todo';
 import { ordered } from '../lib/content';
 import { render } from 'astro:content';
 
+// Until the Foundation sends its bank details, people email for them (owner's decision,
+// 24 November 2026); no list of "To be confirmed" badges.
+const bankMissing = [site.bank.bank, site.bank.accountNumber, site.bank.branchCode].some(isTodo);
 const faqs = await Promise.all(
   (await ordered('faqs', (f) => f.data.page === 'donate')).map(async (f) => ({
     question: f.data.question,
@@ -37,7 +41,9 @@ const ref = site.bank.referencePrefix;
       steps={[
         {
           title: 'Pay by EFT',
-          text: 'Use the bank details below in your banking app or at your bank.',
+          text: bankMissing
+            ? `Email ${site.email} for our bank details, then pay in your banking app or at your bank.`
+            : 'Use the bank details below in your banking app or at your bank.',
         },
         {
           title: `Use the reference ${ref} and your surname`,
@@ -53,17 +59,29 @@ const ref = site.bank.referencePrefix;
 
   <Section variant="alt" labelledby="bank-title" narrow>
     <h2 id="bank-title">Our bank details</h2>
-    <DefinitionList
-      items={[
-        { term: 'Account name', value: site.bank.accountName, copy: true },
-        { term: 'Bank', value: site.bank.bank },
-        { term: 'Account number', value: site.bank.accountNumber, copy: true },
-        { term: 'Branch code', value: site.bank.branchCode, copy: true },
-        { term: 'Account type', value: site.bank.accountType },
-        { term: 'SWIFT code (for international payments)', value: site.bank.swift, copy: true },
-        { term: 'Reference', value: `${ref} and your surname or company name` },
-      ]}
-    />
+    {bankMissing ? (
+      <Notice title="Email us for our bank details">
+        <p>
+          Email{' '}
+          <a href={`mailto:${site.email}?subject=Bank%20details%20for%20a%20donation`}>
+            {site.email}
+          </a>{' '}
+          and we will send you our bank details. Only trust details that come from this address.
+        </p>
+      </Notice>
+    ) : (
+      <DefinitionList
+        items={[
+          { term: 'Account name', value: site.bank.accountName, copy: true },
+          { term: 'Bank', value: site.bank.bank },
+          { term: 'Account number', value: site.bank.accountNumber, copy: true },
+          { term: 'Branch code', value: site.bank.branchCode, copy: true },
+          { term: 'Account type', value: site.bank.accountType },
+          { term: 'SWIFT code (for international payments)', value: site.bank.swift, copy: true },
+          { term: 'Reference', value: `${ref} and your surname or company name` },
+        ]}
+      />
+    )}
     <Notice variant="warning" title="Protect yourself from fraud">
       <p>
         Our bank details will never change by email. If you receive a message saying our bank
